@@ -1,4 +1,4 @@
-# GII15.9 Gestión de trabajos fin de grado v2.0
+# GII 20.09 Herramienta web repositorios de TFGII
 
 ### Autora
 Diana Bringas Ochoa
@@ -8,7 +8,6 @@ Diana Bringas Ochoa
 
 ### Resumen del proyecto
 El propósito del proyecto es evolucionar la interfaz gráfica html, que se genera mediante una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://bitbucket.org/ubu_tfg/2014-beatriz. 
-
 
 ### Página web
 El proyecto está desplegado en https://tomcat8-vaadinjfb.rhcloud.com/sistinf-0.4.
