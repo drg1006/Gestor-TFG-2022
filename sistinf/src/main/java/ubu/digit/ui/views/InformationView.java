@@ -17,6 +17,7 @@ import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 
 import ubu.digit.pesistence.SistInfData;
+import ubu.digit.pesistence.SistInfDataCsv;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
@@ -46,7 +47,7 @@ public class InformationView extends VerticalLayout implements View {
 	/**
 	 * Fachada para obtener los datos.
 	 */
-	private SistInfData fachadaDatos;
+	private SistInfDataCsv fachadaDatos;
 
 	/**
 	 * Nombre de la vista.
@@ -57,7 +58,7 @@ public class InformationView extends VerticalLayout implements View {
 	 * Constructor.
 	 */
 	public InformationView() {
-		fachadaDatos = SistInfData.getInstance();
+		fachadaDatos = SistInfData.getInstanceCsv();
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 
 		setMargin(true);

@@ -11,6 +11,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +37,7 @@ public class SistInfDataTest {
     /**
      * Clase a testear.
      */
-    SistInfData sistInfData;
+    SistInfDataCsv sistInfData;
 
     /**
      * URL del fichero donde se encuentra el fichero de configuración del test.
@@ -50,10 +53,10 @@ public class SistInfDataTest {
     public void setUp() {
         mockStatic(ExternalProperties.class);
 
-        when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false))
-                .thenReturn(test);
+        when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
 
-        sistInfData = SistInfData.getInstance();
+        sistInfData = SistInfData.getInstanceCsv();
+        //sistInfData = SistInfData.getInstanceXls();
     }
 
     /**
@@ -251,5 +254,62 @@ public class SistInfDataTest {
      */
     public static void main(String[] args) {
         JUnitCore.main("ubu.digit.pesistence.SistInfDataTest");
-    }
+    } 
+    
+    /**
+     * Test que comprueba los proyectos activos (año actual)
+     * 
+     * @throws SQLException
+     */
+   /* @Test
+    public void testProjectActivos() throws SQLException {
+    	//Para obtener el año en el que estamos
+    	Calendar cal= Calendar.getInstance();
+    	int year= cal.get(Calendar.YEAR);
+    	
+    	Number num_esperado = 0;
+		num_esperado = sistInfData.getProjectActivos("Titulo","FechaPresentacion", "N3_Historico", year);
+        assertThat(num_esperado, is((Number) 2F));
+    }*/
+    
+	/**
+     * Test que comprueba los proyectos escogidos por varias personas (grupales)
+     * 
+     * @throws SQLException
+     */
+    /*@Test
+    public void testProjectGrupales() throws SQLException {
+    	Number num_esperado = 0;
+    	num_esperado = sistInfData.getProjectVariosAlum("Titulo","Alumno2" ,"Alumno3", "N3_Historico");
+        assertThat(num_esperado, is((Number) 1F));
+    }*/
+    
+    /**
+     * Test que comprueba los alumnos sin proyectos asignados
+     * 
+     * @throws SQLException
+     */
+   /* @Test
+    public void testAlumSinProject() throws SQLException {
+    	Number num_esperado = 0;
+    	num_esperado = sistInfData.getAlumSinProject("ApellidosNombre","Alumno1","Alumno2", "N3_Historico", "N2_Alumno");
+        assertThat(num_esperado, is((Number) 1F));
+    }*/
+    
+    /**
+     * FALTA
+     * Test que comprueba que no haya ningun alumno con dos proyectos
+     * 
+     * @throws SQLException
+     */
+    /*@Test
+    public void testAlumVariosProject() throws SQLException {
+    	Number num_esperado = 0;
+    	num_esperado = sistInfData.getProjectVariosAlum("Titulo","Alumno2" ,"Alumno3", "N3_Historico");
+        assertThat(num_esperado, is((Number) 1F));
+    }*/
+    
+    /**Test que compruba que los alumnos que figuran como que tienen un proyecto esten en la tabla de alumnos*/
+
+    /**Comprueba que ek total dias sea la resta del final presentacion con el inicio*/
 }

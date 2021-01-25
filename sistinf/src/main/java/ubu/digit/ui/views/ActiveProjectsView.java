@@ -15,6 +15,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import ubu.digit.pesistence.SistInfData;
+import ubu.digit.pesistence.SistInfDataCsv;
+import ubu.digit.pesistence.SistInfDataXls;
 import ubu.digit.ui.beans.ActiveProjectBean;
 import ubu.digit.ui.columngenerators.StudentsColumnGenerator;
 import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
@@ -45,11 +47,6 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	 * Nombre de la vista.
 	 */
 	public static final String VIEW_NAME = "active-projects";
-
-	/**
-	 * Fachada para obtener los datos.
-	 */
-	private SistInfData fachadaDatos;
 
 	/**
 	 * Contenedor de POJOS de proyectos activos.
@@ -85,12 +82,24 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	 * Campo de texto para filtrar por curso.
 	 */
 	private TextField courseFilter;
+	
+	/**
+	 * Fachada para obtener los datos.
+	 */
+	private SistInfDataCsv fachadaDatos;
+	
+	/**
+	 * Fachada para obtener los datos.
+	 */
+	//private SistInfDataXls fachadaDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public ActiveProjectsView() {
-		fachadaDatos = SistInfData.getInstance();
+		fachadaDatos = SistInfDataCsv.getInstance();
+		//fachadaDatos = SistInfDataXls.getInstance();
+		//fachadaDatos = SistInfData.getInstanceCsv();
 		setMargin(true);
 		setSpacing(true);
 
@@ -103,7 +112,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 		createCurrentProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("Proyecto.csv");
+		Footer footer = new Footer("N2_Proyecto.csv");
 		addComponent(footer);
 	}
 

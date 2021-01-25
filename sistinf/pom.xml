@@ -137,6 +137,13 @@
 			<artifactId>jfreechartwrapper</artifactId>
 			<version>3.0.4</version>
 		</dependency>	
+		
+		 <!-- https://mvnrepository.com/artifact/com.codoid.products/fillo -->
+		<dependency>
+		    <groupId>com.codoid.products</groupId>
+		    <artifactId>fillo</artifactId>
+		    <version>1.21</version>
+		</dependency>
 	</dependencies>
 
 	<build>

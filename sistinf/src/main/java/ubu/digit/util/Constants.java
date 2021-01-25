@@ -4,76 +4,77 @@ package ubu.digit.util;
  * Literales constantes de la aplicación.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
 public final class Constants {
 
 	/**
-	 * Tribunal (csv).
+	 * Tribunal
 	 */
-	public static final String TRIBUNAL = "Tribunal";
+	public static final String TRIBUNAL = "N1_Tribunal";
 
 	/**
-	 * Norma (csv).
+	 * Norma 
 	 */
-	public static final String NORMA = "Norma";
+	public static final String NORMA = "N1_Norma";
 
 	/**
-	 * Documento (csv).
+	 * Documento
 	 */
-	public static final String DOCUMENTO = "Documento";
+	public static final String DOCUMENTO = "N1_Documento";
 
 	/**
-	 * Proyecto (csv).
+	 * Proyecto 
 	 */
 	public static final String PROYECTO = "Proyecto";
 
 	/**
-	 * Histórico (csv).
+	 * Histórico 
 	 */
-	public static final String HISTORICO = "Historico";
+	public static final String HISTORICO = "N3_Historico";
+	
+	/**
+	 * Alumno 
+	 */
+	public static final String ALUMNO = "N2_Alumno";
 
 	/**
-	 * Cargo (csv).
+	 * Cargo 
 	 */
-	public static final String CARGO = "cargo";
+	public static final String CARGO = "Cargo";
 
 	/**
-	 * Nombre y apellidos (csv).
+	 * Nombre y apellidos
 	 */
-	public static final String NOMBRE_APELLIDOS = "nombreApellidos";
+	public static final String NOMBRE_APELLIDOS = "NombreApellidos";
 
 	/**
-	 * Alumno (csv).
-	 */
-	public static final String ALUMNO = "Alumno";
-
-	/**
-	 * Título (csv).
+	 * Título
 	 */
 	public static final String TITULO = "titulo";
 
 	/**
-	 * Título corto (csv).
+	 * Título corto
 	 */
 	public static final String TITULO_CORTO = "tituloCorto";
 
 	/**
-	 * Descripción (csv).
+	 * Descripción
 	 */
 	public static final String DESCRIPCION = "descripcion";
 
 	/**
-	 * Primer alumno (csv).
+	 * Primer alumno
 	 */
 	public static final String ALUMNO1 = "alumno1";
 
 	/**
-	 * Segundo alumno (csv).
+	 * Segundo alumno
 	 */
 	public static final String ALUMNO2 = "alumno2";
 
 	/**
-	 * Tercer alumno (csv).
+	 * Tercer alumno
 	 */
 	public static final String ALUMNO3 = "alumno3";
 

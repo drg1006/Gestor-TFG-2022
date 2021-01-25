@@ -40,6 +40,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import ubu.digit.pesistence.SistInfData;
+import ubu.digit.pesistence.SistInfDataCsv;
+import ubu.digit.pesistence.SistInfDataXls;
 import ubu.digit.ui.beans.HistoricProjectBean;
 import ubu.digit.ui.columngenerators.ProjectsColumnGenerator;
 import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
@@ -75,11 +77,6 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * Contenedor de POJOS de proyectos históricos.
 	 */
 	private BeanItemContainer<HistoricProjectBean> beans;
-
-	/**
-	 * Fachada para obtener los datos.
-	 */
-	private SistInfData fachadaDatos;
 
 	/**
 	 * Fichero de configuración.
@@ -150,12 +147,23 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * Campo de texto para filtrar por fecha de presentación.
 	 */
 	private TextField presentationDateFilter;
+	
+	/**
+	 * Fachada para obtener los datos.
+	 */
+	private SistInfDataCsv fachadaDatos;
+	
+	/**
+	 * Fachada para obtener los datos.
+	 */
+	//private SistInfDataXls fachadaDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public HistoricProjectsView() {
-		fachadaDatos = SistInfData.getInstance();
+		fachadaDatos = SistInfDataCsv.getInstance();
+		//fachadaDatos = SistInfData.getInstanceXls();
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
@@ -183,7 +191,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 */
 	private void createDataModel() {
 		beans = new BeanItemContainer<>(HistoricProjectBean.class);
-		try (ResultSet result = fachadaDatos.getResultSet(HISTORICO, TITULO)) {
+		try (ResultSet result = fachadaDatos.getResultSet(HISTORICO, TITULO)) { //TODO: 
 			while (result.next()) {
 				int numStudents = 0;
 				int numTutors = 0;
@@ -282,7 +290,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			Label daysStats = new Label("Tiempo/días [media,min,max,stdv]: " + days);
 
 			addComponents(totalProjects, totalStudents, scoreStats, daysStats);
-		} catch (SQLException e) {
+		} catch (Exception e) { //TODO:SQLException FilloException
 			LOGGER.error("Error en históricos (metricas)", e);
 		}
 	}
@@ -654,7 +662,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		LocalDate dateTime = null;
 		try {
 			dateTime = fachadaDatos.getYear(FECHA_PRESENTACION, HISTORICO, isMinimum);
-		} catch (SQLException e) {
+		} catch (Exception e) { //TODO: FilloException SQLException
 			LOGGER.error("Error en getYear", e);
 		}
 		return dateTime;
