@@ -21,7 +21,7 @@ Las tareas que se realizaron fueron:
 		Se procedió a buscar información sobre cómo instalar y manejar Latex para realizar la documentación del proyecto posteriormente.
 \end{itemize}
 
-\subsection{Sprint 1 (25/11/2020 - )}
+\subsection{Sprint 1 (25/11/2020 - 12/01/2020)}
 Generación de test unitarios, búsqueda de trabajos similares, cambio del driver para conectarse con el excel, información para obtener ideas de como realizar ciertas mejoras y comienzo de la documentación del proyecto. Mejora de la cobertura de la aplicación web.
 
 Las tareas planteadas fueron:
@@ -35,6 +35,38 @@ Las tareas planteadas fueron:
 		Para aumentar la covertura de la aplicación se definieron nuevos test.
 	\item Cambiar driver JDBC 
 		Para poder usar los .ods se buscó una alternativa al driver para .csv que se empleaba.
+\end{itemize}
+
+\subsection{Sprint 2 (12/01/2020 - 25/01/2020)}
+Búsqueda de nuevos driver que implementen JDBC para ficheros .xls. Prueba de opciones encontradas como Apache POI, SQLSheet, Fillo, Cdata JDBC for Excel y JdbcOdbcDriver. Integrar la API Fillo en el proyecto. 
+
+Las tareas planteadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Instalación del LibreOffice 
+		Se instaló Apache LibreOffice para manipular los fichero .xls y .csv que se emplean para la parte de datos de la aplicación.
+	\item Cambiar de formato al fichero ``\textbf{BaseDeDatosTFG.ods}''.
+		Se modificó el formato del fichero ``\textbf{BaseDeDatosTFG.ods}'' a ``\textbf{BaseDeDatosTFG.xls}''.
+	\item Anexos - Modificación para poder cambiar el tamaño de las imágenes.
+		Cambios en la plantilla de \textbf{anexos.tex} para poder modificar el tamaño de las imágenes al deseado.
+	\item Probar el Apache POI
+		Para verificar el funcionamiento de Apache POI, se incluyo en el proyecto de prueba \textbf{HolaMundoVaadin} y se realizaron varios ejemplos de prueba tomando como referente el proyecto principal.
+	\item Error al intentar ejecutar la imagen del proyecto gabrielstan/gestion-tfg
+		Bug realizado al intentar desplegar el proyecto  gabrielstan/gestion-tfg.  
+	\item Desplegar proyectos relacionados con la gestión de TFG
+		Proceso por el cual se probó a desplegar los proyectos relacionados con \textbf{GII 20.09 Herramienta web repositorios de TFGII}. 
+	\item Memoria - Mejoras
+		Se realizaron varios cambios en la memoria.
+	\item Incorporación del driver para fichero Excel
+		Prueba de la API Fillo en el proyecto de prueba \textbf{HolaMundoVaadin}, y tras verificar su funcionamiento se procedió a incluirlo en el proyecto principal.
+	\item Modificación de los nombres de los fichero csv 
+		Se cambiaron los nombres de los ficheros .csv para que coincidieran con los nombres de las hojas del fichero .xls. 
+	\item Memoria - Documentación Spring 2
+		Comienzo de la documentación de lo realizado en el Spring 2. En el cual se detallan las tareas realizadas.
+	\item Modificaciones en los test
+		Para probar la incorporación de la API Fillo se modificaron el test  ``\textbf{\textbf{SintInfDataTest}}''.
+	\item Realización de cambios para el funcionamiento de la nueva conexión para los fichero .xls 
+		Para poder usar la API Fillo se han tenido que realizar multitud de cambios en el proyecto. Aunque tanto el ``\textbf{\textbf{CsvDriver}}'' y ``\textbf{\textbf{Fillo}}'' emplean lenguaje SQL, ``\textbf{CsvDriver}'' emplea JDBC puro mientras que ``\textbf{Fillo}'' usa funciones y clases propias.
 \end{itemize}
 
 \section{Estudio de viabilidad}
