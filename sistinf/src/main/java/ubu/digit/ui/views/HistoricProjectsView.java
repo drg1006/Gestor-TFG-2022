@@ -24,6 +24,8 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.vaadin.addon.JFreeChartWrapper;
 
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Recordset;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItemContainer;
@@ -151,19 +153,20 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Fachada para obtener los datos.
 	 */
-	private SistInfDataCsv fachadaDatos;
+	private SistInfDataCsv fachadaDatosCsv;
 	
 	/**
 	 * Fachada para obtener los datos.
 	 */
-	//private SistInfDataXls fachadaDatos;
+	private SistInfDataXls fachadaDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public HistoricProjectsView() {
-		fachadaDatos = SistInfDataCsv.getInstance();
+		//fachadaDatos = SistInfDataCsv.getInstance();
 		//fachadaDatos = SistInfData.getInstanceXls();
+		fachadaDatos = SistInfDataXls.getInstance();
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
@@ -189,9 +192,73 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Crea el modelo de datos de los proyectos históricos.
 	 */
-	private void createDataModel() {
+	private void createDataModel() { //TODO:
 		beans = new BeanItemContainer<>(HistoricProjectBean.class);
-		try (ResultSet result = fachadaDatos.getResultSet(HISTORICO, TITULO)) { //TODO: 
+		try{ 
+			Recordset result = fachadaDatos.getResultSet(HISTORICO, TITULO);
+			while (result.next()) {
+				int numStudents = 0;
+				int numTutors = 0;
+				String title = result.getField(TITULO_CORTO);
+				String description = result.getField(DESCRIPCION);
+				String tutor1 = result.getField(TUTOR1);
+				if (tutor1 == null || "".equals(tutor1)) {
+					tutor1 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor2 = result.getField(TUTOR2);
+				if (tutor2 == null || "".equals(tutor2)) {
+					tutor2 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor3 = result.getField(TUTOR3);
+				if (tutor3 == null || "".equals(tutor3)) {
+					tutor3 = "";
+				} else {
+					numTutors++;
+				}
+				String student1 = result.getField(ALUMNO1);
+				if (student1 == null || "".equals(student1)) {
+					student1 = "";
+				} else {
+					numStudents++;
+				}
+				String student2 = result.getField(ALUMNO2);
+				if (student2 == null || "".equals(student2)) {
+					student2 = "";
+				} else {
+					numStudents++;
+				}
+				String student3 = result.getField(ALUMNO3);
+				if (student3 == null || "".equals(student3)) {
+					student3 = "";
+				} else {
+					numStudents++;
+				}
+				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
+				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
+				Double score = Double.parseDouble(result.getField(NOTA));
+				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
+				String repoLink = result.getField(ENLACE_REPOSITORIO);
+				if (repoLink == null) {
+					repoLink = "";
+				}
+
+				HistoricProjectBean bean = new HistoricProjectBean(title, description, tutor1, tutor2, tutor3, student1,
+						student2, student3, numStudents, numTutors, assignmentDate, presentationDate, score, totalDays,
+						repoLink);
+				beans.addBean(bean);
+			}
+		} catch (FilloException e) {
+			LOGGER.error("Error en históricos", e);
+		}
+	}
+	
+	/*private void createDataModel() {
+		beans = new BeanItemContainer<>(HistoricProjectBean.class);
+		try (ResultSet result = fachadaDatos.getResultSet(HISTORICO, TITULO)) {
 			while (result.next()) {
 				int numStudents = 0;
 				int numTutors = 0;
@@ -250,7 +317,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		} catch (SQLException e) {
 			LOGGER.error("Error en históricos", e);
 		}
-	}
+	}*/
 
 	/**
 	 * Crea las métricas globales de los proyectos históricos.
