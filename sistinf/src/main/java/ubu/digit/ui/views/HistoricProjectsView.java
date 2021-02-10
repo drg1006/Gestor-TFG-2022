@@ -1,8 +1,6 @@
 package ubu.digit.ui.views;
 
 import java.awt.Color;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,8 +22,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.vaadin.addon.JFreeChartWrapper;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Recordset;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItemContainer;
@@ -41,9 +37,10 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import ubu.digit.pesistence.SistInfData;
-import ubu.digit.pesistence.SistInfDataCsv;
-import ubu.digit.pesistence.SistInfDataXls;
+import ubu.digit.pesistence.SistInfDataAbstract;
+import ubu.digit.pesistence.SistInfDataFactory;
+
+import ubu.digit.ui.beans.ActiveProjectBean;
 import ubu.digit.ui.beans.HistoricProjectBean;
 import ubu.digit.ui.columngenerators.ProjectsColumnGenerator;
 import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
@@ -151,22 +148,16 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private TextField presentationDateFilter;
 	
 	/**
-	 * Fachada para obtener los datos.
+	 *  Fachada para obtener los datos
 	 */
-	private SistInfDataCsv fachadaDatosCsv;
-	
-	/**
-	 * Fachada para obtener los datos.
-	 */
-	private SistInfDataXls fachadaDatos;
+	private SistInfDataAbstract fachadaDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public HistoricProjectsView() {
-		//fachadaDatos = SistInfDataCsv.getInstance();
-		//fachadaDatos = SistInfData.getInstanceXls();
-		fachadaDatos = SistInfDataXls.getInstance();
+		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+		
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
@@ -178,7 +169,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		NavigationBar navBar = new NavigationBar();
 		addComponent(navBar);
 
-		createDataModel();
+		createDataModel(); 
 		createGlobalMetrics();
 		createYearlyMetrics();
 		createFilters();
@@ -194,130 +185,20 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 */
 	private void createDataModel() { //TODO:
 		beans = new BeanItemContainer<>(HistoricProjectBean.class);
-		try{ 
-			Recordset result = fachadaDatos.getResultSet(HISTORICO, TITULO);
-			while (result.next()) {
-				int numStudents = 0;
-				int numTutors = 0;
-				String title = result.getField(TITULO_CORTO);
-				String description = result.getField(DESCRIPCION);
-				String tutor1 = result.getField(TUTOR1);
-				if (tutor1 == null || "".equals(tutor1)) {
-					tutor1 = "";
-				} else {
-					numTutors++;
-				}
-				String tutor2 = result.getField(TUTOR2);
-				if (tutor2 == null || "".equals(tutor2)) {
-					tutor2 = "";
-				} else {
-					numTutors++;
-				}
-				String tutor3 = result.getField(TUTOR3);
-				if (tutor3 == null || "".equals(tutor3)) {
-					tutor3 = "";
-				} else {
-					numTutors++;
-				}
-				String student1 = result.getField(ALUMNO1);
-				if (student1 == null || "".equals(student1)) {
-					student1 = "";
-				} else {
-					numStudents++;
-				}
-				String student2 = result.getField(ALUMNO2);
-				if (student2 == null || "".equals(student2)) {
-					student2 = "";
-				} else {
-					numStudents++;
-				}
-				String student3 = result.getField(ALUMNO3);
-				if (student3 == null || "".equals(student3)) {
-					student3 = "";
-				} else {
-					numStudents++;
-				}
-				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
-				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
-				Double score = Double.parseDouble(result.getField(NOTA));
-				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
-				String repoLink = result.getField(ENLACE_REPOSITORIO);
-				if (repoLink == null) {
-					repoLink = "";
-				}
+		
+		//Se obtienen los datos del modelo
+		@SuppressWarnings("rawtypes")
+		ArrayList listaDataModel; //TODO: revisar tipos
+		listaDataModel = fachadaDatos.getDataModelHistoric(dateTimeFormatter);
 
-				HistoricProjectBean bean = new HistoricProjectBean(title, description, tutor1, tutor2, tutor3, student1,
-						student2, student3, numStudents, numTutors, assignmentDate, presentationDate, score, totalDays,
-						repoLink);
-				beans.addBean(bean);
-			}
-		} catch (FilloException e) {
-			LOGGER.error("Error en históricos", e);
+		for(int i=0;i<listaDataModel.size()-1;i++) {
+			HistoricProjectBean bean = new HistoricProjectBean((String)listaDataModel.get(i),(String)listaDataModel.get(++i), 
+					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
+					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
+					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), (String)listaDataModel.get(++i));
+			beans.addBean(bean);
 		}
 	}
-	
-	/*private void createDataModel() {
-		beans = new BeanItemContainer<>(HistoricProjectBean.class);
-		try (ResultSet result = fachadaDatos.getResultSet(HISTORICO, TITULO)) {
-			while (result.next()) {
-				int numStudents = 0;
-				int numTutors = 0;
-				String title = result.getString(TITULO_CORTO);
-				String description = result.getString(DESCRIPCION);
-				String tutor1 = result.getString(TUTOR1);
-				if (tutor1 == null || "".equals(tutor1)) {
-					tutor1 = "";
-				} else {
-					numTutors++;
-				}
-				String tutor2 = result.getString(TUTOR2);
-				if (tutor2 == null || "".equals(tutor2)) {
-					tutor2 = "";
-				} else {
-					numTutors++;
-				}
-				String tutor3 = result.getString(TUTOR3);
-				if (tutor3 == null || "".equals(tutor3)) {
-					tutor3 = "";
-				} else {
-					numTutors++;
-				}
-				String student1 = result.getString(ALUMNO1);
-				if (student1 == null || "".equals(student1)) {
-					student1 = "";
-				} else {
-					numStudents++;
-				}
-				String student2 = result.getString(ALUMNO2);
-				if (student2 == null || "".equals(student2)) {
-					student2 = "";
-				} else {
-					numStudents++;
-				}
-				String student3 = result.getString(ALUMNO3);
-				if (student3 == null || "".equals(student3)) {
-					student3 = "";
-				} else {
-					numStudents++;
-				}
-				LocalDate assignmentDate = LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
-				LocalDate presentationDate = LocalDate.parse(result.getString(FECHA_PRESENTACION), dateTimeFormatter);
-				Double score = result.getDouble(NOTA);
-				int totalDays = result.getShort(TOTAL_DIAS);
-				String repoLink = result.getString(ENLACE_REPOSITORIO);
-				if (repoLink == null) {
-					repoLink = "";
-				}
-
-				HistoricProjectBean bean = new HistoricProjectBean(title, description, tutor1, tutor2, tutor3, student1,
-						student2, student3, numStudents, numTutors, assignmentDate, presentationDate, score, totalDays,
-						repoLink);
-				beans.addBean(bean);
-			}
-		} catch (SQLException e) {
-			LOGGER.error("Error en históricos", e);
-		}
-	}*/
 
 	/**
 	 * Crea las métricas globales de los proyectos históricos.

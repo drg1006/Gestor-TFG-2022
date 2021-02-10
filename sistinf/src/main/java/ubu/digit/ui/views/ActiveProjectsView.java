@@ -1,22 +1,25 @@
 package ubu.digit.ui.views;
 
-import java.sql.ResultSet;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Recordset;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ExternalResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import ubu.digit.pesistence.SistInfData;
-import ubu.digit.pesistence.SistInfDataCsv;
-import ubu.digit.pesistence.SistInfDataXls;
+import ubu.digit.pesistence.SistInfDataAbstract;
+import ubu.digit.pesistence.SistInfDataFactory;
+
 import ubu.digit.ui.beans.ActiveProjectBean;
 import ubu.digit.ui.columngenerators.StudentsColumnGenerator;
 import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
@@ -84,22 +87,17 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	private TextField courseFilter;
 	
 	/**
-	 * Fachada para obtener los datos.
+	 *  Fachada para obtener los datos
 	 */
-	//private SistInfDataCsv fachadaDatosCsv;
-	
-	/**
-	 * Fachada para obtener los datos.
-	 */
-	private SistInfDataXls fachadaDatos;
+	private SistInfDataAbstract fachadaDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public ActiveProjectsView() {
-		//fachadaDatos = SistInfDataCsv.getInstance();
-		fachadaDatos = SistInfDataXls.getInstance();
-		//fachadaDatos = SistInfData.getInstanceCsv();
+		
+		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+		
 		setMargin(true);
 		setSpacing(true);
 
@@ -112,84 +110,28 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 		createCurrentProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("N2_Proyecto.csv");
+		Footer footer = new Footer("N2_Proyecto.csv"); //TODO: Revisar
 		addComponent(footer);
-	}
-
-	private void createDataModel() { //TODO:
-		beans = new BeanItemContainer<>(ActiveProjectBean.class);
-		try{
-			Recordset result = fachadaDatos.getResultSet(PROYECTO, TITULO);
-			while (result.next()) {
-				String title = result.getField(TITULO);
-				String description = result.getField(DESCRIPCION);
-				String tutor1 = result.getField(TUTOR1);
-				String tutor2 = result.getField(TUTOR2);
-				if (tutor2 == null) {
-					tutor2 = "";
-				}
-				String tutor3 = result.getField(TUTOR3);
-				if (tutor3 == null) {
-					tutor3 = "";
-				}
-				String student1 = result.getField(ALUMNO1);
-				String student2 = result.getField(ALUMNO2);
-				if (student2 == null) {
-					student2 = "";
-				}
-				String student3 = result.getField(ALUMNO3);
-				if (student3 == null) {
-					student3 = "";
-				}
-				String courseAssignment = result.getField(CURSO_ASIGNACION);
-
-				ActiveProjectBean bean = new ActiveProjectBean(title, description, tutor1, tutor2, tutor3, student1,
-						student2, student3, courseAssignment);
-				beans.addBean(bean);
-			}
-		} catch (FilloException e) {
-			LOGGER.error("Error en actuales", e);
-		}
 	}
 	
 	/**
 	 * Crea el modelo de datos de los proyectos activos.
 	 */
-	/*private void createDataModel() {
+	private void createDataModel() { //TODO:
 		beans = new BeanItemContainer<>(ActiveProjectBean.class);
-		try (ResultSet result = fachadaDatos.getResultSet(PROYECTO, TITULO)) {
-			while (result.next()) {
-				String title = result.getString(TITULO);
-				String description = result.getString(DESCRIPCION);
-				String tutor1 = result.getString(TUTOR1);
-				String tutor2 = result.getString(TUTOR2);
-				if (tutor2 == null) {
-					tutor2 = "";
-				}
-				String tutor3 = result.getString(TUTOR3);
-				if (tutor3 == null) {
-					tutor3 = "";
-				}
-				String student1 = result.getString(ALUMNO1);
-				String student2 = result.getString(ALUMNO2);
-				if (student2 == null) {
-					student2 = "";
-				}
-				String student3 = result.getString(ALUMNO3);
-				if (student3 == null) {
-					student3 = "";
-				}
-				String courseAssignment = result.getString(CURSO_ASIGNACION);
-
-				ActiveProjectBean bean = new ActiveProjectBean(title, description, tutor1, tutor2, tutor3, student1,
-						student2, student3, courseAssignment);
-				beans.addBean(bean);
-			}
-		} catch (SQLException e) {
-			LOGGER.error("Error en actuales", e);
+		
+		//Se obtienen los datos del modelo
+		List<String> listaDataModel;
+		listaDataModel = fachadaDatos.getDataModel();
+		
+		for(int i=0;i<listaDataModel.size();i++) {
+			ActiveProjectBean bean = new ActiveProjectBean(listaDataModel.get(i), listaDataModel.get(++i), 
+					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
+					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+			beans.addBean(bean);
 		}
-	}*/
-
+	}
+	
 	/**
 	 * Crea las métricas de los proyectos activos.
 	 */

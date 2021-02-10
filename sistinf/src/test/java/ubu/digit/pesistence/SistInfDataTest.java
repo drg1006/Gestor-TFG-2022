@@ -31,13 +31,13 @@ import ubu.digit.util.ExternalProperties;
  *
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ExternalProperties.class, SistInfData.class })
+@PrepareForTest({ ExternalProperties.class, SistInfDataAbstract.class })
 public class SistInfDataTest {
 
     /**
      * Clase a testear.
      */
-    SistInfDataCsv sistInfData;
+    SistInfDataAbstract sistInfData;
 
     /**
      * URL del fichero donde se encuentra el fichero de configuración del test.
@@ -55,8 +55,7 @@ public class SistInfDataTest {
 
         when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
 
-        sistInfData = SistInfData.getInstanceCsv();
-        //sistInfData = SistInfData.getInstanceXls();
+        sistInfData = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
     }
 
     /**
@@ -82,7 +81,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test
-    public void testMaxColumn() throws SQLException {
+    public void testMaxColumn() throws Exception {
 
         String tableName = "Prueba";
         Number num = sistInfData.getMaxColumn("Numero", tableName);
@@ -100,7 +99,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test
-    public void testMinColumn() throws SQLException {
+    public void testMinColumn() throws Exception {
         String tableName = "Prueba";
         Number num = sistInfData.getMinColumn("Numero", tableName);
         Number not = sistInfData.getMinColumn("Nota", tableName);
@@ -118,7 +117,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test
-    public void testStdvColumn() throws SQLException {
+    public void testStdvColumn() throws Exception { //TODO: Revisar throws
         String tableName = "Prueba";
         Number num = sistInfData.getStdvColumn("Numero", tableName);
         Number not = sistInfData.getStdvColumn("Nota", tableName);
@@ -134,7 +133,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test
-    public void testResultSet() throws SQLException {
+    public void testResultSet() throws Exception {
         assertThat(sistInfData.getResultSet("Prueba", "Numero"), notNullValue());
 
         assertThat(sistInfData.getResultSet("Prueba", "Nota",
@@ -165,7 +164,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test(expected = SQLException.class)
-    public void testTotalNumber() throws SQLException {
+    public void testTotalNumber() throws Exception {
 
         Number obtenido = sistInfData.getTotalNumber("Nota", "Prueba",
                 "Nota='5'");
@@ -185,7 +184,7 @@ public class SistInfDataTest {
     }
 
     @Test
-    public void testQuartilColumn() throws SQLException {
+    public void testQuartilColumn() throws Exception {
         assertThat(sistInfData.getQuartilColumn("Nota", "Prueba", new Double(
                 0.25)), notNullValue());
     }
@@ -198,7 +197,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test
-    public void testFechas() throws SQLException {
+    public void testFechas() throws Exception {
         LocalDate esperado = sistInfData.getYear("Fecha", "Prueba", true);
         LocalDate valor = LocalDate.of(1649, 1, 1);
 
@@ -232,7 +231,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test(expected = SQLException.class)
-    public void testSinTabla() throws SQLException {
+    public void testSinTabla() throws Exception {
         sistInfData.getAvgColumn("Nada", "Nada");
     }
 
@@ -243,7 +242,7 @@ public class SistInfDataTest {
      * @throws SQLException
      */
     @Test(expected = SQLException.class)
-    public void testTablaVacia() throws SQLException {
+    public void testTablaVacia() throws Exception {
         sistInfData.getAvgColumn("Nada", "Vacia");
     }
 
@@ -270,43 +269,6 @@ public class SistInfDataTest {
     	Number num_esperado = 0;
 		num_esperado = sistInfData.getProjectActivos("Titulo","FechaPresentacion", "N3_Historico", year);
         assertThat(num_esperado, is((Number) 2F));
-    }*/
-    
-	/**
-     * Test que comprueba los proyectos escogidos por varias personas (grupales)
-     * 
-     * @throws SQLException
-     */
-    /*@Test
-    public void testProjectGrupales() throws SQLException {
-    	Number num_esperado = 0;
-    	num_esperado = sistInfData.getProjectVariosAlum("Titulo","Alumno2" ,"Alumno3", "N3_Historico");
-        assertThat(num_esperado, is((Number) 1F));
-    }*/
-    
-    /**
-     * Test que comprueba los alumnos sin proyectos asignados
-     * 
-     * @throws SQLException
-     */
-   /* @Test
-    public void testAlumSinProject() throws SQLException {
-    	Number num_esperado = 0;
-    	num_esperado = sistInfData.getAlumSinProject("ApellidosNombre","Alumno1","Alumno2", "N3_Historico", "N2_Alumno");
-        assertThat(num_esperado, is((Number) 1F));
-    }*/
-    
-    /**
-     * FALTA
-     * Test que comprueba que no haya ningun alumno con dos proyectos
-     * 
-     * @throws SQLException
-     */
-    /*@Test
-    public void testAlumVariosProject() throws SQLException {
-    	Number num_esperado = 0;
-    	num_esperado = sistInfData.getProjectVariosAlum("Titulo","Alumno2" ,"Alumno3", "N3_Historico");
-        assertThat(num_esperado, is((Number) 1F));
     }*/
     
     /**Test que compruba que los alumnos que figuran como que tienen un proyecto esten en la tabla de alumnos*/

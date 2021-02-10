@@ -26,7 +26,7 @@ public final class Constants {
 	/**
 	 * Proyecto 
 	 */
-	public static final String PROYECTO = "Proyecto";
+	public static final String PROYECTO = "N2_Proyecto"; //TODO:N2_Proyecto
 
 	/**
 	 * Histórico 
@@ -51,7 +51,7 @@ public final class Constants {
 	/**
 	 * Título
 	 */
-	public static final String TITULO = "titulo";
+	public static final String TITULO = "Titulo";
 
 	/**
 	 * Título corto

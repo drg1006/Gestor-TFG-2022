@@ -15,14 +15,12 @@ import org.apache.log4j.Logger;
 
 import com.vaadin.server.VaadinService;
 
-import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 
 /**
- * Fachada Singleton de acceso a datos a través de un recurso
- * jdbc:relique:csv:dir (directorio donde se encuentra). Se proporciona una hoja
- * de datos con la definición de la estructura para probar sus funciones.
+ * Fachada Singleton de acceso a datos a través de un recurso jdbc:relique:csv:dir (directorio donde se encuentra). 
+ * Se proporciona una hoja de datos con la definición de la estructura para probar sus funciones.
  * 
  * @author Carlos López Nozal
  * @author Beatriz Zurera Martínez-Acitores
@@ -30,57 +28,7 @@ import static ubu.digit.util.Constants.*;
  * @author Diana Bringas Ochoa
  * @since 0.5
  */
-public class SistInfDataCsv implements Serializable {
-
-	/**
-	 * Select.
-	 */
-	private static final String SELECT = "select ";
-	
-	/**
-	 * Select all.
-	 */
-	private static final String SELECT_ALL = "select * ";
-	
-	/**
-	 * Select distinct.
-	 */
-	private static final String SELECT_DISTINCT = "select distinct ";
-	
-	/**
-	 * Count.
-	 */
-	private static final String COUNT = "count";
-	
-	/**
-	 * From.
-	 */
-	private static final String FROM = " from ";
-	
-	/**
-	 * Where.
-	 */
-	private static final String WHERE = " where ";
-	
-	/**
-	 * Distinto de vacío.
-	 */
-	private static final String DISTINTO_DE_VACIO = " != ''";
-	
-	/**
-	 * And.
-	 */
-	private static final String AND = " and ";
-	
-	/**
-	 * Like.
-	 */
-	private static final String LIKE = " like ";
-	
-	/**
-	 * Order by.
-	 */
-	private static final String ORDER_BY = " order by ";
+public class SistInfDataCsv extends SistInfDataAbstract implements Serializable {
 
 	/**
 	 * Serial Version UID.
@@ -98,26 +46,9 @@ public class SistInfDataCsv implements Serializable {
 	private transient Connection connection;
 
 	/**
-	 * Dirección de los ficheros en la aplicación del servidor.
-	 */
-	private String serverPath = "";
-
-	/**
 	 * Instancia con los datos.
 	 */
 	private static SistInfDataCsv instance;
-
-	/**
-	 * URL donde encontramos el fichero con las propiedades del proyecto.
-	 */
-	private static ExternalProperties prop = ExternalProperties.getInstance("/WEB-INF/classes/config.properties",
-			false);
-
-	/**
-	 * Directorio donde se encuentra los datos de entrada, es decir, los
-	 * ficheros que contienen los datos que vamos a consultar.
-	 */
-	public static final String DIRCSV = prop.getSetting("dataIn");
 
 	/**
 	 * Constructor vacío.
@@ -130,7 +61,7 @@ public class SistInfDataCsv implements Serializable {
 	/**
 	 * Método singleton para obtener la instancia de la clase fachada.
 	 */
-	public static SistInfDataCsv getInstance() {
+	public static SistInfDataCsv getInstance(){
 		if (instance == null) {
 			instance = new SistInfDataCsv();
 		}
@@ -140,7 +71,7 @@ public class SistInfDataCsv implements Serializable {
 	/**
 	 * Inicializa la conexión odbc al almacen de datos.
 	 */
-	private Connection getConection() {
+	private Connection getConection(){
 		Connection con = null;
 		String url = "jdbc:relique:csv:";
 		try {
@@ -170,7 +101,8 @@ public class SistInfDataCsv implements Serializable {
 	 *            sentencia sql a ejecutar
 	 * @return suma todas la filas de la primera columna
 	 */
-	private Number getResultSetNumber(String sql) { //TODO:revisar tipos porqeu antes era number no float
+	@Override
+	protected Number getResultSetNumber(String sql) { 
 		Float number = 0.0f;
 		boolean hasResults;
 
@@ -186,7 +118,7 @@ public class SistInfDataCsv implements Serializable {
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		}
-		return (Number) number;
+		return (Number) number; //TODO:revisar tipos porqeu antes era number no float
 	}
 
 	/**
@@ -200,6 +132,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return media aritmética
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getAvgColumn(String columnName, String tableName) throws SQLException {
 		List<Float> media = obtenerDatos(columnName, tableName);
 		Float resultadoMedia = new Float(0);
@@ -220,6 +153,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return valor máximo de la columna
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getMaxColumn(String columnName, String tableName) throws SQLException {
 		return Collections.max(obtenerDatos(columnName, tableName));
 	}
@@ -235,6 +169,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return valor mínimo de la columna
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getMinColumn(String columnName, String tableName) throws SQLException {
 		return Collections.min(obtenerDatos(columnName, tableName));
 	}
@@ -250,6 +185,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return desviación estandar
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getStdvColumn(String columnName, String tableName) throws SQLException {
 		return calculateStdev(obtenerDatos(columnName, tableName));
 	}
@@ -263,7 +199,8 @@ public class SistInfDataCsv implements Serializable {
 	 *            nombre de la tabla de datos
 	 * @return Listado con los datos de dicha columna.
 	 */
-	private List<Float> obtenerDatos(String columnName, String tableName) throws SQLException {
+	@Override
+	protected List<Float> obtenerDatos(String columnName, String tableName) throws SQLException {
 		String sql = SELECT + columnName + FROM + tableName + ";";
 		List<Float> media = new ArrayList<>();
 		try (Statement statement = connection.createStatement(); 
@@ -280,39 +217,6 @@ public class SistInfDataCsv implements Serializable {
 	}
 
 	/**
-	 * Calcula la desviación standard.
-	 * 
-	 * @param list
-	 *            Listado de los números de los que calcular la desviación.
-	 * @return Desviación standard.
-	 */
-	private Double calculateStdev(List<Float> list) {
-		double sum = 0;
-
-		for (int i = 0; i < list.size(); i++) {
-			sum = sum + list.get(i);
-		}
-		double mean = sum / list.size();
-		double[] deviations = new double[list.size()];
-
-		for (int i = 0; i < deviations.length; i++) {
-			deviations[i] = list.get(i) - mean;
-		}
-		double[] squares = new double[list.size()];
-
-		for (int i = 0; i < squares.length; i++) {
-			squares[i] = deviations[i] * deviations[i];
-		}
-		sum = 0;
-
-		for (int i = 0; i < squares.length; i++) {
-			sum = sum + squares[i];
-		}
-		double result = sum / (list.size() - 1);
-		return Math.sqrt(result);
-	}
-
-	/**
 	 * Ejecuta una sentencia SQL obteniendo la mediana de la columna de una
 	 * tabla, ambas pasadas como parámetro.
 	 * 
@@ -325,7 +229,8 @@ public class SistInfDataCsv implements Serializable {
 	 * @throws SQLException
 	 * @throws SQLException
 	 */
-	public Number getQuartilColumn(String columnName, String tableName, double percent) throws SQLException {
+	@Override
+	protected Number getQuartilColumn(String columnName, String tableName, double percent) throws SQLException {
 		Number nTotalValue = getTotalNumber(columnName, tableName);
 		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO + ORDER_BY
 				+ columnName;
@@ -344,7 +249,8 @@ public class SistInfDataCsv implements Serializable {
 	 * @return listado con los números.
 	 * @throws SQLException
 	 */
-	private List<Double> getListNumber(String columnName, String sql) throws SQLException {
+	@Override
+	protected List<Double> getListNumber(String columnName, String sql) throws SQLException {
 		List<Double> listValues = new ArrayList<>(100);
 		try (Statement statement = connection.createStatement()) {
 			Boolean hasResults = statement.execute(sql);
@@ -368,7 +274,7 @@ public class SistInfDataCsv implements Serializable {
 	 *            ResultSet a partir del cual obtener los valores.
 	 * @throws SQLException
 	 */
-	private void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) throws SQLException {
+	protected void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) throws SQLException {
 		while (result.next()) {
 			listValues.add(result.getDouble(columnName));
 		}
@@ -385,6 +291,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getTotalNumber(String columnName, String tableName) throws SQLException {
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO;
@@ -404,7 +311,8 @@ public class SistInfDataCsv implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws SQLException
 	 */
-	public Number getTotalNumber(String columnName, String tableName, String whereCondition) throws SQLException {
+	@Override
+	protected Number getTotalNumber(String columnName, String tableName, String whereCondition) throws SQLException {
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO + AND + whereCondition + " ;";
 		return getResultSetNumber(sql);
@@ -421,6 +329,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getTotalNumber(String[] columnsName, String tableName) throws SQLException {
 		String sql;
 		Set<String> noDups = new HashSet<>();
@@ -451,7 +360,7 @@ public class SistInfDataCsv implements Serializable {
 	 *            número de columnas que tiene el resultset
 	 * @throws SQLException
 	 */
-	private void addUniqueStrings(Set<String> noDups, ResultSet resultSet, int numColumns) throws SQLException {
+	protected void addUniqueStrings(Set<String> noDups, ResultSet resultSet, int numColumns) throws SQLException {
 		while (resultSet.next()) {
 			for (int j = 1; j <= numColumns; ++j) {
 				noDups.add(resultSet.getString(j));
@@ -466,6 +375,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return número total de proyectos sin asignar
 	 * @throws SQLException
 	 */
+	@Override
 	public Number getTotalFreeProject() throws SQLException {
 		String sql = SELECT + COUNT + "(*)" + FROM + "Proyecto" + WHERE + ALUMNO1 + LIKE + "'%Aal%'";
 		return getResultSetNumber(sql);
@@ -482,7 +392,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return conjunto de filas distintas de null.
 	 * @throws SQLException
 	 */
-	public ResultSet getResultSet(String tableName, String columnName) throws SQLException {
+	protected ResultSet getResultSet(String tableName, String columnName) throws SQLException {
 		Statement statement = connection.createStatement();
 		String sql = SELECT_ALL + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
 		return statement.executeQuery(sql);
@@ -502,7 +412,7 @@ public class SistInfDataCsv implements Serializable {
 	 *         where.
 	 * @throws SQLException
 	 */
-	public ResultSet getResultSet(String tableName, String columnName, String whereCondition) throws SQLException {
+	protected ResultSet getResultSet(String tableName, String columnName, String whereCondition) throws SQLException {
 		Statement statement = connection.createStatement();
 		String sql = SELECT_ALL + FROM + tableName + WHERE + whereCondition + ";";
 		statement.execute(sql);
@@ -525,7 +435,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return conjunto de filas distintas de null.
 	 * @throws SQLException
 	 */
-	public ResultSet getResultSet(String tableName, String columnName, String[] filters, String[] columnsName)
+	protected ResultSet getResultSet(String tableName, String columnName, String[] filters, String[] columnsName)
 			throws SQLException {
 		Statement statement = connection.createStatement();
 		StringBuilder sql = new StringBuilder();
@@ -575,6 +485,7 @@ public class SistInfDataCsv implements Serializable {
 	 * @return Curso más bajo que ha encontrado.
 	 * @throws SQLException
 	 */
+	@Override
 	public LocalDate getYear(String columnName, String tableName, Boolean minimo) throws SQLException {
 		String sql = SELECT + columnName + FROM + tableName + ";";
 		List<LocalDate> listadoFechas = new ArrayList<>();
@@ -610,7 +521,8 @@ public class SistInfDataCsv implements Serializable {
 	 * @return Un lista con todos los datos que hemos solicitado.
 	 * @throws SQLException
 	 */
-	public List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
+	@Override
+	protected List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
 			String columnName4, String tableName, Number curso) throws SQLException {
 		List<Object> lista;
 		List<List<Object>> resultados = new ArrayList<>();
@@ -643,28 +555,199 @@ public class SistInfDataCsv implements Serializable {
 	}
 
 	/**
-	 * Transforma el string que le llega en un tipo Date.
-	 * 
-	 * @param date
-	 *            Fecha en tipo String
-	 * @return Fecha con formato Date
-	 */
-	private LocalDate transform(String date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return LocalDate.parse(date, dateTimeFormatter);
-	}
-
-	/**
 	 * Destructor elimina la conexión al sistema de acceso a datos.
 	 * 
 	 **/
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() throws Throwable { //TODO:REVISAR
 		try {
 			connection.close();
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		}
-		super.finalize();
+		//super.finalize();
+	}
+	
+	//Funciones trasladadas de las vistas
+	
+	/**
+	 * Obtener los datos del modelo de datos de los proyectos activos.
+	 */
+	public List<String> getDataModel() { 
+		List<String> listaDataModel = new ArrayList<String>();
+		
+		try (ResultSet result = getResultSet(PROYECTO, TITULO)) {
+			while (result.next()) {
+				String title = result.getString(TITULO);
+				String description = result.getString(DESCRIPCION);
+				String tutor1 = result.getString(TUTOR1);
+				String tutor2 = result.getString(TUTOR2);
+				if (tutor2 == null) {
+					tutor2 = "";
+				}
+				String tutor3 = result.getString(TUTOR3);
+				if (tutor3 == null) {
+					tutor3 = "";
+				}
+				String student1 = result.getString(ALUMNO1);
+				String student2 = result.getString(ALUMNO2);
+				if (student2 == null) {
+					student2 = "";
+				}
+				String student3 = result.getString(ALUMNO3);
+				if (student3 == null) {
+					student3 = "";
+				}
+				String courseAssignment = result.getString(CURSO_ASIGNACION);
+				
+				listaDataModel.add(title);
+				listaDataModel.add(description);
+				listaDataModel.add(tutor1);
+				listaDataModel.add(tutor2);
+				listaDataModel.add(tutor3);
+				listaDataModel.add(student1);
+				listaDataModel.add(student2);
+				listaDataModel.add(student3);
+				listaDataModel.add(courseAssignment);
+			}	
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos del actuales", e);
+		}
+		return listaDataModel;
+}
+	
+	/**
+	 * Obtener nombre y apellidos del tribunal
+	 */
+	public List<String> getTribunal(){
+		List<String> listaTribunal = new ArrayList<String>();
+		
+		try (ResultSet result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS)) {
+			while (result.next()) {
+				String cargo = result.getString(CARGO);
+				String nombre = result.getString(NOMBRE_APELLIDOS);
+				String filaTribunal = cargo + ": " + nombre;
+				listaTribunal.add(filaTribunal);
+			}
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos del tribunal", e);
+		}
+		return listaTribunal;
+	}	
+	
+	/**
+	 * Obtener la descripción de las normas
+	 */
+	public List<String> getNormas(){
+		List<String> listaNormas = new ArrayList<String>();
+		
+		try (ResultSet result = getResultSet(NORMA, DESCRIPCION)) {
+			while (result.next()) {
+				String descripcion = result.getString(DESCRIPCION);
+				listaNormas.add(descripcion);
+			}
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos del normas", e);
+		}
+		return listaNormas;
+	}
+	
+	/**
+	 * Obtener la descripción y la url de los documentos
+	 */
+	public List<String> getDocumentos(){
+		List<String> listaDocumentos = new ArrayList<String>();
+		try (ResultSet result = getResultSet(DOCUMENTO, DESCRIPCION)) {
+			while (result.next()) {
+				String descripcion = result.getString(DESCRIPCION);
+				String url = result.getString("Url"); //TODO: revisar nombre columna
+				listaDocumentos.add(descripcion);
+				listaDocumentos.add(url);
+			}
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos del documentos", e);
+		}
+		return listaDocumentos;
+	}
+	
+	/**
+	 * Obtener los datos del modelo de datos de los históricos
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
+		ArrayList listaDataModel=new ArrayList();
+		
+		try (ResultSet result = getResultSet(HISTORICO, TITULO)) {
+			while (result.next()) {
+				int numStudents = 0;
+				int numTutors = 0;
+				String title = result.getString(TITULO_CORTO);
+				String description = result.getString(DESCRIPCION);
+				String tutor1 = result.getString(TUTOR1);
+				if (tutor1 == null || "".equals(tutor1)) {
+					tutor1 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor2 = result.getString(TUTOR2);
+				if (tutor2 == null || "".equals(tutor2)) {
+					tutor2 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor3 = result.getString(TUTOR3);
+				if (tutor3 == null || "".equals(tutor3)) {
+					tutor3 = "";
+				} else {
+					numTutors++;
+				}
+				String student1 = result.getString(ALUMNO1);
+				if (student1 == null || "".equals(student1)) {
+					student1 = "";
+				} else {
+					numStudents++;
+				}
+				String student2 = result.getString(ALUMNO2);
+				if (student2 == null || "".equals(student2)) {
+					student2 = "";
+				} else {
+					numStudents++;
+				}
+				String student3 = result.getString(ALUMNO3);
+				if (student3 == null || "".equals(student3)) {
+					student3 = "";
+				} else {
+					numStudents++;
+				}
+				LocalDate assignmentDate = LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
+				LocalDate presentationDate = LocalDate.parse(result.getString(FECHA_PRESENTACION), dateTimeFormatter);
+				Double score = result.getDouble(NOTA);
+				int totalDays = result.getShort(TOTAL_DIAS);
+				String repoLink = result.getString(ENLACE_REPOSITORIO);
+				if (repoLink == null) {
+					repoLink = "";
+				}
+
+				listaDataModel.add(title);
+				listaDataModel.add(description);
+				listaDataModel.add(tutor1);
+				listaDataModel.add(tutor2);
+				listaDataModel.add(tutor3);
+				listaDataModel.add(student1);
+				listaDataModel.add(student2);
+				listaDataModel.add(student3);
+				listaDataModel.add(numStudents);				
+				listaDataModel.add(numTutors);
+				listaDataModel.add(assignmentDate);
+				listaDataModel.add(presentationDate);
+				listaDataModel.add(score);
+				listaDataModel.add(totalDays);
+				listaDataModel.add(repoLink);
+				
+			}
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos de los históricos", e);
+		}
+		return listaDataModel;
 	}
 }

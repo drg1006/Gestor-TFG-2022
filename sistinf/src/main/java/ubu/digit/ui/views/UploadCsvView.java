@@ -16,7 +16,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 
 import ubu.digit.pesistence.BOMRemoveUTF;
-import ubu.digit.pesistence.SistInfData;
+import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
@@ -239,7 +239,7 @@ public class UploadCsvView extends VerticalLayout implements View {
 		public void uploadFinished(FinishedEvent event) {
 			state.setValue("Idle");
 			try {
-				new BOMRemoveUTF().bomRemoveUTF(serverPath  + SistInfData.DIRCSV + "/" + event.getFilename());
+				new BOMRemoveUTF().bomRemoveUTF(serverPath  + SistInfDataAbstract.DIRCSV + "/" + event.getFilename());
 			} catch (FileNotFoundException e) {
 				LOGGER.error("Error en upload finished", e);
 				

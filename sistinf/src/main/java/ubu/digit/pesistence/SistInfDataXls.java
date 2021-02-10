@@ -18,8 +18,16 @@ import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Field;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
-import com.vaadin.server.VaadinService;
 
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.ExternalResource;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
+
+import ubu.digit.ui.beans.ActiveProjectBean;
+import ubu.digit.ui.beans.HistoricProjectBean;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -27,68 +35,15 @@ import static ubu.digit.util.Constants.*;
 /**
  * Fachada Singleton de acceso a datos a través de fillo
  * 
- *@author Carlos López Nozal
- * @author Beatriz Zurera Martínez-Acitores
- * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-public class SistInfDataXls implements Serializable {
-
-	/**
-	 * Select.
-	 */
-	private static final String SELECT = "select ";
-	
-	/**
-	 * Select all.
-	 */
-	private static final String SELECT_ALL = "select * ";
-	
-	/**
-	 * Select distinct.
-	 */
-	private static final String SELECT_DISTINCT = "select distinct ";
-	
-	/**
-	 * Count.
-	 */
-	private static final String COUNT = "count";
-	
-	/**
-	 * From.
-	 */
-	private static final String FROM = " from ";
-	
-	/**
-	 * Where.
-	 */
-	private static final String WHERE = " where ";
-	
-	/**
-	 * Distinto de vacío.
-	 */
-	private static final String DISTINTO_DE_VACIO = " != ''";
-	
-	/**
-	 * And.
-	 */
-	private static final String AND = " and ";
-	
-	/**
-	 * Like.
-	 */
-	private static final String LIKE = " like ";
-	
-	/**
-	 * Order by.
-	 */
-	private static final String ORDER_BY = " order by ";
+public class SistInfDataXls extends SistInfDataAbstract implements Serializable {
 
 	/**
 	 * Serial Version UID.
 	 */
 	private static final long serialVersionUID = -6019587024081762319L;
-
+	
 	/**
 	 * Logger de la clase.
 	 */
@@ -100,26 +55,9 @@ public class SistInfDataXls implements Serializable {
 	private transient com.codoid.products.fillo.Connection connection;
 
 	/**
-	 * Dirección de los ficheros en la aplicación del servidor.
-	 */
-	private String serverPath = "";
-
-	/**
 	 * Instancia con los datos.
 	 */
 	private static SistInfDataXls instance;
-
-	/**
-	 * URL donde encontramos el fichero con las propiedades del proyecto.
-	 */
-	private static ExternalProperties prop = ExternalProperties.getInstance("/WEB-INF/classes/config.properties",
-			false);
-
-	/**
-	 * Directorio donde se encuentra los datos de entrada, es decir, los
-	 * ficheros que contienen los datos que vamos a consultar.
-	 */
-	public static final String DIRCSV = prop.getSetting("dataIn");
 
 	/**
 	 * Constructor vacío.
@@ -149,13 +87,14 @@ public class SistInfDataXls implements Serializable {
 		com.codoid.products.fillo.Connection conn = null;
         try {
       	   Fillo fillo=new Fillo();
-      	   /*if (DIRCSV.startsWith("/")) {
+			
+      	   if (DIRCSV.startsWith("/")) {
 				serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 			}
-      	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);*/
+      	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
-      	   //conn = fillo.getConnection(serverPath + DIRCSV + "BaseDeDatosTFGTFM.xls");
-      	   conn = fillo.getConnection("C:\\Users\\DianaBO\\Documents\\UNIVERSIDAD\\TFG\\Proyecto\\Gestor-TFG-2016\\sistinf\\src\\main\\resources\\data\\BaseDeDatosTFGTFM.xls");
+      	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
+      	   //conn = fillo.getConnection("C:\\Users\\DianaBO\\Documents\\UNIVERSIDAD\\TFG\\Proyecto\\Gestor-TFG-2016\\sistinf\\src\\main\\resources\\data\\BaseDeDatosTFGTFM.xls");
 
       	}catch (FilloException e) {
       		LOGGER.error(e);
@@ -171,23 +110,18 @@ public class SistInfDataXls implements Serializable {
 	 *            sentencia sql a ejecutar
 	 * @return suma todas la filas de la primera columna
 	 */
-	private Number getResultSetNumber(String sql) { //TODO:revisar tipos porque antes era number no float
+	@Override
+	protected Number getResultSetNumber(String sql) { 
 		Float number = 0.0f;;
-		Float castNumber = null;
 
 		try {
 			Recordset rs = connection.executeQuery(sql);
-			while(rs.next()) {
-				String primeraCol = rs.getField(1).toString();
-				//castNumber = NumberFormat.getInstance().parse(rs.getField(primeraCol)); //Cast de String a Number
-				castNumber = Float.parseFloat(rs.getField(primeraCol));
-				number += castNumber; //Se van sumando lo que vamos obteniendo
-			}
+			number = (float) rs.getCount();//Se cuenta el número de filas que devuelve
 			
 		}catch (FilloException e) {
 			LOGGER.error(e);
 		}
-		return number;
+		return (Number) number;//TODO:revisar tipos porque antes era number no float
 	}
 
 	/**
@@ -201,6 +135,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return media aritmética
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getAvgColumn(String columnName, String tableName) throws FilloException {
 		List<Float> media = obtenerDatos(columnName, tableName);
 		Float resultadoMedia = new Float(0);
@@ -221,6 +156,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return valor máximo de la columna
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getMaxColumn(String columnName, String tableName) throws FilloException {
 		return Collections.max(obtenerDatos(columnName, tableName));
 	}
@@ -236,6 +172,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return valor mínimo de la columna
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getMinColumn(String columnName, String tableName) throws FilloException {
 		return Collections.min(obtenerDatos(columnName, tableName));
 	}
@@ -251,6 +188,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return desviación estandar
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getStdvColumn(String columnName, String tableName) throws FilloException {
 		return calculateStdev(obtenerDatos(columnName, tableName));
 	}
@@ -264,56 +202,21 @@ public class SistInfDataXls implements Serializable {
 	 *            nombre de la tabla de datos
 	 * @return Listado con los datos de dicha columna.
 	 */
-	private List<Float> obtenerDatos(String columnName, String tableName) throws FilloException {
-		String sql = SELECT + columnName + FROM + tableName + ";";
+	@Override
+	protected List<Float> obtenerDatos(String columnName, String tableName) throws FilloException {
+		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
 		List<Float> media = new ArrayList<>();
-		String fieldName;
+		String data;
 		try {
 			Recordset rs = connection.executeQuery(sql);
-			ArrayList<String> fieldNames = rs.getFieldNames();
 			while(rs.next()) {
-	        	for(int i=0;i<fieldNames.size();i++){                
-	               fieldName = fieldNames.get(i);
-	               media.add(Float.parseFloat(rs.getField(fieldName)));
-	        	}  
+				data = rs.getField(columnName);
+				media.add(Float.parseFloat(data));
 			}
 		}catch (FilloException e) {
 			LOGGER.error(e);
 		}
 		return media;
-	}
-	
-	/**
-	 * Calcula la desviación standard.
-	 * 
-	 * @param list
-	 *            Listado de los números de los que calcular la desviación.
-	 * @return Desviación standard.
-	 */
-	private Double calculateStdev(List<Float> list) {
-		double sum = 0;
-
-		for (int i = 0; i < list.size(); i++) {
-			sum = sum + list.get(i);
-		}
-		double mean = sum / list.size();
-		double[] deviations = new double[list.size()];
-
-		for (int i = 0; i < deviations.length; i++) {
-			deviations[i] = list.get(i) - mean;
-		}
-		double[] squares = new double[list.size()];
-
-		for (int i = 0; i < squares.length; i++) {
-			squares[i] = deviations[i] * deviations[i];
-		}
-		sum = 0;
-
-		for (int i = 0; i < squares.length; i++) {
-			sum = sum + squares[i];
-		}
-		double result = sum / (list.size() - 1);
-		return Math.sqrt(result);
 	}
 
 	/**
@@ -329,7 +232,8 @@ public class SistInfDataXls implements Serializable {
 	 * @throws FilloException
 	 * @throws FilloException
 	 */
-	public Number getQuartilColumn(String columnName, String tableName, double percent) throws FilloException {
+	@Override
+	protected Number getQuartilColumn(String columnName, String tableName, double percent) throws FilloException {
 		Number nTotalValue = getTotalNumber(columnName, tableName);
 		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO + ORDER_BY
 				+ columnName;
@@ -348,7 +252,8 @@ public class SistInfDataXls implements Serializable {
 	 * @return listado con los números.
 	 * @throws FilloException
 	 */
-	private List<Double> getListNumber(String columnName, String sql) throws FilloException {
+	@Override
+	protected List<Double> getListNumber(String columnName, String sql) throws FilloException {
 		List<Double> listValues = new ArrayList<>(100);
 		try {
 			Recordset rs = connection.executeQuery(sql);
@@ -372,7 +277,7 @@ public class SistInfDataXls implements Serializable {
 	 *            ResultSet a partir del cual obtener los valores.
 	 * @throws FilloException
 	 */
-	private void addNumbersToList(String columnName, List<Double> listValues, Recordset result) throws FilloException {
+	protected void addNumbersToList(String columnName, List<Double> listValues, Recordset result) throws FilloException {
 		while (result.next()) {
 			listValues.add(Double.parseDouble(result.getField(columnName)));
 		}
@@ -389,6 +294,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getTotalNumber(String columnName, String tableName) throws FilloException {
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO;
@@ -408,7 +314,8 @@ public class SistInfDataXls implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws FilloException
 	 */
-	public Number getTotalNumber(String columnName, String tableName, String whereCondition) throws FilloException {
+	@Override
+	protected Number getTotalNumber(String columnName, String tableName, String whereCondition) throws FilloException {
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO + AND + whereCondition + " ;";
 		return getResultSetNumber(sql);
@@ -425,6 +332,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return número total de filas distintas
 	 * @throws FilloException
 	 */
+	@Override
 	public Number getTotalNumber(String[] columnsName, String tableName) throws FilloException {
 		String sql;
 		Set<String> noDups = new HashSet<>();
@@ -433,8 +341,8 @@ public class SistInfDataXls implements Serializable {
 				sql = SELECT + columnsName[i] + FROM + tableName + WHERE + columnsName[i] + DISTINTO_DE_VACIO;
 				try {
 					Recordset rs = connection.executeQuery(sql);
-					int numColumns = rs.getFieldNames().size();
-					addUniqueStrings(noDups, rs, numColumns);
+					//int numColumns = rs.getFieldNames().size();
+					addUniqueStrings(noDups, rs, columnsName[i]);
 				}catch (FilloException e) {
 					LOGGER.error(e);
 				}
@@ -456,13 +364,11 @@ public class SistInfDataXls implements Serializable {
 	 *            número de columnas que tiene el resultset
 	 * @throws FilloException
 	 */
-	private void addUniqueStrings(Set<String> noDups, Recordset resultSet, int numColumns) throws FilloException {
+	protected void addUniqueStrings(Set<String> noDups, Recordset resultSet, String columnsName) throws FilloException {
 		String nameCol;
 		while (resultSet.next()) {
-			for (int j = 1; j <= numColumns; ++j) {
-				nameCol = resultSet.getField(1).toString(); //Obtenemos el nombre de la columna
-				noDups.add(resultSet.getField(nameCol)); //Añadimos los datos obtenidos en esa columna
-			}
+			String data = resultSet.getField(columnsName);//Obtenemos los datos de la columna
+			noDups.add(data);
 		}
 	}
 
@@ -473,8 +379,8 @@ public class SistInfDataXls implements Serializable {
 	 * @return número total de proyectos sin asignar
 	 * @throws FilloException
 	 */
-	public Number getTotalFreeProject() throws FilloException {
-		String sql = SELECT + COUNT + "(*)" + FROM + "Proyecto" + WHERE + ALUMNO1 + LIKE + "'%Aal%'";
+	public Number getTotalFreeProject() throws FilloException { //TODO:metodo contains
+		String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";
 		return getResultSetNumber(sql);
 	}
 
@@ -489,10 +395,9 @@ public class SistInfDataXls implements Serializable {
 	 * @return conjunto de filas distintas de null.
 	 * @throws FilloException
 	 */
-	public Recordset getResultSet(String tableName, String columnName) throws FilloException {
+	protected Recordset getResultSet(String tableName, String columnName) throws FilloException {
 		String sql = SELECT_ALL + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
-		Recordset rs = connection.executeQuery(sql);
-		return rs;
+		return connection.executeQuery(sql);
 	}
 
 	/**
@@ -509,10 +414,9 @@ public class SistInfDataXls implements Serializable {
 	 *         where.
 	 * @throws FilloException
 	 */
-	public Recordset getResultSet(String tableName, String columnName, String whereCondition) throws FilloException {
+	protected Recordset getResultSet(String tableName, String columnName, String whereCondition) throws FilloException {
 		String sql = SELECT_ALL + FROM + tableName + WHERE + whereCondition + ";";
-		Recordset rs = connection.executeQuery(sql);
-		return rs;
+		return connection.executeQuery(sql);
 	}//TODO: Revisar return return rs.getResultSet();
 
 	/**
@@ -531,7 +435,7 @@ public class SistInfDataXls implements Serializable {
 	 * @return conjunto de filas distintas de null.
 	 * @throws FilloException
 	 */
-	public Recordset getResultSet(String tableName, String columnName, String[] filters, String[] columnsName) throws FilloException {
+	protected Recordset getResultSet(String tableName, String columnName, String[] filters, String[] columnsName) throws FilloException {
 		StringBuilder sql = new StringBuilder();
 		if (columnsName == null) {
 			sql.append(SELECT_ALL);
@@ -579,8 +483,9 @@ public class SistInfDataXls implements Serializable {
 	 * @return Curso más bajo que ha encontrado.
 	 * @throws FilloException
 	 */
+	@Override
 	public LocalDate getYear(String columnName, String tableName, Boolean minimo) throws FilloException {
-		String sql = SELECT + columnName + FROM + tableName + ";";
+		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
 		List<LocalDate> listadoFechas = new ArrayList<>();
 		
 		Recordset rs = connection.executeQuery(sql);
@@ -614,7 +519,8 @@ public class SistInfDataXls implements Serializable {
 	 * @return Un lista con todos los datos que hemos solicitado.
 	 * @throws FilloException
 	 */
-	public List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
+	@Override
+	protected List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
 			String columnName4, String tableName, Number curso) throws FilloException {
 		List<Object> lista;
 		List<List<Object>> resultados = new ArrayList<>();
@@ -646,29 +552,202 @@ public class SistInfDataXls implements Serializable {
 	}
 
 	/**
-	 * Transforma el string que le llega en un tipo Date.
-	 * 
-	 * @param date
-	 *            Fecha en tipo String
-	 * @return Fecha con formato Date
-	 */
-	private LocalDate transform(String date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return LocalDate.parse(date, dateTimeFormatter);
-	}
-
-	/**
 	 * Destructor elimina la conexión al sistema de acceso a datos.
 	 * 
 	 **/
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() throws Throwable { //TODO:REVISAR
 		try {
 			connection.close();
 		} catch (Exception e) {
 			LOGGER.error(e);
 		}
-		super.finalize();
-		
+		//super.finalize();	
 	}
+	
+	//Funciones trasladadas de las vistas
+	
+	/**
+	 * Obtener los datos del modelo de datos de los proyectos activos.
+	 */
+	public List<String> getDataModel() { //TODO:
+		List<String> listaDataModel = new ArrayList<String>();
+		try{
+			Recordset result = getResultSet(PROYECTO, TITULO);
+			while (result.next()) {
+				String title = result.getField(TITULO);
+				String description = result.getField(DESCRIPCION);
+				String tutor1 = result.getField(TUTOR1);
+				String tutor2 = result.getField(TUTOR2);
+				if (tutor2 == null) {
+					tutor2 = "";
+				}
+				String tutor3 = result.getField(TUTOR3);
+				if (tutor3 == null) {
+					tutor3 = "";
+				}
+				String student1 = result.getField(ALUMNO1);
+				String student2 = result.getField(ALUMNO2);
+				if (student2 == null) {
+					student2 = "";
+				}
+				String student3 = result.getField(ALUMNO3);
+				if (student3 == null) {
+					student3 = "";
+				}
+				String courseAssignment = result.getField(CURSO_ASIGNACION);
+
+				listaDataModel.add(title);
+				listaDataModel.add(description);
+				listaDataModel.add(tutor1);
+				listaDataModel.add(tutor2);
+				listaDataModel.add(tutor3);
+				listaDataModel.add(student1);
+				listaDataModel.add(student2);
+				listaDataModel.add(student3);
+				listaDataModel.add(courseAssignment);
+			}
+		} catch (FilloException e) {
+			LOGGER.error("Error al obtener los datos del actuales", e);
+		}
+		return listaDataModel;
+	}
+	
+	/**
+	 * Obtener nombre y apellidos del tribunal
+	 */
+	public List<String> getTribunal(){
+		List<String> listaTribunal = new ArrayList<String>();
+		try {
+			Recordset result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS);
+			while (result.next()) {
+				String cargo = result.getField(CARGO);
+				String nombre = result.getField(NOMBRE_APELLIDOS);
+				String filaTribunal = cargo + ": " + nombre;
+				listaTribunal.add(filaTribunal);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error al obtener los datos del tribunal", e);
+		}
+		return listaTribunal;
+	}
+	
+	/**
+	 * Obtener la descripción de las normas
+	 */
+	public List<String> getNormas(){
+		List<String> listaNormas = new ArrayList<String>();
+		try {
+			Recordset result = getResultSet(NORMA, DESCRIPCION);
+			while (result.next()) {
+				String descripcion = result.getField(DESCRIPCION);
+				listaNormas.add(descripcion);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error al obtener los datos del normas", e);
+		}
+		return listaNormas;
+	}
+	
+	/**
+	 * Obtener la descripción y la url de los documentos
+	 */
+	public List<String> getDocumentos(){
+		List<String> listaDocumentos = new ArrayList<String>();
+		try{
+			Recordset result = getResultSet(DOCUMENTO, DESCRIPCION);
+			while (result.next()) {
+				String descripcion = result.getField(DESCRIPCION);
+				String url = result.getField("Url"); //TODO: revisar nombre columna
+				listaDocumentos.add(descripcion);
+				listaDocumentos.add(url);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error al obtener los datos del documentos", e);
+		}
+		return listaDocumentos;
+	}
+	
+	/**
+	 * Obtener los datos del modelo de datos de los históricos
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
+		//List<T> listaDataModel = new ArrayList<>();
+		ArrayList listaDataModel=new ArrayList();
+		try{ 
+			Recordset result = getResultSet(HISTORICO, TITULO);
+			while (result.next()) {
+				int numStudents = 0;
+				int numTutors = 0;
+				String title = result.getField(TITULO_CORTO);
+				String description = result.getField(DESCRIPCION);
+				String tutor1 = result.getField(TUTOR1);
+				if (tutor1 == null || "".equals(tutor1)) {
+					tutor1 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor2 = result.getField(TUTOR2);
+				if (tutor2 == null || "".equals(tutor2)) {
+					tutor2 = "";
+				} else {
+					numTutors++;
+				}
+				String tutor3 = result.getField(TUTOR3);
+				if (tutor3 == null || "".equals(tutor3)) {
+					tutor3 = "";
+				} else {
+					numTutors++;
+				}
+				String student1 = result.getField(ALUMNO1);
+				if (student1 == null || "".equals(student1)) {
+					student1 = "";
+				} else {
+					numStudents++;
+				}
+				String student2 = result.getField(ALUMNO2);
+				if (student2 == null || "".equals(student2)) {
+					student2 = "";
+				} else {
+					numStudents++;
+				}
+				String student3 = result.getField(ALUMNO3);
+				if (student3 == null || "".equals(student3)) {
+					student3 = "";
+				} else {
+					numStudents++;
+				}
+				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
+				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
+				Double score = Double.parseDouble(result.getField(NOTA));
+				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
+				String repoLink = result.getField(ENLACE_REPOSITORIO);
+				if (repoLink == null) {
+					repoLink = "";
+				}
+
+				listaDataModel.add(title);
+				listaDataModel.add(description);
+				listaDataModel.add(tutor1);
+				listaDataModel.add(tutor2);
+				listaDataModel.add(tutor3);
+				listaDataModel.add(student1);
+				listaDataModel.add(student2);
+				listaDataModel.add(student3);
+				listaDataModel.add(numStudents);				
+				listaDataModel.add(numTutors);
+				listaDataModel.add(assignmentDate);
+				listaDataModel.add(presentationDate);
+				listaDataModel.add(score);
+				listaDataModel.add(totalDays);
+				listaDataModel.add(repoLink);
+				
+			}
+		} catch (FilloException e) {
+			LOGGER.error("Error al obtener los datos de los históricos", e);
+		}
+		return listaDataModel;
+	}	
 }
+
