@@ -1,15 +1,6 @@
 package es.ubu.lsi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import javax.servlet.annotation.WebServlet;
-import javax.swing.JFrame;
-import javax.xml.crypto.Data;
-
-import java.io.*;  
-import java.sql.*;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -33,39 +24,33 @@ public class MyUI extends UI {
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         
         final TextField name = new TextField();
-  
-        try {  
-            Class.forName ( "sun.jdbc.odbc.JdbcOdbcDriver" );  
-            Connection con = DriverManager.getConnection ( "jdbc: odbc: prueba" );  
-            Statement st = con.createStatement ();  
-            ResultSet rs = st.executeQuery ( "Select * from N1_Tribunal" );      
-            while  (rs.next ()){  
-                System.out.print ("hola");  
-            }  
-            
-            st.close ();  
-            con.close (); 
-            
-            name.setCaption("Pruebas");        
-	        layout.addComponents(name);
-	        layout.setMargin(true);
-	        layout.setSpacing(true);
-	        setContent(layout);  
-	        
-        }  catch  (Exception ex) {  
-            System.err.print ( "Excepción:" );  
-            System.err.println (ex.getMessage ());  
-        }  	        
-    }
+        name.setCaption("Type your name here:");
 
+        Button button = new Button("Click Me");
+        button.addClickListener( e -> {
+            layout.addComponent(new Label("Thanks " + name.getValue() 
+                    + ", it works!"));
+        });
+        
+        layout.addComponents(name, button);
+        layout.setMargin(true);
+        layout.setSpacing(true);
+        
+        setContent(layout);
+        
+       
+        
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
-    public static class MyUIServlet extends VaadinServlet {
+    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false) class MyUIServlet extends VaadinServlet {
+
+		/**
+		 * 
+		 */
 		private static final long serialVersionUID = 1L;
     }
+}
 }
