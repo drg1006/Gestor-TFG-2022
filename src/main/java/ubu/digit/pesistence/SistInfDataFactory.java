@@ -28,12 +28,6 @@ public class SistInfDataFactory implements Serializable { //TODO: Serializabble?
 	protected static final Logger LOGGER = Logger.getLogger(SistInfDataFactory.class);
 	
 	/**
-	 * URL donde encontramos el fichero con las propiedades del proyecto.
-	 */
-	private static ExternalProperties prop = ExternalProperties.getInstance("/WEB-INF/classes/config.properties",
-			false);
-	
-	/**
 	 * Método para obtener la instancia de la clase fachada según el parámetro pasado.
 	 */
 	public static SistInfDataAbstract getInstanceData(String type) {
