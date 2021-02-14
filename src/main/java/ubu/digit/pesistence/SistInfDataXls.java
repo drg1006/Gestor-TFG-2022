@@ -453,11 +453,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				sql.append(AND + "(");
 				for (String filter : filters) {
 					whereCondition = " \n" + columnName + " = '" + filter + "')";
-					rs = getSubQuery(sql,whereCondition);
+					rs_aux = getSubQuery(sql,whereCondition);
 					
-					/*if(rs_aux!= null) {
+					if(rs_aux!= null) {
 						rs = rs_aux;
-					}*/
+					}
 				}
 					
 			}
