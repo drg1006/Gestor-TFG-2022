@@ -1,0 +1,72 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: memoria.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+A level-1 auxiliary file: ./tex/1_Introduccion.aux
+Reallocating 'name_of_file' (item size: 1) to 35 items.
+A level-1 auxiliary file: ./tex/2_Objetivos_del_proyecto.aux
+Reallocating 'name_of_file' (item size: 1) to 31 items.
+A level-1 auxiliary file: ./tex/3_Conceptos_teoricos.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: ./tex/4_Tecnicas_y_herramientas.aux
+Reallocating 'name_of_file' (item size: 1) to 60 items.
+A level-1 auxiliary file: ./tex/5_Aspectos_relevantes_del_desarrollo_del_proyecto.aux
+Reallocating 'name_of_file' (item size: 1) to 34 items.
+A level-1 auxiliary file: ./tex/6_Trabajos_relacionados.aux
+Reallocating 'name_of_file' (item size: 1) to 51 items.
+A level-1 auxiliary file: ./tex/7_Conclusiones_Lineas_de_trabajo_futuras.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: plain.bst
+Reallocating 'name_of_file' (item size: 1) to 13 items.
+Database file #1: bibliografia.bib
+Warning--I didn't find a database entry for "frontend_backend"
+Warning--I didn't find a database entry for "desarrollo_full_stack"
+Warning--I didn't find a database entry for "pagina_java"
+Warning--I didn't find a database entry for "pagina_maven"
+Warning--I didn't find a database entry for "pagina_vaadin"
+Warning--I didn't find a database entry for "pagina_eclipse"
+Warning--I didn't find a database entry for "pagina_github"
+Warning--I didn't find a database entry for "pagina_zenhub"
+Warning--I didn't find a database entry for "pagina_github_desktop"
+You've used 1 entry,
+            2118 wiz_defined-function locations,
+            519 strings with 4783 characters,
+and the built_in function-call counts, 237 in all, are:
+= -- 22
+> -- 7
+< -- 0
++ -- 3
+- -- 2
+* -- 8
+:= -- 46
+add.period$ -- 4
+call.type$ -- 1
+change.case$ -- 4
+chr.to.int$ -- 0
+cite$ -- 1
+duplicate$ -- 7
+empty$ -- 23
+format.name$ -- 2
+if$ -- 49
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 0
+newline$ -- 9
+num.names$ -- 2
+pop$ -- 8
+preamble$ -- 1
+purify$ -- 3
+quote$ -- 0
+skip$ -- 6
+stack$ -- 0
+substring$ -- 5
+swap$ -- 1
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 4
+warning$ -- 0
+while$ -- 2
+width$ -- 2
+write$ -- 14
+(There were 9 warnings)
