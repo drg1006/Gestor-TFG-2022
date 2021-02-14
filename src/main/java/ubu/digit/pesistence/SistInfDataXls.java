@@ -1,34 +1,22 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.sql.*;
-import java.text.NumberFormat;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Field;
-import com.codoid.products.fillo.Fillo;
-import com.codoid.products.fillo.Recordset;
+import com.codoid.products.fillo.*;
 
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
 
-import ubu.digit.ui.beans.ActiveProjectBean;
-import ubu.digit.ui.beans.HistoricProjectBean;
-import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 
@@ -83,7 +71,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @return con
 	 * 				conexión con el fichero .xsl 
 	 */
-	private com.codoid.products.fillo.Connection getConection() { //TODO:
+	private com.codoid.products.fillo.Connection getConection() {
 		com.codoid.products.fillo.Connection conn = null;
         try {
       	   Fillo fillo=new Fillo();
@@ -94,7 +82,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
       	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
-      	   //conn = fillo.getConnection("C:\\Users\\DianaBO\\Documents\\UNIVERSIDAD\\TFG\\Proyecto\\Gestor-TFG-2016\\sistinf\\src\\main\\resources\\data\\BaseDeDatosTFGTFM.xls");
 
       	}catch (FilloException e) {
       		LOGGER.error(e);
@@ -121,7 +108,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}catch (FilloException e) {
 			LOGGER.error(e);
 		}
-		return (Number) number;//TODO:revisar tipos porque antes era number no float
+		return (Number) number;
 	}
 
 	/**
@@ -365,7 +352,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @throws FilloException
 	 */
 	protected void addUniqueStrings(Set<String> noDups, Recordset resultSet, String columnsName) throws FilloException {
-		String nameCol;
 		while (resultSet.next()) {
 			String data = resultSet.getField(columnsName);//Obtenemos los datos de la columna
 			noDups.add(data);
@@ -380,7 +366,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @throws FilloException
 	 */
 	public Number getTotalFreeProject() throws FilloException { //TODO:metodo contains
-		String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";
+		String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";//TODO:"'%" 
 		return getResultSetNumber(sql);
 	}
 
@@ -415,9 +401,9 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @throws FilloException
 	 */
 	protected Recordset getResultSet(String tableName, String columnName, String whereCondition) throws FilloException {
-		String sql = SELECT_ALL + FROM + tableName + WHERE + whereCondition + ";";
+		String sql = SELECT_ALL + FROM + tableName + WHERE + whereCondition;
 		return connection.executeQuery(sql);
-	}//TODO: Revisar return return rs.getResultSet();
+	}
 
 	/**
 	 * Ejecuta una sentencia SQL obteniendo un conjunto de filas distintas de
@@ -435,8 +421,13 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @return conjunto de filas distintas de null.
 	 * @throws FilloException
 	 */
-	protected Recordset getResultSet(String tableName, String columnName, String[] filters, String[] columnsName) throws FilloException {
-		StringBuilder sql = new StringBuilder();
+	protected Recordset getResultSet(String tableName, String columnName, String[] filters, String[] columnsName) throws FilloException{
+		StringBuilder sql = new StringBuilder(); 
+		Recordset rs = null;
+		Recordset rs_aux = null;
+		String whereCondition = "";
+		//ArrayList<String> lista = new ArrayList<String>();
+		
 		if (columnsName == null) {
 			sql.append(SELECT_ALL);
 		} else {
@@ -452,22 +443,50 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 			}
 		}
 		sql.append(" \n" + FROM + tableName + " \n" + WHERE + " (" + columnName + DISTINTO_DE_VACIO + ")");
-		if (filters != null) {
-			sql.append(AND + "(");
-			int index = 0;
-			for (String filter : filters) {
-				if (index == 0) {
-					sql.append(" \n" + columnName + " = '" + filter + "'");
-					index++;
-				} else {
-					sql.append(" \nOR " + columnName + " = '" + filter + "'");
+		
+		try {
+			//Se ejecuta la primera parte de la query
+			rs = connection.executeQuery(sql.toString());//TODO:Revisar LinkedListMap<K,V>
+			
+			//Segunda parte de la query 
+			if (filters != null) {
+				sql.append(AND + "(");
+				for (String filter : filters) {
+					whereCondition = " \n" + columnName + " = '" + filter + "')";
+					rs = getSubQuery(sql,whereCondition);
+					
+					/*if(rs_aux!= null) {
+						rs = rs_aux;
+					}*/
 				}
+					
 			}
-			sql.append(");");
+		}catch(FilloException ex) {
+			//LOGGER.error(ex);
+			System.out.println("\nFilloException: "+ex.getMessage());
 		}
-		Recordset rs = connection.executeQuery(sql.toString());
+		
 		return rs;
-	}//TODO: revisar return statement.getResultSet();
+	}
+	
+	/**
+	 * Método que ejecuta las diferentes partes de una query.
+	 * 
+	 * @param sql
+	 * @param whereCondition
+	 * @return RecordSet resultado de la query pasada
+	 * @throws FilloException 
+	 */
+	private Recordset getSubQuery(StringBuilder sql, String whereCondition){
+		Recordset rs = null;
+		try {
+			rs = connection.executeQuery(sql.toString()+whereCondition);
+		}catch(FilloException ex) {
+			//LOGGER.error(ex);
+			System.out.println("\nFilloException: "+ex.getMessage());
+		}
+		return rs;
+	}
 
 	/**
 	 * Método que obtiene el curso más bajo o más alto, según el booleano, que
@@ -658,7 +677,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 			Recordset result = getResultSet(DOCUMENTO, DESCRIPCION);
 			while (result.next()) {
 				String descripcion = result.getField(DESCRIPCION);
-				String url = result.getField("Url"); //TODO: revisar nombre columna
+				String url = result.getField("Url");
 				listaDocumentos.add(descripcion);
 				listaDocumentos.add(url);
 			}

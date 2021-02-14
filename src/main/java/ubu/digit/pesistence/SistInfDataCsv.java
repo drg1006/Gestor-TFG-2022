@@ -118,7 +118,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		}
-		return (Number) number; //TODO:revisar tipos porqeu antes era number no float
+		return (Number) number; 
 	}
 
 	/**
@@ -660,7 +660,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		try (ResultSet result = getResultSet(DOCUMENTO, DESCRIPCION)) {
 			while (result.next()) {
 				String descripcion = result.getString(DESCRIPCION);
-				String url = result.getString("Url"); //TODO: revisar nombre columna
+				String url = result.getString("Url"); 
 				listaDocumentos.add(descripcion);
 				listaDocumentos.add(url);
 			}
