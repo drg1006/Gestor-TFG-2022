@@ -40,7 +40,6 @@ import com.vaadin.ui.VerticalLayout;
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
 
-import ubu.digit.ui.beans.ActiveProjectBean;
 import ubu.digit.ui.beans.HistoricProjectBean;
 import ubu.digit.ui.columngenerators.ProjectsColumnGenerator;
 import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
@@ -54,6 +53,7 @@ import static ubu.digit.util.Constants.*;
  * Vista de proyectos históricos.
  * 
  * @author Javier de la Fuente Barrios.
+ * @author Diana Bringas Ochoa
  */
 public class HistoricProjectsView extends VerticalLayout implements View {
 
@@ -183,7 +183,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Crea el modelo de datos de los proyectos históricos.
 	 */
-	private void createDataModel() { //TODO:
+	private void createDataModel() { 
 		beans = new BeanItemContainer<>(HistoricProjectBean.class);
 		
 		//Se obtienen los datos del modelo
@@ -665,7 +665,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	}
 
 	/**
-	 * Añade las columnas genereadas a la tabla de proyectos históricos.
+	 * Añade las columnas generadas a la tabla de proyectos históricos.
 	 */
 	private void addGeneratedColumns(){
 		table.addGeneratedColumn(TUTORS, new TutorsColumnGenerator());
@@ -674,7 +674,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	}
 
 	/**
-	 * Estalece las cabeceras de las columnas de la tabla de proyectos
+	 * Establece las cabeceras de las columnas de la tabla de proyectos
 	 * históricos.
 	 */
 	private void setTableColumnHeaders() {

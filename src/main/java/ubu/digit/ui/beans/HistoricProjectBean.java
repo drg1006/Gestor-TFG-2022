@@ -6,6 +6,7 @@ import java.time.LocalDate;
  * POJO para almacenar un proyecto histórico.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
 public class HistoricProjectBean extends ProjectBean implements Serializable {
 
@@ -38,6 +39,11 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 * Calificación que obtuvo el proyecto.
 	 */
 	private Double score;
+	
+	/**
+	 * Calificación privada que se muestra en el historico
+	 */
+	private String scorePrivate;
 
 	/**
 	 * Número de días que duró el proyecto.
@@ -105,6 +111,7 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 		this.assignmentDate = assignmentDate;
 		this.presentationDate = presentationDate;
 		this.score = score;
+		this.scorePrivate = "***";
 		this.totalDays = totalDays;
 		this.repositoryLink = repositoryLink;
 		this.numTutors = numTutors;
@@ -173,6 +180,14 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public void setScore(Double score) {
 		this.score = score;
+	}
+	
+	/**
+	 * Obtiene la calificación privada del proyecto.
+	 * @return calificación privada del proyecto.
+	 */
+	public String getScorePrivate() {
+		return scorePrivate;
 	}
 
 	/**

@@ -166,7 +166,7 @@ public final class Constants {
 	/**
 	 * Calificación (POJO).
 	 */
-	public static final String SCORE = "score";
+	public static final String SCORE = "scorePrivate";
 
 	/**
 	 * Fecha de asignación (POJO).
