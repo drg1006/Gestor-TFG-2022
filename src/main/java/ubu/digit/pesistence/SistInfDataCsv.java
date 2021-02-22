@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import org.apache.log4j.Logger;
 
 import com.vaadin.server.VaadinService;
@@ -227,7 +229,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param percent
 	 * @return mediana
 	 * @throws SQLException
-	 * @throws SQLException
 	 */
 	@Override
 	protected Number getQuartilColumn(String columnName, String tableName, double percent) throws SQLException {
@@ -237,6 +238,61 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		List<Double> listValues = getListNumber(columnName, sql);
 		int indexMedian = (int) (nTotalValue.intValue() * percent);
 		return listValues.get(indexMedian);
+	}
+	
+	/**
+	 * Ejecuta una sentencia SQL obteniendo la nota de los proyectos.
+	 * Devolverá los percentiles de las notas obtenidas.
+	 * 
+	 * @param tableName
+	 *            nombre de la tabla de datos
+	 * @return Lista con los percentiles 
+	 * @throws SQLException
+	 */
+	@Override
+	public List<String> getNotePercentile(){ //TODO: revisar
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> percentileList = new ArrayList<Integer>();
+		List<String> rankingList = new ArrayList<String>();
+		int i, count;
+		
+		String sql = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		try (Statement statement = connection.createStatement()) {
+			Boolean hasResults = statement.execute(sql);
+			if (hasResults) {
+				try (ResultSet result = statement.getResultSet()) {
+					addNumbersToList(NOTA, scoreList, result);
+				}
+			}
+		}catch(SQLException ex) { //TODO:
+			
+		}
+		if(scoreList.size() > 0) {
+	        for (i = 0; i < scoreList.size(); i++) { 
+	            count = 0; 
+	            for (int j = 0; j < scoreList.size(); j++){ 
+	                if (scoreList.get(i) > scoreList.get(j)){ // Compara las nota i con el resto de notas
+	                    count++; 
+	                } 
+	            } 
+	            percentileList.add((count * 100) / (scoreList.size() - 1)); 
+	        }
+	        for (i = 0; i < percentileList.size(); i++) { 
+	        	if(percentileList.get(i)>=0 && percentileList.get(i)<=20) {
+	        		rankingList.add("E");
+	        	}else if(percentileList.get(i)>=21 && percentileList.get(i)<=40) {
+	        		rankingList.add("D");
+	        	}else if(percentileList.get(i)>=41 && percentileList.get(i)<=60) {
+	        		rankingList.add("C");
+	        	}else if(percentileList.get(i)>=61 && percentileList.get(i)<=80) {
+	        		rankingList.add("B");
+	        	}else if(percentileList.get(i)>=81 && percentileList.get(i)<=100) {
+	        		rankingList.add("A");
+	        	}
+	        }
+		}
+        
+        return rankingList;
 	}
 
 	/**
@@ -676,7 +732,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
 		ArrayList listaDataModel=new ArrayList();
-		
+		int contador=0;
+		String ranking;
+		List<String> rankings = getNotePercentile();
 		try (ResultSet result = getResultSet(HISTORICO, TITULO)) {
 			while (result.next()) {
 				int numStudents = 0;
@@ -721,6 +779,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				}
 				LocalDate assignmentDate = LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
 				LocalDate presentationDate = LocalDate.parse(result.getString(FECHA_PRESENTACION), dateTimeFormatter);
+				ranking = rankings.get(contador);
+				contador++;
 				Double score = result.getDouble(NOTA);
 				int totalDays = result.getShort(TOTAL_DIAS);
 				String repoLink = result.getString(ENLACE_REPOSITORIO);
@@ -743,6 +803,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(score);
 				listaDataModel.add(totalDays);
 				listaDataModel.add(repoLink);
+				listaDataModel.add(ranking);
 				
 			}
 		} catch (SQLException e) {

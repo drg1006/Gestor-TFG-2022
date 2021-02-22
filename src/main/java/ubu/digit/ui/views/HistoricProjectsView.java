@@ -1,6 +1,7 @@
 package ubu.digit.ui.views;
 
 import java.awt.Color;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -154,14 +155,15 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 
 	/**
 	 * Constructor.
+	 * @throws SQLException 
 	 */
-	public HistoricProjectsView() {
+	public HistoricProjectsView(){
 		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
 		
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");//TODO: parseado
 		
 		setMargin(true);
 		setSpacing(true);
@@ -176,15 +178,16 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		createHistoricProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("Historico.csv");
+		Footer footer = new Footer("N3_Historico.csv");//TODO: Historico
 		addComponent(footer);
 	}
 
 	/**
 	 * Crea el modelo de datos de los proyectos históricos.
+	 * @throws SQLException 
 	 */
-	private void createDataModel() { 
-		beans = new BeanItemContainer<>(HistoricProjectBean.class);
+	private void createDataModel(){ 
+		beans = new BeanItemContainer<>(HistoricProjectBean.class); //TODO: revisar thriows
 		
 		//Se obtienen los datos del modelo
 		@SuppressWarnings("rawtypes")
@@ -195,7 +198,8 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			HistoricProjectBean bean = new HistoricProjectBean((String)listaDataModel.get(i),(String)listaDataModel.get(++i), 
 					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
 					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
-					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), (String)listaDataModel.get(++i));
+					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
+					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i));
 			beans.addBean(bean);
 		}
 	}
@@ -646,7 +650,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Crea la tabla de proyectos históricos.
 	 */
-	private void createHistoricProjectsTable() {
+	private void createHistoricProjectsTable() { //TODO:
 		Label projectsTitle = new Label(DESCRIPCION_PROYECTOS);
 		projectsTitle.setStyleName(TITLE_STYLE);
 		addComponent(projectsTitle);
@@ -658,7 +662,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnCollapsingAllowed(true);
 		table.setContainerDataSource(beans);
 		addGeneratedColumns();
-		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, SCORE);
+		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, SCORE, RANKING );
 		setTableColumnHeaders();
 		setColumnExpandRatios();
 		showDescriptionOnClick();
@@ -670,6 +674,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private void addGeneratedColumns(){
 		table.addGeneratedColumn(TUTORS, new TutorsColumnGenerator());
 		table.addGeneratedColumn(PROJECTS, new ProjectsColumnGenerator());
+		//table.addGeneratedColumn("Ranks", new ProjectsColumnGenerator());
 		
 	}
 
@@ -684,6 +689,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnHeader(ASSIGNMENT_DATE, "Fecha Asignación");
 		table.setColumnHeader(PRESENTATION_DATE, "Fecha Presentación");
 		table.setColumnHeader(SCORE, "Nota");
+		table.setColumnHeader(RANKING, "Ranking");
 	}
 
 	/**
@@ -697,6 +703,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnExpandRatio(ASSIGNMENT_DATE, 6);
 		table.setColumnExpandRatio(PRESENTATION_DATE, 6);
 		table.setColumnExpandRatio(SCORE, 3);
+		table.setColumnExpandRatio(RANKING, 3);
 	}
 
 	/**
@@ -750,6 +757,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		projectFilter.addTextChangeListener(new SimpleStringFilterListener(table, TITLE));
 		tutorsFilter.addTextChangeListener(new OrSimpleStringFilterListener(table, TUTOR1, TUTOR2, TUTOR3));
 		assignmentDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, ASSIGNMENT_DATE));
+		presentationDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, PRESENTATION_DATE));
 		presentationDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, PRESENTATION_DATE));
 	}
 	

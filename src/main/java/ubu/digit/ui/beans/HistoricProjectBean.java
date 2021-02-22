@@ -1,5 +1,6 @@
 package ubu.digit.ui.beans;
 
+import java.util.List;
 import java.io.Serializable;
 import java.time.LocalDate;
 /**
@@ -56,6 +57,11 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	private String repositoryLink;
 
 	/**
+	 * Ranking de percentiles de las notas
+	 */
+	private String ranking;
+
+	/**
 	 * Constructor vacío sin parámetros (convención JavaBean).
 	 */
 	public HistoricProjectBean() {
@@ -98,7 +104,7 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public HistoricProjectBean(String title, String description, String tutor1, String tutor2, String tutor3,
 			String student1, String student2, String student3, int numStudents, int numTutors, LocalDate assignmentDate,
-			LocalDate presentationDate, Double score, int totalDays, String repositoryLink) {
+			LocalDate presentationDate, Double score, int totalDays, String repositoryLink, String ranking) {
 		this.title = title;
 		this.description = description;
 		this.tutor1 = tutor1;
@@ -112,11 +118,32 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 		this.presentationDate = presentationDate;
 		this.score = score;
 		this.scorePrivate = "***";
+		this.ranking = ranking; //TODO:
 		this.totalDays = totalDays;
 		this.repositoryLink = repositoryLink;
 		this.numTutors = numTutors;
 	}
 
+	/**
+	 * Obtiene el ranking basado en percentiles de la nota
+	 * del alumno.
+	 * 
+	 * @return ranking de la nota del alumno
+	 */
+	public String getRanking() { 
+		return ranking;
+	}
+
+	/**
+	 * Establece el ranking basado en percentiles del alumno
+	 * 
+	 * @param ranking clasificación de las nota del alumno 
+	 * respecto al resto de alumnos
+	 */
+	public void setRanking(String ranking) {
+		this.ranking = ranking;
+	}
+	
 	/**
 	 * Obtiene el número de alumnos del proyecto.
 	 * 

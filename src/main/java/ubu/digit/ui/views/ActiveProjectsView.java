@@ -33,6 +33,7 @@ import static ubu.digit.util.Constants.*;
  * Vista de proyectos activos.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
 public class ActiveProjectsView extends VerticalLayout implements View {
 
@@ -110,7 +111,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 		createCurrentProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("N2_Proyecto.csv"); //TODO: Revisar
+		Footer footer = new Footer("N2_Proyecto.csv"); //TODO: Revisar Proyecto
 		addComponent(footer);
 	}
 	

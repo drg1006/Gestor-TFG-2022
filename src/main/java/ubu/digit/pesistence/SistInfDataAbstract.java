@@ -1,11 +1,13 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 
 import ubu.digit.util.ExternalProperties;
@@ -141,7 +143,9 @@ public abstract class SistInfDataAbstract implements Serializable {
 	}
 
 	protected abstract Number getQuartilColumn(String columnName, String tableName, double percent) throws Exception;
-
+	
+	public abstract List<String> getNotePercentile() throws Exception;
+	
 	protected abstract List<Double> getListNumber(String columnName, String sql) throws Exception;
 	
 	//protected abstract void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) throws Exception;
@@ -191,6 +195,5 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	@SuppressWarnings("rawtypes")
 	public abstract ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter);
-
 	
 }

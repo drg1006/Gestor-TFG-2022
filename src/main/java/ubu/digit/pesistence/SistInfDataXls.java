@@ -1,7 +1,9 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 
 import com.codoid.products.exception.FilloException;
@@ -88,7 +91,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	} 	  
 		return conn;
 	}
-
+	
 	/**
 	 * Ejecuta una sentencia SQL sumando todos los datos Float contenidos en la
 	 * primera columna.
@@ -589,7 +592,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Obtener los datos del modelo de datos de los proyectos activos.
 	 */
-	public List<String> getDataModel() { //TODO:
+	public List<String> getDataModel() { 
 		List<String> listaDataModel = new ArrayList<String>();
 		try{
 			Recordset result = getResultSet(PROYECTO, TITULO);
@@ -691,8 +694,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Obtener los datos del modelo de datos de los históricos
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
-		//List<T> listaDataModel = new ArrayList<>();
+	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { 
+		int contador=0;
+		String ranking="";
+		List<String> rankings = getNotePercentile();
 		ArrayList listaDataModel=new ArrayList();
 		try{ 
 			Recordset result = getResultSet(HISTORICO, TITULO);
@@ -739,6 +744,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				}
 				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
 				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
+				ranking = rankings.get(contador);
+				contador++;
 				Double score = Double.parseDouble(result.getField(NOTA));
 				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
 				String repoLink = result.getField(ENLACE_REPOSITORIO);
@@ -761,12 +768,63 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(score);
 				listaDataModel.add(totalDays);
 				listaDataModel.add(repoLink);
-				
+				listaDataModel.add(ranking);
 			}
 		} catch (FilloException e) {
 			LOGGER.error("Error al obtener los datos de los históricos", e);
 		}
 		return listaDataModel;
-	}	
+	}
+
+	/**
+	 * Ejecuta una sentencia SQL obteniendo la nota de los proyectos.
+	 * Devolverá los percentiles de las notas obtenidas.
+	 * 
+	 * @param tableName
+	 *            nombre de la tabla de datos
+	 * @return Lista con los percentiles 
+	 * @throws FilloException
+	 */
+	@Override
+	public List<String> getNotePercentile(){ //TODO: revisar
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> percentileList = new ArrayList<Integer>();
+		List<String> rankingList = new ArrayList<String>();
+		int i, count;
+
+		String sql = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		try {
+			Recordset result = connection.executeQuery(sql);
+			addNumbersToList(NOTA, scoreList, result);
+		}catch(FilloException ex) { 
+			LOGGER.error("Error al obtener el ranking según el percentil", ex);
+		}
+		
+		if(scoreList.size() > 0) {
+	        for (i = 0; i < scoreList.size(); i++) { 
+	            count = 0; 
+	            for (int j = 0; j < scoreList.size(); j++){ 
+	                if (scoreList.get(i) > scoreList.get(j)){ // Compara las nota i con el resto de notas
+	                    count++; 
+	                } 
+	            } 
+	            percentileList.add((count * 100) / (scoreList.size() - 1)); 
+	        } 
+	        for (i = 0; i < percentileList.size(); i++) { 
+	        	if(percentileList.get(i)>=0 && percentileList.get(i)<=20) {
+	        		rankingList.add("E");
+	        	}else if(percentileList.get(i)>=21 && percentileList.get(i)<=40) {
+	        		rankingList.add("D");
+	        	}else if(percentileList.get(i)>=41 && percentileList.get(i)<=60) {
+	        		rankingList.add("C");
+	        	}else if(percentileList.get(i)>=61 && percentileList.get(i)<=80) {
+	        		rankingList.add("B");
+	        	}else if(percentileList.get(i)>=81 && percentileList.get(i)<=100) {
+	        		rankingList.add("A");
+	        	}
+	        }
+		}
+		return rankingList;
+	}
 }
 

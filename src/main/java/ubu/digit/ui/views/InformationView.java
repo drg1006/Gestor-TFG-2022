@@ -28,6 +28,7 @@ import java.util.List;
  * Vista de información.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
 public class InformationView extends VerticalLayout implements View {
 
@@ -77,14 +78,14 @@ public class InformationView extends VerticalLayout implements View {
 		createCalendar();
 		createDocumentos();
 		
-		Footer footer = new Footer("Tribunal.csv"); //TODO:
+		Footer footer = new Footer("N1_Tribunal.csv"); //TODO:Tribunal
 		addComponent(footer);
 	}
 	
 	/**
 	 * Crea el tribunal.
 	 */
-	private void createTribunal() { //TODO:
+	private void createTribunal() { 
 		Label tribunalTitle = new Label(MIEMBROS_DEL_TRIBUNAL);
 		tribunalTitle.setStyleName(TITLE_STYLE);
 
@@ -117,7 +118,7 @@ public class InformationView extends VerticalLayout implements View {
 	/**
 	 * Crea las normas de entrega.
 	 */
-	private void createNormas() { //TODO:
+	private void createNormas() {
 		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
 		Label normasTitle = new Label(ESPECIFICACIONES_DE_ENTREGA);
 		normasTitle.setStyleName(TITLE_STYLE);
@@ -154,7 +155,7 @@ public class InformationView extends VerticalLayout implements View {
 	/**
 	 * Crea los documentos de entrega.
 	 */
-	private void createDocumentos() { //TODO:
+	private void createDocumentos() { 
 		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
 		Label documentosTitle = new Label(DOCUMENTOS);
 		documentosTitle.setStyleName(TITLE_STYLE);

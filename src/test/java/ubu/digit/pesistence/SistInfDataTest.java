@@ -11,9 +11,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +75,7 @@ public class SistInfDataTest {
      * listado funciona correctamente. En este caso, la columna "numero" tiene
      * como máximo un 9 y la columna "nota" tiene como máximo un 10.
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     @Test
     public void testMaxColumn() throws Exception {
@@ -96,7 +93,7 @@ public class SistInfDataTest {
      * listado funciona correctamente. En este caso, la columna "numero" tiene
      * como mínimo un 0 y la columna "nota" tiene como mínimo un 1.
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     @Test
     public void testMinColumn() throws Exception {
@@ -114,7 +111,7 @@ public class SistInfDataTest {
      * un listado de números de 0 a 9 y la columna "nota" un listado de 1 a 10,
      * por lo que en ambas esperamos la misma desviación.
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     @Test
     public void testStdvColumn() throws Exception { 
@@ -130,7 +127,7 @@ public class SistInfDataTest {
      * Este test comprueba que el método no nos devuelve conjunto vacíos de
      * datos.
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     @Test
     public void testResultSet() throws Exception {
@@ -159,9 +156,9 @@ public class SistInfDataTest {
      * <p>
      * - Y por último, pedimos que nos cuente una columna nula, que como no
      * existe pues nos devolverá 0. Y una columna que no existe, por lo que
-     * lanzará una excepción SQL.
+     * lanzará una excepción .
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     //@Test(expected = Exception.class)
     public void testTotalNumber() throws Exception {
@@ -194,7 +191,7 @@ public class SistInfDataTest {
      * mínima funcione correctamente. La fecha mínima que esperamos es
      * 1/01/1649. Y la fecha máxima es 1/01/2015.
      * 
-     * @throws SQLException
+     * @throws Exception
      */
     @Test
     public void testFechas() throws Exception {
@@ -230,10 +227,10 @@ public class SistInfDataTest {
      * 
      * @throws SQLException
      */
-    //@Test(expected = Exception.class)
+    /*@Test(expected = Exception.class)
     public void testSinTabla() throws Exception { //TODO:Revisar
         sistInfData.getAvgColumn("Nada", "Nada");
-    }
+    }*/
 
     /**
      * Test que comprueba que salta la excepción SQLException al intentar
@@ -241,10 +238,10 @@ public class SistInfDataTest {
      * 
      * @throws SQLException
      */
-    //@Test(expected = Exception.class)
+    /*@Test(expected = Exception.class)
     public void testTablaVacia() throws Exception {
         sistInfData.getAvgColumn("Nada", "Vacia");
-    }
+    }*/
 
     /**
      * Método main.
@@ -258,10 +255,10 @@ public class SistInfDataTest {
     /**
      * Test que comprueba los proyectos activos (año actual)
      * 
-     * @throws SQLException
+     * @throws Exception
      */
    /* @Test
-    public void testProjectActivos() throws SQLException {
+    public void testProjectActivos() throws Exception {
     	//Para obtener el año en el que estamos
     	Calendar cal= Calendar.getInstance();
     	int year= cal.get(Calendar.YEAR);
