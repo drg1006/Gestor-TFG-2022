@@ -662,7 +662,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnCollapsingAllowed(true);
 		table.setContainerDataSource(beans);
 		addGeneratedColumns();
-		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, SCORE, RANKING );
+		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING );
 		setTableColumnHeaders();
 		setColumnExpandRatios();
 		showDescriptionOnClick();
@@ -674,7 +674,6 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private void addGeneratedColumns(){
 		table.addGeneratedColumn(TUTORS, new TutorsColumnGenerator());
 		table.addGeneratedColumn(PROJECTS, new ProjectsColumnGenerator());
-		//table.addGeneratedColumn("Ranks", new ProjectsColumnGenerator());
 		
 	}
 
@@ -688,7 +687,6 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnHeader(NUM_STUDENTS, "Nº Alumnos");
 		table.setColumnHeader(ASSIGNMENT_DATE, "Fecha Asignación");
 		table.setColumnHeader(PRESENTATION_DATE, "Fecha Presentación");
-		table.setColumnHeader(SCORE, "Nota");
 		table.setColumnHeader(RANKING, "Ranking");
 	}
 
@@ -702,7 +700,6 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnExpandRatio(NUM_STUDENTS, 4);
 		table.setColumnExpandRatio(ASSIGNMENT_DATE, 6);
 		table.setColumnExpandRatio(PRESENTATION_DATE, 6);
-		table.setColumnExpandRatio(SCORE, 3);
 		table.setColumnExpandRatio(RANKING, 3);
 	}
 
