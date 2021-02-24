@@ -199,7 +199,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
 					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
 					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
-					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i));
+					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i));
 			beans.addBean(bean);
 		}
 	}
@@ -662,7 +662,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnCollapsingAllowed(true);
 		table.setContainerDataSource(beans);
 		addGeneratedColumns();
-		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING );
+		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING_PERCENTILE, RANKING_TOTAL);
 		setTableColumnHeaders();
 		setColumnExpandRatios();
 		showDescriptionOnClick();
@@ -687,7 +687,8 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnHeader(NUM_STUDENTS, "Nº Alumnos");
 		table.setColumnHeader(ASSIGNMENT_DATE, "Fecha Asignación");
 		table.setColumnHeader(PRESENTATION_DATE, "Fecha Presentación");
-		table.setColumnHeader(RANKING, "Ranking");
+		table.setColumnHeader(RANKING_PERCENTILE, "Ranking Percentiles");
+		table.setColumnHeader(RANKING_TOTAL, "Ranking Total");
 	}
 
 	/**
@@ -695,12 +696,13 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * proyectos históricos.
 	 */
 	private void setColumnExpandRatios() {
-		table.setColumnExpandRatio(PROJECTS, 35);
+		table.setColumnExpandRatio(PROJECTS, 30);
 		table.setColumnExpandRatio(TUTORS, 9);
 		table.setColumnExpandRatio(NUM_STUDENTS, 4);
 		table.setColumnExpandRatio(ASSIGNMENT_DATE, 6);
 		table.setColumnExpandRatio(PRESENTATION_DATE, 6);
-		table.setColumnExpandRatio(RANKING, 3);
+		table.setColumnExpandRatio(RANKING_PERCENTILE, 5);
+		table.setColumnExpandRatio(RANKING_TOTAL, 5);
 	}
 
 	/**

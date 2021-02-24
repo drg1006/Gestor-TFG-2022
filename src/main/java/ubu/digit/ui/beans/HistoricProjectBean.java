@@ -40,11 +40,6 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 * Calificación que obtuvo el proyecto.
 	 */
 	private Double score;
-	
-	/**
-	 * Calificación privada que se muestra en el historico
-	 */
-	private String scorePrivate;
 
 	/**
 	 * Número de días que duró el proyecto.
@@ -59,7 +54,12 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	/**
 	 * Ranking de percentiles de las notas
 	 */
-	private String ranking;
+	private String rankingPercentile;
+	
+	/**
+	 * Ranking total de las notas
+	 */
+	private int rankingTotal;
 
 	/**
 	 * Constructor vacío sin parámetros (convención JavaBean).
@@ -104,7 +104,7 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public HistoricProjectBean(String title, String description, String tutor1, String tutor2, String tutor3,
 			String student1, String student2, String student3, int numStudents, int numTutors, LocalDate assignmentDate,
-			LocalDate presentationDate, Double score, int totalDays, String repositoryLink, String ranking) {
+			LocalDate presentationDate, Double score, int totalDays, String repositoryLink, String rankingPercentile, int rankingTotal) {
 		this.title = title;
 		this.description = description;
 		this.tutor1 = tutor1;
@@ -117,8 +117,8 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 		this.assignmentDate = assignmentDate;
 		this.presentationDate = presentationDate;
 		this.score = score;
-		this.scorePrivate = "***";
-		this.ranking = ranking; //TODO:
+		this.rankingPercentile = rankingPercentile;
+		this.rankingTotal = rankingTotal;
 		this.totalDays = totalDays;
 		this.repositoryLink = repositoryLink;
 		this.numTutors = numTutors;
@@ -126,22 +126,39 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 
 	/**
 	 * Obtiene el ranking basado en percentiles de la nota
-	 * del alumno.
-	 * 
-	 * @return ranking de la nota del alumno
+	 * del proyecto
+	 * @return ranking de la nota del proyecto
 	 */
-	public String getRanking() { 
-		return ranking;
+	public String getRankingPercentile() { 
+		return rankingPercentile;
 	}
 
 	/**
-	 * Establece el ranking basado en percentiles del alumno
+	 * Establece el ranking basado en percentiles del proyecto
 	 * 
-	 * @param ranking clasificación de las nota del alumno 
-	 * respecto al resto de alumnos
+	 * @param ranking clasificación de las nota del proyecto 
+	 * respecto al resto de proyectos
 	 */
-	public void setRanking(String ranking) {
-		this.ranking = ranking;
+	public void setRankingPercentile(String rankingPercentile) {
+		this.rankingPercentile = rankingPercentile;
+	}
+	
+	/**
+	 * Obtiene el ranking total de la nota del proyecto.
+	 * 
+	 * @return ranking de la nota del proyecto
+	 */
+	public int getRankingTotal() { 
+		return rankingTotal;
+	}
+
+	/**
+	 * Establece el rankingtotal de la nota del proyecto.
+	 * 
+	 * @param ranking clasificación de las nota del proyecto 
+	 */
+	public void setRankingTotal(int rankingTotal) {
+		this.rankingTotal = rankingTotal;
 	}
 	
 	/**
@@ -207,14 +224,6 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public void setScore(Double score) {
 		this.score = score;
-	}
-	
-	/**
-	 * Obtiene la calificación privada del proyecto.
-	 * @return calificación privada del proyecto.
-	 */
-	public String getScorePrivate() {
-		return scorePrivate;
 	}
 
 	/**

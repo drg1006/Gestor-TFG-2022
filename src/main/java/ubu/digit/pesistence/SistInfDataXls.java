@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
@@ -696,8 +697,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { 
 		int contador=0;
-		String ranking="";
-		List<String> rankings = getNotePercentile();
+		String rankingPercentile="";
+		int rankingTotal=0;
+		List<String> rankingsPercentile = getRankingPercentile();
+		List<Integer> rankingsTotal = getRankingTotal();
 		ArrayList listaDataModel=new ArrayList();
 		try{ 
 			Recordset result = getResultSet(HISTORICO, TITULO);
@@ -744,7 +747,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				}
 				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
 				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
-				ranking = rankings.get(contador);
+				rankingPercentile = rankingsPercentile.get(contador);
+				rankingTotal = rankingsTotal.get(contador);
 				contador++;
 				Double score = Double.parseDouble(result.getField(NOTA));
 				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
@@ -768,7 +772,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(score);
 				listaDataModel.add(totalDays);
 				listaDataModel.add(repoLink);
-				listaDataModel.add(ranking);
+				listaDataModel.add(rankingPercentile);
+				listaDataModel.add(rankingTotal);
 			}
 		} catch (FilloException e) {
 			LOGGER.error("Error al obtener los datos de los históricos", e);
@@ -780,13 +785,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Ejecuta una sentencia SQL obteniendo la nota de los proyectos.
 	 * Devolverá los percentiles de las notas obtenidas.
 	 * 
-	 * @param tableName
-	 *            nombre de la tabla de datos
 	 * @return Lista con los percentiles 
-	 * @throws FilloException
 	 */
 	@Override
-	public List<String> getNotePercentile(){ //TODO: revisar
+	public List<String> getRankingPercentile(){ //TODO: revisar
 		List<Double> scoreList = new ArrayList<Double>();
 		List<Integer> percentileList = new ArrayList<Integer>();
 		List<String> rankingList = new ArrayList<String>();
@@ -804,7 +806,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	        for (i = 0; i < scoreList.size(); i++) { 
 	            count = 0; 
 	            for (int j = 0; j < scoreList.size(); j++){ 
-	                if (scoreList.get(i) > scoreList.get(j)){ // Compara las nota i con el resto de notas
+	                if (scoreList.get(i) > scoreList.get(j)){ //Compara las nota i con el resto de notas
 	                    count++; 
 	                } 
 	            } 
@@ -826,5 +828,50 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}
 		return rankingList;
 	}
+	
+	/**
+	 * Calcula el ranking por notas total de los proyectos
+	 * 
+	 * @return Lista con los rankings por notas total
+	 */
+	@Override
+	public List<Integer> getRankingTotal(){
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> rankingTotalList = new ArrayList<Integer>();
+		List<Double> duplicatedList;
+		int i,j,cont=1;
+
+		String sql = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		try {
+			Recordset result = connection.executeQuery(sql);
+			addNumbersToList(NOTA, scoreList, result);
+		}catch(FilloException ex) { 
+			LOGGER.error("Error al obtener el ranking total de las notas", ex);
+		}
+		
+		if(scoreList.size() > 0){
+			
+			//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
+			//y después lo volvemos a pasar a una lista nueva
+			duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
+	        
+	        for (i = 0; i < scoreList.size(); i++) {
+	        	for (j = 0; j < duplicatedList.size(); j++) {
+	        		if(scoreList.get(i) < duplicatedList.get(j)) {
+	        			cont++;
+	        		}
+	        	}
+	        	rankingTotalList.add(cont);
+	        	cont=1;
+	        }
+		}
+		
+		return rankingTotalList;
+	}
 }
 
+	
+	
+	
+	
+	

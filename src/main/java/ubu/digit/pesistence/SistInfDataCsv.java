@@ -10,11 +10,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import org.apache.log4j.Logger;
 
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Recordset;
 import com.vaadin.server.VaadinService;
 
 import static ubu.digit.util.Constants.*;
@@ -244,13 +247,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * Ejecuta una sentencia SQL obteniendo la nota de los proyectos.
 	 * Devolverá los percentiles de las notas obtenidas.
 	 * 
-	 * @param tableName
-	 *            nombre de la tabla de datos
 	 * @return Lista con los percentiles 
-	 * @throws SQLException
 	 */
 	@Override
-	public List<String> getNotePercentile(){ //TODO: revisar
+	public List<String> getRankingPercentile(){ //TODO: revisar
 		List<Double> scoreList = new ArrayList<Double>();
 		List<Integer> percentileList = new ArrayList<Integer>();
 		List<String> rankingList = new ArrayList<String>();
@@ -264,14 +264,14 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 					addNumbersToList(NOTA, scoreList, result);
 				}
 			}
-		}catch(SQLException ex) { //TODO:
-			
+		}catch(SQLException ex) { 
+			LOGGER.error("Error al obtener el ranking total de las notas", ex);
 		}
 		if(scoreList.size() > 0) {
 	        for (i = 0; i < scoreList.size(); i++) { 
 	            count = 0; 
 	            for (int j = 0; j < scoreList.size(); j++){ 
-	                if (scoreList.get(i) > scoreList.get(j)){ // Compara las nota i con el resto de notas
+	                if (scoreList.get(i) > scoreList.get(j)){
 	                    count++; 
 	                } 
 	            } 
@@ -293,6 +293,49 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}
         
         return rankingList;
+	}
+	
+	/**
+	 * Calcula el ranking por notas total de los proyectos
+	 * 
+	 * @return Lista con los rankings por notas total
+	 */
+	@Override
+	public List<Integer> getRankingTotal(){
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> rankingTotalList = new ArrayList<Integer>();
+		List<Double> duplicatedList;
+		int i,j,cont=1;
+
+		String sql = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		try (Statement statement = connection.createStatement()) {
+			Boolean hasResults = statement.execute(sql);
+			if (hasResults) {
+				try (ResultSet result = statement.getResultSet()) {
+					addNumbersToList(NOTA, scoreList, result);
+				}
+			}
+		}catch(SQLException ex) { 
+			LOGGER.error("Error al obtener el ranking total de las notas", ex);
+		}
+		
+		if(scoreList.size() > 0){
+			//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
+			//y después lo volvemos a pasar a una lista nueva
+			duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
+	        
+	        for (i = 0; i < scoreList.size(); i++) {
+	        	for (j = 0; j < duplicatedList.size(); j++) {
+	        		if(scoreList.get(i) < duplicatedList.get(j)) {
+	        			cont++;
+	        		}
+	        	}
+	        	rankingTotalList.add(cont);
+	        	cont=1;
+	        }
+				}
+		
+		return rankingTotalList;
 	}
 
 	/**
@@ -734,7 +777,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		ArrayList listaDataModel=new ArrayList();
 		int contador=0;
 		String ranking;
-		List<String> rankings = getNotePercentile();
+		List<String> rankings = getRankingPercentile();
 		try (ResultSet result = getResultSet(HISTORICO, TITULO)) {
 			while (result.next()) {
 				int numStudents = 0;

@@ -194,10 +194,20 @@ public final class Constants {
 	public static final String PROJECTS = "projects";
 	
 	/**
-	 * Rankings según el percentil de las notas
+	 * Rankings según el percentil de las notas de los proyectos
 	 */
-	public static final String RANKING = "ranking";
-
+	public static final String RANKING_PERCENTILE = "rankingPercentile";
+	
+	/**
+	 * Rankings de las notas totales de los proyectos
+	 */
+	public static final String RANKING_TOTAL = "rankingTotal";
+	
+	/**
+	 * Rankings de las notas según el curso de los proyectos
+	 */
+	public static final String RANKING_CURSE = "rankingCurse";
+	
 	/**
 	 * Línea en blanco.
 	 */

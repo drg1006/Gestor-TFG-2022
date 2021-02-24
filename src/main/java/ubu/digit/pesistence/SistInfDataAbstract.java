@@ -144,7 +144,9 @@ public abstract class SistInfDataAbstract implements Serializable {
 
 	protected abstract Number getQuartilColumn(String columnName, String tableName, double percent) throws Exception;
 	
-	public abstract List<String> getNotePercentile() throws Exception;
+	public abstract List<String> getRankingPercentile();
+	
+	public abstract List<Integer> getRankingTotal();
 	
 	protected abstract List<Double> getListNumber(String columnName, String sql) throws Exception;
 	
