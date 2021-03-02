@@ -199,7 +199,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
 					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
 					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
-					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i));
+					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i),(int)listaDataModel.get(++i));
 			beans.addBean(bean);
 		}
 	}
@@ -650,7 +650,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Crea la tabla de proyectos históricos.
 	 */
-	private void createHistoricProjectsTable() { //TODO:
+	private void createHistoricProjectsTable() {
 		Label projectsTitle = new Label(DESCRIPCION_PROYECTOS);
 		projectsTitle.setStyleName(TITLE_STYLE);
 		addComponent(projectsTitle);
@@ -662,7 +662,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnCollapsingAllowed(true);
 		table.setContainerDataSource(beans);
 		addGeneratedColumns();
-		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING_PERCENTILE, RANKING_TOTAL);
+		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING_PERCENTILE, RANKING_TOTAL, RANKING_CURSE);
 		setTableColumnHeaders();
 		setColumnExpandRatios();
 		showDescriptionOnClick();
@@ -689,6 +689,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnHeader(PRESENTATION_DATE, "Fecha Presentación");
 		table.setColumnHeader(RANKING_PERCENTILE, "Ranking Percentiles");
 		table.setColumnHeader(RANKING_TOTAL, "Ranking Total");
+		table.setColumnHeader(RANKING_CURSE, "Ranking por cursos");
 	}
 
 	/**
@@ -703,6 +704,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		table.setColumnExpandRatio(PRESENTATION_DATE, 6);
 		table.setColumnExpandRatio(RANKING_PERCENTILE, 5);
 		table.setColumnExpandRatio(RANKING_TOTAL, 5);
+		table.setColumnExpandRatio(RANKING_CURSE, 5);
 	}
 
 	/**

@@ -10,6 +10,9 @@ import java.util.List;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Recordset;
+
 import ubu.digit.util.ExternalProperties;
 
 
@@ -148,10 +151,9 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	public abstract List<Integer> getRankingTotal();
 	
-	protected abstract List<Double> getListNumber(String columnName, String sql) throws Exception;
+	public abstract List<Integer> getRankingCurses();
 	
-	//protected abstract void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) throws Exception;
-	//TODO: Intentar poner tipo generico en lugar de ResultSet
+	protected abstract List<Double> getListNumber(String columnName, String sql) throws Exception;
 	
 	public abstract Number getTotalNumber(String columnName, String tableName) throws Exception;
 
@@ -197,5 +199,7 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	@SuppressWarnings("rawtypes")
 	public abstract ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter);
+
+	protected abstract List<String> getDates(String columnName, String sheet);
 	
 }

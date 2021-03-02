@@ -12,12 +12,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import org.apache.log4j.Logger;
 
 import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Recordset;
 import com.vaadin.server.VaadinService;
 
 import static ubu.digit.util.Constants.*;
@@ -250,7 +247,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @return Lista con los percentiles 
 	 */
 	@Override
-	public List<String> getRankingPercentile(){ //TODO: revisar
+	public List<String> getRankingPercentile(){ 
 		List<Double> scoreList = new ArrayList<Double>();
 		List<Integer> percentileList = new ArrayList<Integer>();
 		List<String> rankingList = new ArrayList<String>();
@@ -334,6 +331,70 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	        	cont=1;
 	        }
 				}
+		
+		return rankingTotalList;
+	}
+	
+	/**
+	 * Añade los años de las fechas de los proyectos a una lista.
+	 * 
+	 * @param columnName
+	 *            Nombre de la columna.
+	 * @param listValues
+	 *            Lista que guarda los años.
+	 * @param result
+	 *            ResultSet a partir del cual obtener los valores.
+	 * @throws SQLException
+	 */
+	protected void addYearsCurseToList(String columnName, List<String> listValues,ResultSet result) throws SQLException {
+		while (result.next()) {
+			listValues.add(result.getString(columnName));
+		}
+	}
+	
+	/**
+	 * Calcula el ranking de notas según el curso academico(cursos)
+	 * 
+	 * @return Lista con los rankings de notas por cursos
+	 */
+	@Override
+	public List<Integer> getRankingCurses(){
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> rankingTotalList = new ArrayList<Integer>();
+		List<String> datesCurse = new ArrayList<String>();
+		int i,j,cont=1;
+		
+		String sql_Historico = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		String sql_Proyecto = SELECT + CURSO_ASIGNACION + FROM + PROYECTO + WHERE + CURSO_ASIGNACION + DISTINTO_DE_VACIO;
+		try (Statement statement = connection.createStatement()) {
+			Boolean hasResults = statement.execute(sql_Historico);
+			if (hasResults) {
+				try (ResultSet result = statement.getResultSet()) {
+					addNumbersToList(NOTA, scoreList, result);
+					
+				}
+			}
+			hasResults = statement.execute(sql_Proyecto);
+			if(hasResults) {
+				try (ResultSet result = statement.getResultSet()) {
+					addYearsCurseToList(CURSO_ASIGNACION, datesCurse, result);
+				}
+			}
+		}catch(SQLException ex) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}
+		
+        for (i=0;i<datesCurse.size();i++){
+        	for(j=0;j<datesCurse.size();j++){
+        		if(i!=j && datesCurse.get(i) == datesCurse.get(j)){
+        			if(scoreList.get(i) < scoreList.get(j)){
+        				cont++;
+        			}
+        		}
+        	}
+        	rankingTotalList.add(cont);
+        	cont=1;
+        }
 		
 		return rankingTotalList;
 	}
@@ -599,6 +660,31 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		} else {
 			return Collections.max(listadoFechas);
 		}
+	}
+	
+	/**
+	 * Método que devuleve una lista con las fechas.
+	 * 
+	 * @param columnName
+	 *            Nombre de la columna.
+	 * @param tableName
+	 *            nombre de la hoja o del csv donde se encuentran los datos
+	 * @return Lista de fechas
+	 * @throws FilloException
+	 */
+	protected List<String> getDates(String columnName, String tableName) {
+		List<String> dates = new ArrayList<String>();
+		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO +";";
+			
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
+			while (result.next()) {
+				dates.add(result.getString(columnName));
+			}
+		}catch(SQLException ex) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}
+		return dates;
 	}
 
 	/**

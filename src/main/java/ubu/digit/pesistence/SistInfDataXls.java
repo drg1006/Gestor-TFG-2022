@@ -1,9 +1,6 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 
 import com.codoid.products.exception.FilloException;
@@ -699,8 +695,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		int contador=0;
 		String rankingPercentile="";
 		int rankingTotal=0;
+		int rankingCurse=0;
 		List<String> rankingsPercentile = getRankingPercentile();
 		List<Integer> rankingsTotal = getRankingTotal();
+		List<Integer> rankingsCurse = getRankingCurses();
 		ArrayList listaDataModel=new ArrayList();
 		try{ 
 			Recordset result = getResultSet(HISTORICO, TITULO);
@@ -749,6 +747,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
 				rankingPercentile = rankingsPercentile.get(contador);
 				rankingTotal = rankingsTotal.get(contador);
+				rankingCurse = rankingsCurse.get(contador);
 				contador++;
 				Double score = Double.parseDouble(result.getField(NOTA));
 				int totalDays = Integer.parseInt(result.getField(TOTAL_DIAS));
@@ -774,6 +773,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(repoLink);
 				listaDataModel.add(rankingPercentile);
 				listaDataModel.add(rankingTotal);
+				listaDataModel.add(rankingCurse);
 			}
 		} catch (FilloException e) {
 			LOGGER.error("Error al obtener los datos de los históricos", e);
@@ -782,13 +782,13 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 
 	/**
-	 * Ejecuta una sentencia SQL obteniendo la nota de los proyectos.
+	 * Obtiene la nota de los proyectos según los percentiles.
 	 * Devolverá los percentiles de las notas obtenidas.
 	 * 
 	 * @return Lista con los percentiles 
 	 */
 	@Override
-	public List<String> getRankingPercentile(){ //TODO: revisar
+	public List<String> getRankingPercentile(){ 
 		List<Double> scoreList = new ArrayList<Double>();
 		List<Integer> percentileList = new ArrayList<Integer>();
 		List<String> rankingList = new ArrayList<String>();
@@ -830,9 +830,9 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
-	 * Calcula el ranking por notas total de los proyectos
+	 * Calcula el ranking de notas total de los proyectos
 	 * 
-	 * @return Lista con los rankings por notas total
+	 * @return Lista con los rankings de notas total
 	 */
 	@Override
 	public List<Integer> getRankingTotal(){
@@ -868,8 +868,97 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		
 		return rankingTotalList;
 	}
+	
+	/**
+	 * Método que devuleve una lista con las fechas.
+	 * 
+	 * @param columnName
+	 *            Nombre de la columna.
+	 * @param tableName
+	 *            nombre de la hoja del xls o del csv donde se encuentran los datos
+	 * @return Lista de fechas
+	 * @throws FilloException
+	 */
+	protected List<String> getDates(String columnName, String tableName) {
+		List<String> dates = new ArrayList<String>();
+		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
+		try {
+			Recordset result = connection.executeQuery(sql);
+			while (result.next()) {
+				dates.add(result.getField(columnName));
+			}
+			//listadoFechas.add(transform(rs.getField(columnName))); //transform --> pasa de string a date
+			/*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		    LocalDate dateWithFormat;
+			while (result.next()) {
+				System.out.println("holi");
+				//listValues.add(Double.parseDouble(result.getField(NOTA)));
+				dateWithFormat = LocalDate.parse(result.getField("FechaAsignacion"), formatter);
+				System.out.println("FECHA"+ dateWithFormat);
+				System.out.println("FECHA año"+ dateWithFormat.getYear());
+				listValues.add(dateWithFormat);*/
+		}catch(FilloException ex) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}
+		return dates;
+	}
+	
+	/**
+	 * Añade los años de las fechas de los proyectos a una lista.
+	 * 
+	 * @param columnName
+	 *            Nombre de la columna.
+	 * @param listValues
+	 *            Lista que guarda los años.
+	 * @param result
+	 *            ResultSet a partir del cual obtener los valores.
+	 * @throws FilloException
+	 */
+	protected void addYearsCurseToList(String columnName, List<String> listValues,Recordset result) throws FilloException {
+		while (result.next()) {
+			listValues.add(result.getField(columnName));
+		}
+	}
+	
+	/**
+	 * Calcula el ranking de notas según el curso academico(cursos)
+	 * 
+	 * @return Lista con los rankings de notas por cursos
+	 */
+	@Override
+	public List<Integer> getRankingCurses(){
+		List<Double> scoreList = new ArrayList<Double>();
+		List<Integer> rankingTotalList = new ArrayList<Integer>();
+		List<String> datesCurse = new ArrayList<String>();
+		int i,j,cont=1;
+		
+		String sql_Historico = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		String sql_Proyecto = SELECT + CURSO_ASIGNACION + FROM + PROYECTO + WHERE + CURSO_ASIGNACION + DISTINTO_DE_VACIO;
+		try {
+			Recordset result_Historico = connection.executeQuery(sql_Historico);
+			Recordset result_Proyecto = connection.executeQuery(sql_Proyecto);
+			addNumbersToList(NOTA, scoreList, result_Historico);
+			addYearsCurseToList(CURSO_ASIGNACION, datesCurse, result_Proyecto);
+			
+		}catch(FilloException ex) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}
+		
+        for (i=0;i<datesCurse.size();i++){
+        	for(j=0;j<datesCurse.size();j++){
+        		if(i!=j && datesCurse.get(i) == datesCurse.get(j)){
+        			if(scoreList.get(i) < scoreList.get(j)){
+        				cont++;
+        			}
+        		}
+        	}
+        	rankingTotalList.add(cont);
+        	cont=1;
+        }
+		
+		return rankingTotalList;
+	}
 }
-
 	
 	
 	

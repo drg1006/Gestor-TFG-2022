@@ -60,6 +60,11 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 * Ranking total de las notas
 	 */
 	private int rankingTotal;
+	
+	/**
+	 * Ranking según el curso academico (1 de septiembre - 30 junio)
+	 */
+	private int rankingCurse;
 
 	/**
 	 * Constructor vacío sin parámetros (convención JavaBean).
@@ -104,7 +109,8 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public HistoricProjectBean(String title, String description, String tutor1, String tutor2, String tutor3,
 			String student1, String student2, String student3, int numStudents, int numTutors, LocalDate assignmentDate,
-			LocalDate presentationDate, Double score, int totalDays, String repositoryLink, String rankingPercentile, int rankingTotal) {
+			LocalDate presentationDate, Double score, int totalDays, String repositoryLink, String rankingPercentile, 
+			int rankingTotal, int rankingCurse) {
 		this.title = title;
 		this.description = description;
 		this.tutor1 = tutor1;
@@ -119,6 +125,7 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 		this.score = score;
 		this.rankingPercentile = rankingPercentile;
 		this.rankingTotal = rankingTotal;
+		this.rankingCurse = rankingCurse;
 		this.totalDays = totalDays;
 		this.repositoryLink = repositoryLink;
 		this.numTutors = numTutors;
@@ -141,6 +148,24 @@ public class HistoricProjectBean extends ProjectBean implements Serializable {
 	 */
 	public void setRankingPercentile(String rankingPercentile) {
 		this.rankingPercentile = rankingPercentile;
+	}
+
+	/**
+	 * Obtiene el ranking según el curso academico
+	 * @return ranking de la nota del proyecto por cursos
+	 */
+	public int getRankingCurse() { 
+		return rankingCurse;
+	}
+
+	/**
+	 * Establece el ranking por cursos (año academico)
+	 * 
+	 * @param ranking clasificación de las nota del proyecto 
+	 * respecto al resto de proyectos según el año academico
+	 */
+	public void setRankingCurse(int rankingCurse) {
+		this.rankingCurse = rankingCurse;
 	}
 	
 	/**
