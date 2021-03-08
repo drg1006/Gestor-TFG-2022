@@ -9,8 +9,12 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,17 +23,20 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.codoid.products.exception.FilloException;
+
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Conjunto de método que verifican la cobertura de la clase SistInfData.
+ * Conjunto de método que verifican la cobertura de la clase SistInfDataCsv.
  * 
  * @author Beatriz Zurera Martínez-Acitores
+ * @author Diana Bringas Ochoa
  *
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ExternalProperties.class, SistInfDataAbstract.class })
-public class SistInfDataTest {
+public class SistInfDataTestCSV {
 
     /**
      * Clase fachada a testear.
@@ -49,10 +56,8 @@ public class SistInfDataTest {
     @Before
     public void setUp() {
         mockStatic(ExternalProperties.class);
-
         when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
-
-        sistInfData = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+        sistInfData = SistInfDataFactory.getInstanceData("CSV"); 
     }
 
     /**
@@ -62,10 +67,10 @@ public class SistInfDataTest {
      * En este caso, la columna "notas" es una lista de notas desde el 1 hasta
      * el 10 por lo que el resultado que esperamos es 5.5.
      * 
-     * @throws Exception
+     * @throws SQLException
      */
     @Test
-    public void testAvg() throws Exception {
+    public void testAvg() throws SQLException {
         Number esperado = sistInfData.getAvgColumn("Nota", "Prueba");
         assertThat(esperado, is((Number) 5.5F));
     }
@@ -75,10 +80,10 @@ public class SistInfDataTest {
      * listado funciona correctamente. En este caso, la columna "numero" tiene
      * como máximo un 9 y la columna "nota" tiene como máximo un 10.
      * 
-     * @throws Exception
+     * @throws SQLException
      */
     @Test
-    public void testMaxColumn() throws Exception {
+    public void testMaxColumn() throws SQLException {
 
         String tableName = "Prueba";
         Number num = sistInfData.getMaxColumn("Numero", tableName);
@@ -93,10 +98,10 @@ public class SistInfDataTest {
      * listado funciona correctamente. En este caso, la columna "numero" tiene
      * como mínimo un 0 y la columna "nota" tiene como mínimo un 1.
      * 
-     * @throws Exception
+     * @throws SQLException
      */
     @Test
-    public void testMinColumn() throws Exception {
+    public void testMinColumn() throws SQLException {
         String tableName = "Prueba";
         Number num = sistInfData.getMinColumn("Numero", tableName);
         Number not = sistInfData.getMinColumn("Nota", tableName);
@@ -111,10 +116,10 @@ public class SistInfDataTest {
      * un listado de números de 0 a 9 y la columna "nota" un listado de 1 a 10,
      * por lo que en ambas esperamos la misma desviación.
      * 
-     * @throws Exception
+     * @throws SQLException
      */
     @Test
-    public void testStdvColumn() throws Exception { 
+    public void testStdvColumn() throws SQLException { 
         String tableName = "Prueba";
         Number num = sistInfData.getStdvColumn("Numero", tableName);
         Number not = sistInfData.getStdvColumn("Nota", tableName);
@@ -124,13 +129,11 @@ public class SistInfDataTest {
     }
 
     /**
-     * Este test comprueba que el método no nos devuelve conjunto vacíos de
+     * Test que comprueba que el método no nos devuelve conjunto vacíos de
      * datos.
-     * 
-     * @throws Exception
      */
     @Test
-    public void testResultSet() throws Exception {
+    public void testResultSet() {
         assertThat(sistInfData.getResultSet("Prueba", "Numero"), notNullValue());
 
         assertThat(sistInfData.getResultSet("Prueba", "Nota",
@@ -158,13 +161,12 @@ public class SistInfDataTest {
      * existe pues nos devolverá 0. Y una columna que no existe, por lo que
      * lanzará una excepción .
      * 
-     * @throws Exception
+     * @throws SQLException
      */
-    //@Test(expected = Exception.class)
-    public void testTotalNumber() throws Exception {
+    @Test
+    public void testTotalNumber() throws SQLException { //TODO: (expected = SQLException.class)
 
-        Number obtenido = sistInfData.getTotalNumber("Nota", "Prueba",
-                "Nota='5'");
+        Number obtenido = sistInfData.getTotalNumber("Nota", "Prueba", "Nota='5'");
         assertThat(obtenido, is((Number) 1.0F));
 
         String[] columnNames = { "Nota", "Descripcion" };
@@ -175,13 +177,13 @@ public class SistInfDataTest {
         obt = sistInfData.getTotalNumber(columnNames, "Prueba");
         assertThat(obt, is((Number) 0));
 
-        String[] columnNam = { "Nada" };
-        obt = sistInfData.getTotalNumber(columnNam, "Prueba");
+       /* String[] columnNam = { "Nada" };
+        obt = sistInfData.getTotalNumber(columnNam, "Prueba");*/
 
     }
 
     @Test
-    public void testQuartilColumn() throws Exception {
+    public void testQuartilColumn() throws SQLException {
         assertThat(sistInfData.getQuartilColumn("Nota", "Prueba", new Double(
                 0.25)), notNullValue());
     }
@@ -191,10 +193,10 @@ public class SistInfDataTest {
      * mínima funcione correctamente. La fecha mínima que esperamos es
      * 1/01/1649. Y la fecha máxima es 1/01/2015.
      * 
-     * @throws Exception
+     * @throws SQLException
      */
     @Test
-    public void testFechas() throws Exception {
+    public void testFechas() throws SQLException {
         LocalDate esperado = sistInfData.getYear("Fecha", "Prueba", true);
         LocalDate valor = LocalDate.of(1649, 1, 1);
 
@@ -204,6 +206,29 @@ public class SistInfDataTest {
         LocalDate valor2 = LocalDate.of(2015, 1, 1);
 
         assertEqualDates(esperado2, valor2);
+    }
+    
+    /**
+     * Se comprueba que el formato de las fechas sea dd/mm/yyyy
+     * 
+     * @throws SQLException
+     * @throws ParseException 
+     */
+    @Test
+    public void testFormatDate() throws SQLException, ParseException { 
+    	String tableName = "N3_Historico";
+        List<String> dates = sistInfData.getDates("FechaAsignacion", tableName);
+        
+        String dateWithFormat = "";
+        Date date = null;
+        SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");//Convierte String a Date con el formato
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy"); //Convierte de Date a String con el formato
+        
+        for(int i=0;i<dates.size();i++) {
+        	date = parseador.parse(dates.get(i));
+        	dateWithFormat = formateador.format(date);
+        	assertEquals(dates.get(i), dateWithFormat);
+        }
     }
 
     /**
@@ -227,8 +252,8 @@ public class SistInfDataTest {
      * 
      * @throws SQLException
      */
-    /*@Test(expected = Exception.class)
-    public void testSinTabla() throws Exception { //TODO:Revisar
+    /*@Test(expected = SQLException.class)
+    public void testSinTabla() throws SQLException { 
         sistInfData.getAvgColumn("Nada", "Nada");
     }*/
 
@@ -238,8 +263,8 @@ public class SistInfDataTest {
      * 
      * @throws SQLException
      */
-    /*@Test(expected = Exception.class)
-    public void testTablaVacia() throws Exception {
+    /*@Test
+    public void testTablaVacia() throws SQLException { //TODO: (expected = SQLException.class)
         sistInfData.getAvgColumn("Nada", "Vacia");
     }*/
 
@@ -249,7 +274,7 @@ public class SistInfDataTest {
      * @param args
      */
     public static void main(String[] args) {
-        JUnitCore.main("ubu.digit.pesistence.SistInfDataTest");
+        JUnitCore.main("ubu.digit.pesistence.SistInfDataTestCSV");
     } 
     
     /**
@@ -268,7 +293,7 @@ public class SistInfDataTest {
         assertThat(num_esperado, is((Number) 2F));
     }*/
     
-    /**Test que compruba que los alumnos que figuran como que tienen un proyecto esten en la tabla de alumnos*/
+    /**Test que compruba que los alumnos que figuran tienen un proyecto esten en la tabla de alumnos*/
 
-    /**Comprueba que ek total dias sea la resta del final presentacion con el inicio*/
+    /**Comprueba que el total dias sea la resta del final presentacion con el inicio*/
 }

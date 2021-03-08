@@ -72,6 +72,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 
 	/**
 	 * Inicializa la conexión odbc al almacen de datos.
+	 * 
+	 * @return con
+	 * 				conexión con el fichero .csv
 	 */
 	private Connection getConection(){
 		Connection con = null;
@@ -132,10 +135,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param tableName
 	 *            nombre de la tabla de datos
 	 * @return media aritmética
-	 * @throws SQLException
 	 */
 	@Override
-	public Number getAvgColumn(String columnName, String tableName) throws SQLException {
+	public Number getAvgColumn(String columnName, String tableName){
 		List<Float> media = obtenerDatos(columnName, tableName);
 		Float resultadoMedia = new Float(0);
 		for (Float numero : media) {
@@ -153,10 +155,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param tableName
 	 *            nombre de la tabla de datos
 	 * @return valor máximo de la columna
-	 * @throws SQLException
 	 */
 	@Override
-	public Number getMaxColumn(String columnName, String tableName) throws SQLException {
+	public Number getMaxColumn(String columnName, String tableName){
 		return Collections.max(obtenerDatos(columnName, tableName));
 	}
 
@@ -169,10 +170,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param tableName
 	 *            nombre de la tabla de datos
 	 * @return valor mínimo de la columna
-	 * @throws SQLException
 	 */
 	@Override
-	public Number getMinColumn(String columnName, String tableName) throws SQLException {
+	public Number getMinColumn(String columnName, String tableName){
 		return Collections.min(obtenerDatos(columnName, tableName));
 	}
 
@@ -188,7 +188,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @throws SQLException
 	 */
 	@Override
-	public Number getStdvColumn(String columnName, String tableName) throws SQLException {
+	public Number getStdvColumn(String columnName, String tableName){
 		return calculateStdev(obtenerDatos(columnName, tableName));
 	}
 
@@ -202,7 +202,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @return Listado con los datos de dicha columna.
 	 */
 	@Override
-	protected List<Float> obtenerDatos(String columnName, String tableName) throws SQLException {
+	protected List<Float> obtenerDatos(String columnName, String tableName){
 		String sql = SELECT + columnName + FROM + tableName + ";";
 		List<Float> media = new ArrayList<>();
 		try (Statement statement = connection.createStatement(); 
@@ -214,6 +214,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 					media.add(result.getFloat(i));
 				}
 			}
+		}catch(SQLException e ) {
+			LOGGER.error(e);
 		}
 		return media;
 	}
@@ -228,10 +230,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 *            nombre de la tabla de datos
 	 * @param percent
 	 * @return mediana
-	 * @throws SQLException
 	 */
 	@Override
-	protected Number getQuartilColumn(String columnName, String tableName, double percent) throws SQLException {
+	public Number getQuartilColumn(String columnName, String tableName, double percent){
 		Number nTotalValue = getTotalNumber(columnName, tableName);
 		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO + ORDER_BY
 				+ columnName;
@@ -347,8 +348,12 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @throws SQLException
 	 */
 	protected void addYearsCurseToList(String columnName, List<String> listValues,ResultSet result) throws SQLException {
-		while (result.next()) {
-			listValues.add(result.getString(columnName));
+		try {
+			while (result.next()) {
+				listValues.add(result.getString(columnName));
+			}
+		}catch(SQLException e) {
+			LOGGER.error("Error", e);
 		}
 	}
 	
@@ -407,10 +412,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param SQL
 	 *            Sentencia a ejecutar.
 	 * @return listado con los números.
-	 * @throws SQLException
 	 */
 	@Override
-	protected List<Double> getListNumber(String columnName, String sql) throws SQLException {
+	protected List<Double> getListNumber(String columnName, String sql){
 		List<Double> listValues = new ArrayList<>(100);
 		try (Statement statement = connection.createStatement()) {
 			Boolean hasResults = statement.execute(sql);
@@ -419,6 +423,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 					addNumbersToList(columnName, listValues, result);
 				}
 			}
+		}catch(SQLException e) {
+			LOGGER.error(e);
 		}
 		return listValues;
 	}
@@ -432,13 +438,16 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 *            Lista que guarda los valores.
 	 * @param result
 	 *            ResultSet a partir del cual obtener los valores.
-	 * @throws SQLException
 	 */
-	protected void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) throws SQLException {
-		while (result.next()) {
-			listValues.add(result.getDouble(columnName));
+	protected void addNumbersToList(String columnName, List<Double> listValues, ResultSet result) {
+		try {
+			while (result.next()) {
+				listValues.add(result.getDouble(columnName));
+			}
+		}catch(SQLException e) {
+			LOGGER.error(e);
 		}
-	}
+	}//TODO: revisar en abstract
 
 	/**
 	 * Ejecuta una sentencia SQL obteniendo el número total de filas diferentes,
@@ -452,7 +461,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @throws SQLException
 	 */
 	@Override
-	public Number getTotalNumber(String columnName, String tableName) throws SQLException {
+	public Number getTotalNumber(String columnName, String tableName){
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO;
 		return getResultSetNumber(sql);
@@ -469,10 +478,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param whereCondition
 	 *            filtro con la condición
 	 * @return número total de filas distintas
-	 * @throws SQLException
 	 */
 	@Override
-	protected Number getTotalNumber(String columnName, String tableName, String whereCondition) throws SQLException {
+	protected Number getTotalNumber(String columnName, String tableName, String whereCondition){
 		String sql = SELECT_DISTINCT + COUNT + "(" + columnName + ")" + FROM + tableName + WHERE + columnName
 				+ DISTINTO_DE_VACIO + AND + whereCondition + " ;";
 		return getResultSetNumber(sql);
@@ -487,10 +495,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param tableName
 	 *            nombre de la tabla de datos
 	 * @return número total de filas distintas
-	 * @throws SQLException
 	 */
 	@Override
-	public Number getTotalNumber(String[] columnsName, String tableName) throws SQLException {
+	public Number getTotalNumber(String[] columnsName, String tableName){
 		String sql;
 		Set<String> noDups = new HashSet<>();
 		if (columnsName != null) {
@@ -501,6 +508,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 					ResultSetMetaData rmeta = resultSet.getMetaData();
 					int numColumns = rmeta.getColumnCount();
 					addUniqueStrings(noDups, resultSet, numColumns);
+				}catch(SQLException e) {
+					LOGGER.error(e);
 				}
 			}
 			return (float) noDups.size();
@@ -533,10 +542,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * asignar. Se busca una cadena que contenga la subcadena "Aal".
 	 * 
 	 * @return número total de proyectos sin asignar
-	 * @throws SQLException
 	 */
 	@Override
-	public Number getTotalFreeProject() throws SQLException {
+	public Number getTotalFreeProject(){
 		String sql = SELECT + COUNT + "(*)" + FROM + "Proyecto" + WHERE + ALUMNO1 + LIKE + "'%Aal%'";
 		return getResultSetNumber(sql);
 	}
@@ -550,12 +558,16 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param tableName
 	 *            nombre de la tabla de datos.
 	 * @return conjunto de filas distintas de null.
-	 * @throws SQLException
 	 */
-	protected ResultSet getResultSet(String tableName, String columnName) throws SQLException {
-		Statement statement = connection.createStatement();
+	protected ResultSet getResultSet(String tableName, String columnName){
 		String sql = SELECT_ALL + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
-		return statement.executeQuery(sql);
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
+			return result;
+		}catch(SQLException e) {
+			LOGGER.error(e);
+		}
+		return null;
 	}
 
 	/**
@@ -568,15 +580,17 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 *            nombre de la tabla de datos.
 	 * @param whereCondition
 	 *            condición de la claúsula where.
-	 * @return conjunto de filas distintas de null y condición de la claúsula
-	 *         where.
-	 * @throws SQLException
+	 * @return conjunto de filas distintas de null y condición de la claúsula where.
 	 */
-	protected ResultSet getResultSet(String tableName, String columnName, String whereCondition) throws SQLException {
-		Statement statement = connection.createStatement();
+	protected ResultSet getResultSet(String tableName, String columnName, String whereCondition){
 		String sql = SELECT_ALL + FROM + tableName + WHERE + whereCondition + ";";
-		statement.execute(sql);
-		return statement.getResultSet();
+		try (Statement statement = connection.createStatement()) {
+			statement.execute(sql);
+			return statement.getResultSet();
+		}catch(SQLException e) {
+			LOGGER.error(e);
+		}
+		return null;
 	}
 
 	/**
@@ -593,42 +607,48 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * @param columnsName
 	 *            nombres de las columnas a seleccionar
 	 * @return conjunto de filas distintas de null.
-	 * @throws SQLException
 	 */
-	protected ResultSet getResultSet(String tableName, String columnName, String[] filters, String[] columnsName)
-			throws SQLException {
-		Statement statement = connection.createStatement();
+	protected ResultSet getResultSet(String tableName, String columnName, String[] filters, String[] columnsName){
 		StringBuilder sql = new StringBuilder();
-		if (columnsName == null) {
-			sql.append(SELECT_ALL);
-		} else {
-			sql.append(SELECT);
-			int index = 0;
-			for (String selectedColumn : columnsName) {
-				if (index == 0) {
-					sql.append(" " + selectedColumn);
-					index++;
-				} else {
-					sql.append(", " + selectedColumn);
+		ResultSet result = null;
+		try {
+			Statement statement = connection.createStatement();
+		
+			if (columnsName == null) {
+				sql.append(SELECT_ALL);
+			} else {
+				sql.append(SELECT);
+				int index = 0;
+				for (String selectedColumn : columnsName) {
+					if (index == 0) {
+						sql.append(" " + selectedColumn);
+						index++;
+					} else {
+						sql.append(", " + selectedColumn);
+					}
 				}
 			}
-		}
-		sql.append(" \n" + FROM + tableName + " \n" + WHERE + " (" + columnName + DISTINTO_DE_VACIO + ")");
-		if (filters != null) {
-			sql.append(AND + "(");
-			int index = 0;
-			for (String filter : filters) {
-				if (index == 0) {
-					sql.append(" \n" + columnName + " = '" + filter + "'");
-					index++;
-				} else {
-					sql.append(" \nOR " + columnName + " = '" + filter + "'");
+			sql.append(" \n" + FROM + tableName + " \n" + WHERE + " (" + columnName + DISTINTO_DE_VACIO + ")");
+			if (filters != null) {
+				sql.append(AND + "(");
+				int index = 0;
+				for (String filter : filters) {
+					if (index == 0) {
+						sql.append(" \n" + columnName + " = '" + filter + "'");
+						index++;
+					} else {
+						sql.append(" \nOR " + columnName + " = '" + filter + "'");
+					}
 				}
+				sql.append(");");
 			}
-			sql.append(");");
+			statement.execute(sql.toString());
+			result = statement.getResultSet();
+			
+		}catch(SQLException e) {
+			LOGGER.error(e);
 		}
-		statement.execute(sql.toString());
-		return statement.getResultSet();
+		return result;
 	}
 
 	/**
@@ -643,10 +663,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 *            True si queremos el curso mínimo, false si queremos el curso
 	 *            máximo.
 	 * @return Curso más bajo que ha encontrado.
-	 * @throws SQLException
 	 */
 	@Override
-	public LocalDate getYear(String columnName, String tableName, Boolean minimo) throws SQLException {
+	public LocalDate getYear(String columnName, String tableName, Boolean minimo) {
 		String sql = SELECT + columnName + FROM + tableName + ";";
 		List<LocalDate> listadoFechas = new ArrayList<>();
 		try (Statement statement = connection.createStatement();
@@ -654,6 +673,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			while (result.next()) {
 				listadoFechas.add(transform(result.getString(columnName)));
 			}
+		}catch(SQLException e) {
+			LOGGER.error(e);
 		}
 		if (minimo) {
 			return Collections.min(listadoFechas);
@@ -708,7 +729,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	@Override
 	protected List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
-			String columnName4, String tableName, Number curso) throws SQLException {
+			String columnName4, String tableName, Number curso){
 		List<Object> lista;
 		List<List<Object>> resultados = new ArrayList<>();
 		String sql = SELECT + columnName + "," + columnName2 + "," + columnName3 + "," + columnName4 + ", " 
@@ -735,6 +756,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				lista.add(result.getString(TUTOR3));
 				resultados.add(lista);
 			}
+		} catch (SQLException e) {
+			LOGGER.error("Error al obtener los datos del actuales", e);
 		}
 		return resultados;
 	}

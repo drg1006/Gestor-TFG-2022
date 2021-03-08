@@ -1,13 +1,14 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 
 import com.codoid.products.exception.FilloException;
@@ -101,16 +102,8 @@ public abstract class SistInfDataAbstract implements Serializable {
 	protected static final Logger LOGGER = Logger.getLogger(SistInfDataAbstract.class);
 	
 	protected abstract Number getResultSetNumber(String sql);
-	
-	public abstract Number getAvgColumn(String columnName, String tableName) throws Exception;
-	
-	public abstract Number getMaxColumn(String columnName, String tableName) throws Exception;
-	
-	public abstract Number getMinColumn(String columnName, String tableName) throws Exception;
 
-	public abstract Number getStdvColumn(String columnName, String tableName) throws Exception;
-
-	protected abstract List<Float> obtenerDatos(String columnName, String tableName) throws Exception;
+	protected abstract List<Float> obtenerDatos(String columnName, String tableName);
 
 	/**
 	 * Calcula la desviación standard.
@@ -144,8 +137,8 @@ public abstract class SistInfDataAbstract implements Serializable {
 		double result = sum / (list.size() - 1);
 		return Math.sqrt(result);
 	}
-
-	protected abstract Number getQuartilColumn(String columnName, String tableName, double percent) throws Exception;
+	
+	public abstract Number getAvgColumn(String columnName, String tableName);
 	
 	public abstract List<String> getRankingPercentile();
 	
@@ -153,27 +146,25 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	public abstract List<Integer> getRankingCurses();
 	
-	protected abstract List<Double> getListNumber(String columnName, String sql) throws Exception;
-	
-	public abstract Number getTotalNumber(String columnName, String tableName) throws Exception;
+	public abstract Number getTotalNumber(String columnName, String tableName);
 
-	protected abstract Number getTotalNumber(String columnName, String tableName, String whereCondition) throws Exception;
+	protected abstract Number getTotalNumber(String columnName, String tableName, String whereCondition);
 
-	public abstract Number getTotalNumber(String[] columnsName, String tableName) throws Exception;
+	public abstract Number getTotalNumber(String[] columnsName, String tableName);
 
-	public abstract Number getTotalFreeProject() throws Exception;
+	public abstract Number getTotalFreeProject();
 	
 	//TODO: modificado tipo que devuelven de resultset a object
-	protected abstract Object getResultSet(String tableName, String columnName) throws Exception;
+	protected abstract Object getResultSet(String tableName, String columnName);
 
-	protected abstract Object getResultSet(String tableName, String columnName, String whereCondition) throws Exception;
+	protected abstract Object getResultSet(String tableName, String columnName, String whereCondition);
 
-	protected abstract Object getResultSet(String tableName, String columnName, String[] filters, String[] columnsName) throws Exception;
+	protected abstract Object getResultSet(String tableName, String columnName, String[] filters, String[] columnsName);
 
-	public abstract LocalDate getYear(String columnName, String tableName, Boolean minimo) throws Exception;
+	public abstract LocalDate getYear(String columnName, String tableName, Boolean minimo);
 
 	protected abstract List<List<Object>> getProjectsCurso(String columnName, String columnName2, String columnName3,
-			String columnName4, String tableName, Number curso) throws Exception;
+			String columnName4, String tableName, Number curso);
 
 	/**
 	 * Transforma el string que le llega en un tipo Date.
@@ -201,5 +192,17 @@ public abstract class SistInfDataAbstract implements Serializable {
 	public abstract ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter);
 
 	protected abstract List<String> getDates(String columnName, String sheet);
+
+	public abstract Number getQuartilColumn(String columnName, String tableName, double percent);
+
+	public abstract Number getMaxColumn(String columnName, String tableName);
+	
+	public abstract Number getMinColumn(String columnName, String tableName);
+	
+	public abstract Number getStdvColumn(String columnName, String tableName);
+
+	protected abstract List<Double> getListNumber(String columnName, String sql);
+
+
 	
 }
