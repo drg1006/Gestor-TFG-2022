@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dbo1001_Gestor-TFG-2021&metric=alert_status)](https://sonarcloud.io/dashboard?id=dbo1001_Gestor-TFG-2021)
+
 # GII 20.09 Herramienta web repositorios de TFGII
 
 ### Autora
@@ -17,6 +19,3 @@ El proyecto está desplegado en https://tomcat8-vaadinjfb.rhcloud.com/sistinf-0.
 * Apache Tomcat como Servidor --> https://vaadin.com/docs/v8/framework/installing/installing-server.html
 * IDE Eclipse (Versión 2020-06 R) --> https://vaadin.com/docs/v8/framework/installing/installing-eclipse.html
 * Plugin de Vaddin --> Instalar la extensión llamada "Vaadin Plugin for Eclipse" desde el "Eclipse Marketplace".
-
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dbo1001_Gestor-TFG-2021&metric=alert_status)](https://sonarcloud.io/dashboard?id=dbo1001_Gestor-TFG-2021)
