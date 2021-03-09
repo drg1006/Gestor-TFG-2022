@@ -21,6 +21,11 @@ Las tareas que se realizaron fueron:
 		Se procedió a buscar información sobre cómo instalar y manejar Latex para realizar la documentación del proyecto posteriormente.
 \end{itemize}
 
+Se puede ver el trascurso de estas tareas gráficamente en la siguiente ilustración \ref{fig:Spring0_Graficos}.
+
+\imagenflotante{Spring0_Graficos}{Gráfica - Spring 0}{0.9}
+
+
 \subsection{Sprint 1 (25/11/2020 - 12/01/2021)}
 Generación de test unitarios, búsqueda de trabajos similares, cambio del driver para conectarse con el excel, información para obtener ideas de como realizar ciertas mejoras y comienzo de la documentación del proyecto. Mejora de la cobertura de la aplicación web.
 
@@ -36,6 +41,10 @@ Las tareas planteadas fueron:
 	\item Cambiar driver JDBC 
 		Para poder usar los .ods se buscó una alternativa al driver para .csv que se empleaba.
 \end{itemize}
+
+Se puede ver el trascurso a través de la siguiente imagen \ref{fig:Spring1_Graficos}.
+
+\imagenflotante{Spring1_Graficos}{Gráfica - Spring 1}{0.9}
 
 \subsection{Sprint 2 (12/01/2021 - 26/01/2021)}
 Búsqueda de nuevos driver que implementen JDBC para ficheros .xls. Prueba de opciones encontradas como Apache POI, SQLSheet, Fillo, Cdata JDBC for Excel y JdbcOdbcDriver. Integrar la API Fillo en el proyecto. 
@@ -68,6 +77,63 @@ Las tareas planteadas fueron:
 	\item Realización de cambios para el funcionamiento de la nueva conexión para los fichero .xls 
 		Para poder usar la API Fillo se han tenido que realizar multitud de cambios en el proyecto. Aunque tanto el ``\textbf{\textbf{CsvDriver}}'' y ``\textbf{\textbf{Fillo}}'' emplean lenguaje SQL, ``\textbf{CsvDriver}'' emplea JDBC puro mientras que ``\textbf{Fillo}'' usa funciones y clases propias.
 \end{itemize}
+
+La siguiente imagen \ref{fig:Spring2_Graficos} muestra cómo se han desarrollado las tareas a lo largo del tiempo.
+
+\imagenflotante{Spring2_Graficos}{Gráfica - Spring 2}{0.9}
+
+\subsection{Sprint 3 (26/01/2021 - 11/02/2021)}
+
+Las tareas planteadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Investigar opciones de hosting para el despliegue
+	Se comparan varias opciones gratuitas para desplegar la aplicación, las cuales son: GitHub Pages, LucusHost, Awardspace, RunHosting, FreeHostia, X10Hosting y Heroku. Eligiendo la opción de Heroku, entre otras razones, porque proporciona la opción de conectar el despliegue con GitHub.
+	\item Rediseño fachada y vistas
+	Se elimina la parte vinculada a los datos de las vistas incluyéndola en a las clases fachada. 
+	\item Cambiar nombres a inglés.
+	Se traducen los nombres de las variables, métodos y clases a inglés.
+	\item Actualización de la Memoria y Anexos.
+	Se realizan cambios y ampliaciones en el contenido de la documentación, en la Memoria y el Anexo.
+	\item Instalación Heroku CLI
+	Para realizar el despliegue del proyecto se instala el terminal de Heroku, denominado Heroku CLI. La instalación se llevo a cabo según el tutorial de instalación de la página oficial de Heroku (https://devcenter.heroku.com/articles/heroku-cli).
+	\item Incorporación del patron Factory 
+	Se crea una nueva clase con la función de seleccionar el tipo de acceso de datos, ya sea la clase fachada encargada de los ficheros .csv o, la que gestiona los ficheros .xls.
+	\item Creación branch de prueba
+	Rama del repositorio donde se almacena el proyecto de prueba formularioVaadin, el cual posteriormente será usado para realizar una prueba de despliegue en Heroku.
+	\item Modificación de Test JUnit
+	Se cambian los test para que sirvan para las funciones de la clase fachada para los ficheros .xls. 
+	\item Probar el despliegue del proyecto de prueba
+	Se emplea el proyecto de prueba, formularioVaddin, para realizar una prueba de despliegue en Heroku. Se intentará realizarlo tanto, a través de Heroku CLI como, mediante la interfaz la página de Heroku.
+	
+\end{itemize}
+
+En la siguiente imagen se enseña gráficamente el desarrollo de las issues \ref{fig:Spring3_Graficos}.
+
+\imagenflotante{Spring3_Graficos}{Gráfica - Spring 3}{0.9}
+
+\subsection{Sprint 4 (11/02/2021 - 23/02/2021)}
+Se intentará incorporar la integración continua. Realizar el despliegue de la aplicación con Heroku. Añadir una columna de rankings en el Histórico. Cambiar las notas del histórico a privadas.
+
+Las tareas planteadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Realizar la Integración Continua.
+	A través de la opción GitHub Actions se incorporará la opción de compilar y ejecutar los test cuando se realiza un cambio (ya sea un push o un pull request) en el repositorio. Tiene como objetivo detectar fallos eficazmente mediante la integración automática frecuentemente de un proyecto. 
+	\item Actualización bibliografía
+	Se incorporan los enlaces de las páginas o datos bibliográficos que se han empleado hasta ahora en la realización del proyecto.
+	\item Cambiar las notas del Histórico a privadas
+	Se elimina las notas de la columnas de "Notas" en la tabla de Históricos. 
+	\item Añadir dependencia Apache Commons Math
+	\item Crear ranking de notas en Histórico
+	\item Actualización del despliegue del proyecto de prueba en Heroku 
+	\item Mejora de test JUnit
+	
+\end{itemize}
+
+A continuación, se expondrá una ilustración donde se aprecia el trascurso del Spring y el desarrollo de las tareas\ref{fig:Spring4_Graficos}.
+
+\imagenflotante{Spring4_Graficos}{Gráfica - Spring 4}{0.9}
 
 \section{Estudio de viabilidad}
 \subsection{Viabilidad económica}

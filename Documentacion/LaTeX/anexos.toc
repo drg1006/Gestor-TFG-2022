@@ -1,0 +1,45 @@
+\babel@toc {spanish}{}
+\babel@toc {spanish}{}
+\contentsline {chapter}{\'{I}ndice general}{\es@scroman {i}}{section*.1}%
+\contentsline {chapter}{\'{I}ndice de figuras}{\es@scroman {iii}}{section*.2}%
+\contentsline {chapter}{\'{I}ndice de tablas}{\es@scroman {iv}}{section*.3}%
+\contentsline {appendix}{\chapternumberline {A}Plan de Proyecto Software}{1}{appendix.Alph1}%
+\contentsline {section}{\numberline {A.1}Introducción}{1}{section.Alph1.1}%
+\contentsline {section}{\numberline {A.2}Planificación temporal}{1}{section.Alph1.2}%
+\contentsline {subsection}{Sprint 0 (26/10/2020 - 25/11/2020)}{1}{section*.4}%
+\contentsline {subsection}{Sprint 1 (25/11/2020 - 12/01/2021)}{2}{section*.5}%
+\contentsline {subsection}{Sprint 2 (12/01/2021 - 26/01/2021)}{3}{section*.6}%
+\contentsline {subsection}{Sprint 3 (26/01/2021 - 11/02/2021)}{5}{section*.7}%
+\contentsline {subsection}{Sprint 4 (11/02/2021 - 23/02/2021)}{7}{section*.8}%
+\contentsline {section}{\numberline {A.3}Estudio de viabilidad}{8}{section.Alph1.3}%
+\contentsline {subsection}{Viabilidad económica}{8}{section*.9}%
+\contentsline {subsubsection}{Coste del personal}{8}{section*.10}%
+\contentsline {subsubsection}{Coste hardware}{8}{section*.11}%
+\contentsline {subsubsection}{Coste software}{8}{section*.12}%
+\contentsline {subsection}{Viabilidad legal}{9}{section*.13}%
+\contentsline {appendix}{\chapternumberline {B}Especificación de Requisitos}{11}{appendix.Alph2}%
+\contentsline {section}{\numberline {B.1}Introducción}{11}{section.Alph2.1}%
+\contentsline {section}{\numberline {B.2}Objetivos generales}{11}{section.Alph2.2}%
+\contentsline {section}{\numberline {B.3}Catalogo de requisitos}{11}{section.Alph2.3}%
+\contentsline {section}{\numberline {B.4}Especificación de requisitos}{11}{section.Alph2.4}%
+\contentsline {appendix}{\chapternumberline {C}Especificación de diseño}{13}{appendix.Alph3}%
+\contentsline {section}{\numberline {C.1}Introducción}{13}{section.Alph3.1}%
+\contentsline {section}{\numberline {C.2}Diseño de datos}{13}{section.Alph3.2}%
+\contentsline {section}{\numberline {C.3}Diseño procedimental}{13}{section.Alph3.3}%
+\contentsline {section}{\numberline {C.4}Diseño arquitectónico}{13}{section.Alph3.4}%
+\contentsline {appendix}{\chapternumberline {D}Documentación técnica de programación}{15}{appendix.Alph4}%
+\contentsline {section}{\numberline {D.1}Introducción}{15}{section.Alph4.1}%
+\contentsline {section}{\numberline {D.2}Estructura de directorios}{15}{section.Alph4.2}%
+\contentsline {section}{\numberline {D.3}Manual del programador}{15}{section.Alph4.3}%
+\contentsline {subsection}{Instalación de Java}{15}{section*.14}%
+\contentsline {subsection}{Instalación de Eclipse}{17}{section*.15}%
+\contentsline {subsection}{Instalación del \textit {plugin de Vaadin} para Eclipse}{19}{section*.16}%
+\contentsline {section}{\numberline {D.4}Compilación, instalación y ejecución del proyecto}{20}{section.Alph4.4}%
+\contentsline {subsection}{Descarga del repositorio}{20}{section*.17}%
+\contentsline {section}{\numberline {D.5}Pruebas del sistema}{21}{section.Alph4.5}%
+\contentsline {appendix}{\chapternumberline {E}Documentación de usuario}{23}{appendix.Alph5}%
+\contentsline {section}{\numberline {E.1}Introducción}{23}{section.Alph5.1}%
+\contentsline {section}{\numberline {E.2}Requisitos de usuarios}{23}{section.Alph5.2}%
+\contentsline {section}{\numberline {E.3}Instalación}{23}{section.Alph5.3}%
+\contentsline {section}{\numberline {E.4}Manual del usuario}{23}{section.Alph5.4}%
+\contentsline {chapter}{Bibliograf\'{\i }a}{25}{appendix*.18}%
