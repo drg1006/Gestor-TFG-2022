@@ -22,9 +22,11 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<vaadin.widgetset.mode>local</vaadin.widgetset.mode>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.projectKey>dbo1001_Gestor-TFG-2021</sonar.projectKey>
+		<sonar.organization>dbo1001</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
 		<sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
-		<sonar.host.url>http://prueba-ubugii.rhcloud.com/</sonar.host.url>
 	</properties>
 
 	<repositories>
