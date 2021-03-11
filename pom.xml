@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+	<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -22,6 +22,9 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<vaadin.widgetset.mode>local</vaadin.widgetset.mode>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
+		<sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
+		<sonar.host.url>http://prueba-ubugii.rhcloud.com/</sonar.host.url>
 		<sonar.projectKey>dbo1001_Gestor-TFG-2021</sonar.projectKey>
 		<sonar.organization>dbo1001</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
