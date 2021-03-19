@@ -97,7 +97,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	 */
 	public ActiveProjectsView() {
 		
-		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
 		
 		setMargin(true);
 		setSpacing(true);

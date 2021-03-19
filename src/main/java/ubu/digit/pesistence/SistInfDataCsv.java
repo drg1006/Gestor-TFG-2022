@@ -783,8 +783,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public List<String> getDataModel() { 
 		List<String> listaDataModel = new ArrayList<String>();
+		String sql = SELECT_ALL + FROM + PROYECTO + WHERE + TITULO + DISTINTO_DE_VACIO;
 		
-		try (ResultSet result = getResultSet(PROYECTO, TITULO)) {
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
 			while (result.next()) {
 				String title = result.getString(TITULO);
 				String description = result.getString(DESCRIPCION);
@@ -829,8 +831,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public List<String> getTribunal(){
 		List<String> listaTribunal = new ArrayList<String>();
+		String sql = SELECT_ALL + FROM + TRIBUNAL + WHERE + NOMBRE_APELLIDOS + DISTINTO_DE_VACIO;
 		
-		try (ResultSet result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS)) {
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
 			while (result.next()) {
 				String cargo = result.getString(CARGO);
 				String nombre = result.getString(NOMBRE_APELLIDOS);
@@ -848,8 +852,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public List<String> getNormas(){
 		List<String> listaNormas = new ArrayList<String>();
+		String sql = SELECT_ALL + FROM + NORMA + WHERE + DESCRIPCION + DISTINTO_DE_VACIO;
 		
-		try (ResultSet result = getResultSet(NORMA, DESCRIPCION)) {
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
 			while (result.next()) {
 				String descripcion = result.getString(DESCRIPCION);
 				listaNormas.add(descripcion);
@@ -865,7 +871,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public List<String> getDocumentos(){
 		List<String> listaDocumentos = new ArrayList<String>();
-		try (ResultSet result = getResultSet(DOCUMENTO, DESCRIPCION)) {
+		String sql = SELECT_ALL + FROM + DOCUMENTO + WHERE + DESCRIPCION + DISTINTO_DE_VACIO;
+		
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
 			while (result.next()) {
 				String descripcion = result.getString(DESCRIPCION);
 				String url = result.getString("Url"); 
@@ -883,11 +892,19 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
-		ArrayList listaDataModel=new ArrayList();
 		int contador=0;
-		String ranking;
-		List<String> rankings = getRankingPercentile();
-		try (ResultSet result = getResultSet(HISTORICO, TITULO)) {
+		String rankingPercentile="";
+		int rankingTotal=0;
+		int rankingCurse=0;
+		List<String> rankingsPercentile = getRankingPercentile();
+		List<Integer> rankingsTotal = getRankingTotal();
+		List<Integer> rankingsCurse = getRankingCurses();
+		ArrayList listaDataModel=new ArrayList();
+		
+		String sql = SELECT_ALL + FROM + HISTORICO + WHERE + TITULO + DISTINTO_DE_VACIO;
+		
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql)) {
 			while (result.next()) {
 				int numStudents = 0;
 				int numTutors = 0;
@@ -931,7 +948,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				}
 				LocalDate assignmentDate = LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
 				LocalDate presentationDate = LocalDate.parse(result.getString(FECHA_PRESENTACION), dateTimeFormatter);
-				ranking = rankings.get(contador);
+				rankingPercentile = rankingsPercentile.get(contador);
+				rankingTotal = rankingsTotal.get(contador);
+				rankingCurse = rankingsCurse.get(contador);
 				contador++;
 				Double score = result.getDouble(NOTA);
 				int totalDays = result.getShort(TOTAL_DIAS);
@@ -955,7 +974,9 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(score);
 				listaDataModel.add(totalDays);
 				listaDataModel.add(repoLink);
-				listaDataModel.add(ranking);
+				listaDataModel.add(rankingPercentile);
+				listaDataModel.add(rankingTotal);
+				listaDataModel.add(rankingCurse);
 				
 			}
 		} catch (SQLException e) {

@@ -158,7 +158,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * @throws SQLException 
 	 */
 	public HistoricProjectsView(){
-		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
 		
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();

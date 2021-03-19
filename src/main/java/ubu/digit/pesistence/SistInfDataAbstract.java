@@ -1,18 +1,13 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Recordset;
 
 import ubu.digit.util.ExternalProperties;
 

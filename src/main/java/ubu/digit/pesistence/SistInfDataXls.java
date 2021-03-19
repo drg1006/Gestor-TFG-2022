@@ -383,7 +383,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	@Override
 	protected Recordset getResultSet(String tableName, String columnName){
 		String sql = SELECT_ALL + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
-		
 		try {
 			return connection.executeQuery(sql);
 		}catch(FilloException e) {

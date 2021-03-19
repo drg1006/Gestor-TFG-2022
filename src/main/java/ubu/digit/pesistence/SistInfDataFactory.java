@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import ubu.digit.util.ExternalProperties;
-
 
 /**
  * Clase que implementa el patrón Factory.

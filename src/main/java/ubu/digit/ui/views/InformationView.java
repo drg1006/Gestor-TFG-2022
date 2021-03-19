@@ -63,7 +63,7 @@ public class InformationView extends VerticalLayout implements View {
 	 * Constructor.
 	 */
 	public InformationView() {
-		fachadaDatos = SistInfDataFactory.getInstanceData("XLS"); //TODO: 
+		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
 		
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 
