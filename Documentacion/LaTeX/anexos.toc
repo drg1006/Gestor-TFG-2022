@@ -21,7 +21,9 @@
 \contentsline {section}{\numberline {B.1}Introducción}{11}{section.Alph2.1}%
 \contentsline {section}{\numberline {B.2}Objetivos generales}{11}{section.Alph2.2}%
 \contentsline {section}{\numberline {B.3}Catalogo de requisitos}{11}{section.Alph2.3}%
-\contentsline {section}{\numberline {B.4}Especificación de requisitos}{11}{section.Alph2.4}%
+\contentsline {section}{\numberline {B.4}Especificación de requisitos}{12}{section.Alph2.4}%
+\contentsline {subsection}{Requisitos funcionales}{12}{section*.14}%
+\contentsline {subsection}{Requisitos no funcionales}{12}{section*.15}%
 \contentsline {appendix}{\chapternumberline {C}Especificación de diseño}{13}{appendix.Alph3}%
 \contentsline {section}{\numberline {C.1}Introducción}{13}{section.Alph3.1}%
 \contentsline {section}{\numberline {C.2}Diseño de datos}{13}{section.Alph3.2}%
@@ -31,15 +33,15 @@
 \contentsline {section}{\numberline {D.1}Introducción}{15}{section.Alph4.1}%
 \contentsline {section}{\numberline {D.2}Estructura de directorios}{15}{section.Alph4.2}%
 \contentsline {section}{\numberline {D.3}Manual del programador}{15}{section.Alph4.3}%
-\contentsline {subsection}{Instalación de Java}{15}{section*.14}%
-\contentsline {subsection}{Instalación de Eclipse}{17}{section*.15}%
-\contentsline {subsection}{Instalación del \textit {plugin de Vaadin} para Eclipse}{19}{section*.16}%
+\contentsline {subsection}{Instalación de Java}{15}{section*.16}%
+\contentsline {subsection}{Instalación de Eclipse}{17}{section*.17}%
+\contentsline {subsection}{Instalación del \textit {plugin de Vaadin} para Eclipse}{19}{section*.18}%
 \contentsline {section}{\numberline {D.4}Compilación, instalación y ejecución del proyecto}{20}{section.Alph4.4}%
-\contentsline {subsection}{Descarga del repositorio}{20}{section*.17}%
+\contentsline {subsection}{Descarga del repositorio}{20}{section*.19}%
 \contentsline {section}{\numberline {D.5}Pruebas del sistema}{21}{section.Alph4.5}%
 \contentsline {appendix}{\chapternumberline {E}Documentación de usuario}{23}{appendix.Alph5}%
 \contentsline {section}{\numberline {E.1}Introducción}{23}{section.Alph5.1}%
 \contentsline {section}{\numberline {E.2}Requisitos de usuarios}{23}{section.Alph5.2}%
 \contentsline {section}{\numberline {E.3}Instalación}{23}{section.Alph5.3}%
 \contentsline {section}{\numberline {E.4}Manual del usuario}{23}{section.Alph5.4}%
-\contentsline {chapter}{Bibliograf\'{\i }a}{25}{appendix*.18}%
+\contentsline {chapter}{Bibliograf\'{\i }a}{25}{appendix*.20}%

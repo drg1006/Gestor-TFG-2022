@@ -1,19 +1,38 @@
 \apendice{Especificación de Requisitos}
 
 \section{Introducción}
-Se detallarán los requisitos del proyecto.
+Los requisitos\cite{requisitos} del proyecto son los puntos clave que se deben cumplir.
 
 \section{Objetivos generales}
-El objetivo principal es mejorar la aplicación web.
+El objetivo del proyecto es la mejora de la aplicación Web centrándose en los siguientes puntos:
 \begin{itemize}
-	\item Incorporación de un nuevo tipo de archivo de datos
-	\item Modificaciones en el Histórico
-	\item Incorporación de las métricas con SonarCloud
-	\item Login a través de UBUVirtual
+	\item Incorporación y validación de un nuevo tipo de datos (XLS)
+	\item Realización de la métricas con los resultados del análisis de la calidad del código de los TFG (SonarCloud)
+	\item Mejoras en la estética de la aplicación Web.
+	\item Modificación del Login para conectarse con la cuenta de la Universidad.
 \end{itemize}
 
 \section{Catalogo de requisitos}
-
+Se describirán los requisitos específicos, funcionales y los no funcionales.
 \section{Especificación de requisitos}
 
+\subsection{Requisitos funcionales}
+\begin{itemize}
+	
+	\item \textbf{RF-1 Adicción nueva capa de datos}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
+	\begin{itemize}
+		\item \textbf{RF-1.1 Subida de datos:} el usuario que tenga permisos podrá subir archivos de datos, tanto en el formato xls como en el csv. 
+	\end{itemize}
+	
+	\item \textbf{RF-2 Login}: el sistema permitirá la subida de datos a ciertos usuarios que se autentificarán a  través del login de la aplicación.
+\end{itemize}
 
+\subsection{Requisitos no funcionales}
+\begin{itemize}
+	\item \textbf{RNF-1 Seguridad}: la aplicación solamente debe permitir la subida de datos a los usuarios con permisos.
+	
+	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la escalabilidad y incorporación de nuevas modificaciones en el futuro de forma sencilla. Un ejemplo de esto sería la actualización de Vaadin a una versión nueva para conservar el soporte en el futuro.
+	
+	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras para que la aplicación sea más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.
+
+\end{itemize}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.11) (preloaded format=pdflatex 2020.11.27)  8 MAR 2021 22:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.11) (preloaded format=pdflatex 2020.11.27)  13 APR 2021 17:34
 entering extended mode
 **./anexos.tex
 (anexos.tex
@@ -1073,16 +1073,28 @@ l.396 \include{./tex/A_Plan_proyecto}
 
 
 
-]) [11]
+]
+
+LaTeX Warning: Citation `requisitos' on page 11 undefined on input line 4.
+
+[11]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
+4.
+ (C:\Users\DianaBO\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+))
+LaTeX Info: Redefining \. on input line 397.
+LaTeX Info: Redefining \% on input line 397.
+
+[12]
 \openout2 = `./tex/C_Diseno.aux'.
 
-
-(tex/C_Diseno.tex [12
-
+ (tex/C_Diseno.tex) [13
 
 
 
-]) [13]
+
+]
 \openout2 = `./tex/D_Manual_programador.aux'.
 
  (tex/D_Manual_programador.tex [14
@@ -1091,13 +1103,13 @@ l.396 \include{./tex/A_Plan_proyecto}
 
 
 ]
-<./img//Descarga_JDK_8.png, id=661, 274.02374pt x 242.40562pt>
+<./img//Descarga_JDK_8.png, id=664, 274.02374pt x 242.40562pt>
 File: ./img//Descarga_JDK_8.png Graphic file (type png)
 <use ./img//Descarga_JDK_8.png>
 Package pdftex.def Info: ./img//Descarga_JDK_8.png  used on input line 18.
 (pdftex.def)             Requested size: 344.69766pt x 304.94814pt.
  [15]
-<./img//Descarga_JDK8_Licencia.png, id=667, 708.39656pt x 239.39438pt>
+<./img//Descarga_JDK8_Licencia.png, id=670, 708.39656pt x 239.39438pt>
 File: ./img//Descarga_JDK8_Licencia.png Graphic file (type png)
 <use ./img//Descarga_JDK8_Licencia.png>
 Package pdftex.def Info: ./img//Descarga_JDK8_Licencia.png  used on input line 
@@ -1118,12 +1130,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.Alph4.
 l.26 P
       ara descargar el IDE se accederá a la \href{https://www.eclipse.org/d...
  <./img//Descarga_JDK_8.png> <./img//Descarga_JDK8_Licencia.png>]
-<./img//Descargar_IDE.png, id=676, 590.205pt x 483.30562pt>
+<./img//Descargar_IDE.png, id=679, 590.205pt x 483.30562pt>
 File: ./img//Descargar_IDE.png Graphic file (type png)
 <use ./img//Descargar_IDE.png>
 Package pdftex.def Info: ./img//Descargar_IDE.png  used on input line 28.
 (pdftex.def)             Requested size: 344.69766pt x 282.27173pt.
-<./img//Eclipse_Installer.png, id=677, 501.37312pt x 405.76593pt>
+<./img//Eclipse_Installer.png, id=680, 501.37312pt x 405.76593pt>
 File: ./img//Eclipse_Installer.png Graphic file (type png)
 <use ./img//Eclipse_Installer.png>
 Package pdftex.def Info: ./img//Eclipse_Installer.png  used on input line 34.
@@ -1140,7 +1152,7 @@ h4.3}) has been already used, duplicate ignored
                                                   
 l.34 ...lipse_Installer}{Seleccionar Eclipse}{0.8}
                                                    <./img//Descargar_IDE.png>]
-<./img//Eclipse_Installer_JDK.png, id=685, 500.62032pt x 409.53pt>
+<./img//Eclipse_Installer_JDK.png, id=688, 500.62032pt x 409.53pt>
 File: ./img//Eclipse_Installer_JDK.png Graphic file (type png)
 <use ./img//Eclipse_Installer_JDK.png>
 Package pdftex.def Info: ./img//Eclipse_Installer_JDK.png  used on input line 3
@@ -1165,7 +1177,7 @@ plicate ignored
 l.35 ...K}{Seleccionar JDK que usará el IDE}{0.8}
                                                    <./img//Eclipse_Installer.pn
 g> <./img//Eclipse_Installer_JDK.png>]
-<./img//Eclipse_marketplace.png, id=692, 223.58531pt x 274.02374pt>
+<./img//Eclipse_marketplace.png, id=695, 223.58531pt x 274.02374pt>
 File: ./img//Eclipse_marketplace.png Graphic file (type png)
 <use ./img//Eclipse_marketplace.png>
 Package pdftex.def Info: ./img//Eclipse_marketplace.png  used on input line 40.
@@ -1178,7 +1190,7 @@ l plugin ``\T1/lmr/bx/it/12 Vaadin Plugin for Eclipse\T1/lmr/m/n/12 (-20) '', s
 e dar� a ``\T1/lmr/bx/sc/12 Install\T1/lmr/m/n/12 (-20) ''
  []
 
-<./img//Plugin_Vaadin.png, id=693, 543.53062pt x 517.935pt>
+<./img//Plugin_Vaadin.png, id=696, 543.53062pt x 517.935pt>
 File: ./img//Plugin_Vaadin.png Graphic file (type png)
 <use ./img//Plugin_Vaadin.png>
 Package pdftex.def Info: ./img//Plugin_Vaadin.png  used on input line 44.
@@ -1197,7 +1209,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.Alph4.
 l.44 ...lotante{Plugin_Vaadin}{Plugin Vaadin}{1.0}
                                                    <./img//Eclipse_marketplace.
 png>]
-<./img//GitHub_Code.png, id=702, 770.12718pt x 320.69812pt>
+<./img//GitHub_Code.png, id=705, 770.12718pt x 320.69812pt>
 File: ./img//GitHub_Code.png Graphic file (type png)
 <use ./img//GitHub_Code.png>
 Package pdftex.def Info: ./img//GitHub_Code.png  used on input line 52.
@@ -1277,36 +1289,40 @@ LaTeX Info: Redefining \% on input line 27.
  (tex/A_Plan_proyecto.aux) (tex/B_Requisitos.aux)
 (tex/C_Diseno.aux) (tex/D_Manual_programador.aux) (tex/E_Manual_usuario.aux))
 Package rerunfilecheck Info: File `anexos.out' has not changed.
-(rerunfilecheck)             Checksum: 5631E0CFF23D43C210E4B6D3EB261D82;2135.
+(rerunfilecheck)             Checksum: 5D0F0A6CC264F9A0F0900E9511AA3897;2135.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 13258 strings out of 479799
- 204190 string characters out of 2868772
- 593321 words of memory out of 3000000
- 29827 multiletter control sequences out of 15000+200000
- 613864 words of font info for 98 fonts, out of 3000000 for 9000
+ 13296 strings out of 479799
+ 205145 string characters out of 2868772
+ 593322 words of memory out of 3000000
+ 29857 multiletter control sequences out of 15000+200000
+ 614330 words of font info for 100 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  66i,12n,72p,420b,715s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}
-<C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pf
-b><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.p
-fb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi1
-0.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmc
-sc10.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
-lmr12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmr17.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmr8.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmri12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmro12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/lm/lmssbx10.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmsso17.pfb>
-Output written on anexos.pdf (31 pages, 1117420 bytes).
+{C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}<
+C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb
+><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pf
+b><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10
+.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcs
+c10.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mr12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
+lmr17.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmr8.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmri12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmro12.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/lm/lmssbx10.pfb><C:/Users/DianaBO/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/lm/lmsso17.pfb>
+Output written on anexos.pdf (31 pages, 1121191 bytes).
 PDF statistics:
- 789 PDF objects out of 1000 (max. 8388607)
- 87 named destinations out of 1000 (max. 500000)
- 20276 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 794 PDF objects out of 1000 (max. 8388607)
+ 89 named destinations out of 1000 (max. 500000)
+ 20788 words of extra memory for PDF output out of 24883 (max. 10000000)
 

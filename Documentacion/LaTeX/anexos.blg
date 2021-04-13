@@ -14,11 +14,11 @@ A level-1 auxiliary file: ./tex/E_Manual_usuario.aux
 Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
 Reallocating 'name_of_file' (item size: 1) to 19 items.
-I found no \citation commands---while reading file anexos.aux
 Database file #1: bibliografiaAnexos.bib
+Warning--I didn't find a database entry for "requisitos"
 You've used 0 entries,
             2118 wiz_defined-function locations,
-            502 strings with 4124 characters,
+            503 strings with 4134 characters,
 and the built_in function-call counts, 18 in all, are:
 = -- 0
 > -- 0
@@ -57,4 +57,4 @@ warning$ -- 0
 while$ -- 0
 width$ -- 0
 write$ -- 2
-(There was 1 error message)
+(There was 1 warning)

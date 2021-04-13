@@ -4,8 +4,10 @@
 \contentsline {chapter}{\'{I}ndice de figuras}{\es@scroman {v}}{section*.2}%
 \contentsline {chapter}{\'{I}ndice de tablas}{\es@scroman {vi}}{section*.3}%
 \contentsline {chapter}{Introducción}{1}{chapter*.4}%
+\contentsline {section}{\numberline {1.1}Estructura de la memoria}{1}{section.1.1}%
 \contentsline {chapter}{Objetivos del proyecto}{3}{chapter*.5}%
-\contentsline {section}{\numberline {2.1}Objetivos}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.1}Objetivos generales}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Objetivos técnicos}{3}{section.2.2}%
 \contentsline {chapter}{Conceptos teóricos}{5}{chapter*.6}%
 \contentsline {section}{\numberline {3.1}\textit {Framework}}{5}{section.3.1}%
 \contentsline {section}{\numberline {3.2}\textit {Frontend}}{5}{section.3.2}%
@@ -24,6 +26,9 @@
 \contentsline {subsection}{GitHub Desktop}{8}{section*.14}%
 \contentsline {chapter}{Aspectos relevantes del desarrollo del proyecto}{9}{chapter*.15}%
 \contentsline {chapter}{Trabajos relacionados}{11}{chapter*.16}%
+\contentsline {section}{\numberline {6.1}Gestor-TFG-2016}{11}{section.6.1}%
+\contentsline {section}{\numberline {6.2}GESTFG}{11}{section.6.2}%
 \contentsline {chapter}{Conclusiones y Líneas de trabajo futuras}{13}{chapter*.17}%
 \contentsline {section}{\numberline {7.1}Conclusiones}{13}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Líneas de trabajo futuras}{13}{section.7.2}%
 \contentsline {chapter}{Bibliograf\'{\i }a}{15}{chapter*.18}%
