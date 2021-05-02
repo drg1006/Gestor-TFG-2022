@@ -17,7 +17,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
-import ubu.digit.ui.views.UploadCsvView;
+import ubu.digit.ui.views.UploadView;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -158,7 +158,7 @@ public class Footer extends CustomComponent {
 		 */
 		@Override
 		public void buttonClick(ClickEvent event) {
-			 UI.getCurrent().getNavigator().navigateTo(UploadCsvView.VIEW_NAME);				
+			 UI.getCurrent().getNavigator().navigateTo(UploadView.VIEW_NAME);				
 		}
 	}
 }

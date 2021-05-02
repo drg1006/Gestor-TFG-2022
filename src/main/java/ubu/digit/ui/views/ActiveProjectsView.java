@@ -97,7 +97,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	 */
 	public ActiveProjectsView() {
 		
-		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
+		fachadaDatos = SistInfDataFactory.getInstanceData();
 		
 		setMargin(true);
 		setSpacing(true);
@@ -111,7 +111,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 		createCurrentProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("N2_Proyecto.csv"); //TODO: Revisar Proyecto
+		Footer footer = new Footer("Proyecto"); //TODO: Revisar N2_Proyecto.csv
 		addComponent(footer);
 	}
 	

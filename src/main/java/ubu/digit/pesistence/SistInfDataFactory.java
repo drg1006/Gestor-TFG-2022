@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
+import ubu.digit.util.ExternalProperties;
+
 
 /**
  * Clase que implementa el patrón Factory.
@@ -26,21 +28,36 @@ public class SistInfDataFactory implements Serializable { //TODO: Serializabble?
 	protected static final Logger LOGGER = Logger.getLogger(SistInfDataFactory.class);
 	
 	/**
+	 * Fichero de configuración.
+	 */
+	private static ExternalProperties config;
+	
+	/**
+	 * Variable que almacena el tipo de datos que se está usando
+	 */
+	public static String type="";
+	
+	/**
 	 * Método para obtener la instancia de la clase fachada según el parámetro pasado.
 	 */
-	public static SistInfDataAbstract getInstanceData(String type) {
-		if(type == null) {
-			return null;
+	public static SistInfDataAbstract getInstanceData() {
+		if(type == "") {
+			config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+			setInstanceData(config.getSetting("sistInfData"));
 		}
-		//String dbType = ConfigLoader.getDBType();
-        //System.out.println("DBType => " + dbType);
         switch(type){
+        	case "csv":
             case "CSV":
             	return SistInfDataCsv.getInstance();
+            case "xls":
             case "XLS":
             	return SistInfDataXls.getInstance();
             default:
                 throw new RuntimeException("Unsupported data type");
         }
     }
+	
+	public static void setInstanceData(String typeData) {
+		type = typeData;
+	}
 }

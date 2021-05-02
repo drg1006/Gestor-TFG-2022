@@ -17,6 +17,7 @@ import com.vaadin.ui.Notification.Type;
 
 import ubu.digit.pesistence.BOMRemoveUTF;
 import ubu.digit.pesistence.SistInfDataAbstract;
+import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
@@ -41,7 +42,7 @@ import com.vaadin.ui.VerticalLayout;
  * 
  * @author Javier de la Fuente Barrios
  */
-public class UploadCsvView extends VerticalLayout implements View {
+public class UploadView extends VerticalLayout implements View {
 
 	/**
 	 * Serial Version UID.
@@ -51,7 +52,7 @@ public class UploadCsvView extends VerticalLayout implements View {
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(UploadCsvView.class);
+	private static final Logger LOGGER = Logger.getLogger(UploadView.class);
 
 	/**
 	 * Nombre de la vista.
@@ -79,9 +80,9 @@ public class UploadCsvView extends VerticalLayout implements View {
 	private ProgressBar progress;
 
 	/**
-	 * 
+	 * Instancia de la clase receptora de la actualización del fichero.
 	 */
-	private CsvReceiver csvReceiver;
+	private DataReceiver dataReceiver;
 
 	/**
 	 * Etiqueta para mostrar el estado de la subida.
@@ -99,26 +100,26 @@ public class UploadCsvView extends VerticalLayout implements View {
 	private ExternalProperties config;
 
 	/**
-	 * Directorio de los archivos csv.
+	 * Directorio de los archivos csv y xls.
 	 */
-	private String dirCsv;
+	private String dir;
 
 	/**
-	 * Ruta completa a los archivos csv.
+	 * Ruta completa a los archivos csv y xls.
 	 */
 	private String completeDir;
 
 	/**
 	 * Constructor.
 	 */
-	public UploadCsvView() {
+	public UploadView() {
 		setMargin(true);
 		setSpacing(true);
 
 		serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
-		dirCsv = config.getSetting("dataIn");
-		completeDir = serverPath + dirCsv + "/";
+		dir = config.getSetting("dataIn");
+		completeDir = serverPath + dir + "/";
 
 		NavigationBar navBar = new NavigationBar();
 		addComponent(navBar);
@@ -129,16 +130,16 @@ public class UploadCsvView extends VerticalLayout implements View {
 		progress.setWidth("300px");
 		progress.setCaption("Progreso:");
 
-		csvReceiver = new CsvReceiver();
+		dataReceiver = new DataReceiver();
 
-		upload = new Upload("Subida de ficheros CSV", null);
+		upload = new Upload("Subida de ficheros CSV y XLS", null);
 		upload.setButtonCaption("Subir fichero");
-		upload.setReceiver(csvReceiver);
-		upload.addStartedListener(csvReceiver);
-		upload.addProgressListener(csvReceiver);
-		upload.addFinishedListener(csvReceiver);
-		upload.addSucceededListener(csvReceiver);
-		upload.addFailedListener(csvReceiver);
+		upload.setReceiver(dataReceiver);
+		upload.addStartedListener(dataReceiver);
+		upload.addProgressListener(dataReceiver);
+		upload.addFinishedListener(dataReceiver);
+		upload.addSucceededListener(dataReceiver);
+		upload.addFailedListener(dataReceiver);
 
 		state = new Label();
 		state.setCaption("Estado:");
@@ -150,11 +151,11 @@ public class UploadCsvView extends VerticalLayout implements View {
 	}
 
 	/**
-	 * Receptor de ficheros csv.
+	 * Receptor de ficheros csv y xls.
 	 * 
 	 * @author Javier de la Fuente Barrios
 	 */
-	class CsvReceiver implements Receiver, StartedListener, ProgressListener, FinishedListener, SucceededListener,
+	public class DataReceiver implements Receiver, StartedListener, ProgressListener, FinishedListener, SucceededListener,
 			FailedListener {
 		/**
 		 * Serial Version UID.
@@ -177,14 +178,15 @@ public class UploadCsvView extends VerticalLayout implements View {
 				file = new File(completeDir + filename);
 				fos = new FileOutputStream(file);
 			} catch (FileNotFoundException e) {
-				LOGGER.error("Error en CsvReceiver", e);
+				LOGGER.error("Error en DataReceiver", e);
 				return new NullOutputStream();
 			}
 			return fos;
 		}
 
 		/**
-		 * Stream nulo para evitar execpciones.
+		 * 
+		 * Stream nulo para evitar excepciones.
 		 * 
 		 * @author Javier de la Fuente Barrios
 		 */
@@ -210,14 +212,17 @@ public class UploadCsvView extends VerticalLayout implements View {
 				return;
 			}
 
-			if (!event.getFilename().endsWith(".csv")) {
+			if (!event.getFilename().endsWith(".csv") && !event.getFilename().endsWith(".xls")) {
 				Notification.show("Error",
-						"El formato del fichero no esta soportado. Seleccione un fichero con extensión .csv",
+						"El formato del fichero no esta soportado. Seleccione un fichero con extensión .csv o .xls",
 						Type.ERROR_MESSAGE);
 				upload.interruptUpload();
 				return;
+			}else if(event.getFilename().endsWith(".csv")) {
+				SistInfDataFactory.setInstanceData("CSV");
+			}else {
+				SistInfDataFactory.setInstanceData("XLS");
 			}
-
 			progress.setValue(0.0f);
 			state.setValue("Subiendo fichero");
 		}
@@ -229,7 +234,6 @@ public class UploadCsvView extends VerticalLayout implements View {
 		public void updateProgress(long readBytes, long contentLength) {
 			progress.setValue(new Float(readBytes / (float) contentLength));
 			state.setValue("Procesados " + readBytes + " bytes de un total de " + contentLength + " bytes.");
-
 		}
 
 		/**
@@ -269,6 +273,8 @@ public class UploadCsvView extends VerticalLayout implements View {
 				if (!deleted) {
 					LOGGER.error("Fichero " + file.getName() + " no borrado correctamente");
 				}
+			}else {
+				LOGGER.error("El fichero no existe");
 			}
 		}
 
@@ -280,7 +286,7 @@ public class UploadCsvView extends VerticalLayout implements View {
 				try {
 					fos.close();
 				} catch (IOException e) {
-					LOGGER.error("Error en uploadcsv", e);
+					LOGGER.error("Error en upload", e);
 				}
 			}
 		}

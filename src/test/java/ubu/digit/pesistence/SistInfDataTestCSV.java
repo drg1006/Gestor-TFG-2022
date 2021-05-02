@@ -57,7 +57,7 @@ public class SistInfDataTestCSV {
     public void setUp() {
         mockStatic(ExternalProperties.class);
         when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
-        sistInfData = SistInfDataFactory.getInstanceData("CSV"); 
+        sistInfData = SistInfDataCsv.getInstance(); 
     }
 
     /**

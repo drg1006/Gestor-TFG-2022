@@ -63,8 +63,9 @@ public class InformationView extends VerticalLayout implements View {
 	 * Constructor.
 	 */
 	public InformationView() {
-		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
 		
+		fachadaDatos = SistInfDataFactory.getInstanceData();
+			
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 
 		setMargin(true);
@@ -78,7 +79,7 @@ public class InformationView extends VerticalLayout implements View {
 		createCalendar();
 		createDocumentos();
 		
-		Footer footer = new Footer("N1_Tribunal.csv"); //TODO:Tribunal
+		Footer footer = new Footer("Tribunal"); //TODO:N1_Tribunal.csv
 		addComponent(footer);
 	}
 	

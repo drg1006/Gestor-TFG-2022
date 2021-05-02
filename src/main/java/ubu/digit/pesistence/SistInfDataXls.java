@@ -62,9 +62,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Método singleton para obtener la instancia de la clase fachada.
 	 */
 	public static SistInfDataXls getInstance() {
-		if (instance == null) {
-			instance = new SistInfDataXls();
-		}
+		instance = new SistInfDataXls();
 		return instance;
 	}
 	
@@ -91,7 +89,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	} 	  
 		return conn;
 	}
-	
+
 	/**
 	 * Ejecuta una sentencia SQL sumando todos los datos Float contenidos en la
 	 * primera columna.

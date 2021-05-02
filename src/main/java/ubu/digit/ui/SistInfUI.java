@@ -13,12 +13,14 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
+import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
 import ubu.digit.ui.views.LoginView;
 import ubu.digit.ui.views.MetricsView;
-import ubu.digit.ui.views.UploadCsvView;
+import ubu.digit.ui.views.UploadView;
+import ubu.digit.util.ExternalProperties;
 
 /**
  * La UI es el punto de entrada de la aplicación.
@@ -36,6 +38,11 @@ public class SistInfUI extends UI {
 	 * Navegador de la aplicación.
 	 */
 	private Navigator navigator;
+	
+	/**
+	 * Fichero de configuración.
+	 */
+	private ExternalProperties config;
 
 	/**
 	 * Inicializa el navegador y las vistas.
@@ -43,22 +50,22 @@ public class SistInfUI extends UI {
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		Page.getCurrent().setTitle("Sistemas Informáticos");
-
+		
 		navigator = new Navigator(this, this);
 		View informationView = new InformationView();
 		View activeProjectsView = new ActiveProjectsView();
 		View historicProjectsView = new HistoricProjectsView();
 		View metricsView = new MetricsView();
 		View loginView = new LoginView();
-		View uploadCsvView = new UploadCsvView();
-
+		View uploadView = new UploadView();
+		
 		navigator.addView("", informationView);
 		navigator.addView(InformationView.VIEW_NAME, informationView);
 		navigator.addView(ActiveProjectsView.VIEW_NAME, activeProjectsView);
 		navigator.addView(HistoricProjectsView.VIEW_NAME, historicProjectsView);
 		navigator.addView(MetricsView.VIEW_NAME, metricsView);
 		navigator.addView(LoginView.VIEW_NAME, loginView);
-		navigator.addView(UploadCsvView.VIEW_NAME, uploadCsvView);
+		navigator.addView(UploadView.VIEW_NAME, uploadView);
 		navigator.addViewChangeListener(new NavigatorViewChangeListener());
 	}
 
@@ -80,7 +87,7 @@ public class SistInfUI extends UI {
 		public boolean beforeViewChange(ViewChangeEvent event) {
 			boolean isUserLoggedIn = getSession().getAttribute("user") != null;
 			boolean isNextViewLoginView = event.getNewView() instanceof LoginView;
-			boolean isNextViewUploadCsvView = event.getNewView() instanceof UploadCsvView;
+			boolean isNextViewUploadCsvView = event.getNewView() instanceof UploadView;
 
 			if (!isUserLoggedIn && isNextViewUploadCsvView) {
 				Notification.show("Error", "Por favor inicie sesión para acceder a esta página.",
@@ -88,7 +95,7 @@ public class SistInfUI extends UI {
 				navigator.navigateTo(LoginView.VIEW_NAME);
 				return false;
 			} else if (isUserLoggedIn && isNextViewLoginView) {
-				navigator.navigateTo(UploadCsvView.VIEW_NAME);
+				navigator.navigateTo(UploadView.VIEW_NAME);
 				return false;
 			}
 			return true;

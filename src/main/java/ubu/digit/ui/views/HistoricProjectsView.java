@@ -158,7 +158,8 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * @throws SQLException 
 	 */
 	public HistoricProjectsView(){
-		fachadaDatos = SistInfDataFactory.getInstanceData("CSV"); //TODO: 
+		
+		fachadaDatos = SistInfDataFactory.getInstanceData();
 		
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
@@ -178,7 +179,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		createHistoricProjectsTable();
 		addFiltersListeners();
 
-		Footer footer = new Footer("N3_Historico.csv");//TODO: Historico
+		Footer footer = new Footer("Historico");//TODO: N3_Historico.csv
 		addComponent(footer);
 	}
 

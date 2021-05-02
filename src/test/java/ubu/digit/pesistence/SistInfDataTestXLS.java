@@ -58,7 +58,7 @@ public class SistInfDataTestXLS {
 
         when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
 
-        sistInfData = SistInfDataFactory.getInstanceData("XLS"); 
+        sistInfData = SistInfDataXls.getInstance(); 
     }
 
     /**

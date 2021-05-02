@@ -136,7 +136,7 @@ public class LoginView extends VerticalLayout implements View {
 
 				if (isValid) {
 					getSession().setAttribute("user", username);
-					getUI().getNavigator().navigateTo(UploadCsvView.VIEW_NAME);
+					getUI().getNavigator().navigateTo(UploadView.VIEW_NAME);
 					Notification.show("Has iniciado sesión satisfactoriamente.");
 
 				} else {
