@@ -51,3 +51,6 @@ hs_err_pid*
 
 # Vaadin files
 \src\main\webapp
+
+#Firebase key
+service-account-file.json 
