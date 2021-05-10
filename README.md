@@ -9,7 +9,9 @@ Diana Bringas Ochoa
 Álvar Arnaiz González y Carlos López Nozal
 
 ### Resumen del proyecto
-El propósito del proyecto es evolucionar la interfaz gráfica html, que se genera mediante una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://bitbucket.org/ubu_tfg/2014-beatriz. 
+El propósito del proyecto es evolucionar la interfaz gráfica html, que se genera mediante una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://bitbucket.org/ubu_tfg/2014-beatriz.
+
+Versión del proyecto en Vaadin 14.
 
 ### Página web
 El proyecto está desplegado en https://tomcat8-vaadinjfb.rhcloud.com/sistinf-0.4.
