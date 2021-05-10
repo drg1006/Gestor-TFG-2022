@@ -12,7 +12,8 @@ import ubu.digit.ui.views.InformationView;
 /**
  * The entry point of the Spring Boot application.
  */
-@SpringBootApplication(scanBasePackageClasses = { MainLayout.class, Application.class})
+
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 	
 	@Override

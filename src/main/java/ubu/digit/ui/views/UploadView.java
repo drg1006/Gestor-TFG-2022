@@ -212,7 +212,7 @@ public class UploadView extends VerticalLayout{
   private void showOutput(String text ,
             HasComponents outputContainer) {
         HtmlComponent p = new HtmlComponent(Tag.P);
-        p.getElement().setText("Actualización de " + text + "completada");
+        p.getElement().setText("Actualización de " + text + " completada");
         outputContainer.add(p);
     }
 }

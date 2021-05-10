@@ -52,9 +52,6 @@ public class MetricsView extends VerticalLayout{
 		setMargin(true);
 		setSpacing(true);
 		
-		NavigationBar navBar = new NavigationBar();
-		add(navBar);
-		
 		H1 metricsTitle = new H1(METRICAS);
 		metricsTitle.addClassName(TITLE_STYLE);
 		add(metricsTitle);

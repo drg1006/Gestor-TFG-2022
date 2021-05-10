@@ -158,21 +158,25 @@ public class ActiveProjectsView extends VerticalLayout{
 		HorizontalLayout filters = new HorizontalLayout();
 		filters.setSpacing(true);
 		filters.setMargin(false);
-		filters.setWidth("100%");
 		
 		projectFilter = new TextField("Filtrar por proyectos:");
+		projectFilter.setWidth("300px");
 		filters.add(projectFilter);
 
 		descriptionFilter = new TextField("Filtrar por descripción:");
+		descriptionFilter.setWidth("300px");
 		filters.add(descriptionFilter);
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
+		tutorsFilter.setWidth("300px");
 		filters.add(tutorsFilter);
 
 		studentsFilter = new TextField("Filtrar por alumnos:");
+		studentsFilter.setWidth("300px");
 		filters.add(studentsFilter);
 
 		courseFilter = new TextField("Filtrar por curso:");
+		courseFilter.setWidth("300px");
 		filters.add(courseFilter);
 		
 		add(filters);

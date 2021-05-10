@@ -1,28 +1,15 @@
 package ubu.digit.ui.components;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.server.FontAwesome;
 
-import ubu.digit.ui.views.InformationView;
 import ubu.digit.ui.views.LoginView;
-import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 
@@ -38,35 +25,26 @@ public class Footer extends HorizontalLayout {
 	 * Serial Version UID.
 	 */
 	private static final long serialVersionUID = 1285443082746553886L;
-
-	/**
-	 * Contenedor del pié de página.
-	 */
-	private HorizontalLayout content;
+	
+	HorizontalLayout conten;
 	
 	VerticalLayout license;
 	
 	VerticalLayout information;
 
 	/**
-	 * Nombre del fichero .csv relacionado con la vista
-	 */
-	private String fileName;
-
-	/**
 	 * Constructor.
 	 * 
 	 */
 	public Footer() {
-		content = new HorizontalLayout();
-		content.addClassName("Footer-grid");
-		//content.setSizeFull();
-		//content.setWidth("100%");
-
+		conten = new HorizontalLayout();
+		conten.addClassName("Footer-grid");
+		
 		addInformation();
 		addLicense();
-		add(content);
-		content.add(information, license);
+		conten.add(information, license);
+		
+		add(conten);
 		
 	}
 
@@ -77,8 +55,8 @@ public class Footer extends HorizontalLayout {
 		information = new VerticalLayout();
 		information.setMargin(false);
 		information.setSpacing(true);
-
-		H1 subtitle = new H1(INFORMACION);
+		
+		Label subtitle = new Label(INFORMACION);
 		subtitle.addClassName(SUBTITLE_STYLE);
 		information.add(subtitle);
 		
@@ -102,29 +80,6 @@ public class Footer extends HorizontalLayout {
 	}
 
 	/**
-	 * Obtiene la fecha de última modificación del fichero asociado a la vista.
-	 * 
-	 * @param fileName
-	 *            nombre del fichero
-	 * @return fecha de última modificación del fichero
-	 */
-	private String getLastModified(String fileName) {
-		//String serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		String serverPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
-		ExternalProperties config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
-		String dirCsv = config.getSetting("dataIn");
-		String dir = serverPath + dirCsv + "/";
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		String lastModified = null;
-		File file = new File(dir + fileName);
-		if (file.exists()) {
-			Date date = new Date(file.lastModified());
-			lastModified = sdf.format(date);
-		}
-		return lastModified;
-	}
-
-	/**
 	 * Añade la información de la licencia del proyecto.
 	 */
 	private void addLicense() {
@@ -132,19 +87,14 @@ public class Footer extends HorizontalLayout {
 		license.setMargin(false);
 		license.setSpacing(true);
 
-		Image ccImage= new Image("frontend/img/cc.png", "https://creativecommons.org/licenses/by/4.0/");
-		
+		Image ccImage= new Image("./styles/img/cc.png","https://creativecommons.org/licenses/by/4.0/");
+	
 		Text licenseText = new Text("This work is licensed under a: ");
 		Anchor ccLink = new Anchor("https://creativecommons.org/licenses/by/4.0/","Creative Commons Attribution 4.0 International License.");
 
 		license.add(ccImage);
 		license.add(licenseText);
 		license.add(ccLink);
-
-		if (fileName != null) {
-			//String lastModified = getLastModified(fileName);
-			license.add(new Text("Ultima actualización: " + "null")); //lastModified //TODO:
-		}
 
 		Button login = new Button("Actualizar");
 		login.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));

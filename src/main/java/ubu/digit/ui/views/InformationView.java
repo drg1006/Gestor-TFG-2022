@@ -32,7 +32,7 @@ import java.util.List;
 
 @Route(value = "Information", layout = MainLayout.class)
 @PageTitle("Información general")
-public class InformationView extends VerticalLayout{
+public class InformationView extends VerticalLayout {
 
 	/**
 	 * Serial Version UID.
@@ -70,9 +70,6 @@ public class InformationView extends VerticalLayout{
 
 		setMargin(true);
 		setSpacing(true);
-		
-		NavigationBar navBar = new NavigationBar();
-		add(navBar);
 		
 		createTribunal();
 		createNormas();

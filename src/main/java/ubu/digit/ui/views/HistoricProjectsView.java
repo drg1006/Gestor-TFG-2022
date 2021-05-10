@@ -1,6 +1,5 @@
 package ubu.digit.ui.views;
 
-import java.awt.Color;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -31,29 +30,11 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.server.FontAwesome;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.vaadin.addon.JFreeChartWrapper;
 
 
 import ubu.digit.pesistence.SistInfDataAbstract;
@@ -62,8 +43,6 @@ import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.beans.HistoricProject;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
-import ubu.digit.ui.listeners.OrSimpleStringFilterListener;
-import ubu.digit.ui.listeners.SimpleStringFilterListener;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -215,6 +194,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	private void createDataModel(){ 	
 		//Se obtienen los datos del modelo
 		dataHistoric = new ArrayList<HistoricProject>();
+		@SuppressWarnings("rawtypes")
 		ArrayList listaDataModel = fachadaDatos.getDataModelHistoric(dateTimeFormatter);
 		
 		for(int i=0;i<listaDataModel.size();i++) {
@@ -671,25 +651,26 @@ public class HistoricProjectsView extends VerticalLayout {
 		HorizontalLayout filters = new HorizontalLayout();
 		filters.setSpacing(true);
 		filters.setMargin(false);
-		add(filters);
 
 		projectFilter = new TextField("Filtrar por proyectos:");
+		projectFilter.setWidth("300px");
 		filters.add(projectFilter);
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
+		tutorsFilter.setWidth("300px");
 		filters.add(tutorsFilter);
 
 		assignmentDateFilter = new TextField("Filtrar por fecha de asignación:");
+		assignmentDateFilter.setWidth("300px");
 		filters.add(assignmentDateFilter);
 
 		presentationDateFilter = new TextField("Filtrar por fecha de presentación:");
+		presentationDateFilter.setWidth("300px");
 		filters.add(presentationDateFilter);
 		
+		add(filters);
+		
 	}
-	
-	 private void configureFilters(TextField filter) { 
-			
-	    }
 
 	/**
 	 * Crea la tabla de proyectos históricos.
@@ -701,18 +682,18 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		gridHistoric = new Grid<>();
 		gridHistoric.addClassName("historic-projects-grid");
-		//gridHistoric.setSizeFull();
+		gridHistoric.setWidth("2000px");
 		
 		gridHistoric.setItems(dataHistoricGrid);
 				
-		gridHistoric.addColumn(HistoricProject::getTitle).setHeader("Título").setFlexGrow(30);
-		gridHistoric.addColumn(HistoricProject::getTutors).setHeader("Tutor/es").setFlexGrow(9);
-		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos").setFlexGrow(4);
-		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación").setFlexGrow(6);
-		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación").setFlexGrow(6);
-		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles").setFlexGrow(5);
-		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total").setFlexGrow(5);
-		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso").setFlexGrow(5);
+		gridHistoric.addColumn(HistoricProject::getTitle).setHeader("Título");
+		gridHistoric.addColumn(HistoricProject::getTutors).setHeader("Tutor/es");
+		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos");
+		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación");
+		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación");
+		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles");
+		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total");
+		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso");
 		
 		List<Column<HistoricProject>> columns = gridHistoric.getColumns();
 		
