@@ -1,11 +1,12 @@
 package ubu.digit.ui.listeners;
 
-import com.vaadin.data.Container.Filterable;
+/*import com.vaadin.data.Container.Filterable;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
-import com.vaadin.ui.Table;
+import com.vaadin.event.FieldEvents.TextChangeListener;*/
+import com.vaadin.flow.component.grid.Grid;
+//import com.vaadin.ui.Table;
 
 /**
  * Listener que hace de filtro de una cadena de texto, para varias columnas de
@@ -13,7 +14,7 @@ import com.vaadin.ui.Table;
  * 
  * @author Javier de la Fuente Barrios
  */
-public class OrSimpleStringFilterListener implements TextChangeListener {
+public class OrSimpleStringFilterListener {
 
 	/**
 	 * Serial Version UID.
@@ -23,12 +24,12 @@ public class OrSimpleStringFilterListener implements TextChangeListener {
 	/**
 	 * Filtro a aplicar.
 	 */
-	private Or filter = null;
-
+	//private Or filter = null;
+	
 	/**
 	 * Tabla donde aplicar el filtro.
 	 */
-	private Table table;
+	private Grid table;
 
 	/**
 	 * Nombre de la primera columna de la tabla.
@@ -57,7 +58,7 @@ public class OrSimpleStringFilterListener implements TextChangeListener {
 	 * @param propertyId3
 	 *            tercera columna
 	 */
-	public OrSimpleStringFilterListener(Table table, String propertyId1, String propertyId2, String propertyId3) {
+	public OrSimpleStringFilterListener(Grid table, String propertyId1, String propertyId2, String propertyId3) {
 		this.propertyId1 = propertyId1;
 		this.propertyId2 = propertyId2;
 		this.propertyId3 = propertyId3;
@@ -67,7 +68,7 @@ public class OrSimpleStringFilterListener implements TextChangeListener {
 	/**
 	 * Operación a realizar al recibir el evento.
 	 */
-	@Override
+	/*@Override
 	public void textChange(TextChangeEvent event) {
 		Filterable f = (Filterable) table.getContainerDataSource();
 
@@ -79,5 +80,5 @@ public class OrSimpleStringFilterListener implements TextChangeListener {
 				new SimpleStringFilter(propertyId2, event.getText(), true, false),
 				new SimpleStringFilter(propertyId3, event.getText(), true, false));
 		f.addContainerFilter(filter);
-	}
+	}*/
 }

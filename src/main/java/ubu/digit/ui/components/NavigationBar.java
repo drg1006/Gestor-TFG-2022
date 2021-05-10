@@ -1,26 +1,28 @@
 package ubu.digit.ui.components;
 
-import com.vaadin.navigator.Navigator;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import ubu.digit.ui.views.ActiveProjectsView;
+import ubu.digit.ui.views.HistoricProjectsView;
+//import ubu.digit.ui.views.ActiveProjectsView;
+//import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.InformationView;
 import ubu.digit.ui.views.MetricsView;
-import ubu.digit.ui.views.HistoricProjectsView;
-import static ubu.digit.util.Constants.*;
 
-import com.vaadin.ui.Button.ClickEvent;
+//import ubu.digit.ui.views.MetricsView;
+//import ubu.digit.ui.views.HistoricProjectsView;
+import static ubu.digit.util.Constants.*;
 
 /**
  * Barra de navegación común a todas las vistas.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
-public class NavigationBar extends CustomComponent {
-
+public class NavigationBar extends HorizontalLayout{
+	
 	/**
 	 * Serial Version UID.
 	 */
@@ -47,38 +49,32 @@ public class NavigationBar extends CustomComponent {
 	private Button buttonMetrics;
 
 	/**
-	 * Navegador de la aplicación.
-	 */
-	private Navigator navigator;
-	
-	/**
 	 * Constructor.
 	 */
 	public NavigationBar() {
-		HorizontalLayout content = new HorizontalLayout();
-		content.setMargin(false);
-		content.setSpacing(false);
-		content.setWidth("100%");
+		setMargin(false);
+		setSpacing(false);
+		setWidth("100%");
 
 		initComponents();
-		content.addComponents(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
-		setCompositionRoot(content);
 	}
-
+	
 	/**
 	 * Inicializa los botones de navegación.
 	 */
 	private void initComponents() {
-		navigator = UI.getCurrent().getNavigator();
-
 		buttonInfo = new Button(INFORMACION);
-		buttonInfo.addClickListener(new ButtonClick());
+		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
+		
 		buttonActive = new Button(PROYECTOS_ACTIVOS);
-		buttonActive.addClickListener(new ButtonClick());
+		buttonActive.addClickListener(e -> UI.getCurrent().navigate(ActiveProjectsView.class));
+		
 		buttonHistory = new Button(PROYECTOS_HISTORICOS);
-		buttonHistory.addClickListener(new ButtonClick());
+		buttonHistory.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
+		
 		buttonMetrics = new Button(METRICAS);
-		buttonMetrics.addClickListener(new ButtonClick());
+		buttonMetrics.addClickListener(e -> UI.getCurrent().navigate(MetricsView.class));
+		
 
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
@@ -89,29 +85,7 @@ public class NavigationBar extends CustomComponent {
 		buttonActive.setWidth("100%");
 		buttonHistory.setWidth("100%");
 		buttonMetrics.setWidth("100%");
-	}
-
-	/**
-	 * Listener para los botones.
-	 * 
-	 * Redirige a una vista u otra dependiendo del origen del evento.
-	 * 
-	 * @author Javier de la Fuente Barrios
-	 */
-	private class ButtonClick implements Button.ClickListener {
-		private static final long serialVersionUID = -2703551968601700023L;
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			if (event.getButton() == buttonInfo) {
-				navigator.navigateTo(InformationView.VIEW_NAME);
-			} else if (event.getButton() == buttonActive) {
-				navigator.navigateTo(ActiveProjectsView.VIEW_NAME);
-			} else if (event.getButton() == buttonHistory) {
-				navigator.navigateTo(HistoricProjectsView.VIEW_NAME);
-			} else if (event.getButton() == buttonMetrics) {
-				navigator.navigateTo(MetricsView.VIEW_NAME);
-			}
-		}
-	}
+		
+		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
+}
 }

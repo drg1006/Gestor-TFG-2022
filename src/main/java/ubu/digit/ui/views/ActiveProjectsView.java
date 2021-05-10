@@ -1,32 +1,28 @@
 package ubu.digit.ui.views;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
-
-import ubu.digit.ui.beans.ActiveProjectBean;
-import ubu.digit.ui.columngenerators.StudentsColumnGenerator;
-import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
+import ubu.digit.ui.MainLayout;
+import ubu.digit.ui.beans.ActiveProject;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
-import ubu.digit.ui.listeners.OrSimpleStringFilterListener;
-import ubu.digit.ui.listeners.SimpleStringFilterListener;
+
 import static ubu.digit.util.Constants.*;
 
 /**
@@ -35,7 +31,9 @@ import static ubu.digit.util.Constants.*;
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-public class ActiveProjectsView extends VerticalLayout implements View {
+@Route(value = "active-projects", layout = MainLayout.class)
+@PageTitle("Proyectos activos")
+public class ActiveProjectsView extends VerticalLayout{
 
 	/**
 	 * Serial Version UID.
@@ -45,7 +43,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(ActiveProjectsView.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActiveProjectsView.class.getName());
 
 	/**
 	 * Nombre de la vista.
@@ -53,14 +51,20 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "active-projects";
 
 	/**
-	 * Contenedor de POJOS de proyectos activos.
-	 */
-	private BeanItemContainer<ActiveProjectBean> beans;
-
-	/**
 	 * Tabla de proyectos.
 	 */
-	private Table table;
+	private Grid<ActiveProject> table;
+	
+	/**
+	 * Lista con los proyectos activos
+	 */
+	List<ActiveProject> dataActiveProjects;
+	
+	/**
+	 * Lista con los proyectos activos que se usarán el el grid
+	 * En este los tutores y alumnos se incluyen juntos en una columna.
+	 */
+	List<ActiveProject> dataActiveProjectsGrid;
 
 	/**
 	 * Campo de texto para filtrar por proyecto.
@@ -99,47 +103,27 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 		
 		fachadaDatos = SistInfDataFactory.getInstanceData();
 		
+		addClassName("active-projects-view");
 		setMargin(true);
 		setSpacing(true);
 
-		NavigationBar navBar = new NavigationBar();
-		addComponent(navBar);
-
 		createDataModel();
+		CreateDataModelToGrid();
 		createMetrics();
 		createFilters();
 		createCurrentProjectsTable();
-		addFiltersListeners();
-
-		Footer footer = new Footer("Proyecto"); //TODO: Revisar N2_Proyecto.csv
-		addComponent(footer);
-	}
-	
-	/**
-	 * Crea el modelo de datos de los proyectos activos.
-	 */
-	private void createDataModel() { //TODO:
-		beans = new BeanItemContainer<>(ActiveProjectBean.class);
+		add(table);
 		
-		//Se obtienen los datos del modelo
-		List<String> listaDataModel;
-		listaDataModel = fachadaDatos.getDataModel();
-		
-		for(int i=0;i<listaDataModel.size();i++) {
-			ActiveProjectBean bean = new ActiveProjectBean(listaDataModel.get(i), listaDataModel.get(++i), 
-					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
-			beans.addBean(bean);
-		}
+		Footer footer = new Footer();
+		add(footer);
 	}
-	
 	/**
 	 * Crea las métricas de los proyectos activos.
 	 */
 	private void createMetrics() {
-		Label metricsTitle = new Label(INFO_ESTADISTICA);
-		metricsTitle.setStyleName("lbl-title");
-		addComponent(metricsTitle);
+		H1 metricsTitle = new H1(INFO_ESTADISTICA);
+		metricsTitle.addClassName("lbl-title");
+		add(metricsTitle);
 
 		try {
 			Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
@@ -157,7 +141,7 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 			Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
 			Label totalTutor = new Label("- Número total de tutores involucrados: " + totalTutorNumber.intValue());
 
-			addComponents(totalProjects, totalFreeProject, aalumnos, totalStudent, totalTutor);
+			add(totalProjects, totalFreeProject, aalumnos, totalStudent, totalTutor);
 		} catch (Exception e) {
 			LOGGER.error("Error en estadísticas", e);
 		}
@@ -167,100 +151,94 @@ public class ActiveProjectsView extends VerticalLayout implements View {
 	 * Crea los filtros de la tabla.
 	 */
 	private void createFilters() {
-		Label filtersTitle = new Label(FILTROS);
-		filtersTitle.setStyleName(TITLE_STYLE);
-		addComponent(filtersTitle);
+		H1 filtersTitle = new H1(FILTROS);
+		filtersTitle.addClassName(TITLE_STYLE);
+		add(filtersTitle);
 
 		HorizontalLayout filters = new HorizontalLayout();
 		filters.setSpacing(true);
 		filters.setMargin(false);
 		filters.setWidth("100%");
-		addComponent(filters);
-
+		
 		projectFilter = new TextField("Filtrar por proyectos:");
-		filters.addComponent(projectFilter);
+		filters.add(projectFilter);
 
 		descriptionFilter = new TextField("Filtrar por descripción:");
-		filters.addComponent(descriptionFilter);
+		filters.add(descriptionFilter);
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
-		filters.addComponent(tutorsFilter);
+		filters.add(tutorsFilter);
 
 		studentsFilter = new TextField("Filtrar por alumnos:");
-		filters.addComponent(studentsFilter);
+		filters.add(studentsFilter);
 
 		courseFilter = new TextField("Filtrar por curso:");
-		filters.addComponent(courseFilter);
+		filters.add(courseFilter);
+		
+		add(filters);
 	}
 
+	/**
+	 * Crea el modelo de datos de los proyectos activos.
+	 */
+	private void createDataModel() { 
+		//Se obtienen los datos del modelo
+		List<String> listaDataModel = fachadaDatos.getDataModel();
+		dataActiveProjects = new ArrayList<ActiveProject>();
+		
+		for(int i=0;i<listaDataModel.size();i++) {
+			ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
+					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
+					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+			dataActiveProjects.add(actives);
+		}
+	}
+	
 	/**
 	 * Crea la tabla de proyectos activos.
 	 */
 	private void createCurrentProjectsTable() {
-		Label proyectosTitle = new Label(DESCRIPCION_PROYECTOS);
-		proyectosTitle.setStyleName(TITLE_STYLE);
-		addComponent(proyectosTitle);
-
-		table = new Table();
-		addComponent(table);
-		table.setWidth("100%");
-		table.setPageLength(5);
-		table.setColumnCollapsingAllowed(true);
-		table.setContainerDataSource(beans);
-		addGeneratedColumns();
-		table.setVisibleColumns(TITLE, DESCRIPTION, TUTORS, STUDENTS, COURSE_ASSIGNMENT);
-
-		setTableColumnHeaders();
-		setColumnExpandRatios();
-	}
-
-	/**
-	 * Añade las columnas generadas a la tabla.
-	 */
-	private void addGeneratedColumns(){
-		table.addGeneratedColumn(TUTORS, new TutorsColumnGenerator());
-		table.addGeneratedColumn(STUDENTS, new StudentsColumnGenerator());
+		H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
+		proyectosTitle.addClassName(TITLE_STYLE);
+		add(proyectosTitle);
+		
+		try {
+			table = new Grid<>();
+			table.addClassName("active-projects-grid");
+			
+			table.setItems(dataActiveProjectsGrid);
+			
+			table.addColumn(ActiveProject::getTitle).setHeader("Título"); //setFlexGrow(2);
+			table.addColumn(ActiveProject::getDescription).setHeader("Descripción");
+			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es");
+			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s");
+			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación");
+			
+			table.getColumns().forEach(columna -> columna.setAutoWidth(true));
+			
+		}catch(Exception e) {
+			LOGGER.error(e.getMessage());
+			throw e;
+		}
 		
 	}
 	
 	/**
-	 * Establece las cabeceras de las columnas de la tabla.
+	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.
 	 */
-	private void setTableColumnHeaders() {
-		table.setColumnHeader(TITLE, "Título");
-		table.setColumnHeader(DESCRIPTION, "Descripción");
-		table.setColumnHeader(TUTORS, "Tutor/es");
-		table.setColumnHeader(STUDENTS, "Alumno/s");
-		table.setColumnHeader(COURSE_ASSIGNMENT, "Curso Asignación");
-	}
-
-	/**
-	 * Establece el ratio de expansión de las columnas.
-	 */
-	private void setColumnExpandRatios() {
-		table.setColumnExpandRatio(TITLE, 5);
-		table.setColumnExpandRatio(DESCRIPTION, 17);
-		table.setColumnExpandRatio(TUTORS, 6);
-		table.setColumnExpandRatio(STUDENTS, 6);
-		table.setColumnExpandRatio(COURSE_ASSIGNMENT, 3);
-	}
-
-	/**
-	 * Añade los listeners de los filtros. 
-	 */
-	private void addFiltersListeners() {
-		projectFilter.addTextChangeListener(new SimpleStringFilterListener(table, TITLE));
-		descriptionFilter.addTextChangeListener(new SimpleStringFilterListener(table, DESCRIPTION));
-		tutorsFilter.addTextChangeListener(new OrSimpleStringFilterListener(table, TUTOR1, TUTOR2, TUTOR3));
-		studentsFilter.addTextChangeListener(new OrSimpleStringFilterListener(table, STUDENT1, STUDENT2, STUDENT3));
-		courseFilter.addTextChangeListener(new SimpleStringFilterListener(table, COURSE_ASSIGNMENT));
-	}
-
-	/**
-	 * La vista se inicializa en el constructor.
-	 */
-	@Override
-	public void enter(ViewChangeEvent event) {
-		// Se inicializa el contenido de la vista en el constructor
+	private void CreateDataModelToGrid() {
+		String tutors = "";
+		String students = "";
+		dataActiveProjectsGrid = new ArrayList<ActiveProject>();
+		Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
+		while (iterator.hasNext()) {
+			ActiveProject bean = iterator.next();
+			tutors = bean.getTutor1() + "\n" + bean.getTutor2() + "\n" + bean.getTutor3();
+			students = bean.getStudent1() + "\n" + bean.getStudent2() + "\n" + bean.getStudent3();
+			
+			ActiveProject actives = new ActiveProject(bean.getTitle(), bean.getDescription(),
+					tutors, students, bean.getCourseAssignment());
+			dataActiveProjectsGrid.add(actives);
+		}	
 	}
 }

@@ -1,9 +1,10 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,12 +14,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.*;
-
-import com.vaadin.server.VaadinService;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinServlet;
 
 import static ubu.digit.util.Constants.*;
 
@@ -38,7 +42,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(SistInfDataXls.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataXls.class.getName());
 
 	/**
 	 * Conexión que se produce entre la base de datos(xls) y la aplicación.
@@ -62,8 +66,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Método singleton para obtener la instancia de la clase fachada.
 	 */
 	public static SistInfDataXls getInstance() {
-		instance = new SistInfDataXls();
-		return instance;
+		return instance  = new SistInfDataXls();
 	}
 	
 	/**
@@ -78,18 +81,19 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   Fillo fillo=new Fillo();
 			
       	   if (DIRCSV.startsWith("/")) {
-				serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-			}
+      		   String path = this.getClass().getClassLoader().getResource("").getPath();
+      		   serverPath = path.substring(1, path.length()-17);
+      	   }
       	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
       	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
 
       	}catch (FilloException e) {
-      		LOGGER.error(e);
+      		LOGGER.error(e.getMessage());
       	} 	  
 		return conn;
 	}
-
+	
 	/**
 	 * Ejecuta una sentencia SQL sumando todos los datos Float contenidos en la
 	 * primera columna.
@@ -107,7 +111,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 			number = (float) rs.getCount();//Se cuenta el número de filas que devuelve
 			
 		}catch (FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return (Number) number;
 	}
@@ -201,7 +205,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				media.add(Float.parseFloat(data));
 			}
 		}catch (FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return media;
 	}
@@ -245,7 +249,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				addNumbersToList(columnName, listValues, rs);
 			}
 		}catch (FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return listValues;
 	}
@@ -266,7 +270,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listValues.add(Double.parseDouble(result.getField(columnName)));
 			}
 		}catch (FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 	}//TODO: revisar en abstract
 
@@ -328,7 +332,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 					//int numColumns = rs.getFieldNames().size();
 					addUniqueStrings(noDups, rs, columnsName[i]);
 				}catch (FilloException e) {
-					LOGGER.error(e);
+					LOGGER.error(e.getMessage());
 				}
 			}
 			return (float) noDups.size();
@@ -384,7 +388,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			return connection.executeQuery(sql);
 		}catch(FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return null;
 	}
@@ -408,7 +412,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			return connection.executeQuery(sql);
 		}catch(FilloException e) {
-			LOGGER.error(e); //TODO: test no record found
+			LOGGER.error(e.getMessage()); //TODO: test no record found
 		}
 		return null;
 	}
@@ -469,7 +473,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 					
 			}
 		}catch(FilloException ex) {
-			LOGGER.error(ex);
+			LOGGER.error(ex.getMessage());
 			System.out.println("\nFilloException: "+ex.getMessage());
 		}
 		
@@ -489,7 +493,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			rs = connection.executeQuery(sql.toString()+whereCondition);
 		}catch(FilloException ex) {
-			LOGGER.error(ex);
+			LOGGER.error(ex.getMessage());
 			System.out.println("\nFilloException: "+ex.getMessage());
 		}
 		return rs;
@@ -518,7 +522,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listadoFechas.add(transform(rs.getField(columnName))); //transform --> pasa de string a date
 			}
 		}catch(FilloException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		
 		if (minimo) {
@@ -590,7 +594,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			connection.close();
 		} catch (Exception e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		//super.finalize();	
 	}
@@ -978,8 +982,3 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		return rankingTotalList;
 	}
 }
-	
-	
-	
-	
-	

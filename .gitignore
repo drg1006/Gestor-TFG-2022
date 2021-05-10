@@ -1,6 +1,8 @@
 /target/
+/node_modules/
 *.class
 *.gitignore
+.settings
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -52,5 +54,6 @@ hs_err_pid*
 # Vaadin files
 \src\main\webapp
 
-#Firebase key
-service-account-file.json 
+webpack.generated.js
+package-lock.json
+

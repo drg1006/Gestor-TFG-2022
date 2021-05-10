@@ -11,7 +11,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.appreciated.apexcharts.ApexCharts;
+import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
+import com.github.appreciated.apexcharts.config.builder.GridBuilder;
+import com.github.appreciated.apexcharts.config.builder.StrokeBuilder;
+import com.github.appreciated.apexcharts.config.builder.TitleSubtitleBuilder;
+import com.github.appreciated.apexcharts.config.builder.XAxisBuilder;
+import com.github.appreciated.apexcharts.config.chart.Type;
+import com.github.appreciated.apexcharts.config.chart.builder.ZoomBuilder;
+import com.github.appreciated.apexcharts.config.grid.builder.RowBuilder;
+import com.github.appreciated.apexcharts.config.stroke.Curve;
+import com.github.appreciated.apexcharts.config.subtitle.Align;
+import com.github.appreciated.apexcharts.helper.Series;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Page;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.server.FontAwesome;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -23,40 +55,28 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.vaadin.addon.JFreeChartWrapper;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.shared.Position;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
-
-import ubu.digit.ui.beans.HistoricProjectBean;
-import ubu.digit.ui.columngenerators.ProjectsColumnGenerator;
-import ubu.digit.ui.columngenerators.TutorsColumnGenerator;
+import ubu.digit.ui.MainLayout;
+import ubu.digit.ui.beans.HistoricProject;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.listeners.OrSimpleStringFilterListener;
 import ubu.digit.ui.listeners.SimpleStringFilterListener;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
+
 /**
  * Vista de proyectos históricos.
  * 
  * @author Javier de la Fuente Barrios.
  * @author Diana Bringas Ochoa
  */
-public class HistoricProjectsView extends VerticalLayout implements View {
+
+@Route(value = "Historic", layout = MainLayout.class)
+@PageTitle("Histórico de los proyectos")
+public class HistoricProjectsView extends VerticalLayout {
 
 	/**
 	 * Serial Version UID.
@@ -66,7 +86,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(HistoricProjectsView.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HistoricProjectsView.class.getName());
 
 	/**
 	 * Nombre de la vista.
@@ -74,9 +94,15 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "historic-projects";
 
 	/**
-	 * Contenedor de POJOS de proyectos históricos.
+	 * Lista con los proyectos históricos.
 	 */
-	private BeanItemContainer<HistoricProjectBean> beans;
+	private List<HistoricProject> dataHistoric;
+	
+	/**
+	 * Lista con los proyectos históricos que se usará 
+	 * en el grid descripción de proyectos. 
+	 */
+	private List<HistoricProject> dataHistoricGrid;
 
 	/**
 	 * Fichero de configuración.
@@ -86,8 +112,8 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Tabla de proyectos históricos.
 	 */
-	private Table table;
-
+	 private Grid<HistoricProject> gridHistoric;
+	 
 	/**
 	 * Formateador de números.
 	 */
@@ -101,22 +127,22 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	/**
 	 * Mapa auxiliar con los diferentes cursos.
 	 */
-	private transient Map<Integer, List<HistoricProjectBean>> yearOfProjects;
+	private transient Map<Integer, List<HistoricProject>> yearOfProjects;
 	
 	/**
 	 * Mapa con los cursos que tienen proyectos de nueva asignación.
 	 */
-	private transient Map<Integer, List<HistoricProjectBean>> newProjects;
+	private transient Map<Integer, List<HistoricProject>> newProjects;
 
 	/**
 	 * Mapa con los cursos que tienen proyectos ya asignados.
 	 */
-	private transient Map<Integer, List<HistoricProjectBean>> oldProjects;
+	private transient Map<Integer, List<HistoricProject>> oldProjects;
 
 	/**
 	 * Mapa con los cursos que tienen proyectos presentados.
 	 */
-	private transient Map<Integer, List<HistoricProjectBean>> presentedProjects;
+	private transient Map<Integer, List<HistoricProject>> presentedProjects;
 
 	/**
 	 * Menor curso total (más antiguo).
@@ -168,40 +194,36 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		
 		setMargin(true);
 		setSpacing(true);
-		
-		NavigationBar navBar = new NavigationBar();
-		addComponent(navBar);
 
-		createDataModel(); 
+		createDataModel();
+		CreateDataModelToGrid();
 		createGlobalMetrics();
 		createYearlyMetrics();
 		createFilters();
 		createHistoricProjectsTable();
-		addFiltersListeners();
+		add(gridHistoric);
+		//addFiltersListeners();
 
-		Footer footer = new Footer("Historico");//TODO: N3_Historico.csv
-		addComponent(footer);
+		Footer footer = new Footer();
+		add(footer);
 	}
 
 	/**
 	 * Crea el modelo de datos de los proyectos históricos.
 	 * @throws SQLException 
 	 */
-	private void createDataModel(){ 
-		beans = new BeanItemContainer<>(HistoricProjectBean.class); //TODO: revisar thriows
-		
+	private void createDataModel(){ 	
 		//Se obtienen los datos del modelo
-		@SuppressWarnings("rawtypes")
-		ArrayList listaDataModel; //TODO: revisar tipos
-		listaDataModel = fachadaDatos.getDataModelHistoric(dateTimeFormatter);
-
-		for(int i=0;i<listaDataModel.size()-1;i++) {
-			HistoricProjectBean bean = new HistoricProjectBean((String)listaDataModel.get(i),(String)listaDataModel.get(++i), 
+		dataHistoric = new ArrayList<HistoricProject>();
+		ArrayList listaDataModel = fachadaDatos.getDataModelHistoric(dateTimeFormatter);
+		
+		for(int i=0;i<listaDataModel.size();i++) {
+			HistoricProject historic = new HistoricProject((String)listaDataModel.get(i),(String)listaDataModel.get(++i), 
 					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
 					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
 					(LocalDate)listaDataModel.get(++i),(LocalDate)listaDataModel.get(++i), (Double)listaDataModel.get(++i), (int)listaDataModel.get(++i), 
 					(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (int)listaDataModel.get(++i),(int)listaDataModel.get(++i));
-			beans.addBean(bean);
+			dataHistoric.add(historic);
 		}
 	}
 
@@ -209,9 +231,9 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * Crea las métricas globales de los proyectos históricos.
 	 */
 	private void createGlobalMetrics() {
-		Label metricsTitle = new Label(INFO_ESTADISTICA);
-		metricsTitle.setStyleName(TITLE_STYLE);
-		addComponent(metricsTitle);
+		H1 metricsTitle = new H1(INFO_ESTADISTICA);
+		metricsTitle.addClassName(TITLE_STYLE);
+		add(metricsTitle);
 		try {
 			Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, HISTORICO);
 			Label totalProjects = new Label("Número total de proyectos: " + totalProjectsNumber.intValue());
@@ -242,7 +264,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			days.add(numberFormatter.format(stdvDays));
 			Label daysStats = new Label("Tiempo/días [media,min,max,stdv]: " + days);
 
-			addComponents(totalProjects, totalStudents, scoreStats, daysStats);
+			add(totalProjects, totalStudents, scoreStats, daysStats);
 		} catch (Exception e) { //TODO:SQLException FilloException
 			LOGGER.error("Error en históricos (metricas)", e);
 		}
@@ -269,15 +291,15 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		oldProjects = new HashMap<>();
 		presentedProjects = new HashMap<>();
 
-		Iterator<HistoricProjectBean> iterator = beans.getItemIds().iterator();
+		Iterator<HistoricProject> iterator = dataHistoric.iterator();
 		while (iterator.hasNext()) {
-			HistoricProjectBean beanId = iterator.next();
-			HistoricProjectBean bean = beans.getItem(beanId).getBean();
+			HistoricProject bean = iterator.next();
+			//HistoricProject bean = beans.getItem(beanId).getBean();
 			int year = bean.getAssignmentDate().getYear();
 			if (yearOfProjects.containsKey(year)) {
 				yearOfProjects.get(year).add(bean);
 			} else {
-				List<HistoricProjectBean> aux = new ArrayList<>();
+				List<HistoricProject> aux = new ArrayList<>();
 				aux.add(bean);
 				yearOfProjects.put(year, aux);
 			}
@@ -293,7 +315,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		while (iterator.hasNext()) {
 			Integer year = iterator.next();
 			for (int index = 0; index < yearOfProjects.get(year).size(); index++) {
-				HistoricProjectBean project = yearOfProjects.get(year).get(index);
+				HistoricProject project = yearOfProjects.get(year).get(index);
 				LocalDate assignmentDate = project.getAssignmentDate();
 
 				int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
@@ -325,7 +347,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * @param isCurrentCourse
 	 *            si el proyecto se corresponde con el curso actual
 	 */
-	private void assignProjectCourses(int year, HistoricProjectBean project, int totalYears, boolean isCurrentCourse) {
+	private void assignProjectCourses(int year, HistoricProject project, int totalYears, boolean isCurrentCourse) {
 		for (int yearCount = 0; yearCount <= totalYears; yearCount++) {
 			assignProject(year, yearCount, project, isCurrentCourse);
 		}
@@ -343,7 +365,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * @param isCurrentCourse
 	 *            si el proyecto se corresponde con el curso actual
 	 */
-	private void assignProject(int year, int yearCount, HistoricProjectBean project, boolean isCurrentCourse) {
+	private void assignProject(int year, int yearCount, HistoricProject project, boolean isCurrentCourse) {
 		int before = 0;
 		if (!isCurrentCourse) {
 			before = 1;
@@ -352,7 +374,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			if (newProjects.containsKey(year + before)) {
 				newProjects.get(year + before).add(project);
 			} else {
-				List<HistoricProjectBean> aux = new ArrayList<>();
+				List<HistoricProject> aux = new ArrayList<>();
 				aux.add(project);
 				newProjects.put(year + before, aux);
 			}
@@ -360,7 +382,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			if (oldProjects.containsKey(year + yearCount + before)) {
 				oldProjects.get(year + yearCount + before).add(project);
 			} else {
-				List<HistoricProjectBean> aux = new ArrayList<>();
+				List<HistoricProject> aux = new ArrayList<>();
 				aux.add(project);
 				oldProjects.put(year + yearCount + before, aux);
 			}
@@ -373,7 +395,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * @param project
 	 *            proyecto actual
 	 */
-	private void buildPresentedProjects(HistoricProjectBean project) {
+	private void buildPresentedProjects(HistoricProject project) {
 		LocalDate presentedDate = project.getPresentationDate();
 		LocalDate startDate = LocalDate.of(presentedDate.getYear(), Integer.parseInt(config.getSetting("finPresentaciones.mes")),
 				Integer.parseInt(config.getSetting("finPresentaciones.dia")));
@@ -381,7 +403,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			if (presentedProjects.containsKey(presentedDate.getYear())) {
 				presentedProjects.get(presentedDate.getYear()).add(project);
 			} else {
-				List<HistoricProjectBean> aux = new ArrayList<>();
+				List<HistoricProject> aux = new ArrayList<>();
 				aux.add(project);
 				presentedProjects.put(presentedDate.getYear(), aux);
 			}
@@ -398,7 +420,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private Map<Integer, Number> getStudentsCount() {
 		Map<Integer, Number> studentsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
-			HistoricProjectBean project;
+			HistoricProject project;
 			int numStudents = 0;
 			if (newProjects.containsKey(year)) {
 				for (int index = 0; index < newProjects.get(year).size(); index++) {
@@ -421,7 +443,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private Map<Integer, Number> getTutorsCount() {
 		Map<Integer, Number> tutorsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
-			HistoricProjectBean current;
+			HistoricProject current;
 			int numTutors = 0;
 			if (newProjects.containsKey(year)) {
 				for (int index = 0; index < newProjects.get(year).size(); index++) {
@@ -464,17 +486,37 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 			avgMonths.add(averageMonths.get(year));
 		}
 		
-		addComponent(new Label("Media de notas por curso: " + scores));
-		addComponent(new Label("Media de dias por curso: " + days));
-		addComponent(new Label("Media de meses por curso: " + months));
+		add(new Label("Media de notas por curso: " + scores));
+		add(new Label("Media de dias por curso: " + days));
+		add(new Label("Media de meses por curso: " + months));
 		
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		for (int i = 0; i < courses.size(); i++) {
-			dataset.addValue(avgScores.get(i), "Nota", courses.get(i));
-			dataset.addValue(avgMonths.get(i), "Nº meses", courses.get(i));
-		}
-		createChart(dataset);
+		 ApexCharts lineChart = ApexChartsBuilder.get()
+	                .withChart(ChartBuilder.get()
+	                        .withType(Type.line)
+	                        .withZoom(ZoomBuilder.get()
+	                                .withEnabled(false)
+	                                .build())
+	                        .build())
+	                .withStroke(StrokeBuilder.get()
+	                		.withColors("#E91E63","#4682B4")
+	                        .withCurve(Curve.straight)
+	                        .build())
+	                .withTitle(TitleSubtitleBuilder.get()
+	                        .withText("Métricas agrupadas por curso")
+	                        .withAlign(Align.center)
+	                        .build())
+	                .withGrid(GridBuilder.get()
+	                        .withRow(RowBuilder.get()
+	                                .withColors("#f3f3f3", "transparent")
+	                                .withOpacity(0.5).build()
+	                        ).build())
+	                .withXaxis(XAxisBuilder.get()
+	                        .withCategories(courses)
+	                        .build())
+	                .withSeries(new Series("Notas", avgScores.toArray()),new Series("Nº Meses", avgMonths.toArray()))
+	                .build();
+	        add(lineChart);
+	        setWidth("35%");
 	}
 
 	/**
@@ -485,7 +527,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private Map<Integer, Number> getAverageScores() {
 		Map<Integer, Number> averageScores = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
-			HistoricProjectBean project;
+			HistoricProject project;
 			double mean = 0;
 			if (newProjects.containsKey(year)) {
 				for (int index = 0; index < newProjects.get(year).size(); index++) {
@@ -507,7 +549,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	private Map<Integer, Number> getAverageTotalDays() {
 		Map<Integer, Number> averageTotalDays = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
-			HistoricProjectBean project;
+			HistoricProject project;
 			double mean = 0;
 			if (newProjects.containsKey(year)) {
 				for (int index = 0; index < newProjects.get(year).size(); index++) {
@@ -550,40 +592,37 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 		Label asignedYearlyTutors = new Label(
 				"Número total de tutores con nuevas asignaciones por curso: " + yearlyAssignedTutors);
 		Label allCourses = new Label("Cursos: " + courses);
-		addComponents(asignedYearlyProjects, presentedYearlyProjects, asignedYearlyStudents, asignedYearlyTutors,
+		add(asignedYearlyProjects, presentedYearlyProjects, asignedYearlyStudents, asignedYearlyTutors,
 				allCourses);
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		for (int i = 0; i < courses.size(); i++) {
-			dataset.addValue(yearlyAssignedProjects.get(i), "Proyectos Asignados", courses.get(i));
-			dataset.addValue(yearlyAssignedStudents.get(i), "Alumnos Asignados", courses.get(i));
-			dataset.addValue(yearlyAssignedTutors.get(i), "Tutores Asignados", courses.get(i));
-			dataset.addValue(yearlyOldProjects.get(i), "Proyectos Ya Asignados", courses.get(i));
-		}
-
-		createChart(dataset);
-	}
-
-	/**
-	 * Crea una gráfica a partir de unos datos.
-	 * 
-	 * @param dataset datos para generar la gráfica
-	 */
-	private void createChart(DefaultCategoryDataset dataset) {
-		JFreeChart chart = ChartFactory.createLineChart("Métricas agrupadas por curso", "Curso", "Nº", dataset,
-				PlotOrientation.VERTICAL, true, true, false);
-		chart.setBackgroundPaint(Color.white);
-		CategoryPlot plot = (CategoryPlot) chart.getPlot();
-		plot.setBackgroundPaint(Color.white);
-		plot.setRangeGridlinePaint(Color.gray);
-		plot.setRenderer(new LineAndShapeRenderer());
-
-		CategoryAxis domainAxis = chart.getCategoryPlot().getDomainAxis();
-		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
-		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-		JFreeChartWrapper chartWrapper = new JFreeChartWrapper(chart);
-		addComponent(chartWrapper);
+		 ApexCharts lineChart = ApexChartsBuilder.get()
+	                .withChart(ChartBuilder.get()
+	                        .withType(Type.line)
+	                        .withZoom(ZoomBuilder.get()
+	                                .withEnabled(false)
+	                                .build())
+	                        .build())
+	                .withStroke(StrokeBuilder.get()
+	                		.withColors("#E91E63","#4a6f22", "#9C27B0","#4682B4")
+	                        .withCurve(Curve.straight)
+	                        .build())
+	                .withTitle(TitleSubtitleBuilder.get()
+	                        .withText("Métricas agrupadas por curso")
+	                        .withAlign(Align.center)
+	                        .build())
+	                .withGrid(GridBuilder.get()
+	                        .withRow(RowBuilder.get()
+	                                .withColors("#f3f3f3", "transparent")
+	                                .withOpacity(0.5).build()
+	                        ).build())
+	                .withXaxis(XAxisBuilder.get()
+	                        .withCategories(courses)
+	                        .build())
+	                .withSeries(new Series("Proyectos Asignados", yearlyAssignedProjects.toArray()),new Series("Alumnos Asignados", yearlyAssignedStudents.toArray()),
+	                		new Series("Tutores Asignados", yearlyAssignedTutors.toArray()),new Series("Proyectos Ya Asignados", yearlyOldProjects.toArray()))
+	                .build();
+	        add(lineChart);
+	        setWidth("35%");
 	}
 
 	/**
@@ -593,7 +632,7 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 *            projectos agrupados por curso
 	 * @return número de proyectos de cada curso.
 	 */
-	private Map<Integer, Number> getProjectsCount(Map<Integer, List<HistoricProjectBean>> projects) {
+	private Map<Integer, Number> getProjectsCount(Map<Integer, List<HistoricProject>> projects) {
 		Map<Integer, Number> projectsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			int totalProjects = 0;
@@ -625,149 +664,89 @@ public class HistoricProjectsView extends VerticalLayout implements View {
 	 * Crea los filtros de la tabla de proyectos históricos.
 	 */
 	private void createFilters() {
-		Label filtersTitle = new Label(FILTROS);
-		filtersTitle.setStyleName(TITLE_STYLE);
-		addComponent(filtersTitle);
+		H1 filtersTitle = new H1(FILTROS);
+		filtersTitle.addClassName(TITLE_STYLE);
+		add(filtersTitle);
 
 		HorizontalLayout filters = new HorizontalLayout();
 		filters.setSpacing(true);
 		filters.setMargin(false);
-		filters.setWidth("100%");
-		addComponent(filters);
+		add(filters);
 
 		projectFilter = new TextField("Filtrar por proyectos:");
-		filters.addComponent(projectFilter);
+		filters.add(projectFilter);
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
-		filters.addComponent(tutorsFilter);
+		filters.add(tutorsFilter);
 
 		assignmentDateFilter = new TextField("Filtrar por fecha de asignación:");
-		filters.addComponent(assignmentDateFilter);
+		filters.add(assignmentDateFilter);
 
 		presentationDateFilter = new TextField("Filtrar por fecha de presentación:");
-		filters.addComponent(presentationDateFilter);
+		filters.add(presentationDateFilter);
+		
 	}
+	
+	 private void configureFilters(TextField filter) { 
+			
+	    }
 
 	/**
 	 * Crea la tabla de proyectos históricos.
 	 */
 	private void createHistoricProjectsTable() {
-		Label projectsTitle = new Label(DESCRIPCION_PROYECTOS);
-		projectsTitle.setStyleName(TITLE_STYLE);
-		addComponent(projectsTitle);
-
-		table = new Table();
-		addComponent(table);
-		table.setWidth("100%");
-		table.setPageLength(10);
-		table.setColumnCollapsingAllowed(true);
-		table.setContainerDataSource(beans);
-		addGeneratedColumns();
-		table.setVisibleColumns(PROJECTS, TUTORS, NUM_STUDENTS, ASSIGNMENT_DATE, PRESENTATION_DATE, RANKING_PERCENTILE, RANKING_TOTAL, RANKING_CURSE);
-		setTableColumnHeaders();
-		setColumnExpandRatios();
-		showDescriptionOnClick();
-	}
-
-	/**
-	 * Añade las columnas generadas a la tabla de proyectos históricos.
-	 */
-	private void addGeneratedColumns(){
-		table.addGeneratedColumn(TUTORS, new TutorsColumnGenerator());
-		table.addGeneratedColumn(PROJECTS, new ProjectsColumnGenerator());
+		H1 projectsTitle = new H1(DESCRIPCION_PROYECTOS);
+		projectsTitle.addClassName(TITLE_STYLE);
+		add(projectsTitle);
 		
+		gridHistoric = new Grid<>();
+		gridHistoric.addClassName("historic-projects-grid");
+		//gridHistoric.setSizeFull();
+		
+		gridHistoric.setItems(dataHistoricGrid);
+				
+		gridHistoric.addColumn(HistoricProject::getTitle).setHeader("Título").setFlexGrow(30);
+		gridHistoric.addColumn(HistoricProject::getTutors).setHeader("Tutor/es").setFlexGrow(9);
+		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos").setFlexGrow(4);
+		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación").setFlexGrow(6);
+		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación").setFlexGrow(6);
+		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles").setFlexGrow(5);
+		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total").setFlexGrow(5);
+		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso").setFlexGrow(5);
+		
+		List<Column<HistoricProject>> columns = gridHistoric.getColumns();
+		
+		gridHistoric.getColumns().forEach(columna -> columna.setAutoWidth(true));
 	}
+
 
 	/**
-	 * Establece las cabeceras de las columnas de la tabla de proyectos
-	 * históricos.
+	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.
 	 */
-	private void setTableColumnHeaders() {
-		table.setColumnHeader(PROJECTS, "Título");
-		table.setColumnHeader(TUTORS, "Tutor/es");
-		table.setColumnHeader(NUM_STUDENTS, "Nº Alumnos");
-		table.setColumnHeader(ASSIGNMENT_DATE, "Fecha Asignación");
-		table.setColumnHeader(PRESENTATION_DATE, "Fecha Presentación");
-		table.setColumnHeader(RANKING_PERCENTILE, "Ranking Percentiles");
-		table.setColumnHeader(RANKING_TOTAL, "Ranking Total");
-		table.setColumnHeader(RANKING_CURSE, "Ranking por cursos");
+	private void CreateDataModelToGrid() {
+		String tutors = "";
+		dataHistoricGrid = new ArrayList<HistoricProject>();
+		Iterator<HistoricProject> iterator = dataHistoric.iterator();
+		while (iterator.hasNext()) {
+			HistoricProject bean = iterator.next();
+			tutors = bean.getTutor1() + "\n" + bean.getTutor2() + "\n" + bean.getTutor3();
+			
+			HistoricProject historic = new HistoricProject(bean.getTitle(), tutors,bean.getNumStudents(), 
+					bean.getAssignmentDate(), bean.getPresentationDate(), bean.getRankingPercentile(),
+					bean.getRankingTotal(),bean.getRankingCurse());
+			dataHistoricGrid.add(historic);
+		}	
 	}
-
-	/**
-	 * Establece los ratios de expansión de las columnas de la tabla de
-	 * proyectos históricos.
-	 */
-	private void setColumnExpandRatios() {
-		table.setColumnExpandRatio(PROJECTS, 30);
-		table.setColumnExpandRatio(TUTORS, 9);
-		table.setColumnExpandRatio(NUM_STUDENTS, 4);
-		table.setColumnExpandRatio(ASSIGNMENT_DATE, 6);
-		table.setColumnExpandRatio(PRESENTATION_DATE, 6);
-		table.setColumnExpandRatio(RANKING_PERCENTILE, 5);
-		table.setColumnExpandRatio(RANKING_TOTAL, 5);
-		table.setColumnExpandRatio(RANKING_CURSE, 5);
-	}
-
+	
 	/**
 	 * Activa el mostrar la información de un proyecto al hacer click sobre él
 	 * en la tabla.
 	 */
-	private void showDescriptionOnClick() {
+	/*private void showDescriptionOnClick() {
 		table.setSelectable(true);
 		table.setMultiSelect(false);
 		table.setImmediate(true);
 		table.setNullSelectionAllowed(true);
 		table.addValueChangeListener(new TableValueChangeListener());
-	}
-
-	/**
-	 * Listener para mostrar la información de un proyecto al hacer click sobre
-	 * él.
-	 * 
-	 * @author Javier de la Fuente Barrios
-	 */
-	private class TableValueChangeListener implements Property.ValueChangeListener {
-		private static final long serialVersionUID = -5055796506090094836L;
-
-		/**
-		 * Acción a realizar al recibir el evento.
-		 */
-		@Override
-		public void valueChange(ValueChangeEvent event) {
-			if (event.getProperty().getValue() != null) {
-				HistoricProjectBean value = (HistoricProjectBean) event.getProperty().getValue();
-				String description = value.getDescription();
-
-				if (description != null && !"".equals(description)) {
-					Notification notification = new Notification("", description, Notification.Type.HUMANIZED_MESSAGE);
-					notification.setDelayMsec(10000);
-					notification.setPosition(Position.BOTTOM_CENTER);
-					notification.setIcon(FontAwesome.FILE_TEXT_O);
-					notification.show(Page.getCurrent());
-				} else {
-					Notification.show("Información", "No hay una descripción disponible para ese proyecto",
-							Notification.Type.HUMANIZED_MESSAGE);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Añade los listeners de los filtros a los campos de texto.
-	 */
-	private void addFiltersListeners() {
-		projectFilter.addTextChangeListener(new SimpleStringFilterListener(table, TITLE));
-		tutorsFilter.addTextChangeListener(new OrSimpleStringFilterListener(table, TUTOR1, TUTOR2, TUTOR3));
-		assignmentDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, ASSIGNMENT_DATE));
-		presentationDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, PRESENTATION_DATE));
-		presentationDateFilter.addTextChangeListener(new SimpleStringFilterListener(table, PRESENTATION_DATE));
-	}
-	
-	/**
-	 * La vista se inicializa en el constructor.
-	 */
-	@Override
-	public void enter(ViewChangeEvent event) {
-		// Se inicializa el contenido de la vista en el constructor
-	}
+	}*/
 }

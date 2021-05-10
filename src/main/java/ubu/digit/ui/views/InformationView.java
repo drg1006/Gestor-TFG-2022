@@ -1,25 +1,24 @@
 package ubu.digit.ui.views;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.BrowserFrame;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.IFrame;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
-
-import ubu.digit.ui.components.Footer;
-import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.components.*;
+import ubu.digit.ui.MainLayout;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -30,7 +29,10 @@ import java.util.List;
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-public class InformationView extends VerticalLayout implements View {
+
+@Route(value = "Information", layout = MainLayout.class)
+@PageTitle("Información general")
+public class InformationView extends VerticalLayout{
 
 	/**
 	 * Serial Version UID.
@@ -40,7 +42,7 @@ public class InformationView extends VerticalLayout implements View {
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(InformationView.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InformationView.class.getName());
 
 	/**
 	 * Fichero de configuración.
@@ -52,8 +54,6 @@ public class InformationView extends VerticalLayout implements View {
 	 */
 	private SistInfDataAbstract fachadaDatos;
 
-	private AbstractOrderedLayout normas;
-
 	/**
 	 * Nombre de la vista.
 	 */
@@ -62,42 +62,43 @@ public class InformationView extends VerticalLayout implements View {
 	/**
 	 * Constructor.
 	 */
-	public InformationView() {
+	public InformationView() {    
 		
-		fachadaDatos = SistInfDataFactory.getInstanceData();
+        fachadaDatos = SistInfDataFactory.getInstanceData();
 			
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 
 		setMargin(true);
 		setSpacing(true);
-
+		
 		NavigationBar navBar = new NavigationBar();
-		addComponent(navBar);
-
+		add(navBar);
+		
 		createTribunal();
 		createNormas();
 		createCalendar();
 		createDocumentos();
 		
-		Footer footer = new Footer("Tribunal"); //TODO:N1_Tribunal.csv
-		addComponent(footer);
+		Footer footer = new Footer();
+		add(footer);
 	}
 	
 	/**
 	 * Crea el tribunal.
 	 */
 	private void createTribunal() { 
-		Label tribunalTitle = new Label(MIEMBROS_DEL_TRIBUNAL);
-		tribunalTitle.setStyleName(TITLE_STYLE);
-
+		H1 tribunalTitle = new H1(MIEMBROS_DEL_TRIBUNAL);
+		tribunalTitle.addClassName(TITLE_STYLE);
+		add(tribunalTitle);
+		
 		final HorizontalLayout horizontalTribunal = new HorizontalLayout();
 		horizontalTribunal.setSpacing(true);
-		horizontalTribunal.setMargin(new MarginInfo(false, true, false, true));
+		horizontalTribunal.setMargin(true);//new MarginInfo(false, true, false, true));
 
-		Label iconoTribunal = new Label(FontAwesome.USERS.getHtml(), ContentMode.HTML);
-		iconoTribunal.setStyleName("icon-big");
-		iconoTribunal.setWidth(130, Unit.PIXELS);
-
+		Icon iconoTribunal = new Icon(VaadinIcon.USER);
+		iconoTribunal.addClassName("icon-big");
+		//iconoTribunal.setSize(Unit.PIXELS);
+		
 		final VerticalLayout tribunal = new VerticalLayout();
 		tribunal.setSpacing(true);
 		tribunal.setWidth(350, Unit.PIXELS);
@@ -106,24 +107,24 @@ public class InformationView extends VerticalLayout implements View {
 		List<String> listaTribunal;
 		listaTribunal = fachadaDatos.getTribunal();
 		for(int i=0;i<listaTribunal.size();i++) {
-			tribunal.addComponent(new Label(listaTribunal.get(i)));
+			tribunal.add(new Label(listaTribunal.get(i)));
 		}
-		horizontalTribunal.addComponents(iconoTribunal, tribunal);
+		horizontalTribunal.add(iconoTribunal, tribunal);
 
 		String yearIndex = config.getSetting("indexAño");
 		int nextYearIndex = Integer.parseInt(yearIndex) + 1;
 		Label curso = new Label("Programa en vigor a partir del Curso " + yearIndex + "-" + nextYearIndex + ".");
-		addComponents(tribunalTitle, horizontalTribunal, curso);
+		add(horizontalTribunal, curso);
 	}
 	
 	/**
 	 * Crea las normas de entrega.
 	 */
 	private void createNormas() {
-		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
-		Label normasTitle = new Label(ESPECIFICACIONES_DE_ENTREGA);
-		normasTitle.setStyleName(TITLE_STYLE);
-
+		H1 normasTitle = new H1(ESPECIFICACIONES_DE_ENTREGA);
+		normasTitle.addClassName(TITLE_STYLE);
+		add(normasTitle);
+		
 		final VerticalLayout normas = new VerticalLayout();
 		normas.setSpacing(true);
 
@@ -132,34 +133,31 @@ public class InformationView extends VerticalLayout implements View {
 		listaNormas = fachadaDatos.getNormas();
 		
 		for(int i=0;i<listaNormas.size();i++) {
-			normas.addComponent(new Label(" - " + listaNormas.get(i)));
+			normas.add(new Label(" - " + listaNormas.get(i)));
 		}
-		
-		addComponents(normasTitle, normas);
+		add(normasTitle, normas);
 	}
 	
 	/**
 	 * Crea el calendario.
 	 */
-	private void createCalendar() {
-		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
-		Label fechasTitle = new Label(FECHAS_DE_ENTREGA);
-		fechasTitle.setStyleName(TITLE_STYLE);
+	private void createCalendar() {	
+		H1 fechasTitle = new H1(FECHAS_DE_ENTREGA);
+		fechasTitle.addClassName(TITLE_STYLE);
 
 		String urlCalendario = config.getSetting("urlCalendario");
-		BrowserFrame calendar = new BrowserFrame("", new ExternalResource("https://" + urlCalendario));
+		IFrame calendar = new IFrame("https://" + urlCalendario);
 		calendar.setWidth(85, Unit.PERCENTAGE);
 		calendar.setHeight(500, Unit.PIXELS);
-		addComponents(fechasTitle, calendar);
+		add(fechasTitle, calendar);
 	}
 
 	/**
 	 * Crea los documentos de entrega.
 	 */
 	private void createDocumentos() { 
-		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
-		Label documentosTitle = new Label(DOCUMENTOS);
-		documentosTitle.setStyleName(TITLE_STYLE);
+		H1 documentosTitle = new H1(DOCUMENTOS);
+		documentosTitle.addClassName(TITLE_STYLE);
 
 		final VerticalLayout documentos = new VerticalLayout();
 		documentos.setSpacing(true);
@@ -169,19 +167,10 @@ public class InformationView extends VerticalLayout implements View {
 		listaDocumentos = fachadaDatos.getDocumentos();
 		
 		for(int i=0;i<listaDocumentos.size();i++) {
-			Link link = new Link(listaDocumentos.get(i), new ExternalResource(listaDocumentos.get(++i)));
-			link.setIcon(FontAwesome.LINK);
-			documentos.addComponent(link);
+			Anchor link = new Anchor(listaDocumentos.get(i), listaDocumentos.get(++i));
+			//link.setIcon(FontAwesome.LINK);
+			documentos.add(link);
 		}
-		addComponents(documentosTitle, documentos);
-		addComponent(new Label(WHITE_LINE, ContentMode.HTML));
-	}
-
-	/**
-	 * La vista se inicializa en el constructor. 
-	 */
-	@Override
-	public void enter(ViewChangeEvent event) {
-		// Se inicializa el contenido de la vista en el constructor
+		add(documentosTitle, documentos);
 	}
 }

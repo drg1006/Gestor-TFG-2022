@@ -1,10 +1,6 @@
 package ubu.digit.ui.listeners;
 
-import com.vaadin.data.Container.Filterable;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
-import com.vaadin.ui.Table;
+import com.vaadin.flow.component.grid.Grid;
 
 /**
  * Listener que hace de filtro de una cadena de texto, para una columna deuna
@@ -12,7 +8,7 @@ import com.vaadin.ui.Table;
  * 
  * @author Javier de la Fuente Barrios
  */
-public class SimpleStringFilterListener implements TextChangeListener {
+public class SimpleStringFilterListener {//implements TextChangeListener {
 
 	/**
 	 * Serial Version UID.
@@ -22,12 +18,12 @@ public class SimpleStringFilterListener implements TextChangeListener {
 	/**
 	 * Filtro a aplicar.
 	 */
-	private SimpleStringFilter filter = null;
+	//private SimpleStringFilter filter = null;
 
 	/**
 	 * Tabla donde aplicar el filtro.
 	 */
-	private Table table;
+	private Grid table;
 
 	/**
 	 * Nombre de la columna de la tabla donde aplicar el filtro.
@@ -42,7 +38,7 @@ public class SimpleStringFilterListener implements TextChangeListener {
 	 * @param propertyId
 	 *            nombre de la columna
 	 */
-	public SimpleStringFilterListener(Table table, String propertyId) {
+	public SimpleStringFilterListener(Grid table, String propertyId) {
 		this.propertyId = propertyId;
 		this.table = table;
 	}
@@ -50,7 +46,7 @@ public class SimpleStringFilterListener implements TextChangeListener {
 	/**
 	 * Operación a realizara al recibir un evento.
 	 */
-	@Override
+	/*@Override
 	public void textChange(TextChangeEvent event) {
 		Filterable f = (Filterable) table.getContainerDataSource();
 
@@ -60,5 +56,5 @@ public class SimpleStringFilterListener implements TextChangeListener {
 
 		filter = new SimpleStringFilter(propertyId, (String) event.getText(), true, false);
 		f.addContainerFilter(filter);
-	}
+	}*/
 }

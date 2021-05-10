@@ -4,22 +4,27 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.vaadin.server.ExternalResource;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
-import ubu.digit.ui.views.UploadView;
+import ubu.digit.ui.views.InformationView;
+import ubu.digit.ui.views.LoginView;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
+
 
 /**
  * Pié de página común a todas las vistas.
@@ -27,7 +32,7 @@ import static ubu.digit.util.Constants.*;
  * @author Javier de la Fuente Barrios
  *
  */
-public class Footer extends CustomComponent {
+public class Footer extends HorizontalLayout {
 
 	/**
 	 * Serial Version UID.
@@ -37,7 +42,11 @@ public class Footer extends CustomComponent {
 	/**
 	 * Contenedor del pié de página.
 	 */
-	private GridLayout content;
+	private HorizontalLayout content;
+	
+	VerticalLayout license;
+	
+	VerticalLayout information;
 
 	/**
 	 * Nombre del fichero .csv relacionado con la vista
@@ -47,52 +56,49 @@ public class Footer extends CustomComponent {
 	/**
 	 * Constructor.
 	 * 
-	 * @param fileName
-	 *            nombre del fichero .csv relacionado con la vista.
 	 */
-	public Footer(String fileName) {
-		this.fileName = fileName;
-		content = new GridLayout(2, 1);
-		content.setMargin(false);
-		content.setSpacing(true);
-		content.setWidth("100%");
+	public Footer() {
+		content = new HorizontalLayout();
+		content.addClassName("Footer-grid");
+		//content.setSizeFull();
+		//content.setWidth("100%");
 
 		addInformation();
 		addLicense();
-
-		content.setColumnExpandRatio(0, 4);
-		content.setColumnExpandRatio(1, 4);
-
-		setCompositionRoot(content);
+		add(content);
+		content.add(information, license);
+		
 	}
 
 	/**
 	 * Añade la información del proyecto.
 	 */
 	private void addInformation() {
-		VerticalLayout information = new VerticalLayout();
+		information = new VerticalLayout();
 		information.setMargin(false);
 		information.setSpacing(true);
 
-		Label subtitle = new Label(INFORMACION);
-		subtitle.setStyleName(SUBTITLE_STYLE);
-
-		Label version2 = new Label("Versión 2.0 creada por Javier de la Fuente Barrios");
-		Link link2 = new Link("jfb0019@alu.ubu.es", new ExternalResource("mailto:jfb0019@alu.ubu.es"));
-		link2.setIcon(FontAwesome.ENVELOPE);
-
-		Label version1 = new Label("Versión 1.0 creada por Beatriz Zurera Martínez-Acitores");
-		Link link1 = new Link("bzm0001@alu.ubu.es", new ExternalResource("mailto:bzm0001@alu.ubu.es"));
-		link1.setIcon(FontAwesome.ENVELOPE);
-
-		Label tutor = new Label("Tutorizado por Carlos López Nozal");
-		Link linkT = new Link("clopezno@ubu.es", new ExternalResource("mailto:clopezno@alu.ubu.es"));
-		linkT.setIcon(FontAwesome.ENVELOPE);
-
-		Label copyright = new Label("Copyright @ LSI");
-
-		information.addComponents(subtitle, version2, link2, version1, link1, tutor, linkT, copyright);
-		content.addComponent(information);
+		H1 subtitle = new H1(INFORMACION);
+		subtitle.addClassName(SUBTITLE_STYLE);
+		information.add(subtitle);
+		
+		Text version2 = new Text("Versión 2.0 creada por Javier de la Fuente Barrios");
+		Anchor link2 = new Anchor("mailto:jfb0019@alu.ubu.es","jfb0019@alu.ubu.es");
+		information.add(version2);
+		information.add(link2);
+		
+		Text version1 = new Text("Versión 1.0 creada por Beatriz Zurera Martínez-Acitores");
+		Anchor link1 = new Anchor("bzm0001@alu.ubu.es","mailto:bzm0001@alu.ubu.es");
+		information.add(version1);
+		information.add(link1);
+		
+		Text tutor = new Text("Tutorizado por Carlos López Nozal");
+		Anchor linkT = new Anchor("clopezno@ubu.es", "mailto:clopezno@alu.ubu.es");
+		information.add(tutor);
+		information.add(linkT);
+		
+		Text copyright = new Text("Copyright @ LSI");
+		information.add(copyright);
 	}
 
 	/**
@@ -103,7 +109,8 @@ public class Footer extends CustomComponent {
 	 * @return fecha de última modificación del fichero
 	 */
 	private String getLastModified(String fileName) {
-		String serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		//String serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		String serverPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
 		ExternalProperties config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		String dirCsv = config.getSetting("dataIn");
 		String dir = serverPath + dirCsv + "/";
@@ -121,44 +128,26 @@ public class Footer extends CustomComponent {
 	 * Añade la información de la licencia del proyecto.
 	 */
 	private void addLicense() {
-		VerticalLayout license = new VerticalLayout();
+		license = new VerticalLayout();
 		license.setMargin(false);
 		license.setSpacing(true);
 
-		Link ccImage = new Link(null, new ExternalResource("https://creativecommons.org/licenses/by/4.0/"));
-		ccImage.setIcon(new ThemeResource("img/cc.png"));
+		Image ccImage= new Image("frontend/img/cc.png", "https://creativecommons.org/licenses/by/4.0/");
+		
+		Text licenseText = new Text("This work is licensed under a: ");
+		Anchor ccLink = new Anchor("https://creativecommons.org/licenses/by/4.0/","Creative Commons Attribution 4.0 International License.");
 
-		Label licenseText = new Label("This work is licensed under a: ");
-		Link ccLink = new Link("Creative Commons Attribution 4.0 International License.",
-				new ExternalResource("https://creativecommons.org/licenses/by/4.0/"));
-
-		license.addComponents(ccImage, licenseText, ccLink);
+		license.add(ccImage);
+		license.add(licenseText);
+		license.add(ccLink);
 
 		if (fileName != null) {
-			String lastModified = getLastModified(fileName);
-			license.addComponent(new Label("Ultima actualización: " + lastModified));
+			//String lastModified = getLastModified(fileName);
+			license.add(new Text("Ultima actualización: " + "null")); //lastModified //TODO:
 		}
 
 		Button login = new Button("Actualizar");
-		login.addClickListener(new LoginClickListener());
-		license.addComponent(login);
-		content.addComponent(license);
-	}
-
-	/**
-	 * Listener para el botón que accede a la pantalla de administración.
-	 * 
-	 * @author Javier de la Fuente Barrios
-	 */
-	private final class LoginClickListener implements Button.ClickListener {
-		private static final long serialVersionUID = -861788921350517735L;
-	
-		/**
-		 * Acción a realizar al recibir el evento de un click.
-		 */
-		@Override
-		public void buttonClick(ClickEvent event) {
-			 UI.getCurrent().getNavigator().navigateTo(UploadView.VIEW_NAME);				
-		}
+		login.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+		license.add(login);
 	}
 }

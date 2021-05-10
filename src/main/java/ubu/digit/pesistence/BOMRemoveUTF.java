@@ -5,20 +5,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BOMRemoveUTF {
 	
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(BOMRemoveUTF.class);
+	private static final Logger LOGGER =  LoggerFactory.getLogger(BOMRemoveUTF.class.getName());
 	
 	public static void main(String[] args) throws IOException {
-		//new BOMRemoveUTF().bomRemoveUTF(".\\rsc\\Tribunal2.csv");
 		new BOMRemoveUTF().bomRemoveUTFDirectory(".\\rsc");
 	}
 	
+	public static String prueba() {
+		return "hola";
+	}
 	
 	/***
 	 * Remove unicode character BOM (Byte Order Mark) from of files of a
@@ -36,7 +39,7 @@ public class BOMRemoveUTF {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 			
 		}
 
@@ -51,6 +54,27 @@ public class BOMRemoveUTF {
 	public  void bomRemoveUTF(String fileStrPath) throws FileNotFoundException, IOException {
 		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
 		byte[] buffer = new byte[3];
+		file.read(buffer);
+		if (hasBom(buffer)){
+			int inputSize = (int)file.length();
+			byte[] bufferWithoutBom = new byte[inputSize-3];
+			file.read(bufferWithoutBom,0,inputSize-3);
+			file.seek(0);
+			file.write(bufferWithoutBom, 0, inputSize-3);
+			file.setLength(inputSize-3);
+
+		}
+		file.close();
+	}
+	
+	/**
+	 * Remove unicode character BOM (Byte Order Mark) at the beginning of file 
+	 * @param buffer
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public  void bomRemoveUTF(byte[] buffer, String fileStrPath) throws FileNotFoundException, IOException {
+		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
 		file.read(buffer);
 		if (hasBom(buffer)){
 			int inputSize = (int)file.length();

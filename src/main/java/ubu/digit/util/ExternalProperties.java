@@ -6,9 +6,12 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import javax.servlet.ServletContext;
 
-import com.vaadin.server.VaadinService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.flow.server.VaadinServlet;
 
 /**
  * Clase para la obtención de los valores de las propiedades.
@@ -27,7 +30,7 @@ public class ExternalProperties implements Serializable {
 	/**
      * Logger de la clase.
      */
-    private static final Logger LOGGER = Logger.getLogger(ExternalProperties.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalProperties.class.getName());
 
     /**
      * Propiedad.
@@ -56,7 +59,8 @@ public class ExternalProperties implements Serializable {
 
         InputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(file);
+        	inputStream = VaadinServlet.getCurrent().getServletContext().getResourceAsStream("/WEB-INF/classes/config.properties");
+            //inputStream = new FileInputStream(file);
             PROPERTIES.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("", e);
@@ -75,7 +79,8 @@ public class ExternalProperties implements Serializable {
 	 */
     public static ExternalProperties getInstance(String propFileName, Boolean testFlag) { 
     	if(!testFlag) {
-    		basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+    		basePath = VaadinServlet.getCurrent().getServletContext().getContextPath();
+    		//basePath = "C:\\Users\\DianaBO\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapss\\sistinf";
     	}
     	
         if (instance == null) {

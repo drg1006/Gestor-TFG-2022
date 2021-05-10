@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ubu.digit.util.ExternalProperties;
 
@@ -82,19 +83,18 @@ public abstract class SistInfDataAbstract implements Serializable {
 	/**
 	 * URL donde encontramos el fichero con las propiedades del proyecto.
 	 */
-	protected static ExternalProperties prop = ExternalProperties.getInstance("/WEB-INF/classes/config.properties",
-			false);
+	protected static ExternalProperties prop = ExternalProperties.getInstance("/WEB-INF/classes/config.properties",false);
 	
 	/**
 	 * Directorio donde se encuentra los datos de entrada, es decir, los
 	 * ficheros que contienen los datos que vamos a consultar.
 	 */
 	public static final String DIRCSV = prop.getSetting("dataIn"); //TODO: crear get para clase updateCSVVIew
-
+	
 	/**
 	 * Logger de la clase.
 	 */
-	protected static final Logger LOGGER = Logger.getLogger(SistInfDataAbstract.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataAbstract.class.getName());
 	
 	protected abstract Number getResultSetNumber(String sql);
 

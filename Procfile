@@ -1,1 +1,1 @@
-web: java -jar target/Gestor-TFG-2021.jar @PORT
+web: java $JAVA_OPTS -jar target/*.jar $JAR_OPTS

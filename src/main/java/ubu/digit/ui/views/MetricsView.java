@@ -1,13 +1,20 @@
 package ubu.digit.ui.views;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
@@ -18,8 +25,9 @@ import static ubu.digit.util.Constants.*;
  * 
  * @author Javier de la Fuente Barrios
  */
-public class MetricsView extends VerticalLayout implements View {
-	
+@Route(value = "Metrics", layout = MainLayout.class)
+@PageTitle("Métricas")
+public class MetricsView extends VerticalLayout{
 
 	/**
 	 * Serial Version UID.
@@ -43,35 +51,30 @@ public class MetricsView extends VerticalLayout implements View {
 		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 		setMargin(true);
 		setSpacing(true);
-		NavigationBar navBar = new NavigationBar();
-		addComponent(navBar);
-
-		addSonarImageLink();
 		
-		Footer footer = new Footer(null);
-		addComponent(footer);
+		NavigationBar navBar = new NavigationBar();
+		add(navBar);
+		
+		H1 metricsTitle = new H1(METRICAS);
+		metricsTitle.addClassName(TITLE_STYLE);
+		add(metricsTitle);
+
+		//addSonarImageLink();
+		
+		Footer footer = new Footer();
+		add(footer);
 	}
 
 	/**
 	 * Añade la imagen y el link de SonarQube.
 	 */
 	private void addSonarImageLink(){
-		Label metricsTitle = new Label(METRICAS);
-		metricsTitle.setStyleName(TITLE_STYLE);
-		addComponent(metricsTitle);
 		
-		String urlSonar = config.getSetting("urlSonar");
-		Link sonarLink = new Link(null, new ExternalResource("https://" + urlSonar));
-		sonarLink.setIcon(new ThemeResource("img/tfgsonar.png"));
-		sonarLink.setTargetName("_blank");
-		addComponent(sonarLink);
-	}
-
-	/**
-	 * La vista se inicializa en el constructor.
-	 */
-	@Override
-	public void enter(ViewChangeEvent event) {
-		// Se inicializa el contenido de la vista en el constructor
+		//String urlSonar = config.getSetting("urlSonar");
+		//Anchor sonarLink = new ThemeResource("img/tfgsonar.png"); //(null, new ExternalResource("https://" + urlSonar));
+		//sonarLink.setHref("https://" + urlSonar);
+		
+		//Image sonarLink = new Image("./styles/img/tfgsonar.png", "https://" + urlSonar);
+		//add(sonarLink);
 	}
 }

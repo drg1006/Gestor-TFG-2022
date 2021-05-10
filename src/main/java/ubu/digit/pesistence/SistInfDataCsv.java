@@ -1,6 +1,10 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,10 +16,17 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.codoid.products.exception.FilloException;
-import com.vaadin.server.VaadinService;
+import com.vaadin.flow.server.VaadinContext;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.server.VaadinServletService;
 
 import static ubu.digit.util.Constants.*;
 
@@ -40,7 +51,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(SistInfDataCsv.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataCsv.class.getName());
 	
 	/**
 	 * Conexión que se produce entre la base de datos(csv) y la aplicación.
@@ -51,7 +62,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 * Instancia con los datos.
 	 */
 	private static SistInfDataCsv instance;
-
+	
 	/**
 	 * Constructor vacío.
 	 */
@@ -82,7 +93,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		try {
 			Class.forName("org.relique.jdbc.csv.CsvDriver");
 			if (DIRCSV.startsWith("/")) {
-				serverPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+				String path = this.getClass().getClassLoader().getResource("").getPath();
+				serverPath = path.substring(1, path.length()-17);
 			}
 			
 			new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
@@ -93,7 +105,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			props.put("charset", "UTF-8");
 			con = DriverManager.getConnection(url + serverPath + DIRCSV, props);
 		} catch (ClassNotFoundException | SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return con;
 	}
@@ -121,7 +133,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				}
 			}
 		} catch (SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return (Number) number; 
 	}
@@ -215,7 +227,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				}
 			}
 		}catch(SQLException e ) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return media;
 	}
@@ -424,7 +436,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				}
 			}
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return listValues;
 	}
@@ -445,7 +457,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				listValues.add(result.getDouble(columnName));
 			}
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 	}//TODO: revisar en abstract
 
@@ -509,7 +521,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 					int numColumns = rmeta.getColumnCount();
 					addUniqueStrings(noDups, resultSet, numColumns);
 				}catch(SQLException e) {
-					LOGGER.error(e);
+					LOGGER.error(e.getMessage());
 				}
 			}
 			return (float) noDups.size();
@@ -565,7 +577,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				ResultSet result = statement.executeQuery(sql)) {
 			return result;
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return null;
 	}
@@ -588,7 +600,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			statement.execute(sql);
 			return statement.getResultSet();
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return null;
 	}
@@ -646,7 +658,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			result = statement.getResultSet();
 			
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		return result;
 	}
@@ -674,7 +686,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				listadoFechas.add(transform(result.getString(columnName)));
 			}
 		}catch(SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		if (minimo) {
 			return Collections.min(listadoFechas);
@@ -771,7 +783,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage());
 		}
 		//super.finalize();
 	}
@@ -890,7 +902,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Obtener los datos del modelo de datos de los históricos
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
 		int contador=0;
 		String rankingPercentile="";
@@ -946,7 +959,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				} else {
 					numStudents++;
 				}
-				LocalDate assignmentDate = LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
+				LocalDate assignmentDate =  LocalDate.parse(result.getString(FECHA_ASIGNACION), dateTimeFormatter);
 				LocalDate presentationDate = LocalDate.parse(result.getString(FECHA_PRESENTACION), dateTimeFormatter);
 				rankingPercentile = rankingsPercentile.get(contador);
 				rankingTotal = rankingsTotal.get(contador);

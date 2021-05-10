@@ -2,7 +2,8 @@ package ubu.digit.pesistence;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ubu.digit.util.ExternalProperties;
 
@@ -15,7 +16,7 @@ import ubu.digit.util.ExternalProperties;
  * 
  * @author Diana Bringas Ochoa
  */
-public class SistInfDataFactory implements Serializable { //TODO: Serializabble??
+public class SistInfDataFactory implements Serializable { 
 
 	/**
 	 * Serial Version UID.
@@ -25,38 +26,44 @@ public class SistInfDataFactory implements Serializable { //TODO: Serializabble?
 	/**
 	 * Logger de la clase.
 	 */
-	protected static final Logger LOGGER = Logger.getLogger(SistInfDataFactory.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataFactory.class.getName());
 	
 	/**
 	 * Fichero de configuración.
 	 */
 	private static ExternalProperties config;
-	
+
 	/**
 	 * Variable que almacena el tipo de datos que se está usando
 	 */
-	public static String type="";
+	private static String type="";
 	
 	/**
 	 * Método para obtener la instancia de la clase fachada según el parámetro pasado.
 	 */
+	
 	public static SistInfDataAbstract getInstanceData() {
 		if(type == "") {
 			config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
 			setInstanceData(config.getSetting("sistInfData"));
 		}
-        switch(type){
-        	case "csv":
-            case "CSV":
-            	return SistInfDataCsv.getInstance();
-            case "xls":
-            case "XLS":
-            	return SistInfDataXls.getInstance();
-            default:
-                throw new RuntimeException("Unsupported data type");
-        }
-    }
+		
+		switch(type){
+	    	case "csv":
+	        case "CSV":
+	        	return SistInfDataCsv.getInstance();
+	        case "xls":
+	        case "XLS":
+	        	return SistInfDataXls.getInstance();
+	        default:
+	            throw new RuntimeException("Unsupported data type");
+		}
+	}
 	
+	/**
+	 * Método para establecer la fachada de datos que se empleará (CSV o XLS)
+	 * @param typeData
+	 */
 	public static void setInstanceData(String typeData) {
 		type = typeData;
 	}
