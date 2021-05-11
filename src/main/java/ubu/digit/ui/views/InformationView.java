@@ -94,7 +94,7 @@ public class InformationView extends VerticalLayout {
 
 		Icon iconoTribunal = new Icon(VaadinIcon.USER);
 		iconoTribunal.addClassName("icon-big");
-		//iconoTribunal.setSize(Unit.PIXELS);
+		iconoTribunal.setSize("100px");
 		
 		final VerticalLayout tribunal = new VerticalLayout();
 		tribunal.setSpacing(true);
