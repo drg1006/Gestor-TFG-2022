@@ -5,10 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-import ubu.digit.pesistence.SistInfDataCsv;
-import ubu.digit.ui.MainLayout;
-import ubu.digit.ui.views.InformationView;
-
 /**
  * The entry point of the Spring Boot application.
  */

@@ -63,10 +63,11 @@ public class InformationView extends VerticalLayout {
 	 * Constructor.
 	 */
 	public InformationView() {    
-		
+		LOGGER.info("InformationView");
         fachadaDatos = SistInfDataFactory.getInstanceData();
-			
-		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+        LOGGER.info("InformationView");
+		config = ExternalProperties.getInstance("/config.properties", false);
+		LOGGER.info("InformationView");
 
 		setMargin(true);
 		setSpacing(true);
@@ -76,7 +77,7 @@ public class InformationView extends VerticalLayout {
 		createCalendar();
 		createDocumentos();
 		
-		Footer footer = new Footer();
+		Footer footer = new Footer("N1_Tribunal");
 		add(footer);
 	}
 	

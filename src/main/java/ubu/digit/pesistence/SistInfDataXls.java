@@ -1,10 +1,6 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,15 +10,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.*;
-import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinServlet;
 
 import static ubu.digit.util.Constants.*;
 
@@ -52,6 +44,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Instancia con los datos.
 	 */
+	@SuppressWarnings("unused")
 	private static SistInfDataXls instance;
 
 	/**
@@ -83,13 +76,14 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   if (DIRCSV.startsWith("/")) {
       		   String path = this.getClass().getClassLoader().getResource("").getPath();
       		   serverPath = path.substring(1, path.length()-17);
+      		   LOGGER.info("Ruta Fachada XLS " + serverPath);
       	   }
-      	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
+      	   //new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
-      	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
+      	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM");
 
       	}catch (FilloException e) {
-      		LOGGER.error(e.getMessage());
+      		LOGGER.error("Error al al establecer la conexión con el fichero XLS " + e.getMessage());
       	} 	  
 		return conn;
 	}

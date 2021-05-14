@@ -4,9 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Properties;
-
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ public class ExternalProperties implements Serializable {
     /**
      * Fichero del que leeremos las propiedades.
      */
-    private static String file;
+	private static String file;
 
     /**
      * Instancia que tendrá la propiedad.
@@ -59,11 +58,14 @@ public class ExternalProperties implements Serializable {
 
         InputStream inputStream = null;
         try {
-        	inputStream = VaadinServlet.getCurrent().getServletContext().getResourceAsStream("/WEB-INF/classes/config.properties");
-            //inputStream = new FileInputStream(file);
+        	LOGGER.info("ExternalProperties");
+        	inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream("/config.properties");
+        	//ExternalProperties.class.getResourceAsStream("/config.properties");
+        	
+        	LOGGER.info("ExternalProperties - InputStream de " + file + " :" + inputStream);
             PROPERTIES.load(inputStream);
         } catch (IOException e) {
-            LOGGER.error("", e);
+            LOGGER.error("ExternalProperties error al crear el InputStream y leerlo :", e);
         }
     }
 
@@ -78,13 +80,15 @@ public class ExternalProperties implements Serializable {
 	 * @return
 	 */
     public static ExternalProperties getInstance(String propFileName, Boolean testFlag) { 
+    	LOGGER.info("ExternalProperties - GetInstance");
     	if(!testFlag) {
-    		basePath = VaadinServlet.getCurrent().getServletContext().getContextPath();
-    		//basePath = "C:\\Users\\DianaBO\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapss\\sistinf";
+    		String path = ExternalProperties.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+    		basePath = path.substring(1, path.length()-1);
     	}
     	
         if (instance == null) {
             file = basePath + propFileName;
+            LOGGER.info("ExternalProperties - GetInstance: " + file);
             instance = new ExternalProperties();
         }
         return instance;

@@ -1,22 +1,12 @@
 package ubu.digit.ui.views;
 
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
-import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -48,7 +38,7 @@ public class MetricsView extends VerticalLayout{
 	 * Constructor.
 	 */
 	public MetricsView() {
-		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+		config = ExternalProperties.getInstance("/config.properties", false);
 		setMargin(true);
 		setSpacing(true);
 		
@@ -58,14 +48,14 @@ public class MetricsView extends VerticalLayout{
 
 		//addSonarImageLink();
 		
-		Footer footer = new Footer();
+		Footer footer = new Footer(null);
 		add(footer);
 	}
 
 	/**
 	 * Añade la imagen y el link de SonarQube.
 	 */
-	private void addSonarImageLink(){
+	//private void addSonarImageLink(){
 		
 		//String urlSonar = config.getSetting("urlSonar");
 		//Anchor sonarLink = new ThemeResource("img/tfgsonar.png"); //(null, new ExternalResource("https://" + urlSonar));
@@ -73,5 +63,5 @@ public class MetricsView extends VerticalLayout{
 		
 		//Image sonarLink = new Image("./styles/img/tfgsonar.png", "https://" + urlSonar);
 		//add(sonarLink);
-	}
+	//}
 }

@@ -198,6 +198,11 @@ public abstract class SistInfDataAbstract implements Serializable {
 
 	protected abstract List<Double> getListNumber(String columnName, String sql);
 
+	public String getPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 }

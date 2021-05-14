@@ -9,8 +9,18 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import ubu.digit.pesistence.SistInfDataXls;
 import ubu.digit.ui.views.LoginView;
+import ubu.digit.util.ExternalProperties;
+
 import static ubu.digit.util.Constants.*;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,12 +41,24 @@ public class Footer extends HorizontalLayout {
 	VerticalLayout license;
 	
 	VerticalLayout information;
+	
+	/**
+	 * Nombre del fichero .csv  o .xls relacionado con la vista
+	 */
+	private String fileName;
+	
+	/**
+	 * Logger de la clase.
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(Footer.class.getName());
+
 
 	/**
 	 * Constructor.
 	 * 
 	 */
-	public Footer() {
+	public Footer(String fileName) {
+		this.fileName = fileName;
 		conten = new HorizontalLayout();
 		conten.addClassName("Footer-grid");
 		
@@ -78,6 +100,34 @@ public class Footer extends HorizontalLayout {
 		Text copyright = new Text("Copyright @ LSI");
 		information.add(copyright);
 	}
+	
+	/**
+	 * Obtiene la fecha de última modificación del fichero asociado a la vista.
+	 * 
+	 * @param fileName
+	 *            nombre del fichero
+	 * @return fecha de última modificación del fichero
+	 */
+	private String getLastModified(String fileName) {
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String serverPath = path.substring(1, path.length()-17);
+		LOGGER.info("Ruta Footer " + serverPath);
+		
+		ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+		String dirCsv = config.getSetting("dataIn");
+		String dir = serverPath + dirCsv + "/";
+		
+		LOGGER.info("Ruta config.properties Footer " + dir);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		String lastModified = null;
+		File file = new File(dir + fileName);
+		if (file.exists()) {
+			Date date = new Date(file.lastModified());
+			lastModified = sdf.format(date);
+		}
+		return lastModified;
+	}
 
 	/**
 	 * Añade la información de la licencia del proyecto.
@@ -95,6 +145,11 @@ public class Footer extends HorizontalLayout {
 		license.add(ccImage);
 		license.add(licenseText);
 		license.add(ccLink);
+		
+		if (fileName != null) {
+			String lastModified = getLastModified(fileName);
+			license.add(new Label("Ultima actualización: " + lastModified));
+		}
 
 		Button login = new Button("Actualizar");
 		login.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));

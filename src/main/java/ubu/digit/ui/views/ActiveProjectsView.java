@@ -114,7 +114,7 @@ public class ActiveProjectsView extends VerticalLayout{
 		createCurrentProjectsTable();
 		add(table);
 		
-		Footer footer = new Footer();
+		Footer footer = new Footer("N2_Proyecto");
 		add(footer);
 	}
 	/**

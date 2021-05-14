@@ -1,10 +1,6 @@
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,18 +12,10 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codoid.products.exception.FilloException;
-import com.vaadin.flow.server.VaadinContext;
-import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.flow.server.VaadinServletService;
-
 import static ubu.digit.util.Constants.*;
 
 
@@ -76,8 +64,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public static SistInfDataCsv getInstance(){
 		if (instance == null) {
+			LOGGER.info("getInstance Fachada CSV " );
 			instance = new SistInfDataCsv();
 		}
+		LOGGER.info("getInstance Fachada CSV ");
 		return instance;
 	}
 
@@ -95,17 +85,19 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			if (DIRCSV.startsWith("/")) {
 				String path = this.getClass().getClassLoader().getResource("").getPath();
 				serverPath = path.substring(1, path.length()-17);
+				LOGGER.info("Ruta Fachada CSV " + serverPath);
 			}
 			
-			new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
+			//new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
 			
 			Properties props = new java.util.Properties();
 			props.put("ignoreNonParseableLines", true);
 			props.put("separator",  prop.getSetting("csvSeparator"));
 			props.put("charset", "UTF-8");
 			con = DriverManager.getConnection(url + serverPath + DIRCSV, props);
+			LOGGER.info("Ruta Fachada CSV " + url + serverPath + DIRCSV);
 		} catch (ClassNotFoundException | SQLException e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("Error al obtener la conexión con el Csv " + e.getMessage());
 		}
 		return con;
 	}
@@ -853,6 +845,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				String filaTribunal = cargo + ": " + nombre;
 				listaTribunal.add(filaTribunal);
 			}
+			LOGGER.info("listaTribunal " + listaTribunal);
 		} catch (SQLException e) {
 			LOGGER.error("Error al obtener los datos del tribunal", e);
 		}

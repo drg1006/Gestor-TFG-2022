@@ -19,30 +19,27 @@ public class BOMRemoveUTF {
 		new BOMRemoveUTF().bomRemoveUTFDirectory(".\\rsc");
 	}
 	
-	public static String prueba() {
-		return "hola";
-	}
-	
 	/***
 	 * Remove unicode character BOM (Byte Order Mark) from of files of a
 	 * directory
 	 * @param directoryStrPath
 	 */
 	public void bomRemoveUTFDirectory(String directoryStrPath) {
-
+		LOGGER.info("bomRemoveUTFDirectory ");
 		File directory = new File(directoryStrPath);
+
 		
 		try {
 			if (directory.isDirectory()) {
 				for (File fileEntry : directory.listFiles()) {
 					bomRemoveUTF(directoryStrPath + "/" +  fileEntry.getName());
+					LOGGER.info("Ruta directory  " + directoryStrPath + "/" +  fileEntry.getName());
 				}
 			}
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
 			
 		}
-
 	}
 
 	/**Remove unicode character BOM (Byte Order Mark) at the beginning of file 
@@ -53,16 +50,17 @@ public class BOMRemoveUTF {
 	 */
 	public  void bomRemoveUTF(String fileStrPath) throws FileNotFoundException, IOException {
 		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
+		LOGGER.info("Ruta file " + fileStrPath);
 		byte[] buffer = new byte[3];
 		file.read(buffer);
 		if (hasBom(buffer)){
+			LOGGER.info("BUFFER BOM  " + buffer);
 			int inputSize = (int)file.length();
 			byte[] bufferWithoutBom = new byte[inputSize-3];
 			file.read(bufferWithoutBom,0,inputSize-3);
 			file.seek(0);
 			file.write(bufferWithoutBom, 0, inputSize-3);
 			file.setLength(inputSize-3);
-
 		}
 		file.close();
 	}

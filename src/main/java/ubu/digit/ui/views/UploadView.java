@@ -128,9 +128,12 @@ public class UploadView extends VerticalLayout{
   		String path = this.getClass().getClassLoader().getResource("").getPath();
   		serverPath = path.substring(1, path.length()-17);
   		
-		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+		config = ExternalProperties.getInstance("/config.properties", false);
 		dir = config.getSetting("dataIn");
 		completeDir = serverPath + dir + "/";
+		LOGGER.info("Upload - ServerPath" + serverPath);
+		LOGGER.info("Upload - Config config.properties " + config);
+		LOGGER.info("Upload - Completedir config.properties " + completeDir);
 		
 		MemoryBuffer  buffer = new MemoryBuffer ();
         upload = new Upload(buffer);

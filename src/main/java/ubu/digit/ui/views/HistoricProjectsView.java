@@ -166,7 +166,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		fachadaDatos = SistInfDataFactory.getInstanceData();
 		
-		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+		config = ExternalProperties.getInstance("/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
 		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");//TODO: parseado
@@ -178,12 +178,12 @@ public class HistoricProjectsView extends VerticalLayout {
 		CreateDataModelToGrid();
 		createGlobalMetrics();
 		createYearlyMetrics();
-		createFilters();
+		//createFilters();
 		createHistoricProjectsTable();
 		add(gridHistoric);
 		//addFiltersListeners();
 
-		Footer footer = new Footer();
+		Footer footer = new Footer("N3_Historico");
 		add(footer);
 	}
 

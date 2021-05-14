@@ -61,7 +61,7 @@ public class LoginView extends VerticalLayout{
 	 * Constructor.
 	 */
 	public LoginView() {
-		config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+		config = ExternalProperties.getInstance("/config.properties", false);
 		setMargin(true);
 		setSpacing(true);
 

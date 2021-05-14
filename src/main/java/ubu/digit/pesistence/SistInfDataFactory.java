@@ -44,8 +44,10 @@ public class SistInfDataFactory implements Serializable {
 	
 	public static SistInfDataAbstract getInstanceData() {
 		if(type == "") {
-			config = ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false);
+			LOGGER.info("getInstanceData");
+			config = ExternalProperties.getInstance("/config.properties", false);
 			setInstanceData(config.getSetting("sistInfData"));
+			LOGGER.info("Tipo de Fachada de datos: " + type);
 		}
 		
 		switch(type){

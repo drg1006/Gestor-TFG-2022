@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/*.jar $JAR_OPTS
+web: web: java -jar target/*.war
