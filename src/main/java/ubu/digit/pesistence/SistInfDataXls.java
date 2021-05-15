@@ -44,7 +44,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Instancia con los datos.
 	 */
-	@SuppressWarnings("unused")
 	private static SistInfDataXls instance;
 	
 	private String path="";
@@ -68,6 +67,15 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
+	 * Método que sobreescribe la instancia con una nueva conexión
+	 * Se usa cuando se actualiza el fichero para volver a crear la conexión con él
+	 */
+	public static SistInfDataXls getUploadInstance() {
+		LOGGER.info("Actualización de la instancia tras la subida de un fichero xls nuevo");
+		return instance = new SistInfDataXls();
+	}
+	
+	/**
 	 * Inicializa la conexión odbc al almacen de datos en formato .xsl
 	 * 
 	 * @return con
@@ -85,6 +93,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   
       	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
+      	   LOGGER.info("Creación de la conexión con el fichero XLS: " + serverPath + DIRCSV);
       	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
 
       	}catch (FilloException e) {
@@ -774,7 +783,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				if (repoLink == null) {
 					repoLink = "";
 				}
-
+				LOGGER.info("getDataModelHistoric  5");
 				listaDataModel.add(title);
 				listaDataModel.add(description);
 				listaDataModel.add(tutor1);

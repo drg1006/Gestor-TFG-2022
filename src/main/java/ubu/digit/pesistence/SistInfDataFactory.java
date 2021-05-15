@@ -44,7 +44,6 @@ public class SistInfDataFactory implements Serializable {
 	
 	public static SistInfDataAbstract getInstanceData() {
 		if(type == "") {
-			LOGGER.info("getInstanceData");
 			config = ExternalProperties.getInstance("/config.properties", false);
 			setInstanceData(config.getSetting("sistInfData"));
 			LOGGER.info("Tipo de Fachada de datos: " + type);
@@ -67,6 +66,9 @@ public class SistInfDataFactory implements Serializable {
 	 * @param typeData
 	 */
 	public static void setInstanceData(String typeData) {
+		if(typeData == "XLS") {
+			SistInfDataXls.getUploadInstance();
+		}
 		type = typeData;
 	}
 }

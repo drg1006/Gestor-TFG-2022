@@ -1,65 +1,31 @@
 package ubu.digit.ui.views;
 
-import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.logging.Level;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.servlet.ServletContext;
-
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.io.stream.NullOutputStream;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.progressbar.ProgressBar;
-import com.vaadin.flow.component.upload.FailedEvent;
-import com.vaadin.flow.component.upload.FinishedEvent;
-import com.vaadin.flow.component.upload.ProgressListener;
-import com.vaadin.flow.component.upload.Receiver;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
-import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
-import com.vaadin.flow.internal.MessageDigestUtil;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.ui.Upload.FailedListener;
-import com.vaadin.ui.Upload.FinishedListener;
-import com.vaadin.ui.Upload.StartedListener;
-import com.vaadin.ui.Upload.SucceededListener;
 
 import elemental.json.Json;
-import ubu.digit.pesistence.BOMRemoveUTF;
-import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
-import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -126,14 +92,11 @@ public class UploadView extends VerticalLayout{
 		setSpacing(true);
 
   		String path = this.getClass().getClassLoader().getResource("").getPath();
-  		serverPath = path.substring(1, path.length()-17);
+  		serverPath = path.substring(0, path.length()-17);
   		
 		config = ExternalProperties.getInstance("/config.properties", false);
 		dir = config.getSetting("dataIn");
 		completeDir = serverPath + dir + "/";
-		LOGGER.info("Upload - ServerPath" + serverPath);
-		LOGGER.info("Upload - Config config.properties " + config);
-		LOGGER.info("Upload - Completedir config.properties " + completeDir);
 		
 		MemoryBuffer  buffer = new MemoryBuffer ();
         upload = new Upload(buffer);
@@ -160,6 +123,7 @@ public class UploadView extends VerticalLayout{
                  File fileDeleted = new File(completeDir + event.getFileName());
                  if (fileDeleted.exists()) {
          			boolean deleted = fileDeleted.delete();
+         			LOGGER.info("Fichero " + fileDeleted + " eliminado");
          			if (!deleted) {
          				LOGGER.error("Fichero " + fileDeleted.getName() + " no se ha borrado correctamente");
          			}
@@ -167,11 +131,11 @@ public class UploadView extends VerticalLayout{
                  File targetFile = new File(completeDir + event.getFileName());
                  OutputStream outStream = new FileOutputStream(targetFile);
                  outStream.write(buf);
-                 System.out.println("Finished " + event.getFileName() +" upload!");
+                 LOGGER.info("Fichero " + event.getFileName() +" cargado!");
                  outStream.flush();
                  outStream.close();
              } catch (IOException ex) {
-            	 LOGGER.error(UploadView.class.getName() + "Error: " +ex);
+            	 LOGGER.error("Error: " + UploadView.class.getName() + " " + ex);
              }
             
             output.removeAll();
@@ -179,13 +143,15 @@ public class UploadView extends VerticalLayout{
         });
         
         upload.addFinishedListener(event ->{
-    	 if (!upload.isUploading()) {
-    		 if(event.getFileName().endsWith(".csv")) {
-  				SistInfDataFactory.setInstanceData("CSV");
-  			}else {
-  				SistInfDataFactory.setInstanceData("XLS");
-  			}
-        }
+        	if (!upload.isUploading()) {
+	    		 if(event.getFileName().endsWith(".csv")) {
+	  				SistInfDataFactory.setInstanceData("CSV");
+	  				LOGGER.info("Actualización del fichero "+ event.getFileName() + " finalizada");
+	  			}else {
+	  				SistInfDataFactory.setInstanceData("XLS");
+	  				LOGGER.info("Actualización del fichero "+ event.getFileName() + " finalizada");
+	  			}
+        	}
         });
 
 		upload.addFileRejectedListener(event -> {
@@ -202,7 +168,7 @@ public class UploadView extends VerticalLayout{
         });
 
         upload.addFailedListener(event -> {
-	        Notification.show("Failed to load file:"
+	        Notification.show("Error al cargar el fichero: "
 	        +event.getFileName()).addThemeVariants(NotificationVariant.LUMO_ERROR);
 	        upload.getElement().setPropertyJson("files", Json.createArray());});
 
