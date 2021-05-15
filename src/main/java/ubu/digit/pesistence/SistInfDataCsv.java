@@ -64,10 +64,8 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	public static SistInfDataCsv getInstance(){
 		if (instance == null) {
-			LOGGER.info("getInstance Fachada CSV " );
 			instance = new SistInfDataCsv();
 		}
-		LOGGER.info("getInstance Fachada CSV ");
 		return instance;
 	}
 
@@ -84,11 +82,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			Class.forName("org.relique.jdbc.csv.CsvDriver");
 			if (DIRCSV.startsWith("/")) {
 				String path = this.getClass().getClassLoader().getResource("").getPath();
-				serverPath = path.substring(1, path.length()-17);
-				LOGGER.info("Ruta Fachada CSV " + serverPath);
+				serverPath = path.substring(0, path.length()-17);
 			}
 			
-			//new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
+			new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
 			
 			Properties props = new java.util.Properties();
 			props.put("ignoreNonParseableLines", true);
@@ -845,7 +842,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 				String filaTribunal = cargo + ": " + nombre;
 				listaTribunal.add(filaTribunal);
 			}
-			LOGGER.info("listaTribunal " + listaTribunal);
 		} catch (SQLException e) {
 			LOGGER.error("Error al obtener los datos del tribunal", e);
 		}

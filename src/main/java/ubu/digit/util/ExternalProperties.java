@@ -59,7 +59,7 @@ public class ExternalProperties implements Serializable {
         InputStream inputStream = null;
         try {
         	LOGGER.info("ExternalProperties");
-        	inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream("/config.properties");
+        	inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream(file);
         	//ExternalProperties.class.getResourceAsStream("/config.properties");
         	
         	LOGGER.info("ExternalProperties - InputStream de " + file + " :" + inputStream);
@@ -87,8 +87,8 @@ public class ExternalProperties implements Serializable {
     	}
     	
         if (instance == null) {
-            file = basePath + propFileName;
-            LOGGER.info("ExternalProperties - GetInstance: " + file);
+            file = propFileName;
+            LOGGER.info("ExternalProperties - GetInstance rute: " + basePath + file);
             instance = new ExternalProperties();
         }
         return instance;

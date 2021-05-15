@@ -46,6 +46,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 */
 	@SuppressWarnings("unused")
 	private static SistInfDataXls instance;
+	
+	private String path="";
 
 	/**
 	 * Constructor vacío.
@@ -59,7 +61,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Método singleton para obtener la instancia de la clase fachada.
 	 */
 	public static SistInfDataXls getInstance() {
-		return instance  = new SistInfDataXls();
+		if (instance == null) {
+			instance = new SistInfDataXls();
+		}
+		return instance;
 	}
 	
 	/**
@@ -74,16 +79,16 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   Fillo fillo=new Fillo();
 			
       	   if (DIRCSV.startsWith("/")) {
-      		   String path = this.getClass().getClassLoader().getResource("").getPath();
-      		   serverPath = path.substring(1, path.length()-17);
-      		   LOGGER.info("Ruta Fachada XLS " + serverPath);
+      		   path = this.getClass().getClassLoader().getResource("").getPath();
+      		   serverPath = path.substring(0, path.length()-17);
       	   }
-      	   //new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
       	   
-      	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM");
+      	   new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
+      	   
+      	   conn = fillo.getConnection(serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
 
       	}catch (FilloException e) {
-      		LOGGER.error("Error al al establecer la conexión con el fichero XLS " + e.getMessage());
+      		LOGGER.error("Error al al establecer la conexión con el fichero XLS : " + e.getMessage());
       	} 	  
 		return conn;
 	}

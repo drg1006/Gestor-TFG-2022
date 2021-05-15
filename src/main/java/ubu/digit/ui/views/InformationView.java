@@ -65,9 +65,7 @@ public class InformationView extends VerticalLayout {
 	public InformationView() {    
 		LOGGER.info("InformationView");
         fachadaDatos = SistInfDataFactory.getInstanceData();
-        LOGGER.info("InformationView");
 		config = ExternalProperties.getInstance("/config.properties", false);
-		LOGGER.info("InformationView");
 
 		setMargin(true);
 		setSpacing(true);
