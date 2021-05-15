@@ -1,1 +1,1 @@
-web: java -jar target/*.war
+web: heroku war:deploy target/*.war --app gestor-tfg-2021
