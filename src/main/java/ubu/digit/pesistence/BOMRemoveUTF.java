@@ -25,7 +25,7 @@ public class BOMRemoveUTF {
 	 * @param directoryStrPath
 	 */
 	public void bomRemoveUTFDirectory(String directoryStrPath) {
-		LOGGER.info("bomRemoveUTFDirectory ");
+		LOGGER.info("bomRemoveUTFDirectory : " + directoryStrPath);
 		File directory = new File(directoryStrPath);
 
 		

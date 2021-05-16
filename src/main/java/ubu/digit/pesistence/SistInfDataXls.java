@@ -902,6 +902,30 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
+	 * Método que devuelve una lista con las fechas.
+	 * 
+	 * @param columnName
+	 *            Nombre de la columna.
+	 * @param tableName
+	 *            nombre de la hoja del xls o del csv donde se encuentran los datos
+	 * @return Lista de fechas
+	 */
+	@Override
+	protected List<String> getDates(String columnName, String tableName) {
+		List<String> dates = new ArrayList<String>();
+		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
+		try {
+			Recordset result = connection.executeQuery(sql);
+			while (result.next()) {
+				dates.add(result.getField(columnName));
+			}
+		}catch(FilloException ex) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}
+		return dates;
+	}
+	
+	/**
 	 * Método que devuelve una lista con el curso al que pertenece (yyyy/yyyy).
 	 * 
 	 * @return Lista de fechas formato (yyyy/yyyy)

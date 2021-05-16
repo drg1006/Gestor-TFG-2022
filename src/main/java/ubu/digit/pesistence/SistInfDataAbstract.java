@@ -186,6 +186,8 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	@SuppressWarnings("rawtypes")
 	public abstract ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter);
+	
+	protected abstract List<String> getDates(String columnName, String sheet);
 
 	public abstract Number getQuartilColumn(String columnName, String tableName, double percent);
 
@@ -196,11 +198,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 	public abstract Number getStdvColumn(String columnName, String tableName);
 
 	protected abstract List<Double> getListNumber(String columnName, String sql);
-
-	public String getPath() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	

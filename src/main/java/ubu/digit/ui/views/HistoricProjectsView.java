@@ -1,6 +1,8 @@
 package ubu.digit.ui.views;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +29,6 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -42,7 +43,6 @@ import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.beans.HistoricProject;
 import ubu.digit.ui.components.Footer;
-import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -82,6 +82,11 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * en el grid descripción de proyectos. 
 	 */
 	private List<HistoricProject> dataHistoricGrid;
+	
+	/**
+	 * Lista con los proyectos históricos filtrados
+	 */
+	private List<HistoricProject>  dataFilteredGrid;
 
 	/**
 	 * Fichero de configuración.
@@ -165,11 +170,10 @@ public class HistoricProjectsView extends VerticalLayout {
 	public HistoricProjectsView(){
 		
 		fachadaDatos = SistInfDataFactory.getInstanceData();
-		
 		config = ExternalProperties.getInstance("/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");//TODO: parseado
+		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
 		setMargin(true);
 		setSpacing(true);
@@ -178,10 +182,9 @@ public class HistoricProjectsView extends VerticalLayout {
 		CreateDataModelToGrid();
 		createGlobalMetrics();
 		createYearlyMetrics();
-		//createFilters();
+		createFilters();
 		createHistoricProjectsTable();
 		add(gridHistoric);
-		//addFiltersListeners();
 
 		Footer footer = new Footer("N3_Historico");
 		add(footer);
@@ -245,7 +248,7 @@ public class HistoricProjectsView extends VerticalLayout {
 			Label daysStats = new Label("Tiempo/días [media,min,max,stdv]: " + days);
 
 			add(totalProjects, totalStudents, scoreStats, daysStats);
-		} catch (Exception e) { //TODO:SQLException FilloException
+		} catch (Exception e) { 
 			LOGGER.error("Error en históricos (metricas)", e);
 		}
 	}
@@ -274,7 +277,6 @@ public class HistoricProjectsView extends VerticalLayout {
 		Iterator<HistoricProject> iterator = dataHistoric.iterator();
 		while (iterator.hasNext()) {
 			HistoricProject bean = iterator.next();
-			//HistoricProject bean = beans.getItem(beanId).getBean();
 			int year = bean.getAssignmentDate().getYear();
 			if (yearOfProjects.containsKey(year)) {
 				yearOfProjects.get(year).add(bean);
@@ -438,7 +440,10 @@ public class HistoricProjectsView extends VerticalLayout {
 
 	/**
 	 * Genera las estadísticas (medias aritméticas) anuales de los proyectos históricos.
+	 * Y crear a partir de esas estadísticas un gráfico para representar la media de notas 
+	 * y meses por curso academico.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createYearlyAverageStats() {
 		Map<Integer, Number> averageScores = getAverageScores();
 		Map<Integer, Number> averageTotalDays = getAverageTotalDays();
@@ -454,16 +459,20 @@ public class HistoricProjectsView extends VerticalLayout {
 		List<String> months = new ArrayList<>();
 		
 		List<String> courses = new ArrayList<>();
-		List<Number> avgScores = new ArrayList<>();
-		List<Number> avgMonths = new ArrayList<>();
+		List<String> avgScores = new ArrayList<>();
+		List<String> avgMonths = new ArrayList<>();
+		
+		DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
+		separadoresPersonalizados.setDecimalSeparator('.');
+		DecimalFormat df = new DecimalFormat("#.00", separadoresPersonalizados);
 		
 		for (int year = minCourse; year <= maxCourse; year++) {
 			scores.add(numberFormatter.format(averageScores.get(year)));
 			days.add(numberFormatter.format(averageTotalDays.get(year)));
 			months.add(numberFormatter.format(averageMonths.get(year)));
 			courses.add(year - 1 + "/" + year);
-			avgScores.add(averageScores.get(year));
-			avgMonths.add(averageMonths.get(year));
+			avgScores.add(df.format(averageScores.get(year)));
+			avgMonths.add(df.format(averageMonths.get(year)));
 		}
 		
 		add(new Label("Media de notas por curso: " + scores));
@@ -545,7 +554,10 @@ public class HistoricProjectsView extends VerticalLayout {
 
 	/**
 	 * Genera las estadísticas (totales) anuales de los proyectos históricos.
+	 * Y crear a partir de esas estadísticas un gráfico para representar la media de proyectos, 
+	 * estudiantes, tutores asignados por cursos.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createYearlyTotalStats() {
 		List<String> courses = new ArrayList<>();
 		List<Number> yearlyAssignedProjects = new ArrayList<>();
@@ -634,7 +646,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		LocalDate dateTime = null;
 		try {
 			dateTime = fachadaDatos.getYear(FECHA_PRESENTACION, HISTORICO, isMinimum);
-		} catch (Exception e) { //TODO: FilloException SQLException
+		} catch (Exception e) {
 			LOGGER.error("Error en getYear", e);
 		}
 		return dateTime;
@@ -651,23 +663,48 @@ public class HistoricProjectsView extends VerticalLayout {
 		HorizontalLayout filters = new HorizontalLayout();
 		filters.setSpacing(true);
 		filters.setMargin(false);
-
+		
 		projectFilter = new TextField("Filtrar por proyectos:");
 		projectFilter.setWidth("300px");
-		filters.add(projectFilter);
+		projectFilter.addValueChangeListener(event -> {
+			if(!projectFilter.isEmpty()) {
+				applyFilter("title", event.getValue());
+			}else {
+				gridHistoric.setItems(dataHistoricGrid);
+			}
+		});
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
 		tutorsFilter.setWidth("300px");
-		filters.add(tutorsFilter);
+		tutorsFilter.addValueChangeListener(event -> {
+			if(!tutorsFilter.isEmpty()) {
+				applyFilter("tutor", event.getValue());
+			}else {
+				gridHistoric.setItems(dataHistoricGrid);
+			}
+		});
 
 		assignmentDateFilter = new TextField("Filtrar por fecha de asignación:");
 		assignmentDateFilter.setWidth("300px");
-		filters.add(assignmentDateFilter);
+		assignmentDateFilter.addValueChangeListener(event -> {
+			if(!assignmentDateFilter.isEmpty()) {
+				applyFilter("assignmentDate", event.getValue());
+			}else {
+				gridHistoric.setItems(dataHistoricGrid);
+			}
+		});
 
 		presentationDateFilter = new TextField("Filtrar por fecha de presentación:");
 		presentationDateFilter.setWidth("300px");
-		filters.add(presentationDateFilter);
+		presentationDateFilter.addValueChangeListener(event -> {
+			if(!presentationDateFilter.isEmpty()) {
+				applyFilter("presentationDate", event.getValue());
+			}else {
+				gridHistoric.setItems(dataHistoricGrid);
+			}
+		});
 		
+		filters.add(projectFilter, tutorsFilter, assignmentDateFilter, presentationDateFilter);
 		add(filters);
 		
 	}
@@ -695,9 +732,51 @@ public class HistoricProjectsView extends VerticalLayout {
 		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total");
 		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso");
 		
-		List<Column<HistoricProject>> columns = gridHistoric.getColumns();
-		
 		gridHistoric.getColumns().forEach(columna -> columna.setAutoWidth(true));
+	}
+	
+	/**
+	 * Crea una nueva lista con los valores filtrados
+	 * 
+	 * @param column
+	 * @param valueChange
+	 */
+	private void applyFilter(String column, String valueChange) {
+		LocalDate dateChange = null;
+		dataFilteredGrid = new ArrayList<HistoricProject>();
+		Iterator<HistoricProject> iterator = dataHistoricGrid.iterator();
+		if(valueChange != " ") {
+			while (iterator.hasNext()) {
+				HistoricProject historicProject = iterator.next();
+				
+				switch(column) {
+					case "title":
+						if(historicProject.getTitle().contains(valueChange)){
+							dataFilteredGrid.add(historicProject);
+						}
+						break;
+					case "tutor":
+						if(historicProject.getTutors().contains(valueChange)){
+							dataFilteredGrid.add(historicProject);
+						}
+						break;
+					case "assignmentDate":
+						dateChange = LocalDate.parse(valueChange, dateTimeFormatter);
+						if(historicProject.getAssignmentDate().equals(dateChange)){
+							dataFilteredGrid.add(historicProject);
+						}
+						break;
+					case "presentationDate":
+						dateChange = LocalDate.parse(valueChange, dateTimeFormatter);
+						if(historicProject.getPresentationDate().equals(dateChange)){
+						dataFilteredGrid.add(historicProject);
+						}
+						break;
+				}
+			}
+			//Se establece los nuevos valores del grid
+			gridHistoric.setItems(dataFilteredGrid);
+		}
 	}
 
 
@@ -709,25 +788,13 @@ public class HistoricProjectsView extends VerticalLayout {
 		dataHistoricGrid = new ArrayList<HistoricProject>();
 		Iterator<HistoricProject> iterator = dataHistoric.iterator();
 		while (iterator.hasNext()) {
-			HistoricProject bean = iterator.next();
-			tutors = bean.getTutor1() + "\n" + bean.getTutor2() + "\n" + bean.getTutor3();
+			HistoricProject historicProject = iterator.next();
+			tutors = historicProject.getTutor1() + "\n" + historicProject.getTutor2() + "\n" + historicProject.getTutor3();
 			
-			HistoricProject historic = new HistoricProject(bean.getTitle(), tutors,bean.getNumStudents(), 
-					bean.getAssignmentDate(), bean.getPresentationDate(), bean.getRankingPercentile(),
-					bean.getRankingTotal(),bean.getRankingCurse());
+			HistoricProject historic = new HistoricProject(historicProject.getTitle(), tutors, historicProject.getNumStudents(), 
+					historicProject.getAssignmentDate(), historicProject.getPresentationDate(), historicProject.getRankingPercentile(),
+					historicProject.getRankingTotal(),historicProject.getRankingCurse());
 			dataHistoricGrid.add(historic);
 		}	
 	}
-	
-	/**
-	 * Activa el mostrar la información de un proyecto al hacer click sobre él
-	 * en la tabla.
-	 */
-	/*private void showDescriptionOnClick() {
-		table.setSelectable(true);
-		table.setMultiSelect(false);
-		table.setImmediate(true);
-		table.setNullSelectionAllowed(true);
-		table.addValueChangeListener(new TableValueChangeListener());
-	}*/
 }

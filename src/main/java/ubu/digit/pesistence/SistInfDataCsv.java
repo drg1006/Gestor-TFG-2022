@@ -656,7 +656,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Método que obtiene el curso más bajo o más alto, según el booleano, que
 	 * tiene la base de datos.

@@ -21,7 +21,6 @@ import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.beans.ActiveProject;
 import ubu.digit.ui.components.Footer;
-import ubu.digit.ui.components.NavigationBar;
 
 import static ubu.digit.util.Constants.*;
 
@@ -65,6 +64,11 @@ public class ActiveProjectsView extends VerticalLayout{
 	 * En este los tutores y alumnos se incluyen juntos en una columna.
 	 */
 	List<ActiveProject> dataActiveProjectsGrid;
+	
+	/**
+	 * Lista con los proyectos activos filtrados 
+	 */
+	List<ActiveProject> dataFilteredGrid;
 
 	/**
 	 * Campo de texto para filtrar por proyecto.
@@ -161,24 +165,55 @@ public class ActiveProjectsView extends VerticalLayout{
 		
 		projectFilter = new TextField("Filtrar por proyectos:");
 		projectFilter.setWidth("300px");
-		filters.add(projectFilter);
+		projectFilter.addValueChangeListener(event -> {
+			if(!projectFilter.isEmpty()) {
+				applyFilter("title", event.getValue());
+			}else {
+				table.setItems(dataActiveProjectsGrid);
+			}
+		});
 
 		descriptionFilter = new TextField("Filtrar por descripción:");
 		descriptionFilter.setWidth("300px");
-		filters.add(descriptionFilter);
+		descriptionFilter.addValueChangeListener(event -> {
+			if(!descriptionFilter.isEmpty()) {
+				applyFilter("description", event.getValue());
+			}else {
+				table.setItems(dataActiveProjectsGrid);
+			}
+		});
 
 		tutorsFilter = new TextField("Filtrar por tutores:");
 		tutorsFilter.setWidth("300px");
-		filters.add(tutorsFilter);
+		tutorsFilter.addValueChangeListener(event -> {
+			if(!tutorsFilter.isEmpty()) {
+				applyFilter("tutor", event.getValue());
+			}else {
+				table.setItems(dataActiveProjectsGrid);
+			}
+		});
 
 		studentsFilter = new TextField("Filtrar por alumnos:");
 		studentsFilter.setWidth("300px");
-		filters.add(studentsFilter);
+		studentsFilter.addValueChangeListener(event -> {
+			if(!studentsFilter.isEmpty()) {
+				applyFilter("student", event.getValue());
+			}else {
+				table.setItems(dataActiveProjectsGrid);
+			}
+		});
 
 		courseFilter = new TextField("Filtrar por curso:");
 		courseFilter.setWidth("300px");
-		filters.add(courseFilter);
+		courseFilter.addValueChangeListener(event -> {
+			if(!courseFilter.isEmpty()) {
+				applyFilter("course", event.getValue());
+			}else {
+				table.setItems(dataActiveProjectsGrid);
+			}
+		});
 		
+		filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter, courseFilter);
 		add(filters);
 	}
 
@@ -212,19 +247,66 @@ public class ActiveProjectsView extends VerticalLayout{
 			
 			table.setItems(dataActiveProjectsGrid);
 			
-			table.addColumn(ActiveProject::getTitle).setHeader("Título"); //setFlexGrow(2);
-			table.addColumn(ActiveProject::getDescription).setHeader("Descripción");
-			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es");
-			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s");
-			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación");
+			table.addColumn(ActiveProject::getTitle).setHeader("Título");//.setFlexGrow(10);
+			table.addColumn(ActiveProject::getDescription).setHeader("Descripción");//.setFlexGrow(25);
+			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es");//.setFlexGrow(6);
+			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s");//.setFlexGrow(6);
+			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación");//.setFlexGrow(5);
 			
+			table.getColumns().forEach(columna -> columna.isResizable());
+			table.isMultiSort();
 			table.getColumns().forEach(columna -> columna.setAutoWidth(true));
 			
 		}catch(Exception e) {
 			LOGGER.error(e.getMessage());
 			throw e;
 		}
-		
+	}
+
+	/**
+	 * Crea una nueva lista con los valores filtrados
+	 * 
+	 * @param column
+	 * @param valueChange
+	 */
+	private void applyFilter(String column, String valueChange) {
+		dataFilteredGrid = new ArrayList<ActiveProject>();
+		Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
+		if(valueChange != " ") {
+			while (iterator.hasNext()) {
+				ActiveProject activeproject = iterator.next();
+				
+				switch(column) {
+					case "title":
+						if(activeproject.getTitle().contains(valueChange)) {
+							dataFilteredGrid.add(activeproject);
+						}
+						break;
+					case "description":
+						if(activeproject.getDescription().contains(valueChange)) {
+							dataFilteredGrid.add(activeproject);
+						}
+						break;
+					case "tutor":
+						if(activeproject.getTutors().contains(valueChange)) {
+							dataFilteredGrid.add(activeproject);
+						}
+						break;
+					case "student":
+						if(activeproject.getStudents().contains(valueChange)) {
+							dataFilteredGrid.add(activeproject);
+						}
+						break;
+					case "course":
+						if(activeproject.getCourseAssignment().contains(valueChange)) {
+						dataFilteredGrid.add(activeproject);
+						}
+						break;
+				}
+			}
+			//Se establece los nuevos valores del grid
+			table.setItems(dataFilteredGrid);
+		}
 	}
 	
 	/**
@@ -236,12 +318,12 @@ public class ActiveProjectsView extends VerticalLayout{
 		dataActiveProjectsGrid = new ArrayList<ActiveProject>();
 		Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
 		while (iterator.hasNext()) {
-			ActiveProject bean = iterator.next();
-			tutors = bean.getTutor1() + "\n" + bean.getTutor2() + "\n" + bean.getTutor3();
-			students = bean.getStudent1() + "\n" + bean.getStudent2() + "\n" + bean.getStudent3();
+			ActiveProject activeproject = iterator.next();
+			tutors = activeproject.getTutor1() + "\n" + activeproject.getTutor2() + "\n" + activeproject.getTutor3();
+			students = activeproject.getStudent1() + "\n" + activeproject.getStudent2() + "\n" + activeproject.getStudent3();
 			
-			ActiveProject actives = new ActiveProject(bean.getTitle(), bean.getDescription(),
-					tutors, students, bean.getCourseAssignment());
+			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
+					tutors, students, activeproject.getCourseAssignment());
 			dataActiveProjectsGrid.add(actives);
 		}	
 	}
