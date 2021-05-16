@@ -719,7 +719,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		gridHistoric = new Grid<>();
 		gridHistoric.addClassName("historic-projects-grid");
-		gridHistoric.setWidth("2000px");
+		gridHistoric.setWidthFull();
 		
 		gridHistoric.setItems(dataHistoricGrid);
 				
@@ -732,7 +732,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total");
 		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso");
 		
-		gridHistoric.getColumns().forEach(columna -> columna.setAutoWidth(true));
+		//gridHistoric.getColumns().forEach(columna -> columna.setAutoWidth(true));
 	}
 	
 	/**

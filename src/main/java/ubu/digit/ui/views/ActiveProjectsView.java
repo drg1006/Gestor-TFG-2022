@@ -244,6 +244,7 @@ public class ActiveProjectsView extends VerticalLayout{
 		try {
 			table = new Grid<>();
 			table.addClassName("active-projects-grid");
+			table.setWidthFull();
 			
 			table.setItems(dataActiveProjectsGrid);
 			
