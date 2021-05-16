@@ -17,14 +17,16 @@ Versión del proyecto en Vaadin 14.
 El proyecto está desplegado en https://tomcat8-vaadinjfb.rhcloud.com/sistinf-0.4.
 
 ### Instalación
-* JDK --> https://vaadin.com/docs/v8/framework/installing/installing-java.html
+* JDK --> https://www.oracle.com/es/java/technologies/javase-jdk11-downloads.html
+* Apache Tomcat 9 --> https://tomcat.apache.org/download-90.cgi
 * Apache Tomcat como Servidor --> https://vaadin.com/docs/v8/framework/installing/installing-server.html
 * IDE Eclipse (Versión 2020-06 R) --> https://vaadin.com/docs/v8/framework/installing/installing-eclipse.html
 * Plugin de Vaddin --> Instalar la extensión llamada "Vaadin Plugin for Eclipse" desde el "Eclipse Marketplace".
 
 
 ### Ejecución en local
+* Eliminar dependencias --> mvn clean
 * Instalar dependencias y compilar --> mvn install
+* Instalar en modo producción (despliegue) --> mvn package -Pproduction
 * Iniciar app --> mvn spring-boot:run
-
 * Ejecutar los test --> mvn test
