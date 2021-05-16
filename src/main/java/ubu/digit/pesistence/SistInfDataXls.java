@@ -250,7 +250,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 */
 	@Override
 	protected List<Double> getListNumber(String columnName, String sql){
-		List<Double> listValues = new ArrayList<>(100);
+		List<Double> listValues = new ArrayList<>();
 		try {
 			Recordset rs = connection.executeQuery(sql);
 			while(rs.next()) {
@@ -527,7 +527,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			Recordset rs = connection.executeQuery(sql);
 			while(rs.next()) {
-				listadoFechas.add(transform(rs.getField(columnName))); //transform --> pasa de string a date
+				listadoFechas.add(transform(rs.getField(columnName)));
 			}
 		}catch(FilloException e) {
 			LOGGER.error(e.getMessage());
@@ -783,7 +783,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				if (repoLink == null) {
 					repoLink = "";
 				}
-				LOGGER.info("getDataModelHistoric  5");
+				
 				listaDataModel.add(title);
 				listaDataModel.add(description);
 				listaDataModel.add(tutor1);
@@ -826,34 +826,37 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			Recordset result = connection.executeQuery(sql);
 			addNumbersToList(NOTA, scoreList, result);
+			
+			if(scoreList.size() > 0) {
+		        for (i = 0; i < scoreList.size(); i++) { 
+		            count = 0; 
+		            for (int j = 0; j < scoreList.size(); j++){ 
+		                if (scoreList.get(i) > scoreList.get(j)){ //Compara las nota i con el resto de notas
+		                    count++; 
+		                } 
+		            } 
+		            percentileList.add((count * 100) / (scoreList.size() - 1)); 
+		        } 
+		        for (i = 0; i < percentileList.size(); i++) { 
+		        	if(percentileList.get(i)>=0 && percentileList.get(i)<=20) {
+		        		rankingList.add("E");
+		        	}else if(percentileList.get(i)>=21 && percentileList.get(i)<=40) {
+		        		rankingList.add("D");
+		        	}else if(percentileList.get(i)>=41 && percentileList.get(i)<=60) {
+		        		rankingList.add("C");
+		        	}else if(percentileList.get(i)>=61 && percentileList.get(i)<=80) {
+		        		rankingList.add("B");
+		        	}else if(percentileList.get(i)>=81 && percentileList.get(i)<=100) {
+		        		rankingList.add("A");
+		        	}
+		        }
+			}
 		}catch(FilloException ex) { 
 			LOGGER.error("Error al obtener el ranking según el percentil", ex);
+		}catch(Exception e) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", e);
 		}
 		
-		if(scoreList.size() > 0) {
-	        for (i = 0; i < scoreList.size(); i++) { 
-	            count = 0; 
-	            for (int j = 0; j < scoreList.size(); j++){ 
-	                if (scoreList.get(i) > scoreList.get(j)){ //Compara las nota i con el resto de notas
-	                    count++; 
-	                } 
-	            } 
-	            percentileList.add((count * 100) / (scoreList.size() - 1)); 
-	        } 
-	        for (i = 0; i < percentileList.size(); i++) { 
-	        	if(percentileList.get(i)>=0 && percentileList.get(i)<=20) {
-	        		rankingList.add("E");
-	        	}else if(percentileList.get(i)>=21 && percentileList.get(i)<=40) {
-	        		rankingList.add("D");
-	        	}else if(percentileList.get(i)>=41 && percentileList.get(i)<=60) {
-	        		rankingList.add("C");
-	        	}else if(percentileList.get(i)>=61 && percentileList.get(i)<=80) {
-	        		rankingList.add("B");
-	        	}else if(percentileList.get(i)>=81 && percentileList.get(i)<=100) {
-	        		rankingList.add("A");
-	        	}
-	        }
-		}
 		return rankingList;
 	}
 	
@@ -873,82 +876,53 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			Recordset result = connection.executeQuery(sql);
 			addNumbersToList(NOTA, scoreList, result);
+			
+			if(scoreList.size() > 0){
+				
+				//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
+				//y después lo volvemos a pasar a una lista nueva
+				duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
+		        
+		        for (i = 0; i < scoreList.size(); i++) {
+		        	for (j = 0; j < duplicatedList.size(); j++) {
+		        		if(scoreList.get(i) < duplicatedList.get(j)) {
+		        			cont++;
+		        		}
+		        	}
+		        	rankingTotalList.add(cont);
+		        	cont=1;
+		        }
+			}
 		}catch(FilloException ex) { 
 			LOGGER.error("Error al obtener el ranking total de las notas", ex);
+		}catch(Exception e) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", e);
 		}
-		
-		if(scoreList.size() > 0){
-			
-			//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
-			//y después lo volvemos a pasar a una lista nueva
-			duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
-	        
-	        for (i = 0; i < scoreList.size(); i++) {
-	        	for (j = 0; j < duplicatedList.size(); j++) {
-	        		if(scoreList.get(i) < duplicatedList.get(j)) {
-	        			cont++;
-	        		}
-	        	}
-	        	rankingTotalList.add(cont);
-	        	cont=1;
-	        }
-		}
-		
 		return rankingTotalList;
 	}
 	
 	/**
-	 * Método que devuelve una lista con las fechas.
+	 * Método que devuelve una lista con el curso al que pertenece (yyyy/yyyy).
 	 * 
-	 * @param columnName
-	 *            Nombre de la columna.
-	 * @param tableName
-	 *            nombre de la hoja del xls o del csv donde se encuentran los datos
-	 * @return Lista de fechas
+	 * @return Lista de fechas formato (yyyy/yyyy)
 	 */
-	@Override
-	protected List<String> getDates(String columnName, String tableName) {
-		List<String> dates = new ArrayList<String>();
-		String sql = SELECT + columnName + FROM + tableName + WHERE + columnName + DISTINTO_DE_VACIO;
+	protected List<String> addYearsCurseToList() {
+		List<String> curses = new ArrayList<String>();
+		String sql_CurseDate = SELECT + FECHA_ASIGNACION + "," + FECHA_PRESENTACION + FROM + 
+				HISTORICO + WHERE + FECHA_ASIGNACION + DISTINTO_DE_VACIO + AND + FECHA_PRESENTACION + DISTINTO_DE_VACIO;
+		String dateIni = "";
+		String dateEnd = "";
 		try {
-			Recordset result = connection.executeQuery(sql);
-			while (result.next()) {
-				dates.add(result.getField(columnName));
+			Recordset result_Curse = connection.executeQuery(sql_CurseDate);
+			while (result_Curse.next()) {
+				dateIni = result_Curse.getField(FECHA_ASIGNACION);
+				dateEnd = result_Curse.getField(FECHA_PRESENTACION);
+				curses.add(dateIni.toString().substring(6) + dateEnd.toString().substring(5));
 			}
-			//listadoFechas.add(transform(rs.getField(columnName))); //transform --> pasa de string a date
-			/*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		    LocalDate dateWithFormat;
-			while (result.next()) {
-				System.out.println("holi");
-				//listValues.add(Double.parseDouble(result.getField(NOTA)));
-				dateWithFormat = LocalDate.parse(result.getField("FechaAsignacion"), formatter);
-				System.out.println("FECHA"+ dateWithFormat);
-				System.out.println("FECHA año"+ dateWithFormat.getYear());
-				listValues.add(dateWithFormat);*/
 		}catch(FilloException ex) { 
-			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+			LOGGER.error("Error al obtener las fechas de presentación y de asignación", ex);
 		}
-		return dates;
-	}
-	
-	/**
-	 * Añade los años de las fechas de los proyectos a una lista.
-	 * 
-	 * @param columnName
-	 *            Nombre de la columna.
-	 * @param listValues
-	 *            Lista que guarda los años.
-	 * @param result
-	 *            ResultSet a partir del cual obtener los valores.
-	 */
-	protected void addYearsCurseToList(String columnName, List<String> listValues,Recordset result){
-		try {
-			while (result.next()) {
-				listValues.add(result.getField(columnName));
-			}
-		}catch(FilloException e) {
-			LOGGER.error("Error ", e);
-		}
+		return curses;
 	}
 	
 	/**
@@ -963,30 +937,33 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		List<String> datesCurse = new ArrayList<String>();
 		int i,j,cont=1;
 		
-		String sql_Historico = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
-		String sql_Proyecto = SELECT + CURSO_ASIGNACION + FROM + PROYECTO + WHERE + CURSO_ASIGNACION + DISTINTO_DE_VACIO;
+		String sql_Historic = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
 		try {
-			Recordset result_Historico = connection.executeQuery(sql_Historico);
-			Recordset result_Proyecto = connection.executeQuery(sql_Proyecto);
+			Recordset result_Historico = connection.executeQuery(sql_Historic);	
 			addNumbersToList(NOTA, scoreList, result_Historico);
-			addYearsCurseToList(CURSO_ASIGNACION, datesCurse, result_Proyecto);
+			datesCurse = addYearsCurseToList();
+			
+			 for (i=0;i<datesCurse.size();i++){
+		        	for(j=0;j<datesCurse.size();j++){
+		        		if(i!=j ) {
+		        			String dateInic = datesCurse.get(i).substring(5);
+		        			if(datesCurse.get(i).equals(datesCurse.get(j)) || ( dateInic.equals(datesCurse.get(j).substring(5))
+		        				&&  dateInic.equals(datesCurse.get(j).substring(0,4)))){
+			        			if(scoreList.get(i) < scoreList.get(j)){
+			        				cont++;
+			        			}
+		        			}
+		        		}
+		        	}
+		        	rankingTotalList.add(cont);
+		        	cont=1;
+		        }
 			
 		}catch(FilloException ex) { 
 			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}catch(Exception e) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", e);
 		}
-		
-        for (i=0;i<datesCurse.size();i++){
-        	for(j=0;j<datesCurse.size();j++){
-        		if(i!=j && datesCurse.get(i) == datesCurse.get(j)){
-        			if(scoreList.get(i) < scoreList.get(j)){
-        				cont++;
-        			}
-        		}
-        	}
-        	rankingTotalList.add(cont);
-        	cont=1;
-        }
-		
 		return rankingTotalList;
 	}
 }

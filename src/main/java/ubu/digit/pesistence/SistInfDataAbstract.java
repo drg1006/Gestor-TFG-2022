@@ -1,3 +1,4 @@
+
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
@@ -185,8 +186,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	@SuppressWarnings("rawtypes")
 	public abstract ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter);
-
-	protected abstract List<String> getDates(String columnName, String sheet);
 
 	public abstract Number getQuartilColumn(String columnName, String tableName, double percent);
 

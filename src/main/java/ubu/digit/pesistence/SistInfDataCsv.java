@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codoid.products.exception.FilloException;
+
 import static ubu.digit.util.Constants.*;
 
 
@@ -313,50 +314,53 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			if (hasResults) {
 				try (ResultSet result = statement.getResultSet()) {
 					addNumbersToList(NOTA, scoreList, result);
+					if(scoreList.size() > 0){
+						//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
+						//y después lo volvemos a pasar a una lista nueva
+						duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
+				        
+				        for (i = 0; i < scoreList.size(); i++) {
+				        	for (j = 0; j < duplicatedList.size(); j++) {
+				        		if(scoreList.get(i) < duplicatedList.get(j)) {
+				        			cont++;
+				        		}
+				        	}
+				        	rankingTotalList.add(cont);
+				        	cont=1;
+				        }
+							}
 				}
 			}
 		}catch(SQLException ex) { 
 			LOGGER.error("Error al obtener el ranking total de las notas", ex);
+		}catch(Exception e) { 
+			LOGGER.error("Error al obtener el ranking total de las notas", e);
 		}
-		
-		if(scoreList.size() > 0){
-			//Pasamos la lista a un stream que tiene el método distinct (elimina duplicados) 
-			//y después lo volvemos a pasar a una lista nueva
-			duplicatedList = scoreList.stream().distinct().collect(Collectors.toList());
-	        
-	        for (i = 0; i < scoreList.size(); i++) {
-	        	for (j = 0; j < duplicatedList.size(); j++) {
-	        		if(scoreList.get(i) < duplicatedList.get(j)) {
-	        			cont++;
-	        		}
-	        	}
-	        	rankingTotalList.add(cont);
-	        	cont=1;
-	        }
-				}
-		
 		return rankingTotalList;
 	}
 	
 	/**
-	 * Añade los años de las fechas de los proyectos a una lista.
+	 * Método que devuelve una lista con el curso al que pertenece (yyyy/yyyy).
 	 * 
-	 * @param columnName
-	 *            Nombre de la columna.
-	 * @param listValues
-	 *            Lista que guarda los años.
-	 * @param result
-	 *            ResultSet a partir del cual obtener los valores.
-	 * @throws SQLException
+	 * @return lista el curso (yyyy/yyyy)
 	 */
-	protected void addYearsCurseToList(String columnName, List<String> listValues,ResultSet result) throws SQLException {
-		try {
-			while (result.next()) {
-				listValues.add(result.getString(columnName));
-			}
-		}catch(SQLException e) {
-			LOGGER.error("Error", e);
+	protected List<String> addYearsCurseToList(){
+		List<String> curses = new ArrayList<String>();
+		String sql_CurseDate = SELECT + FECHA_ASIGNACION + "," + FECHA_PRESENTACION + FROM + 
+				HISTORICO + WHERE + FECHA_ASIGNACION + DISTINTO_DE_VACIO + AND + FECHA_PRESENTACION + DISTINTO_DE_VACIO;
+		String dateIni = "";
+		String dateEnd = "";
+		try (Statement statement = connection.createStatement();
+				ResultSet result = statement.executeQuery(sql_CurseDate)) {
+				while (result.next()) {
+					dateIni = result.getString(FECHA_ASIGNACION);
+					dateEnd = result.getString(FECHA_PRESENTACION);
+					curses.add(dateIni.toString().substring(6) + dateEnd.toString().substring(5));
+				}
+		}catch(SQLException ex) { 
+			LOGGER.error("Error al obtener las fechas de presentación y asignación", ex);
 		}
+		return curses;
 	}
 	
 	/**
@@ -372,36 +376,36 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		int i,j,cont=1;
 		
 		String sql_Historico = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
-		String sql_Proyecto = SELECT + CURSO_ASIGNACION + FROM + PROYECTO + WHERE + CURSO_ASIGNACION + DISTINTO_DE_VACIO;
+		
 		try (Statement statement = connection.createStatement()) {
 			Boolean hasResults = statement.execute(sql_Historico);
 			if (hasResults) {
 				try (ResultSet result = statement.getResultSet()) {
 					addNumbersToList(NOTA, scoreList, result);
+					datesCurse = addYearsCurseToList();
 					
-				}
-			}
-			hasResults = statement.execute(sql_Proyecto);
-			if(hasResults) {
-				try (ResultSet result = statement.getResultSet()) {
-					addYearsCurseToList(CURSO_ASIGNACION, datesCurse, result);
+					 for (i=0;i<datesCurse.size();i++){
+				        	for(j=0;j<datesCurse.size();j++){
+				        		if(i!=j ) {
+				        			String dateInic = datesCurse.get(i).substring(5);
+				        			if(datesCurse.get(i).equals(datesCurse.get(j)) || ( dateInic.equals(datesCurse.get(j).substring(5))
+				        				&&  dateInic.equals(datesCurse.get(j).substring(0,4)))){
+					        			if(scoreList.get(i) < scoreList.get(j)){
+					        				cont++;
+					        			}
+				        			}
+				        		}
+				        	}
+				        	rankingTotalList.add(cont);
+				        	cont=1;
+				        }
 				}
 			}
 		}catch(SQLException ex) { 
 			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+		}catch(Exception e) { 
+			LOGGER.error("Error al obtener el ranking de notas por cursos", e);
 		}
-		
-        for (i=0;i<datesCurse.size();i++){
-        	for(j=0;j<datesCurse.size();j++){
-        		if(i!=j && datesCurse.get(i) == datesCurse.get(j)){
-        			if(scoreList.get(i) < scoreList.get(j)){
-        				cont++;
-        			}
-        		}
-        	}
-        	rankingTotalList.add(cont);
-        	cont=1;
-        }
 		
 		return rankingTotalList;
 	}
