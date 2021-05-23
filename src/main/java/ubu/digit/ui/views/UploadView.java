@@ -12,13 +12,19 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.upload.StartedEvent;
+import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.UploadI18N;
+import com.vaadin.flow.component.upload.UploadI18N.DropFiles;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -26,12 +32,13 @@ import com.vaadin.flow.router.Route;
 import elemental.json.Json;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
+import ubu.digit.ui.components.Footer;
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Vista de administración.
+ * Vista de actualización de ficheros.
  * 
- * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  */
 
 @Route(value = "Upload", layout = MainLayout.class)
@@ -82,15 +89,25 @@ public class UploadView extends VerticalLayout{
 	 * Ruta completa a los archivos csv y xls.
 	 */
 	private String completeDir;
-
+	
+	/**
+	 * Buffer que almacenará el fichero actualizado
+	 */
+	private MemoryBuffer buffer;
+	
+	/**
+	 * Componente output 
+	 */
+	private Div output;
 
 	/**
 	 * Constructor.
 	 */
 	public UploadView() {
+		
 		setMargin(true);
 		setSpacing(true);
-
+		
   		String path = this.getClass().getClassLoader().getResource("").getPath();
   		serverPath = path.substring(0, path.length()-17);
   		
@@ -98,18 +115,41 @@ public class UploadView extends VerticalLayout{
 		dir = config.getSetting("dataIn");
 		completeDir = serverPath + dir + "/";
 		
-		MemoryBuffer  buffer = new MemoryBuffer ();
+		buffer = new MemoryBuffer ();
         upload = new Upload(buffer);
-        Div output = new Div();
-        
-        upload.setWidth("2000px");
+        upload.setI18n(createSpanishI18n());
+        output = new Div();
+		ConfigureLogin();
+		
+		Span span = new Span();
+		span.getElement().setProperty("innerHTML", "");
+		add(span);
+		
+		Text infoNameFile = new Text("El nombre de los ficheros csv debe ser alguno de los siguientes:"
+				+ " N1_Documento, N1_Tribunal"
+				+ ", N1_Norma, N2_Alumno " 
+				+ ", N2_Proyecto, N3_Historico");
+		
+		add(infoNameFile);
+		Footer footer = new Footer(null);
+		add(footer);
+	}
+	
+	/**
+	 * Función que establece los listener para el login.
+	 */
+	private void ConfigureLogin() {
+        upload.setWidthFull();
         upload.addStartedListener(event -> {
-            upload.getElement().getPropertyNames()
-                    .forEach(prop -> System.out.println(prop + " "
-                            + upload.getElement().getProperty(prop)));
-        });
-        upload.addFileRejectedListener(event -> {
-            Notification.show(event.getErrorMessage());
+        	Boolean isNameValid = checkNameFile(event);
+        	if(!isNameValid) {
+        		output.removeAll();
+        		upload.interruptUpload();
+        	}else {
+        		upload.getElement().getPropertyNames()
+                .forEach(prop -> LOGGER.info(prop + " "
+                        + upload.getElement().getProperty(prop)));
+        	}
         });
         
         upload.setAcceptedFileTypes(".csv",".xls");
@@ -120,18 +160,13 @@ public class UploadView extends VerticalLayout{
                  byte[] buf = new byte[(int)event.getContentLength()];
                  InputStream is = buffer.getInputStream();
                  is.read(buf);
-                 File fileDeleted = new File(completeDir + event.getFileName());
-                 if (fileDeleted.exists()) {
-         			boolean deleted = fileDeleted.delete();
-         			LOGGER.info("Fichero " + fileDeleted + " eliminado");
-         			if (!deleted) {
-         				LOGGER.error("Fichero " + fileDeleted.getName() + " no se ha borrado correctamente");
-         			}
-                 }
-                 File targetFile = new File(completeDir + event.getFileName());
-                 OutputStream outStream = new FileOutputStream(targetFile);
+                 String fileName = DeleteFile(event);
+                 LOGGER.info("Fichero "+ fileName + " eliminado");
+                 
+            	 File newFile = new File(completeDir + fileName);
+                 OutputStream outStream = new FileOutputStream(newFile);
                  outStream.write(buf);
-                 LOGGER.info("Fichero " + event.getFileName() +" cargado!");
+                 LOGGER.info("Fichero " + fileName +" cargado");
                  outStream.flush();
                  outStream.close();
              } catch (IOException ex) {
@@ -142,6 +177,7 @@ public class UploadView extends VerticalLayout{
             showOutput(event.getFileName(), output);
         });
         
+        //Al finalizar la actualización del fichero se cambia el modelo de datos al correspondiente al fichero subido.
         upload.addFinishedListener(event ->{
         	if (!upload.isUploading()) {
 	    		 if(event.getFileName().endsWith(".csv")) {
@@ -154,19 +190,19 @@ public class UploadView extends VerticalLayout{
         	}
         });
 
-		upload.addFileRejectedListener(event -> {
-		    output.removeAll();
-		});
-		upload.getElement().addEventListener("file-remove", event -> {
-		    output.removeAll();
-		});
-		
-        upload.getElement().addEventListener("file-abort", event1 -> {
+        upload.getElement().addEventListener("Actualización fallida", event1 -> {
             String files = upload.getElement().getProperty("files");
+            output.removeAll();
             Notification.show(files);
-            System.out.println(files);
         });
+        
+      //Cuando se rechaza el fichero debido a: setMaxFileSize, setMaxFiles, setAcceptedFileTypes
+  		upload.addFileRejectedListener(event -> {
+  		    output.removeAll();
+  		    showOutput(event.getErrorMessage(), output);
+  		});
 
+        //Fallo al actualizar
         upload.addFailedListener(event -> {
 	        Notification.show("Error al cargar el fichero: "
 	        +event.getFileName()).addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -174,14 +210,113 @@ public class UploadView extends VerticalLayout{
 
         add(upload, output);
         logout = new Button("Desconectar");
-		logout.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
+		logout.addClickListener(e ->  {
+			UI.getCurrent().navigate(InformationView.class);
+		});
 		add(logout);
 	}
-
-  private void showOutput(String text ,
-            HasComponents outputContainer) {
+	
+	/**
+	 * Función que muestra un mensaje cuando el fichero se ha actualizado correctamente.
+	 * @param text
+	 * @param outputContainer
+	 */
+	private void showOutput(String text ,HasComponents outputContainer) {
         HtmlComponent p = new HtmlComponent(Tag.P);
-        p.getElement().setText("Actualización de " + text + " completada");
+        p.getElement().setText(text);
         outputContainer.add(p);
     }
+	
+	/**
+	 * Método que traduce los mensajes del Upload a Español.
+	 * @return UploadI18N
+	 */
+	private UploadI18N createSpanishI18n() {
+		final UploadI18N uploadI18N = new UploadI18N();
+
+		uploadI18N.setDropFiles(new DropFiles()
+				.setOne("Arrastre el archivo aquí")
+				.setMany("Arrastre los archivos aquí"));
+		
+		//general error
+		uploadI18N.setError( new UploadI18N.Error()
+				.setFileIsTooBig("El tamaño del archivo es demasiado grande")
+				.setIncorrectFileType("La extensión debe coincidir con .csv o .xls")
+				.setTooManyFiles("Adjunte unicamente un archivo"));
+		
+		//add files
+		uploadI18N.setAddFiles( new UploadI18N.AddFiles()
+				.setOne("Suba un archivo")
+				.setMany("Suba los archivos"));
+
+		//uploading
+		uploadI18N.setUploading( new UploadI18N.Uploading()
+				 .setStatus(new UploadI18N.Uploading.Status()
+						 .setConnecting("Conectando...")
+						 .setStalled("Descarga bloqueada.")
+						 .setProcessing("Cargando..."))
+				 .setRemainingTime(
+	                        new UploadI18N.Uploading.RemainingTime()
+	                        .setPrefix("Tiempo restante: ")
+	                        .setUnknown("Tiempo restante desconocido"))
+				 .setError(new UploadI18N.Uploading.Error()
+	                        .setServerUnavailable("Servidor no disponible")
+	                        .setUnexpectedServerError("Error inesperado del servidor")
+	                        .setForbidden("No es posible realizar la descarga")));
+
+		uploadI18N.setCancel("Cancelado");
+		
+		return uploadI18N;
+	}
+	
+	/**
+	 * Comprueba que el nombre del fichero csv corresponda con alguno de los siguientes: 
+	 * 	N1_Documento, N1_Tribunal, N1_Norma, N2_Alumno, N2_Proyecto o N3_Historico
+	 * @param event
+	 * @return
+	 */
+	private Boolean checkNameFile(StartedEvent event) {
+		if(event.getFileName().endsWith(".csv") && event.getFileName().equals("N1_Documento.csv") == false
+				&& event.getFileName().equals("N1_Tribunal.csv")  == false && event.getFileName().equals("N1_Norma.csv")  == false 
+				&& event.getFileName().equals("N2_Alumno.csv") == false && event.getFileName().equals("N2_Proyecto.csv") == false 
+				&& event.getFileName().equals("N3_Historico.csv") == false) {
+			Notification.show("Nombre de fichero inválido - Debe ser alguno de los siguientes: "
+					+ "N1_Documento, N1_Tribunal"
+					+ ", N1_Norma, N2_Alumno"
+					+ ", N2_Proyecto, N3_Historico").addThemeVariants(NotificationVariant.LUMO_ERROR);
+			return false;
+			
+		}
+		return true;
+	}
+	
+	/**
+	 * Se elimina el fichero actual para reemplazarlo con el nuevo.
+	 * Si el fichero es de tipo xls se sobreescribe el nombre por "BaseDeDatosTFGTFM.xls".
+	 * 
+	 * @param event
+	 * @return nombre fichero 
+	 */
+	private String DeleteFile(SucceededEvent event) {
+		String fileName="";
+		if(event.getFileName().endsWith(".xls")) {
+			fileName = "BaseDeDatosTFGTFM.xls";
+		}else {
+			fileName = event.getFileName();
+		}
+		
+		try {
+			File fileDeleted = new File(completeDir + fileName);
+	        if (fileDeleted.exists()) {
+				boolean deleted = fileDeleted.delete();
+				LOGGER.info("Fichero " + fileDeleted + " eliminado");
+				if (!deleted) {
+					LOGGER.error("Fichero " + fileDeleted.getName() + " no se ha borrado correctamente");
+				}
+	        }
+		}catch(Exception e) {
+			LOGGER.error("Error al intentar eliminar el fichero " + fileName , e);
+		}
+        return fileName;
+	}
 }
