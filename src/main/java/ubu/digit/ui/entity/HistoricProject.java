@@ -1,4 +1,4 @@
-package ubu.digit.ui.beans;
+package ubu.digit.ui.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
