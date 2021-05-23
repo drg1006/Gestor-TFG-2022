@@ -14,7 +14,7 @@ El propósito del proyecto es evolucionar la interfaz gráfica html, que se gene
 Versión del proyecto en Vaadin 14.
 
 ### Página web
-El proyecto está desplegado en https://tomcat8-vaadinjfb.rhcloud.com/sistinf-0.4.
+El proyecto está desplegado en https://gestor-tfg-2021.herokuapp.com/.
 
 ### Instalación
 * JDK --> https://www.oracle.com/es/java/technologies/javase-jdk11-downloads.html
