@@ -19,8 +19,8 @@ import com.vaadin.flow.router.Route;
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
-import ubu.digit.ui.beans.ActiveProject;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.entity.ActiveProject;
 
 import static ubu.digit.util.Constants.*;
 
@@ -118,7 +118,7 @@ public class ActiveProjectsView extends VerticalLayout{
 		createCurrentProjectsTable();
 		add(table);
 		
-		Footer footer = new Footer("N2_Proyecto");
+		Footer footer = new Footer("N2_Proyecto.csv");
 		add(footer);
 	}
 	/**
@@ -248,11 +248,11 @@ public class ActiveProjectsView extends VerticalLayout{
 			
 			table.setItems(dataActiveProjectsGrid);
 			
-			table.addColumn(ActiveProject::getTitle).setHeader("Título");//.setFlexGrow(10);
-			table.addColumn(ActiveProject::getDescription).setHeader("Descripción");//.setFlexGrow(25);
-			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es");//.setFlexGrow(6);
-			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s");//.setFlexGrow(6);
-			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación");//.setFlexGrow(5);
+			table.addColumn(ActiveProject::getTitle).setHeader("Título").setFlexGrow(10);
+			table.addColumn(ActiveProject::getDescription).setHeader("Descripción").setFlexGrow(25);
+			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
+			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
+			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación").setFlexGrow(5);
 			
 			table.getColumns().forEach(columna -> columna.isResizable());
 			table.isMultiSort();

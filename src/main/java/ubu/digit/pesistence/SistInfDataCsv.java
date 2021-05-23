@@ -53,7 +53,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	private static SistInfDataCsv instance;
 	
 	/**
-	 * Constructor vacío.
+	 * Constructor que inicializa la conexión con el CsvDriver
 	 */
 	private SistInfDataCsv() {
 		super();

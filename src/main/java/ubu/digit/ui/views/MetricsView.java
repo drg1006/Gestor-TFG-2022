@@ -45,23 +45,8 @@ public class MetricsView extends VerticalLayout{
 		H1 metricsTitle = new H1(METRICAS);
 		metricsTitle.addClassName(TITLE_STYLE);
 		add(metricsTitle);
-
-		//addSonarImageLink();
 		
 		Footer footer = new Footer(null);
 		add(footer);
 	}
-
-	/**
-	 * Añade la imagen y el link de SonarQube.
-	 */
-	//private void addSonarImageLink(){
-		
-		//String urlSonar = config.getSetting("urlSonar");
-		//Anchor sonarLink = new ThemeResource("img/tfgsonar.png"); //(null, new ExternalResource("https://" + urlSonar));
-		//sonarLink.setHref("https://" + urlSonar);
-		
-		//Image sonarLink = new Image("./styles/img/tfgsonar.png", "https://" + urlSonar);
-		//add(sonarLink);
-	//}
 }

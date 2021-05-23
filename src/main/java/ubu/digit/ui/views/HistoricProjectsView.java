@@ -29,6 +29,7 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -41,8 +42,8 @@ import com.vaadin.flow.router.Route;
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.MainLayout;
-import ubu.digit.ui.beans.HistoricProject;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -186,7 +187,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		createHistoricProjectsTable();
 		add(gridHistoric);
 
-		Footer footer = new Footer("N3_Historico");
+		Footer footer = new Footer("N3_Historico.csv");
 		add(footer);
 	}
 
@@ -723,16 +724,23 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		gridHistoric.setItems(dataHistoricGrid);
 				
-		gridHistoric.addColumn(HistoricProject::getTitle).setHeader("Título");
-		gridHistoric.addColumn(HistoricProject::getTutors).setHeader("Tutor/es");
-		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos");
-		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación");
-		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación");
-		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles");
-		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total");
-		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso");
+		gridHistoric.addColumn(HistoricProject::getTitle).setHeader("Título").setFlexGrow(30);
+		gridHistoric.addColumn(HistoricProject::getTutors).setHeader("Tutor/es").setFlexGrow(9);
+		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos").setFlexGrow(4);
+		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación").setFlexGrow(6);
+		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación").setFlexGrow(6);
+		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles").setFlexGrow(5);
+		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total").setFlexGrow(5);
+		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso").setFlexGrow(5);
 		
-		//gridHistoric.getColumns().forEach(columna -> columna.setAutoWidth(true));
+		gridHistoric.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.MATERIAL_COLUMN_DIVIDERS);
+		
+		/*gridHistoric.isRowsDraggable();
+		gridHistoric.isVerticalScrollingEnabled();
+		gridHistoric.scrollToStart();
+		gridHistoric.asMultiSelect();*/
+		
 	}
 	
 	/**

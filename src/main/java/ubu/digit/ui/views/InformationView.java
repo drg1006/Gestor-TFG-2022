@@ -53,6 +53,8 @@ public class InformationView extends VerticalLayout {
 	 *  Fachada para obtener los datos
 	 */
 	private SistInfDataAbstract fachadaDatos;
+	
+	private Footer footer;
 
 	/**
 	 * Nombre de la vista.
@@ -74,7 +76,7 @@ public class InformationView extends VerticalLayout {
 		createCalendar();
 		createDocumentos();
 		
-		Footer footer = new Footer("N1_Tribunal");
+		footer = new Footer("N1_Tribunal.csv");
 		add(footer);
 	}
 	
@@ -88,11 +90,11 @@ public class InformationView extends VerticalLayout {
 		
 		final HorizontalLayout horizontalTribunal = new HorizontalLayout();
 		horizontalTribunal.setSpacing(true);
-		horizontalTribunal.setMargin(true);//new MarginInfo(false, true, false, true));
+		horizontalTribunal.setMargin(true);
 
-		Icon iconoTribunal = new Icon(VaadinIcon.USER);
+		Icon iconoTribunal = new Icon(VaadinIcon.USERS);
 		iconoTribunal.addClassName("icon-big");
-		iconoTribunal.setSize("100px");
+		iconoTribunal.setSize("150px");
 		
 		final VerticalLayout tribunal = new VerticalLayout();
 		tribunal.setSpacing(true);
@@ -163,8 +165,7 @@ public class InformationView extends VerticalLayout {
 		
 		for(int i=0;i<listaDocumentos.size();i++) {
 			Anchor link = new Anchor(listaDocumentos.get(i), listaDocumentos.get(++i));
-			//link.setIcon(FontAwesome.LINK);
-			documentos.add(link);
+			documentos.add(new HorizontalLayout(new Icon(VaadinIcon.LINK),link));
 		}
 		add(documentosTitle, documentos);
 	}

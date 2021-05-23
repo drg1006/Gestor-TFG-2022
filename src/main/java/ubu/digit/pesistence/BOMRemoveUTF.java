@@ -25,15 +25,12 @@ public class BOMRemoveUTF {
 	 * @param directoryStrPath
 	 */
 	public void bomRemoveUTFDirectory(String directoryStrPath) {
-		LOGGER.info("bomRemoveUTFDirectory : " + directoryStrPath);
 		File directory = new File(directoryStrPath);
 
-		
 		try {
 			if (directory.isDirectory()) {
 				for (File fileEntry : directory.listFiles()) {
 					bomRemoveUTF(directoryStrPath + "/" +  fileEntry.getName());
-					LOGGER.info("Ruta directory  " + directoryStrPath + "/" +  fileEntry.getName());
 				}
 			}
 		} catch (IOException e) {
@@ -50,11 +47,9 @@ public class BOMRemoveUTF {
 	 */
 	public  void bomRemoveUTF(String fileStrPath) throws FileNotFoundException, IOException {
 		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
-		LOGGER.info("Ruta file " + fileStrPath);
 		byte[] buffer = new byte[3];
 		file.read(buffer);
 		if (hasBom(buffer)){
-			LOGGER.info("BUFFER BOM  " + buffer);
 			int inputSize = (int)file.length();
 			byte[] bufferWithoutBom = new byte[inputSize-3];
 			file.read(bufferWithoutBom,0,inputSize-3);

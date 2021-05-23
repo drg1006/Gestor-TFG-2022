@@ -87,5 +87,5 @@ public class NavigationBar extends HorizontalLayout{
 		buttonMetrics.setWidth("100%");
 		
 		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
-}
+	}
 }

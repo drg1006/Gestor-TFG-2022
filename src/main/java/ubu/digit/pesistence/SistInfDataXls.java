@@ -45,9 +45,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Instancia con los datos.
 	 */
 	private static SistInfDataXls instance;
-	
-	private String path="";
-
 	/**
 	 * Constructor vacío.
 	 */
@@ -87,7 +84,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	   Fillo fillo=new Fillo();
 			
       	   if (DIRCSV.startsWith("/")) {
-      		   path = this.getClass().getClassLoader().getResource("").getPath();
+      		   String path = this.getClass().getClassLoader().getResource("").getPath();
       		   serverPath = path.substring(0, path.length()-17);
       	   }
       	   
