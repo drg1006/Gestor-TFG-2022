@@ -23,13 +23,13 @@ import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 import java.util.List;
+
 /**
  * Vista de información.
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-
 @Route(value = "Information", layout = MainLayout.class)
 @PageTitle("Información general")
 public class InformationView extends VerticalLayout {
@@ -103,6 +103,7 @@ public class InformationView extends VerticalLayout {
 		//Se obtienen los nombres y apellidos de los miembros del tribunal
 		List<String> listaTribunal;
 		listaTribunal = fachadaDatos.getTribunal();
+		LOGGER.info("Obteniendo datos del tribunal ");
 		for(int i=0;i<listaTribunal.size();i++) {
 			tribunal.add(new Label(listaTribunal.get(i)));
 		}
@@ -128,6 +129,7 @@ public class InformationView extends VerticalLayout {
 		//Se obtienen las descripciones de las normas 
 		List<String> listaNormas;
 		listaNormas = fachadaDatos.getNormas();
+		LOGGER.info("Obteniendo normas de entrega ");
 		
 		for(int i=0;i<listaNormas.size();i++) {
 			normas.add(new Label(" - " + listaNormas.get(i)));
@@ -162,6 +164,7 @@ public class InformationView extends VerticalLayout {
 		//Se obtienen las descripciones y la url de los documentos 
 		List<String> listaDocumentos;
 		listaDocumentos = fachadaDatos.getDocumentos();
+		LOGGER.info("Obteniendo documentos a entregar ");
 		
 		for(int i=0;i<listaDocumentos.size();i++) {
 			Anchor link = new Anchor(listaDocumentos.get(i), listaDocumentos.get(++i));
