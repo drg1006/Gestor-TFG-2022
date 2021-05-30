@@ -70,10 +70,10 @@ public class FirestoreDB {
 			DocumentSnapshot document = users.get();
 			if (document.exists()) {
 				if(document.getData().get(email).toString().equals(password)) {
+					LOGGER.info("Usuario " + document.getData().get(email) + " autentificado.");
 					user = email;
 					return true;
 				}
-				LOGGER.info("PASSWORD: " + document.getData().get(email));
 			} else {
 				LOGGER.error("No existe ese documento en la base de datos");
 			}

@@ -1,6 +1,5 @@
 package ubu.digit.ui.views;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +65,7 @@ public class LoginView extends VerticalLayout{
 		login.setForgotPasswordButtonVisible(false);
 		login.addLoginListener(e -> {
 			login.setEnabled(false);
+			LOGGER.info("Comprobando autentificación del usuario... ");
 		    boolean isAuthenticated = firestore.authenticate(e.getUsername(), e.getPassword());
 		    if (isAuthenticated) {
 		    	UI.getCurrent().navigate(UploadView.class);
@@ -100,4 +100,5 @@ public class LoginView extends VerticalLayout{
 	        .setMessage("Verifique su usuario y contraseña y vuelva a intentarlo.");
 	    return i18n;
 	}
+
 }

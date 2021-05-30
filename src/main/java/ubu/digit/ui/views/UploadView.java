@@ -26,11 +26,14 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.UploadI18N;
 import com.vaadin.flow.component.upload.UploadI18N.DropFiles;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import elemental.json.Json;
 import ubu.digit.pesistence.SistInfDataFactory;
+import ubu.digit.security.FirestoreDB;
 import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.util.ExternalProperties;
@@ -40,10 +43,9 @@ import ubu.digit.util.ExternalProperties;
  * 
  * @author Diana Bringas Ochoa
  */
-
 @Route(value = "Upload", layout = MainLayout.class)
 @PageTitle("Actualización de ficheros")
-public class UploadView extends VerticalLayout{
+public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 
 	/**
 	 * Serial Version UID.
@@ -115,7 +117,7 @@ public class UploadView extends VerticalLayout{
 		dir = config.getSetting("dataIn");
 		completeDir = serverPath + dir + "/";
 		
-		buffer = new MemoryBuffer ();
+		buffer = new MemoryBuffer();
         upload = new Upload(buffer);
         upload.setI18n(createSpanishI18n());
         output = new Div();
@@ -211,6 +213,7 @@ public class UploadView extends VerticalLayout{
         add(upload, output);
         logout = new Button("Desconectar");
 		logout.addClickListener(e ->  {
+			FirestoreDB.logout();
 			UI.getCurrent().navigate(InformationView.class);
 		});
 		add(logout);
@@ -238,18 +241,18 @@ public class UploadView extends VerticalLayout{
 				.setOne("Arrastre el archivo aquí")
 				.setMany("Arrastre los archivos aquí"));
 		
-		//general error
+		//Error
 		uploadI18N.setError( new UploadI18N.Error()
 				.setFileIsTooBig("El tamaño del archivo es demasiado grande")
 				.setIncorrectFileType("La extensión debe coincidir con .csv o .xls")
 				.setTooManyFiles("Adjunte unicamente un archivo"));
 		
-		//add files
+		//Añadir files
 		uploadI18N.setAddFiles( new UploadI18N.AddFiles()
 				.setOne("Suba un archivo")
 				.setMany("Suba los archivos"));
 
-		//uploading
+		//Actualización
 		uploadI18N.setUploading( new UploadI18N.Uploading()
 				 .setStatus(new UploadI18N.Uploading.Status()
 						 .setConnecting("Conectando...")
@@ -318,5 +321,18 @@ public class UploadView extends VerticalLayout{
 			LOGGER.error("Error al intentar eliminar el fichero " + fileName , e);
 		}
         return fileName;
+	}
+	
+	/** 
+	 * Controla el evento antes de acceder al mismo. 
+	 * Redirige al usuario si no tiene permisos de acceso a la vista del login.
+	 * 
+	 * @param event
+	 *            before navigation event with event details
+	 */
+	public void beforeEnter(BeforeEnterEvent event) {
+		if (!FirestoreDB.isUserLogin()) {
+				event.rerouteTo(LoginView.class);
+		}
 	}
 }
