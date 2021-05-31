@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -254,9 +256,25 @@ public class ActiveProjectsView extends VerticalLayout{
 			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
 			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación").setFlexGrow(5);
 			
-			table.getColumns().forEach(columna -> columna.isResizable());
-			table.isMultiSort();
-			table.getColumns().forEach(columna -> columna.setAutoWidth(true));
+			table.getColumns().forEach(columna -> columna.setResizable(true));
+			table.getColumns().forEach(columna -> columna.setSortable(true));
+			
+			table.setItemDetailsRenderer(
+				    new ComponentRenderer<>(ActiveProject -> {
+				        VerticalLayout layout = new VerticalLayout();
+				        layout.add(new Label("Título: " +
+				        		ActiveProject.getTitle()));
+				        layout.add(new Label("Descripción: " +
+				        		ActiveProject.getDescription()));
+				        layout.add(new Label("Tutor/es: " +
+				        		ActiveProject.getTutors()));
+				        layout.add(new Label("Alumno/s: " +
+				        		ActiveProject.getStudents()));
+				        layout.add(new Label("Curso Asignación: " +
+				        		ActiveProject.getCourseAssignment()));
+				        return layout;
+				}));
+			table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 			
 		}catch(Exception e) {
 			LOGGER.error(e.getMessage());

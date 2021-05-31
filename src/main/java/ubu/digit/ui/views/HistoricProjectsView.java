@@ -35,6 +35,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -504,9 +505,10 @@ public class HistoricProjectsView extends VerticalLayout {
 	                        .withCategories(courses)
 	                        .build())
 	                .withSeries(new Series("Notas", avgScores.toArray()),new Series("Nº Meses", avgMonths.toArray()))
+	                .withColors("#E91E63","#4682B4")
 	                .build();
+		 	lineChart.setWidth("800px");
 	        add(lineChart);
-	        setWidth("35%");
 	}
 
 	/**
@@ -613,9 +615,10 @@ public class HistoricProjectsView extends VerticalLayout {
 	                        .build())
 	                .withSeries(new Series("Proyectos Asignados", yearlyAssignedProjects.toArray()),new Series("Alumnos Asignados", yearlyAssignedStudents.toArray()),
 	                		new Series("Tutores Asignados", yearlyAssignedTutors.toArray()),new Series("Proyectos Ya Asignados", yearlyOldProjects.toArray()))
+	                .withColors("#E91E63","#4a6f22", "#9C27B0","#4682B4")
 	                .build();
-	        add(lineChart);
-	        setWidth("35%");
+		 lineChart.setWidth("800px");
+	     add(lineChart);
 	}
 
 	/**
@@ -733,13 +736,32 @@ public class HistoricProjectsView extends VerticalLayout {
 		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total").setFlexGrow(5);
 		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso").setFlexGrow(5);
 		
-		gridHistoric.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
-				GridVariant.MATERIAL_COLUMN_DIVIDERS);
+		gridHistoric.getColumns().forEach(columna -> columna.setResizable(true));
+		gridHistoric.getColumns().forEach(columna -> columna.setSortable(true));
 		
-		/*gridHistoric.isRowsDraggable();
-		gridHistoric.isVerticalScrollingEnabled();
-		gridHistoric.scrollToStart();
-		gridHistoric.asMultiSelect();*/
+		gridHistoric.setItemDetailsRenderer(
+			    new ComponentRenderer<>(HistoricProject -> {
+			        VerticalLayout layout = new VerticalLayout();
+			        layout.add(new Label("Título: " +
+			        		HistoricProject.getTitle()));
+			        layout.add(new Label("Tutor/es: " +
+			        		HistoricProject.getTutors()));
+			        layout.add(new Label("Nº Alumnos: " +
+			        		HistoricProject.getNumStudents()));
+			        layout.add(new Label("Fecha Asignación: " +
+			        		HistoricProject.getAssignmentDate()));
+			        layout.add(new Label("Fecha Presentación: " +
+			        		HistoricProject.getPresentationDate()));
+			        layout.add(new Label("Ranking Percentiles: " +
+			        		HistoricProject.getRankingPercentile()));
+			        layout.add(new Label("Ranking Total: " +
+			        		HistoricProject.getRankingTotal()));
+			        layout.add(new Label("Ranking por curso: " +
+			        		HistoricProject.getRankingCurse()));
+			        return layout;
+			}));
+		
+		gridHistoric.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 		
 	}
 	
