@@ -34,8 +34,8 @@ import com.vaadin.flow.router.Route;
 import elemental.json.Json;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.security.FirestoreDB;
-import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -43,7 +43,7 @@ import ubu.digit.util.ExternalProperties;
  * 
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Upload", layout = MainLayout.class)
+@Route(value = "Upload")
 @PageTitle("Actualización de ficheros")
 public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 
@@ -116,6 +116,9 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 		config = ExternalProperties.getInstance("/config.properties", false);
 		dir = config.getSetting("dataIn");
 		completeDir = serverPath + dir + "/";
+		
+		NavigationBar bat = new NavigationBar();
+		add(bat);
 		
 		buffer = new MemoryBuffer();
         upload = new Upload(buffer);

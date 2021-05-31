@@ -20,8 +20,8 @@ import com.vaadin.flow.router.Route;
 
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
-import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.ActiveProject;
 
 import static ubu.digit.util.Constants.*;
@@ -32,7 +32,7 @@ import static ubu.digit.util.Constants.*;
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-@Route(value = "active-projects", layout = MainLayout.class)
+@Route(value = "active-projects")
 @PageTitle("Proyectos activos")
 public class ActiveProjectsView extends VerticalLayout{
 
@@ -112,6 +112,9 @@ public class ActiveProjectsView extends VerticalLayout{
 		addClassName("active-projects-view");
 		setMargin(true);
 		setSpacing(true);
+		
+		NavigationBar bat = new NavigationBar();
+		add(bat);
 
 		createDataModel();
 		CreateDataModelToGrid();

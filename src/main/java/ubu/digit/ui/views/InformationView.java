@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.IFrame;
@@ -18,7 +19,6 @@ import com.vaadin.flow.router.Route;
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
 import ubu.digit.ui.components.*;
-import ubu.digit.ui.MainLayout;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
@@ -30,7 +30,9 @@ import java.util.List;
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Information", layout = MainLayout.class)
+@Route("")
+@CssImport("./styles/shared-styles.css")
+@CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 @PageTitle("Información general")
 public class InformationView extends VerticalLayout {
 
@@ -67,9 +69,12 @@ public class InformationView extends VerticalLayout {
 	public InformationView() {    
         fachadaDatos = SistInfDataFactory.getInstanceData();
 		config = ExternalProperties.getInstance("/config.properties", false);
-
+		
 		setMargin(true);
 		setSpacing(true);
+		
+		NavigationBar bat = new NavigationBar();
+		add(bat);
 		
 		createTribunal();
 		createNormas();

@@ -11,15 +11,15 @@ import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.security.FirestoreDB;
-import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.components.NavigationBar;
 
 /**
  * Vista de inicio de sesión.
  * 
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Login", layout = MainLayout.class)
+@Route(value = "Login")
 @PageTitle("Login ")
 public class LoginView extends VerticalLayout{
 
@@ -55,6 +55,9 @@ public class LoginView extends VerticalLayout{
 		setSpacing(true);
 		setSizeFull();
 
+		NavigationBar bat = new NavigationBar();
+		add(bat);
+		
 		setJustifyContentMode(JustifyContentMode.CENTER);
 		setAlignItems(Alignment.CENTER);
 

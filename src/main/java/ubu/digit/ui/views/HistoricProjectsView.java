@@ -42,8 +42,8 @@ import com.vaadin.flow.router.Route;
 
 import ubu.digit.pesistence.SistInfDataAbstract;
 import ubu.digit.pesistence.SistInfDataFactory;
-import ubu.digit.ui.MainLayout;
 import ubu.digit.ui.components.Footer;
+import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
@@ -55,7 +55,7 @@ import static ubu.digit.util.Constants.*;
  * @author Diana Bringas Ochoa
  */
 
-@Route(value = "Historic", layout = MainLayout.class)
+@Route(value = "Historic")
 @PageTitle("Histórico de los proyectos")
 public class HistoricProjectsView extends VerticalLayout {
 
@@ -180,6 +180,9 @@ public class HistoricProjectsView extends VerticalLayout {
 		setMargin(true);
 		setSpacing(true);
 
+		NavigationBar bat = new NavigationBar();
+		add(bat);
+		
 		createDataModel();
 		CreateDataModelToGrid();
 		createGlobalMetrics();

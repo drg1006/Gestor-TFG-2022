@@ -148,7 +148,7 @@ public class Footer extends VerticalLayout {
 
 	/**
 	 * Añade la información de la licencia del proyecto, la fecha de actualización 
-	 * de los ficheros de datos y el butón del acceso al Login
+	 * de los ficheros de datos y el butón del acceso al Login.
 	 */
 	private void addLicense() {
 		license = new VerticalLayout();
