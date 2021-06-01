@@ -29,6 +29,7 @@
 *.fot
 *.cb
 *.cb2
+*.aux
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
