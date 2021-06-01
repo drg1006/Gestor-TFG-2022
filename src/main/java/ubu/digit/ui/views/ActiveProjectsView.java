@@ -341,8 +341,8 @@ public class ActiveProjectsView extends VerticalLayout{
 		Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
 		while (iterator.hasNext()) {
 			ActiveProject activeproject = iterator.next();
-			tutors = activeproject.getTutor1() + "\n" + activeproject.getTutor2() + "\n" + activeproject.getTutor3();
-			students = activeproject.getStudent1() + "\n" + activeproject.getStudent2() + "\n" + activeproject.getStudent3();
+			tutors = activeproject.getTutor1() + ", " + activeproject.getTutor2() + ", " + activeproject.getTutor3();
+			students = activeproject.getStudent1() + ", " + activeproject.getStudent2() + ", " + activeproject.getStudent3();
 			
 			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
 					tutors, students, activeproject.getCourseAssignment());

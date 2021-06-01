@@ -822,7 +822,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		Iterator<HistoricProject> iterator = dataHistoric.iterator();
 		while (iterator.hasNext()) {
 			HistoricProject historicProject = iterator.next();
-			tutors = historicProject.getTutor1() + "\n" + historicProject.getTutor2() + "\n" + historicProject.getTutor3();
+			tutors = historicProject.getTutor1() + ", " + historicProject.getTutor2() + ", " + historicProject.getTutor3();
 			
 			HistoricProject historic = new HistoricProject(historicProject.getTitle(), tutors, historicProject.getNumStudents(), 
 					historicProject.getAssignmentDate(), historicProject.getPresentationDate(), historicProject.getRankingPercentile(),
