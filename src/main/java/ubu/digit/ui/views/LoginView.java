@@ -58,8 +58,8 @@ public class LoginView extends VerticalLayout{
 		NavigationBar bat = new NavigationBar();
 		add(bat);
 		
-		/*setJustifyContentMode(JustifyContentMode.CENTER);
-		setAlignItems(Alignment.CENTER);*/
+		setJustifyContentMode(JustifyContentMode.CENTER);
+		setAlignItems(Alignment.CENTER);
 
 		firestore = FirestoreDB.getInstance();
 		

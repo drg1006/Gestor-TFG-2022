@@ -111,20 +111,13 @@ public class FirestoreDB {
 	 */
 	private Firestore getConectionFirectore() {
 		try {
-			/*String path = this.getClass().getClassLoader().getResource("").getPath();
-			String serverPath = path.substring(0, path.length()-17);
-			
-			InputStream serviceAccount = new FileInputStream(serverPath + "/service-account-file.json");
-			GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);*/
-			
 			FirestoreOptions firestoreOptions =
 				    FirestoreOptions.getDefaultInstance().toBuilder()
 				        .setProjectId("gestor-tfg-2021")
 				        .setCredentials(GoogleCredentials.getApplicationDefault())
 				        .build();
 			
-			LOGGER.info("Realizada la conexión con Firestore ");
-			return firestoreOptions.getService();
+				return firestoreOptions.getService();
 				
 		}catch(IOException e) {
 			LOGGER.error("Opciones de configuración de Firestore invalidas : ", e);

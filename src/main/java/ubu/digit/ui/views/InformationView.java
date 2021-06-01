@@ -96,10 +96,14 @@ public class InformationView extends VerticalLayout {
 		final HorizontalLayout horizontalTribunal = new HorizontalLayout();
 		horizontalTribunal.setSpacing(true);
 		horizontalTribunal.setMargin(true);
+
+		Icon iconoTribunal = new Icon(VaadinIcon.USERS);
+		iconoTribunal.addClassName("icon-big");
+		iconoTribunal.setSize("150px");
 		
 		final VerticalLayout tribunal = new VerticalLayout();
 		tribunal.setSpacing(true);
-		tribunal.setWidth(500, Unit.PIXELS);
+		tribunal.setWidth(350, Unit.PIXELS);
 
 		//Se obtienen los nombres y apellidos de los miembros del tribunal
 		List<String> listaTribunal;
@@ -108,7 +112,7 @@ public class InformationView extends VerticalLayout {
 		for(int i=0;i<listaTribunal.size();i++) {
 			tribunal.add(new Label(listaTribunal.get(i)));
 		}
-		horizontalTribunal.add(tribunal);
+		horizontalTribunal.add(iconoTribunal, tribunal);
 
 		String yearIndex = config.getSetting("indexAño");
 		int nextYearIndex = Integer.parseInt(yearIndex) + 1;
