@@ -109,11 +109,7 @@ public class InformationView extends VerticalLayout {
 			tribunal.add(new Label(listaTribunal.get(i)));
 		}
 		horizontalTribunal.add(tribunal);
-
-		String yearIndex = config.getSetting("indexAño");
-		int nextYearIndex = Integer.parseInt(yearIndex) + 1;
-		Label curso = new Label("Programa en vigor a partir del Curso " + yearIndex + "-" + nextYearIndex + ".");
-		add(horizontalTribunal, curso);
+		add(horizontalTribunal);
 	}
 	
 	/**
