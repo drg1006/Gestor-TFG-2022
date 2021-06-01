@@ -131,6 +131,189 @@ Las tareas planteadas fueron:
 	
 \end{itemize}
 
+\subsection{Sprint 5 (23/02/2021 - 09/03/2021)}
+Añadir de nuevas columnas en la tabla de Históricos para reemplazar la columna Notas, la cual será eliminada. Crear test para comprobar los datos de los ficheros XLS. Investigación y prueba de análisis de calidad de código con SonarCloud.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Eliminación de la columna Nota del Histórico
+	\item Crear columna del ranking total en el Histórico. 
+	Se creó una nueva columna en la tabla de la vista del Histórico para representar las notas en comparación al resto de ellas
+	\item -	Investigar sobre SonarCloud. 
+	Para realizar las métricas que posteriormente irán en el apartado de Métricas, se analizará la calidad del código de algunos de los proyectos realizados anteriormente. Para ello, se investigará como usar el software SonarCloud para realizar las mediciones de calidad. Consta de dos versiones, una de pago y otra gratuita, siendo está última la que se empleará. Al ser una versión gratuita los proyectos serán públicos. 
+	\item Crear columna del ranking por cursos en el histórico. 
+	Al igual que con el caso del ranking total, se añadirá una nueva columna en la tabla de Históricos que contenga el ranking de una nota con respecto al resto de notas de ese mismo curso escolar (1 de septiembre a 30 de junio). 
+	\item Probar a desplegar el proyecto en Linux.
+	 Al estar el proyecto desplegado en Heroku se podrá acceder a él a través de la url desde cualquier SO.
+	\item Parsear ficheros CSV. 
+	Se añadirán nuevos test que verifiquen que no existan errores de formato, por ejemplo que el formato de las fechas sea el indicado
+	\item Separación de la clase SintInfDataTest en SintInfDataTestXLS y SintInfDataTestCSV.
+	 Al añadir una nueva clase fachada para el tipo de datos XLS se necesita otra clase para testarla, por lo que se dividirá la clase SintInfDataTest en dos clases, SintInfDataTestXLS, encargada de verificar los archivos y funciones correspondientes a los datos en XLS, y SintInfDataTestCSV, la cual testará los ficheros CSV.
+	 \item Añadir botón quality gate SonarCloud. 
+	 Se incorporará en el README.md del proyecto un acceso directo a la página donde figurarán los análisis de los proyectos en SonarCloud. 
+	 \item Añadir botón despliegue Heroku.
+	  Al igual que con SonarCloud, se incluirá un acceso a la página donde se encuentra desplegado el proyecto en Heroku. Para realizarlo se siguió los pasos de la documentación de \href{https://devcenter.heroku.com/articles/heroku-button}{Heroku}.
+	 \item Analizar el proyecto sistinf con SonarCloud. 
+	 Se realizará el análisis automático del proyecto principal, en el cual no se incluye el análisis del código en Java ya que esté lenguaje no está soportado en SonarCloud.
+	 \item Incluir el análisis automático del proyecto en Sonarcloud. 
+	 Se seguirá el siguiente tutorial de la página de Sonarcloud para que se realice el análisis cada vez que se realice un push.  
+	 \item Anexos actualización – B-Requisitos. 
+	 Se añadirá el apartado de requisitos a la documentación de LaTex
+	 \item Anexos actualización - A-Plan-Proyecto.
+	  Modificación de los Anexos con el apartado A-Plan-Proyecto.	
+	
+\end{itemize}
+
+\subsection{Sprint 6 (09/03/2021 - 23/03/2021)}
+Análisis del proyecto poolobject del código en Java en SonarCloud. Se investigó y probó a realizar el login a través de distintos métodos.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Análisis del proyecto de prueba poolobject con SonarCloud.
+	Se trata de un proyecto en Java al igual que el del Gestor-TFG-2021. Para ello se realizará un fork del proyecto en github y se procederá a realizar el análisis especificando la ubicación del código fuente en Java y los archivos binarios ya que el análisis automático de SonarCloud no incluye Java.
+	\item Pruebas de Login a través de Heroku. 
+	Se probó a acceder a la parte de actualización de ficheros a través del login y subir un fichero, pero, no se modifico los datos de las vistas ni la fecha de actualización.
+	\item Prueba Login con la app desplegada con Tomcat. 
+	Al ejecutar la app manualmente desde el IDE Eclipse empleando como herramienta para desplegar el proyecto Tomcat, se modificó la fecha de actualización de subida de los ficheros pero no se actualización los datos de las vistas.
+	\item Solucionar problema en la actualización de los ficheros csv.
+	 Examinar y arreglar la razón por la que los ficheros no se estaban actualizando y por tanto, no cambiaban los datos de las vistas. Para ello, se llevo a cabo varias modificaciones en las clases fachada de los datos.
+	\item Cambiar configuración SonarCloud. 
+	Se excluirá los ficheros que no se desean examinar en el análisis de la calidad del código como los ficheros propios de Vaadin, los ficheros CSS, entre otros. Anteriormente el análisis que se había realizado sobre SonarCloud no estaba teniendo en cuenta los códigos en Java debido a que el análisis automático de SonarCLoud no es compatible con Java. Por lo que se deberá especificar donde se encuentra el código fuente que se desea examinar y los archivos binarios de Java.
+	\item Investigar cómo realizar el Login a través de UBUVirtual. 
+	Uno de los requisitos es realizar un Login que permita autentificarse conel correo de la UBU o similares, por lo que se investigará que herramientas se pueden emplear para realizar esto. Finalmente la opción que se escogío fue Firebase, un servicio de backend que dispone de SDKs fáciles de usar y bibliotecas de IU ya elaboradas.
+	\item Investigar cómo importar los ficheros CSV y XLS a Heroku.
+	Se puede subir los ficheros mediante Amazon S3 (o otro almacenamiento en la nube que se pueda conectar con Heroku) y, a través de Skyvia importar los datos (volcarlos) en la base de datos (Heroku Postgresql). O simplemente subir los ficheros en el .war y cuando se actualicen modificarlos, esta será la opción que se empleará.
+	\item Prueba - Login con Microsoft.
+	Se probará el código de ejemplo para iniciar sesión mediante Microsoft en aplicaciones web en Java. Siguiendo el tutorial de la página de \href{https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-java-webapp}{Microsoft}. Para ello se registró la app en Azure y se siguió el tutorial de ejemplo \href{https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade/quickStartType/JavaQuickstartPage/sourceType/docs}{Azure}. No se consiguió realizar el login ya que se necesitan permisos los cuales no dispongo.
+	\item Añadir más extensiones a gitignore. 
+	Para evitar que se suban ficheros no deseado se incluyeron más extensiones a ignorar en el fichero gitignore. 
+	
+\end{itemize}
+
+\subsection{Sprint 7 (23/03/2021 - 13/04/2021)}
+Análisis de la calidad del código de los proyectos presentados en 2020 con SonarCloud. Investigar cómo realizar el login con Firebase. Investigar y realizar la migración de versión de Vaadin.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Forks de todos los proyectos presentados en 2020.
+	Se les añadirá al principio del nombre "UBU-TFG" para identificarlos. 
+	\item Instalar SonarCloud CLI.
+	Se realizará la instalación según la documentación de \href{https://sonarcloud.io/documentation/analysis/scan/sonarscanner/}{SonarCloud} 
+	\item SonarCloud - Analizar proyecto Gestión Aulas Informática
+	\item SonarCloud - Analizar proyecto UBUMonitor Clustering
+	\item SonarCloud - Analizar proyecto Medidor estadístico metajuego Magic The Gathering
+	\item SonarCloud - Analizar proyecto TourPlanner-FrontEnd-Cliente
+	\item SonarCloud - Analizar proyecto UBUVoiceAssistant
+	\item SonarCloud - Analizar proyecto LogScope
+	\item SonarCloud - Analizar proyecto PruebaNetExtractor
+	\item SonarCloud - Analizar proyecto Reserva aulas informática
+	\item SonarCloud - Analizar proyecto MetrominutoWeb
+	\item SonarCloud - Analizar proyecto Sentinel
+	\item SonarCloud - Analizar proyecto CENIEH and Ariadne
+	\item SonarCloud - Analizar proyecto Plataforma de text mining sobre repositorios
+	\item SonarCloud - Analizar proyecto UBUEstelas 
+	\item Investigar cómo migrar de versión de Vaadin 
+	\item SonarCloud - Analizar proyecto XRayDetector
+	\item SonarCloud - Analizar proyecto Jellyfish Forecast
+	\item SonarCloud - Analizar proyecto Análisis Comercial Urbano
+	\item SonarCloud - Analizar proyecto Iris classifier
+	\item SonarCloud - Analizar proyecto Asistente de programación C
+	\item SonarCloud - Analizar proyecto Flutter Serpiente
+	\item Instalación NodeJS
+	\item SonarCloud - Analizar proyecto Blockchain en una cadena de distribución de productos
+	\item Crear proyecto en Firebase
+	\item Migración de versión de Vaadin
+	\item SonarCloud - Analizar proyecto Estudio de herramientas para realidad aumentada
+	\item SonarCloud - Analizar proyecto ARBUBU
+	\item SonarCloud - Analizar proyecto Free Connect
+	\item Memoria - Objetivos del proyecto 
+	\item Anexo - Especificación de Requisitos
+	
+\end{itemize}
+
+\subsection{Sprint 8 (13/04/2021 - 04/05/2021)}
+Se migrará el proyecto a Vaadin 14. Se creará la primera release (versión 0.6) con la app con la posibilidad de subir tanto .csv como .xls y su correspondiente actualización de las vistas.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Revisión de memoria y anexos
+	Realización de correcciones recomendadas por el tutor de la documentación en LaTeX.
+	\item Actualización subida de ficheros
+	Se llevaron a cabo varias modificaciones en el código para que se realizará correctamente la actualización de las vistas con los nuevos datos, tanto xls como csv.
+	\item Incorporación Firebase para el Login 
+	\item Migración a Vaadin 14
+	Continuación del proceso de migración del proyecto a Vaadin 14 para lo cual se debió de investigar y sustituir múltiples elementos que ya no existían en la nueva versión.
+	\item Creación Release 0.6 
+	Primera versión con la aplicación en la versión con Vaadin 7 con la posibilidad de subir tanto ficheros csv como xls. 
+	
+\end{itemize}
+
+\subsection{Sprint 9 (04/05/2021 - 11/05/2021)}
+Finalización del proceso de migración del proyecto a Vaadin 14 y despliegue de la aplicación en su nueva versión en Heroku.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Investigar nueva API para realizar las gráficas del Histórico
+	Al cambiar de versión de Vaadin, JFreeChart, el componente empleado para realizar las gráficas del histórico, deja de ser válido. Por lo que se realizar un búsqueda en \href{https://vaadin.com/directory}{Vaadin Directory} de componentes que puedan sustituirlo. Las dos mejores opciones encontradas son Vaadin Chart, la cual es de pago por lo que es descartada y ApexChart, la opción elegida.
+	\item Continuar la migración a Vaadin 14
+	Se concluye la migración de la app Gestor-TFG-2021 a Vaadin 14.
+	\item Actualización componentes de las Vistas
+	Se implementaron diversas modificaciones para conseguir que fuese similar estéticamente a su versión anterior.
+	\item Prueba del proyecto en Heroku
+	\item Modificación Login
+	
+\end{itemize}
+
+\subsection{Sprint 10 (11/05/2021 - 18/05/2021)}
+Realizar despliegue en Java 11 con la nueva versión en Vaadin 14. Continuar con el nuevo login con Firebase. Introducir mejoras en el código.
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Pruebas de actualización de ficheros en el proyecto en el despliegue de heroku 
+	Se probará a actualizar varios ficheros csv y xls para comprobar que se realiza correctamente. También se realizo una prueba con el fichero XLS obtenido por los tutores en la anterior reunión para probar.
+	\item Despliegue del proyecto en Vaadin 14 en Heroku 
+	\item Actualizar obtención ranking por cursos
+	La obtención de los cursos para el ranking se obtenía de la vista del proyecto (N2-Proyecto). Se cambiará para que obtenga el curso a partir de la fecha de presentación y asignación del Histórico ($N3_Historico$).
+	\item Realizar mejoras en el código.
+	Se realizará diversas mejoras cómo la introducción de más información en el logger, actualización de los filtros empleados en las tablas (Grid), eliminación warnings y imports no usados.
+	\item Cambio de versión a Java 11 en el workflow Maven CI/CD
+	En los últimos commits no se pasaron los test de la Integración continua a que se cambio la aplicación a Java 11, en el pom.xml, mientras que en el workflow sigue estando la 8. Esto se solucionará cambiando la versión de Java (java-version) en el workflow, en el fichero github-ci.yml concretamente.
+	\item Creación release 0.8
+	Creación nueva release con la aplicación en Java 11 y Vaadin 14.
+	\item Actualizar styles del proyecto
+	Modificaciones estéticas de la aplicación para conseguir un resultado más similar al de la versión anterior de la aplicación, con Vaadin 7. En estos cambios destacan por ejemplo el cambio del estilo del texto, tablas o títulos.
+	
+\end{itemize}
+
+\subsection{Sprint 11 (18/05/2021 - 01/06/2021)}
+
+Las tareas realizadas fueron:
+\begin{itemize}
+	\tightlist
+	\item Continuar con Login con Firebase
+	\item Actualizar README
+	Actualizar enlace al despliegue de Heroku y introducir más información acerca de la app y cómo ejecutarlo.
+	\item Añadir reglas de seguridad en Firestore
+	Tras crear la base de datos Firestore se añadirán nuevas reglas de seguridad para impedir su modificación a usuarios no permitidos.
+	\item Añadir iconos faltantes en la app
+	Se buscó iconos equivalentes a los que anteriormente había en las vistas de la aplicación, ya que al actualizar de versión de Vaadin ya no existen.
+	\item Actualizar Footer
+	Añadir iconos en el Footer, los nombres faltantes (y sus respectivos correos de la ubu) y revisar fecha actualización ficheros. Se agregó, además de la fecha de actualización de los ficheros CSV, la fecha de actualización del archivo XLS.
+	\item Renombrar ficheros XLS al subirse
+	Se modificó la lógica de la vista de actualización de ficheros (UploadView) para que se pudiese subir el fichero XLS con cualquier nombre y fuese la propia app la que lo renombrará con el nombre requerido. En el caso de los ficheros csv, se indicará en la vista de UploadView cómo deben llamarse: $N1_Documento$, $N1_Norma$, $N1_Tribunal$,$N2_Alumno$,$N2_Proyecto$ y $N3_Historico$.
+	\item Añadir seguridad con Spring boot
+	Para evitar que se pueda acceder a la vista de la actualización de ficheros sin haber iniciado sesión previamente se comenzó introduciendo Spring boot security pero, finalmente se encontró una forma más sencilla y se descarto el uso de esta opción.
+	\item Modificar UploadView para verificar si hay un usuario logeado
+	Se añadió un método que comprueba y controla, antes de entrar al evento de UploadView, si hay algún usuario logeado. En caso contrario, redirige al login para que el usuario inicie sesión. 
+	
+\end{itemize}
+
 A continuación, se expondrá una ilustración donde se aprecia el trascurso del Spring y el desarrollo de las tareas\ref{fig:Spring4_Graficos}.
 
 \imagenflotante{Spring4_Graficos}{Gráfica - Spring 4}{0.9}
