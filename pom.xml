@@ -18,7 +18,10 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.release>11</maven.compiler.release>
-        <vaadin.version>14.5.3</vaadin.version>
+		<sonar.projectKey>dbo1001_Gestor-TFG-2021</sonar.projectKey>
+ 		 <sonar.organization>dbo1001</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        	<vaadin.version>14.5.3</vaadin.version>
 	</properties>
 	
 	<parent>
