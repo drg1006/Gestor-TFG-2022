@@ -58,8 +58,9 @@ public class CreateUserCourses {
 	public Course checkCourseTFG(List<Course> courses) {
 		Course course = null;
 		
-		if (courses.size() < 0)
+		if (courses.isEmpty())
 			return course;
+		
 		LOGGER.info("Comprobando si el usuario tiene la asignatura correspondiente al TFG");
 		for (int i = 0; i < courses.size(); i++) {
 			if (courses.get(i).getFullName().contains("TRABAJO FIN DE GRADO")) {

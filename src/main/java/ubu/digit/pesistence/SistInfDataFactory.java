@@ -66,7 +66,7 @@ public class SistInfDataFactory implements Serializable {
 	 * @param typeData
 	 */
 	public static void setInstanceData(String typeData) {
-		if(typeData == "XLS") {
+		if(typeData.equals("XLS")) {
 			SistInfDataXls.getUploadInstance();
 		}
 		type = typeData;

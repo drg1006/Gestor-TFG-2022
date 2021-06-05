@@ -270,9 +270,12 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * Inicializa los mapas.
 	 */
 	private void initProjectsStructures() {
-		minCourse = getCourse(true).getYear();
-		maxCourse = getCourse(false).getYear();
-
+		try {
+			minCourse = getCourse(true).getYear();
+			maxCourse = getCourse(false).getYear();
+		}catch(NullPointerException e) {
+			LOGGER.error("Error al obtener el año del curso mínimo y máximo ", e);
+		}
 		yearOfProjects = new HashMap<>();
 		newProjects = new HashMap<>();
 		oldProjects = new HashMap<>();
@@ -709,8 +712,7 @@ public class HistoricProjectsView extends VerticalLayout {
 				gridHistoric.setItems(dataHistoricGrid);
 			}
 		});
-		
-		//presentationDateFilter.clear();
+
 		
 		filters.add(projectFilter, tutorsFilter, assignmentDateFilter, presentationDateFilter);
 		add(filters);
@@ -779,7 +781,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		LocalDate dateChange = null;
 		dataFilteredGrid = new ArrayList<HistoricProject>();
 		Iterator<HistoricProject> iterator = dataHistoricGrid.iterator();
-		if(valueChange != " ") {
+		if(!valueChange.equals(" ")) {
 			while (iterator.hasNext()) {
 				HistoricProject historicProject = iterator.next();
 				
@@ -812,7 +814,6 @@ public class HistoricProjectsView extends VerticalLayout {
 			gridHistoric.setItems(dataFilteredGrid);
 		}
 	}
-
 
 	/**
 	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.

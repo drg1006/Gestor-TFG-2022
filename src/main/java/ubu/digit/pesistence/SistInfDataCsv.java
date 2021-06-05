@@ -633,9 +633,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	protected ResultSet getResultSet(String tableName, String columnName, String[] filters, String[] columnsName){
 		StringBuilder sql = new StringBuilder();
 		ResultSet result = null;
-		try {
-			Statement statement = connection.createStatement();
-		
+		try (Statement statement = connection.createStatement()){
 			if (columnsName == null) {
 				sql.append(SELECT_ALL);
 			} else {

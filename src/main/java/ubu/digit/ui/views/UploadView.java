@@ -171,8 +171,11 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
         upload.addSucceededListener(event -> {
         	 try {
                  byte[] buf = new byte[(int)event.getContentLength()];
-                 InputStream is = buffer.getInputStream();
-                 is.read(buf);
+                 InputStream inputSt = buffer.getInputStream();
+                 if(inputSt.read(buf) == 0) {
+                	 LOGGER.info("No se ha leido ningún bytes ");
+                 }
+                 
                  String fileName = DeleteFile(event);
                  LOGGER.info("Fichero "+ fileName + " eliminado");
                  

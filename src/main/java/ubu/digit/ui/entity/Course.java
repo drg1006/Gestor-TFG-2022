@@ -144,15 +144,4 @@ public class Course implements Serializable {
 	public String getUserFullName() {
 		return userFullName;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Course))
-			return false;
-		Course other = (Course) obj;
-		return id == other.id;
-
-	}
 }

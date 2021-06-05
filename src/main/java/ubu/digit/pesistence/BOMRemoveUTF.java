@@ -8,6 +8,9 @@ import java.io.RandomAccessFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Clase que se encarga de eliminar los caracteres unicode BOM (Byte Order Mark) de los ficheros.
+ */
 public class BOMRemoveUTF {
 	
 	/**
@@ -20,8 +23,7 @@ public class BOMRemoveUTF {
 	}
 	
 	/***
-	 * Remove unicode character BOM (Byte Order Mark) from of files of a
-	 * directory
+	 * Elimina el caracter unicode BOM (Byte Order Mark) de los archivos del directorio.
 	 * @param directoryStrPath
 	 */
 	public void bomRemoveUTFDirectory(String directoryStrPath) {
@@ -33,56 +35,65 @@ public class BOMRemoveUTF {
 					bomRemoveUTF(directoryStrPath + "/" +  fileEntry.getName());
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			
 		}
 	}
 
-	/**Remove unicode character BOM (Byte Order Mark) at the beginning of file 
+	/**
+	 * Elimina el caracter unicode BOM (Byte Order Mark) del comienzo del fichero.
 	 * @see https://en.wikipedia.org/wiki/Byte_order_mark
 	 * @param fileStrPath 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public  void bomRemoveUTF(String fileStrPath) throws FileNotFoundException, IOException {
-		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
-		byte[] buffer = new byte[3];
-		file.read(buffer);
-		if (hasBom(buffer)){
-			int inputSize = (int)file.length();
-			byte[] bufferWithoutBom = new byte[inputSize-3];
-			file.read(bufferWithoutBom,0,inputSize-3);
-			file.seek(0);
-			file.write(bufferWithoutBom, 0, inputSize-3);
-			file.setLength(inputSize-3);
+	public  void bomRemoveUTF(String fileStrPath){
+		try {
+			RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
+			byte[] buffer = new byte[3];
+			file.read(buffer);
+			if (hasBom(buffer)){
+				int inputSize = (int)file.length();
+				byte[] bufferWithoutBom = new byte[inputSize-3];
+				file.read(bufferWithoutBom,0,inputSize-3);
+				file.seek(0);
+				file.write(bufferWithoutBom, 0, inputSize-3);
+				file.setLength(inputSize-3);
+			}
+			file.close();
+		}catch(Exception e) {
+			LOGGER.error(e.getMessage());
 		}
-		file.close();
 	}
 	
 	/**
-	 * Remove unicode character BOM (Byte Order Mark) at the beginning of file 
+	 * Elimina el caracter unicode character BOM (Byte Order Mark) del comienzo del fichero.
 	 * @param buffer
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public  void bomRemoveUTF(byte[] buffer, String fileStrPath) throws FileNotFoundException, IOException {
-		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
-		file.read(buffer);
-		if (hasBom(buffer)){
-			int inputSize = (int)file.length();
-			byte[] bufferWithoutBom = new byte[inputSize-3];
-			file.read(bufferWithoutBom,0,inputSize-3);
-			file.seek(0);
-			file.write(bufferWithoutBom, 0, inputSize-3);
-			file.setLength(inputSize-3);
-
+	public  void bomRemoveUTF(byte[] buffer, String fileStrPath){
+		try {
+			RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
+			file.read(buffer);
+			if (hasBom(buffer)){
+				int inputSize = (int)file.length();
+				byte[] bufferWithoutBom = new byte[inputSize-3];
+				file.read(bufferWithoutBom,0,inputSize-3);
+				file.seek(0);
+				file.write(bufferWithoutBom, 0, inputSize-3);
+				file.setLength(inputSize-3);
+			}
+			file.close();
+		}catch(Exception e) {
+			LOGGER.error(e.getMessage());
 		}
-		file.close();
 	}
 	
 
-	/** Check if buffer is unicode character BOM (Byte Order Mark)  
+	/** 
+	 * Comprueba si el buffer es un caracter unicode BOM (Byte Order Mark)  
 	 * @see https://en.wikipedia.org/wiki/Byte_order_mark
 	 * @param buffer
 	 * @return 
