@@ -9,7 +9,8 @@ Diana Bringas Ochoa
 Álvar Arnaiz González y Carlos López Nozal
 
 ### Resumen del proyecto
-El propósito del proyecto es evolucionar la aplicación web de Gestor de TFG/TFM del grado de Ingeniería Informática de la Universidad de Burgos. Se llevarán a cabo tanto mejoras funcionales, por ejemplo la incorporación de un nuevo modelo de datos, como mejoras de la interfaz gráfica html. Se trata de una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  
+El propósito del proyecto es evolucionar la aplicación web de Gestor de TFG/TFM del grado de Ingeniería Informática de la Universidad de Burgos. Se llevarán a cabo tanto mejoras funcionales, por ejemplo la incorporación de un nuevo modelo de datos, como mejoras de la interfaz gráfica html. 
+Se trata de una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  
 
 El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://bitbucket.org/ubu_tfg/2014-beatriz.
 
