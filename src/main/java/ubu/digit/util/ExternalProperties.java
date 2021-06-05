@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Beatriz Zurera Martínez-Acitores.
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  * @since 3.0
  */
 public class ExternalProperties implements Serializable {
@@ -45,6 +46,7 @@ public class ExternalProperties implements Serializable {
     /**
      * Dirección de los ficheros en la aplicación del servidor.
      */
+	@SuppressWarnings("unused")
 	private static String basePath = "";
 
     /**
@@ -55,8 +57,6 @@ public class ExternalProperties implements Serializable {
         InputStream inputStream = null;
         try {
         	inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream(file);
-        	
-        	LOGGER.info("ExternalProperties - InputStream de " + file + " :" + inputStream);
             PROPERTIES.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("ExternalProperties error al crear el InputStream y leerlo :", e);
@@ -81,7 +81,6 @@ public class ExternalProperties implements Serializable {
     	
         if (instance == null) {
             file = propFileName;
-            LOGGER.info("ExternalProperties - GetInstance rute: " + basePath + file);
             instance = new ExternalProperties();
         }
         return instance;

@@ -2,13 +2,14 @@ package ubu.digit.ui.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+
 /**
- * POJO para almacenar un proyecto histórico.
+ * Clase para almacenar un proyecto histórico.
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
  */
-public class HistoricProject extends ProjectBean implements Serializable {
+public class HistoricProject extends Projects implements Serializable {
 
 	/**
 	 * Serial Version UID.
@@ -71,7 +72,6 @@ public class HistoricProject extends ProjectBean implements Serializable {
 	 * Constructor vacío sin parámetros (convención JavaBean).
 	 */
 	public HistoricProject(){
-		// Constructor vacío (convención JavaBean)
 	}
 	
 	/**

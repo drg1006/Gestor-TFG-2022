@@ -3,12 +3,13 @@ package ubu.digit.ui.entity;
 import java.io.Serializable;
 
 /**
- * POJO que contiene los elementos comunes de un proyecto activo e histórico.
+ * Clase que contiene los elementos comunes de un proyecto activo e histórico.
  * 
  * @author Javier de la Fuente Barrios
+ * @author Diana Bringas Ochoa
  *
  */
-public class ProjectBean implements Serializable {
+public class Projects implements Serializable {
 
 	/**
 	 * Serial Version UID.
@@ -56,10 +57,9 @@ public class ProjectBean implements Serializable {
 	protected String student3;
 
 	/**
-	 * Constructor vacío sin parámetros (convención JavaBean).
+	 * Constructor vacío sin parámetros.
 	 */
-	public ProjectBean() {
-		// Constructor vacío (convención JavaBean)
+	public Projects() {
 	}
 
 	/**

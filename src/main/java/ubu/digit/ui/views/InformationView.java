@@ -93,10 +93,6 @@ public class InformationView extends VerticalLayout {
 		tribunalTitle.addClassName(TITLE_STYLE);
 		add(tribunalTitle);
 		
-		final HorizontalLayout horizontalTribunal = new HorizontalLayout();
-		horizontalTribunal.setSpacing(true);
-		horizontalTribunal.setMargin(true);
-		
 		final VerticalLayout tribunal = new VerticalLayout();
 		tribunal.setSpacing(true);
 		tribunal.setWidth(500, Unit.PIXELS);
@@ -108,8 +104,7 @@ public class InformationView extends VerticalLayout {
 		for(int i=0;i<listaTribunal.size();i++) {
 			tribunal.add(new Label(listaTribunal.get(i)));
 		}
-		horizontalTribunal.add(tribunal);
-		add(horizontalTribunal);
+		add(tribunal);
 	}
 	
 	/**

@@ -2,7 +2,12 @@ package ubu.digit.ui.entity;
 
 import java.io.Serializable;
 
-public class ActiveProject extends ProjectBean implements Serializable {
+/**
+ * Clase para almacenar los proyectos activos.
+ * 
+ * @author Diana Bringas Ochoa
+ */
+public class ActiveProject extends Projects implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -12,12 +17,12 @@ public class ActiveProject extends ProjectBean implements Serializable {
 	private String courseAssignment="";
 
 	/**
-	 * Tutores del proyecto
+	 * Tutores del proyecto.
 	 */
 	private String tutors;
 
 	/**
-	 * Alumnos del proyecto
+	 * Alumnos del proyecto.
 	 */
 	private String students;
 
@@ -80,7 +85,7 @@ public class ActiveProject extends ProjectBean implements Serializable {
 
 	/**
 	 * Obtiene los estudiantes del proyecto.
-	 * @return
+	 * @return students
 	 */
 	public String getStudents(){
 		return this.students;
@@ -96,14 +101,16 @@ public class ActiveProject extends ProjectBean implements Serializable {
 	
 	/**
 	 * Devuelve los tutores a cargo del proyecto.
-	 * @return
+	 * 
+	 * @return tutors
 	 */
 	public String getTutors(){
 		return this.tutors;
 	}
 	
 	/**
-	 * Establece los tutores del proyecto
+	 * Establece los tutores del proyecto.
+	 * 
 	 * @param tutors
 	 */
 	public void setTutors(String tutors) {
@@ -113,7 +120,8 @@ public class ActiveProject extends ProjectBean implements Serializable {
 	/**
 	 * Obtiene el curso de asignación del proyecto.
 	 * 
-	 * @return curso de asignación del proyecto
+	 * @return courseAssignment 
+	 * 			Curso de asignación del proyecto
 	 */
 	public String getCourseAssignment() {
 		return courseAssignment;
