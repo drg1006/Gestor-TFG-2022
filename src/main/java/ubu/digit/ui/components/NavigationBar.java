@@ -6,13 +6,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
-//import ubu.digit.ui.views.ActiveProjectsView;
-//import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.InformationView;
-import ubu.digit.ui.views.MetricsView;
-
-//import ubu.digit.ui.views.MetricsView;
-//import ubu.digit.ui.views.HistoricProjectsView;
 import static ubu.digit.util.Constants.*;
 
 /**
@@ -62,6 +56,7 @@ public class NavigationBar extends HorizontalLayout{
 	/**
 	 * Inicializa los botones de navegación.
 	 */
+	@SuppressWarnings("deprecation")
 	private void initComponents() {
 		buttonInfo = new Button(INFORMACION);
 		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
@@ -71,11 +66,10 @@ public class NavigationBar extends HorizontalLayout{
 		
 		buttonHistory = new Button(PROYECTOS_HISTORICOS);
 		buttonHistory.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
-		
-		buttonMetrics = new Button(METRICAS);
-		buttonMetrics.addClickListener(e -> UI.getCurrent().navigate(MetricsView.class));
-		
 
+		buttonMetrics = new Button(METRICAS);
+		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/explore/projects?search=UBU-TFG&sort=-analysis_date/\", \"_blank\");"));
+		
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
