@@ -20,6 +20,7 @@ import com.vaadin.flow.component.login.LoginI18n.ErrorMessage;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.security.*;
+import ubu.digit.util.Constants;
 import ubu.digit.util.UtilMethods;
 import ubu.digit.webService.CoreCourseGetUserAdministrationOptions;
 import ubu.digit.webService.CoreWebserviceGetSiteInfo;
@@ -97,7 +98,6 @@ public class LoginView extends VerticalLayout{
 			if(!isAutentificarte) {
 				CONTROLLER.setLogin(null);
 				login.setEnabled(true);
-				i18n.setErrorMessage(errorMessage);
 				i18n.getErrorMessage().setTitle(errorMessage.getTitle());
 				i18n.getErrorMessage().setMessage(errorMessage.getMessage());
 				login.setI18n(i18n);
@@ -144,7 +144,7 @@ public class LoginView extends VerticalLayout{
 		}
 
 		try {
-			String validUsername = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreWebserviceGetSiteInfo()).getString("username");
+			String validUsername = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreWebserviceGetSiteInfo()).getString(Constants.USERNAME);
 			PopulateMoodleUser populateMoodleUser = new PopulateMoodleUser(CONTROLLER.getWebService());
 			MoodleUser moodleUser = populateMoodleUser.populateMoodleUser(validUsername, CONTROLLER.getUrlHost().toString());
 			
@@ -168,7 +168,7 @@ public class LoginView extends VerticalLayout{
 			Collection<Integer> courseids = moodleUser.getCourses().stream().map(Course::getId).collect(Collectors.toList());
 			
 			JSONArray jsonArray;
-			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(courseids)).getJSONArray("courses");
+			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(courseids)).getJSONArray(Constants.COURSES);
 			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
 			
 		} catch (Exception e) {

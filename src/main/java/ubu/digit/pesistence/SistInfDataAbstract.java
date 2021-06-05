@@ -1,4 +1,3 @@
-
 package ubu.digit.pesistence;
 
 import java.io.Serializable;
@@ -7,10 +6,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ubu.digit.util.ExternalProperties;
 
 
@@ -90,12 +85,7 @@ public abstract class SistInfDataAbstract implements Serializable {
 	 * Directorio donde se encuentra los datos de entrada, es decir, los
 	 * ficheros que contienen los datos que vamos a consultar.
 	 */
-	public static final String DIRCSV = prop.getSetting("dataIn"); //TODO: crear get para clase updateCSVVIew
-	
-	/**
-	 * Logger de la clase.
-	 */
-	protected static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataAbstract.class.getName());
+	public static final String DIRCSV = prop.getSetting("dataIn");
 	
 	protected abstract Number getResultSetNumber(String sql);
 
@@ -150,7 +140,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 
 	public abstract Number getTotalFreeProject();
 	
-	//TODO: modificado tipo que devuelven de resultset a object
 	protected abstract Object getResultSet(String tableName, String columnName);
 
 	protected abstract Object getResultSet(String tableName, String columnName, String whereCondition);
@@ -173,8 +162,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		return LocalDate.parse(date, dateTimeFormatter);
 	}
-
-	protected abstract void finalize() throws Throwable;
 	
 	public abstract List<String> getDataModel();
 	
@@ -198,7 +185,4 @@ public abstract class SistInfDataAbstract implements Serializable {
 	public abstract Number getStdvColumn(String columnName, String tableName);
 
 	protected abstract List<Double> getListNumber(String columnName, String sql);
-
-
-	
 }

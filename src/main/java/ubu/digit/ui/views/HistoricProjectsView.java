@@ -54,7 +54,6 @@ import static ubu.digit.util.Constants.*;
  * @author Javier de la Fuente Barrios.
  * @author Diana Bringas Ochoa
  */
-
 @Route(value = "Historic")
 @PageTitle("Histórico de los proyectos")
 public class HistoricProjectsView extends VerticalLayout {
@@ -711,6 +710,8 @@ public class HistoricProjectsView extends VerticalLayout {
 			}
 		});
 		
+		//presentationDateFilter.clear();
+		
 		filters.add(projectFilter, tutorsFilter, assignmentDateFilter, presentationDateFilter);
 		add(filters);
 		
@@ -769,7 +770,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	}
 	
 	/**
-	 * Crea una nueva lista con los valores filtrados
+	 * Crea una nueva lista con los valores filtrados.
 	 * 
 	 * @param column
 	 * @param valueChange
@@ -822,7 +823,18 @@ public class HistoricProjectsView extends VerticalLayout {
 		Iterator<HistoricProject> iterator = dataHistoric.iterator();
 		while (iterator.hasNext()) {
 			HistoricProject historicProject = iterator.next();
-			tutors = historicProject.getTutor1() + ", " + historicProject.getTutor2() + ", " + historicProject.getTutor3();
+			
+			tutors = historicProject.getTutor1();	
+			if(tutors.equals("")) {
+				tutors += historicProject.getTutor2();
+			}else {
+				tutors += ", " + historicProject.getTutor2();
+			}
+			if(tutors.equals("")) {
+				tutors +=historicProject.getTutor3();
+			}else{	
+				tutors += ", " + historicProject.getTutor3();
+			}
 			
 			HistoricProject historic = new HistoricProject(historicProject.getTitle(), tutors, historicProject.getNumStudents(), 
 					historicProject.getAssignmentDate(), historicProject.getPresentationDate(), historicProject.getRankingPercentile(),

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import ubu.digit.ui.entity.Course;
 import ubu.digit.ui.views.LoginView;
+import ubu.digit.util.Constants;
 import ubu.digit.util.UtilMethods;
 import ubu.digit.webService.CoreUsersCourses;
 
@@ -86,10 +87,10 @@ public class CreateUserCourses {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			if (jsonObject != null) {
 				Course course = new Course();
-				course.setShortName(jsonObject.optString("shortname"));
-				course.setFullName(jsonObject.optString("fullname"));
-				course.setIdNumber(jsonObject.optString("idnumber"));
-				course.setId(jsonObject.optInt("id"));
+				course.setShortName(jsonObject.optString(Constants.SHORTNAME));
+				course.setFullName(jsonObject.optString(Constants.FULLNAME));
+				course.setIdNumber(jsonObject.optString(Constants.IDNUMBER));
+				course.setId(jsonObject.optInt(Constants.ID));
 				courses.add(course);
 			}
 		}
@@ -114,10 +115,10 @@ public class CreateUserCourses {
 		for (int i = 0; i < jsonArray.length(); ++i) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			course.setCourseAccess(true);
-			JSONArray options = jsonObject.getJSONArray("options");
+			JSONArray options = jsonObject.getJSONArray(Constants.OPTIONS);
 			for (int j = 0; j < options.length(); ++j) {
 				JSONObject option = options.getJSONObject(j);
-				if (permission.equals(option.getString("name")) && option.getBoolean("available")== false) {
+				if (permission.equals(option.getString(Constants.NAME)) && option.getBoolean(Constants.AVAILABLE)== false) {
 					LOGGER.info("Permiso de actualización disponible ");
 					return true;
 				}

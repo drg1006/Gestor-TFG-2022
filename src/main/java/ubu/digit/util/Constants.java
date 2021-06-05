@@ -288,10 +288,15 @@ public final class Constants {
 	 */
 	
 	public static final String ID = "id";
+	public static final String IDNUMBER = "idnumber";
 	public static final String USERNAME = "username";
 	public static final String FULLNAME = "fullname";
+	public static final String SHORTNAME = "shortname";
 	public static final String EMAIL = "email";
-
+	public static final String COURSES = "courses";
+	public static final String NAME = "name";
+	public static final String AVAILABLE = "available";
+	public static final String OPTIONS = "options";
 	
 	/**
 	 * Constructor vacío y privado.

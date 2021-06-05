@@ -102,6 +102,21 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
+	 * Destructor elimina la conexión al sistema de acceso a datos.
+	 * 
+	 **/
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
+		super.finalize();
+	}
+	
+	/**
 	 * Ejecuta una sentencia SQL sumando todos los datos Float contenidos en la
 	 * primera columna.
 	 * 
@@ -139,6 +154,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 *            nombre de la tabla de datos
 	 * @return media aritmética
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Number getAvgColumn(String columnName, String tableName){
 		List<Float> media = obtenerDatos(columnName, tableName);
@@ -453,7 +469,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}catch(SQLException e) {
 			LOGGER.error(e.getMessage());
 		}
-	}//TODO: revisar en abstract
+	}
 
 	/**
 	 * Ejecuta una sentencia SQL obteniendo el número total de filas diferentes,
@@ -767,22 +783,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}
 		return resultados;
 	}
-
-	/**
-	 * Destructor elimina la conexión al sistema de acceso a datos.
-	 * 
-	 **/
-	@Override
-	protected void finalize() throws Throwable { //TODO:REVISAR
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
-		//super.finalize();
-	}
-	
-	//Funciones trasladadas de las vistas
 	
 	/**
 	 * Obtener los datos del modelo de datos de los proyectos activos.
@@ -898,7 +898,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { //TODO: revisar tipos arraylist
+	public ArrayList getDataModelHistoric(DateTimeFormatter dateTimeFormatter) { 
 		int contador=0;
 		String rankingPercentile="";
 		int rankingTotal=0;

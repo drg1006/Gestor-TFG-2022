@@ -18,7 +18,6 @@ import com.codoid.products.fillo.*;
 
 import static ubu.digit.util.Constants.*;
 
-
 /**
  * Fachada Singleton de acceso a datos a través de fillo
  * 
@@ -45,6 +44,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * Instancia con los datos.
 	 */
 	private static SistInfDataXls instance;
+	
 	/**
 	 * Constructor vacío.
 	 */
@@ -100,6 +100,21 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
+	 * Destructor elimina la conexión al sistema de acceso a datos.
+	 * 
+	 **/
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			connection.close();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		super.finalize();	
+	}
+	
+	/**
 	 * Ejecuta una sentencia SQL sumando todos los datos Float contenidos en la
 	 * primera columna.
 	 * 
@@ -134,6 +149,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	@Override
 	public Number getAvgColumn(String columnName, String tableName){
 		List<Float> media = obtenerDatos(columnName, tableName);
+		@SuppressWarnings("deprecation")
 		Float resultadoMedia = new Float(0);
 		for (Float numero : media) {
 			resultadoMedia += numero;
@@ -277,7 +293,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}catch (FilloException e) {
 			LOGGER.error(e.getMessage());
 		}
-	}//TODO: revisar en abstract
+	}
 
 	/**
 	 * Ejecuta una sentencia SQL obteniendo el número total de filas diferentes,
@@ -372,8 +388,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @throws FilloException
 	 */
 	@Override
-	public Number getTotalFreeProject(){ //TODO:metodo contains
-		String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";//TODO:"'%" 
+	public Number getTotalFreeProject(){
+		String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";
 		return getResultSetNumber(sql);
 	}
 
@@ -417,7 +433,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		try {
 			return connection.executeQuery(sql);
 		}catch(FilloException e) {
-			LOGGER.error(e.getMessage()); //TODO: test no record found
+			LOGGER.error(e.getMessage());
 		}
 		return null;
 	}
@@ -462,7 +478,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		
 		try {
 			//Se ejecuta la primera parte de la query
-			rs = connection.executeQuery(sql.toString());//TODO:Revisar LinkedListMap<K,V>
+			rs = connection.executeQuery(sql.toString());
 			
 			//Segunda parte de la query 
 			if (filters != null) {
@@ -493,7 +509,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 * @return RecordSet resultado de la query pasada
 	 * @throws FilloException 
 	 */
-	private Recordset getSubQuery(StringBuilder sql, String whereCondition){ //TODO: revisar
+	private Recordset getSubQuery(StringBuilder sql, String whereCondition){ 
 		Recordset rs = null;
 		try {
 			rs = connection.executeQuery(sql.toString()+whereCondition);
@@ -590,22 +606,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		return resultados;
 	}
 
-	/**
-	 * Destructor elimina la conexión al sistema de acceso a datos.
-	 * 
-	 **/
-	@Override
-	protected void finalize() throws Throwable { //TODO:REVISAR
-		try {
-			connection.close();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-		}
-		//super.finalize();	
-	}
-	
-	//Funciones trasladadas de las vistas
-	
 	/**
 	 * Obtener los datos del modelo de datos de los proyectos activos.
 	 */
