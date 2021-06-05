@@ -11,7 +11,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import ubu.digit.security.Controller;
 import ubu.digit.ui.views.LoginView;
+import ubu.digit.ui.views.UploadView;
 import ubu.digit.util.ExternalProperties;
 
 import static ubu.digit.util.Constants.*;
@@ -59,6 +61,11 @@ public class Footer extends VerticalLayout {
 	private String fileName;
 	
 	/**
+	 * Controlador del acceso al moodle de UbuVirtual
+	 */
+	private static Controller CONTROLLER;
+	
+	/**
 	 * Logger de la clase.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(Footer.class.getName());
@@ -73,6 +80,9 @@ public class Footer extends VerticalLayout {
 		
 		H2 subtitle = new H2(INFORMACION);
 		subtitle.addClassName(SUBTITLE_STYLE);
+		
+		//Se crea la instancia del controlador de acceso al moodle de UbuVirtual
+		CONTROLLER = Controller.getInstance();
 		
 		addInformation();
 		addLicense();
@@ -168,7 +178,13 @@ public class Footer extends VerticalLayout {
 		}
 
 		Button login = new Button("Actualizar");
-		login.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+		login.addClickListener(e -> {	
+			if(CONTROLLER.getLogin() != null) {
+				UI.getCurrent().navigate(UploadView.class);
+			}else {	
+				UI.getCurrent().navigate(LoginView.class);
+			}
+		});
 		license.add(login);
 	}
 }

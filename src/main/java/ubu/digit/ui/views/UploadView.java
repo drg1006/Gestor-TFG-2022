@@ -33,7 +33,7 @@ import com.vaadin.flow.router.Route;
 
 import elemental.json.Json;
 import ubu.digit.pesistence.SistInfDataFactory;
-import ubu.digit.security.FirestoreDB;
+import ubu.digit.security.Controller;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
@@ -101,6 +101,11 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	 * Componente output 
 	 */
 	private Div output;
+	
+	/**
+	 * Controlador del acceso al moodle de UbuVirtual
+	 */
+	private static Controller CONTROLLER;
 
 	/**
 	 * Constructor.
@@ -120,6 +125,9 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 		NavigationBar bat = new NavigationBar();
 		add(bat);
 		
+		//Se crea la instancia del controlador de acceso al moodle de UbuVirtual
+		CONTROLLER = Controller.getInstance();
+				
 		buffer = new MemoryBuffer();
         upload = new Upload(buffer);
         upload.setI18n(createSpanishI18n());
@@ -133,7 +141,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 		Text infoNameFile = new Text("El nombre de los ficheros csv debe ser alguno de los siguientes:"
 				+ " N1_Documento, N1_Tribunal"
 				+ ", N1_Norma, N2_Alumno " 
-				+ ", N2_Proyecto, N3_Historico");
+				+ ", N2_Proyecto o N3_Historico");
 		
 		add(infoNameFile);
 		Footer footer = new Footer(null);
@@ -216,7 +224,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
         add(upload, output);
         logout = new Button("Desconectar");
 		logout.addClickListener(e ->  {
-			FirestoreDB.logout();
+			CONTROLLER.setLogin(null);
 			UI.getCurrent().navigate(InformationView.class);
 		});
 		add(logout);
@@ -334,8 +342,8 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	 *            before navigation event with event details
 	 */
 	public void beforeEnter(BeforeEnterEvent event) {
-		if (!FirestoreDB.isUserLogin()) {
-				event.rerouteTo(LoginView.class);
+		if (CONTROLLER.getLogin() == null) {
+			event.rerouteTo(LoginView.class);
 		}
 	}
 }

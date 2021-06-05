@@ -1,7 +1,7 @@
 package ubu.digit.util;
 
 /**
- * Literales constantes de la aplicación.
+ * Constantes de la aplicación.
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
@@ -26,7 +26,7 @@ public final class Constants {
 	/**
 	 * Proyecto 
 	 */
-	public static final String PROYECTO = "N2_Proyecto"; //TODO:N2_Proyecto y Proyecto
+	public static final String PROYECTO = "N2_Proyecto";
 
 	/**
 	 * Histórico 
@@ -282,7 +282,17 @@ public final class Constants {
 	 * Documentos (etiqueta título).
 	 */
 	public static final String DOCUMENTOS = "Documentos";
+	
+	/**
+	 * Constantes empleadas en la obtención de información del Moodle de UbuVirtual
+	 */
+	
+	public static final String ID = "id";
+	public static final String USERNAME = "username";
+	public static final String FULLNAME = "fullname";
+	public static final String EMAIL = "email";
 
+	
 	/**
 	 * Constructor vacío y privado.
 	 */
