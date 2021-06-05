@@ -270,12 +270,11 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * Inicializa los mapas.
 	 */
 	private void initProjectsStructures() {
-		try {
+		if(getCourse(true) != null && getCourse(false) != null) {
 			minCourse = getCourse(true).getYear();
 			maxCourse = getCourse(false).getYear();
-		}catch(NullPointerException e) {
-			LOGGER.error("Error al obtener el año del curso mínimo y máximo ", e);
 		}
+
 		yearOfProjects = new HashMap<>();
 		newProjects = new HashMap<>();
 		oldProjects = new HashMap<>();

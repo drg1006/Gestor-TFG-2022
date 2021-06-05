@@ -35,7 +35,7 @@ public class BOMRemoveUTF {
 					bomRemoveUTF(directoryStrPath + "/" +  fileEntry.getName());
 				}
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
 			
 		}
@@ -48,23 +48,19 @@ public class BOMRemoveUTF {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public  void bomRemoveUTF(String fileStrPath){
-		try {
-			RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
-			byte[] buffer = new byte[3];
-			file.read(buffer);
-			if (hasBom(buffer)){
-				int inputSize = (int)file.length();
-				byte[] bufferWithoutBom = new byte[inputSize-3];
-				file.read(bufferWithoutBom,0,inputSize-3);
-				file.seek(0);
-				file.write(bufferWithoutBom, 0, inputSize-3);
-				file.setLength(inputSize-3);
-			}
-			file.close();
-		}catch(Exception e) {
-			LOGGER.error(e.getMessage());
+	public  void bomRemoveUTF(String fileStrPath) throws FileNotFoundException, IOException {
+		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
+		byte[] buffer = new byte[3];
+		file.read(buffer);
+		if (hasBom(buffer)){
+			int inputSize = (int)file.length();
+			byte[] bufferWithoutBom = new byte[inputSize-3];
+			file.read(bufferWithoutBom,0,inputSize-3);
+			file.seek(0);
+			file.write(bufferWithoutBom, 0, inputSize-3);
+			file.setLength(inputSize-3);
 		}
+		file.close();
 	}
 	
 	/**
@@ -73,22 +69,18 @@ public class BOMRemoveUTF {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public  void bomRemoveUTF(byte[] buffer, String fileStrPath){
-		try {
-			RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
-			file.read(buffer);
-			if (hasBom(buffer)){
-				int inputSize = (int)file.length();
-				byte[] bufferWithoutBom = new byte[inputSize-3];
-				file.read(bufferWithoutBom,0,inputSize-3);
-				file.seek(0);
-				file.write(bufferWithoutBom, 0, inputSize-3);
-				file.setLength(inputSize-3);
-			}
-			file.close();
-		}catch(Exception e) {
-			LOGGER.error(e.getMessage());
+	public  void bomRemoveUTF(byte[] buffer, String fileStrPath) throws FileNotFoundException, IOException{
+		RandomAccessFile file = new RandomAccessFile(fileStrPath,"rw");
+		file.read(buffer);
+		if (hasBom(buffer)){
+			int inputSize = (int)file.length();
+			byte[] bufferWithoutBom = new byte[inputSize-3];
+			file.read(bufferWithoutBom,0,inputSize-3);
+			file.seek(0);
+			file.write(bufferWithoutBom, 0, inputSize-3);
+			file.setLength(inputSize-3);
 		}
+		file.close();
 	}
 	
 
@@ -99,7 +91,7 @@ public class BOMRemoveUTF {
 	 * @return 
 	 * @throws IOException
 	 */
-	private  boolean hasBom(byte[] buffer) throws IOException {
+	private  boolean hasBom(byte[] buffer){
 		String string = new String();
 		for (byte b : buffer)
 			string += String.format("%02X", b);
