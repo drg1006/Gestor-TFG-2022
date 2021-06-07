@@ -16,8 +16,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import ubu.digit.pesistence.SistInfDataAbstract;
-import ubu.digit.pesistence.SistInfDataFactory;
+import ubu.digit.persistence.SistInfDataAbstract;
+import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.*;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
@@ -31,8 +31,7 @@ import java.util.List;
  * @author Diana Bringas Ochoa
  */
 @Route("")
-@CssImport("./styles/shared-styles.css")
-@CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./styles/shared-styles.css", themeFor = "sistinftheme")
 @PageTitle("Información general")
 public class InformationView extends VerticalLayout {
 

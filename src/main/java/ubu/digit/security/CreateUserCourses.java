@@ -117,9 +117,11 @@ public class CreateUserCourses {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			course.setCourseAccess(true);
 			JSONArray options = jsonObject.getJSONArray(Constants.OPTIONS);
+			LOGGER.info("Permisos del usuario: " );
 			for (int j = 0; j < options.length(); ++j) {
 				JSONObject option = options.getJSONObject(j);
-				if (permission.equals(option.getString(Constants.NAME)) && option.getBoolean(Constants.AVAILABLE)== false) {
+				LOGGER.info("Permiso--> " + option);
+				if (permission.equals(option.getString(Constants.NAME)) && option.getBoolean(Constants.AVAILABLE)== true) {
 					LOGGER.info("Permiso de actualización disponible ");
 					return true;
 				}

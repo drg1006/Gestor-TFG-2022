@@ -28,6 +28,7 @@ import com.github.appreciated.apexcharts.config.grid.builder.RowBuilder;
 import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
@@ -39,9 +40,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-
-import ubu.digit.pesistence.SistInfDataAbstract;
-import ubu.digit.pesistence.SistInfDataFactory;
+import ubu.digit.persistence.SistInfDataAbstract;
+import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.HistoricProject;
@@ -56,6 +56,8 @@ import static ubu.digit.util.Constants.*;
  */
 @Route(value = "Historic")
 @PageTitle("Histórico de los proyectos")
+//@CssImport("./styles/shared-styles.css")
+//@CssImport(value = "./styles/shared-styles.css", themeFor = "sistinftheme")
 public class HistoricProjectsView extends VerticalLayout {
 
 	/**
@@ -737,12 +739,29 @@ public class HistoricProjectsView extends VerticalLayout {
 		gridHistoric.addColumn(HistoricProject::getNumStudents).setHeader("Nº Alumnos").setFlexGrow(4);
 		gridHistoric.addColumn(HistoricProject::getAssignmentDate).setHeader("Fecha Asignación").setFlexGrow(6);
 		gridHistoric.addColumn(HistoricProject::getPresentationDate).setHeader("Fecha Presentación").setFlexGrow(6);
+		
 		gridHistoric.addColumn(HistoricProject::getRankingPercentile).setHeader("Ranking Percentiles").setFlexGrow(5);
 		gridHistoric.addColumn(HistoricProject::getRankingTotal).setHeader("Ranking Total").setFlexGrow(5);
 		gridHistoric.addColumn(HistoricProject::getRankingCurse).setHeader("Ranking por curso").setFlexGrow(5);
 		
 		gridHistoric.getColumns().forEach(columna -> columna.setResizable(true));
 		gridHistoric.getColumns().forEach(columna -> columna.setSortable(true));
+		
+		/*gridHistoric.getColumnByKey("Ranking Percentiles").setClassNameGenerator(historic -> {
+			switch(historic.getRankingPercentile()) {
+				case "A":
+					return "ranking-styleA"; 
+				case "B":
+					return "ranking-styleB"; 
+				case "C":
+					return "ranking-styleC"; 
+				case "D":
+					return "ranking-styleD"; 
+				case "E":
+					return "ranking-styleE"; 
+			}
+			return " ";
+		});*/
 		
 		gridHistoric.setItemDetailsRenderer(
 			    new ComponentRenderer<>(HistoricProject -> {

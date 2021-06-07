@@ -96,7 +96,7 @@ public class LoginView extends VerticalLayout{
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
 			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
 			if(!isAutentificarte) {
-				CONTROLLER.setLogin(null);
+				CONTROLLER.setUsername("");
 				login.setEnabled(true);
 				i18n.getErrorMessage().setTitle(errorMessage.getTitle());
 				i18n.getErrorMessage().setMessage(errorMessage.getMessage());

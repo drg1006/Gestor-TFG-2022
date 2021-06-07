@@ -3,6 +3,7 @@ package ubu.digit.security;
 import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
 import ubu.digit.webService.WSFunction;
+import ubu.digit.webService.WSFunctionEnum;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -54,13 +55,12 @@ public class WebService {
 		String url = host + "/login/token.php";
 		RequestBody formBody = new FormBody.Builder().add("username", email)
 				.add("password", password)
-				.add("service", "moodle_mobile_app")
+				.add("service",WSFunctionEnum.MOODLE_MOBILE_APP.toString() )
 				.build();
 		try (Response response = Connection.getResponse(new Request.Builder().url(url)
 				.post(formBody)
 				.build())) {
-			JSONObject jsonObject = new JSONObject(new JSONTokener(response.body()
-					.byteStream()));
+			JSONObject jsonObject = new JSONObject(new JSONTokener(response.body().byteStream()));
 			if (jsonObject.has("error")) {
 				LOGGER.error("Error al intentar recuperar el token del usuario en el moodle de UbuVirtual");
 				throw new IllegalAccessError(jsonObject.getString("error"));

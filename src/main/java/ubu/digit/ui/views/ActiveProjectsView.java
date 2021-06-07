@@ -18,8 +18,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import ubu.digit.pesistence.SistInfDataAbstract;
-import ubu.digit.pesistence.SistInfDataFactory;
+import ubu.digit.persistence.SistInfDataAbstract;
+import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.ActiveProject;

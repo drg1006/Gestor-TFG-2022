@@ -70,7 +70,7 @@ public class Controller {
 		login = new LoginUbuVirtual(host, username, password);
 		String validHost = login.checkUrlServer(host);
 		setLogin(login);
-		login.setHost(validHost);
+		login.setUsername(username);
 		login.normalLogin();
 		this.host = new URL(validHost);
 	}

@@ -32,7 +32,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import elemental.json.Json;
-import ubu.digit.pesistence.SistInfDataFactory;
+import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.security.Controller;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
@@ -173,7 +173,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
                  byte[] buf = new byte[(int)event.getContentLength()];
                  InputStream inputSt = buffer.getInputStream();
                  if(inputSt.read(buf) == 0) {
-                	 LOGGER.info("No se ha leido ningún bytes ");
+                	 LOGGER.info("No se ha leido ningún byte ");
                  }
                  
                  String fileName = DeleteFile(event);
@@ -345,7 +345,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	 *            before navigation event with event details
 	 */
 	public void beforeEnter(BeforeEnterEvent event) {
-		if (CONTROLLER.getLogin() == null) {
+		if (CONTROLLER.getUsername() == "") {
 			event.rerouteTo(LoginView.class);
 		}
 	}
