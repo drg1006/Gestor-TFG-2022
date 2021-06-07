@@ -255,18 +255,7 @@
 		    <artifactId>commons-math3</artifactId>
 		    <version>3.6.1</version>
 		</dependency>	
-		
-		<dependency>
-		    <groupId>com.google.cloud</groupId>
-		    <artifactId>google-cloud-firestore</artifactId>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
-		<dependency>
-		    <groupId>com.google.firebase</groupId>
-		    <artifactId>firebase-admin</artifactId>
-		    <version>7.2.0</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
