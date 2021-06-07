@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -23,9 +22,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.codoid.products.exception.FilloException;
-
 import ubu.digit.util.ExternalProperties;
+import ubu.digit.persistence.SistInfDataCsv;
 
 /**
  * Conjunto de método que verifican la cobertura de la clase SistInfDataCsv.
@@ -35,19 +33,19 @@ import ubu.digit.util.ExternalProperties;
  *
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ExternalProperties.class, SistInfDataAbstract.class })
+@PrepareForTest({ ExternalProperties.class, SistInfDataCsv.class })
 public class SistInfDataTestCSV {
 
     /**
      * Clase fachada a testear.
      */
-    SistInfDataAbstract sistInfData;
+    SistInfDataCsv sistInfData;
 
     /**
      * URL del fichero donde se encuentra el fichero de configuración del test.
      */
     ExternalProperties test = ExternalProperties
-    		.getInstance("src/test/resources/testConfig.properties", true);
+    		.getInstance("/testConfig.properties", true);
 
     /**
      * Método que se ejecuta antes de cualquier test. Modifica el fichero de
@@ -56,14 +54,14 @@ public class SistInfDataTestCSV {
     @Before
     public void setUp() {
         mockStatic(ExternalProperties.class);
-        when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
+        when(ExternalProperties.getInstance("/config.properties", false)).thenReturn(test);
         sistInfData = SistInfDataCsv.getInstance(); 
     }
 
     /**
      * Test que comprueba que el método que obtiene la media de una lista de
      * números funciona correctamente.
-     * <p>
+     * 
      * En este caso, la columna "notas" es una lista de notas desde el 1 hasta
      * el 10 por lo que el resultado que esperamos es 5.5.
      * 
@@ -72,7 +70,7 @@ public class SistInfDataTestCSV {
     @Test
     public void testAvg() throws SQLException {
         Number esperado = sistInfData.getAvgColumn("Nota", "Prueba");
-        assertThat(esperado, is((Number) 5.5F));
+        assertEquals(esperado, is((Number) 5.5F));
     }
 
     /**
@@ -88,8 +86,8 @@ public class SistInfDataTestCSV {
         String tableName = "Prueba";
         Number num = sistInfData.getMaxColumn("Numero", tableName);
         Number not = sistInfData.getMaxColumn("Nota", tableName);
-        assertThat(num, is((Number) 9.0F));
-        assertThat(not, is((Number) 10.0F));
+        assertEquals(num, is((Number) 9.0F));
+        assertEquals(not, is((Number) 10.0F));
         assertNotEquals(num, not);
     }
 
@@ -105,8 +103,8 @@ public class SistInfDataTestCSV {
         String tableName = "Prueba";
         Number num = sistInfData.getMinColumn("Numero", tableName);
         Number not = sistInfData.getMinColumn("Nota", tableName);
-        assertThat(num, is((Number) 0.0F));
-        assertThat(not, is((Number) 1.0F));
+        assertEquals(num, is((Number) 0.0F));
+        assertEquals(not, is((Number) 1.0F));
         assertNotEquals(num, not);
     }
 
@@ -123,8 +121,8 @@ public class SistInfDataTestCSV {
         String tableName = "Prueba";
         Number num = sistInfData.getStdvColumn("Numero", tableName);
         Number not = sistInfData.getStdvColumn("Nota", tableName);
-        assertThat(num, is((Number) 3.0276503540974917));
-        assertThat(not, is((Number) 3.0276503540974917));
+        assertEquals(num, is((Number) 3.0276503540974917));
+        assertEquals(not, is((Number) 3.0276503540974917));
         assertEquals(num, not);
     }
 
@@ -134,48 +132,48 @@ public class SistInfDataTestCSV {
      */
     @Test
     public void testResultSet() {
-        assertThat(sistInfData.getResultSet("Prueba", "Numero"), notNullValue());
+    	assertEquals(sistInfData.getResultSet("Prueba", "Numero"), notNullValue());
 
-        assertThat(sistInfData.getResultSet("Prueba", "Nota",
+        assertEquals(sistInfData.getResultSet("Prueba", "Nota",
                 "Descripcion='hola'"), notNullValue());
 
         String[] metricValoreSelect = { "Numero", "Nota", "Descripcion" };
-        assertThat(sistInfData.getResultSet("Prueba", "Numero", null,
+        assertEquals(sistInfData.getResultSet("Prueba", "Numero", null,
                 metricValoreSelect), notNullValue());
-        assertThat(sistInfData.getResultSet("Prueba", "Numero",
+        assertEquals(sistInfData.getResultSet("Prueba", "Numero",
                 metricValoreSelect, null), notNullValue());
     }
 
     /**
      * Este test comprueba que el método devuelva correctamente el número de
      * filas según la ejecución SQL.
-     * <p>
-     * - En la primera pedimos que nos cuente el número de filas distintas donde
+     * 
+     * En la primera pedimos que nos cuente el número de filas distintas donde
      * la nota sea un 5, que solo tenemos 1.
-     * <p>
-     * - En la segunda le pedimos que nos cuente el número de filas distintas de
+     * 
+     * En la segunda le pedimos que nos cuente el número de filas distintas de
      * la columna "nota" y "descripcion", por lo que esperamos 10 de la columna
      * "nota" + 2 de la columna "descripcion". Un total de 12.
-     * <p>
-     * - Y por último, pedimos que nos cuente una columna nula, que como no
+     * 
+     * Y por último, pedimos que nos cuente una columna nula, que como no
      * existe pues nos devolverá 0. Y una columna que no existe, por lo que
      * lanzará una excepción .
      * 
      * @throws SQLException
      */
-    @Test
-    public void testTotalNumber() throws SQLException { //TODO: (expected = SQLException.class)
+    @Test(expected = SQLException.class)
+    public void testTotalNumber() throws SQLException { 
 
         Number obtenido = sistInfData.getTotalNumber("Nota", "Prueba", "Nota='5'");
-        assertThat(obtenido, is((Number) 1.0F));
+        assertEquals(obtenido, is((Number) 1.0F));
 
         String[] columnNames = { "Nota", "Descripcion" };
         Number obt = sistInfData.getTotalNumber(columnNames, "Prueba");
-        assertThat(obt, is((Number) 12.0F));
+        assertEquals(obt, is((Number) 12.0F));
 
         columnNames = null;
         obt = sistInfData.getTotalNumber(columnNames, "Prueba");
-        assertThat(obt, is((Number) 0));
+        assertEquals(obt, is((Number) 0));
 
        /* String[] columnNam = { "Nada" };
         obt = sistInfData.getTotalNumber(columnNam, "Prueba");*/
@@ -184,8 +182,8 @@ public class SistInfDataTestCSV {
 
     @Test
     public void testQuartilColumn() throws SQLException {
-        assertThat(sistInfData.getQuartilColumn("Nota", "Prueba", new Double(
-                0.25)), notNullValue());
+    	Double quartil = 0.25;
+    	assertEquals(sistInfData.getQuartilColumn("Nota", "Prueba", quartil), notNullValue());
     }
 
     /**
@@ -215,7 +213,7 @@ public class SistInfDataTestCSV {
      * @throws ParseException 
      */
     @Test
-    public void testFormatDate() throws SQLException, ParseException { 
+    public void testFormatDatesHistorico() throws SQLException, ParseException { 
     	String tableName = "N3_Historico";
         List<String> dates = sistInfData.getDates("FechaAsignacion", tableName);
         
@@ -252,10 +250,10 @@ public class SistInfDataTestCSV {
      * 
      * @throws SQLException
      */
-    /*@Test(expected = SQLException.class)
+    @Test(expected = SQLException.class)
     public void testSinTabla() throws SQLException { 
         sistInfData.getAvgColumn("Nada", "Nada");
-    }*/
+    }
 
     /**
      * Test que comprueba que salta la excepción SQLException al intentar
@@ -263,10 +261,10 @@ public class SistInfDataTestCSV {
      * 
      * @throws SQLException
      */
-    /*@Test
-    public void testTablaVacia() throws SQLException { //TODO: (expected = SQLException.class)
+    @Test(expected = SQLException.class)
+    public void testTablaVacia() throws SQLException { 
         sistInfData.getAvgColumn("Nada", "Vacia");
-    }*/
+    }
 
     /**
      * Método main.

@@ -3,8 +3,6 @@ package ubu.digit.pesistence;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -24,29 +22,28 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.codoid.products.exception.FilloException;
 
+import ubu.digit.persistence.SistInfDataXls;
 import ubu.digit.util.ExternalProperties;
 
 /**
  * Conjunto de método que verifican la cobertura de la clase SistInfDataXls.
  * 
- * @author Beatriz Zurera Martínez-Acitores
  * @author Diana Bringas Ochoa
  *
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ExternalProperties.class, SistInfDataAbstract.class })
+@PrepareForTest({ ExternalProperties.class, SistInfDataXls.class })
 public class SistInfDataTestXLS {
 
     /**
      * Clase fachada a testear.
      */
-    SistInfDataAbstract sistInfData;
+	SistInfDataXls sistInfData;
 
     /**
      * URL del fichero donde se encuentra el fichero de configuración del test.
      */
-    ExternalProperties test = ExternalProperties
-    		.getInstance("src/test/resources/testConfig.properties", true);
+    ExternalProperties test = ExternalProperties.getInstance("/testConfig.properties", true);
    
     /**
      * Método que se ejecuta antes de cualquier test. Modifica el fichero de
@@ -56,7 +53,7 @@ public class SistInfDataTestXLS {
     public void setUp() {
         mockStatic(ExternalProperties.class);
 
-        when(ExternalProperties.getInstance("/WEB-INF/classes/config.properties", false)).thenReturn(test);
+        when(ExternalProperties.getInstance("/config.properties", false)).thenReturn(test);
 
         sistInfData = SistInfDataXls.getInstance(); 
     }
@@ -73,7 +70,7 @@ public class SistInfDataTestXLS {
     @Test
     public void testAvg(){
         Number esperado = sistInfData.getAvgColumn("Nota", "N3_Historico");
-        assertThat(esperado, is((Number) 7.0625F));
+        assertEquals(esperado, is((Number) 7.0625F));
     }
 
     /**
@@ -88,7 +85,7 @@ public class SistInfDataTestXLS {
 
         String tableName = "N3_Historico";
         Number not = sistInfData.getMaxColumn("Nota", tableName);
-        assertThat(not, is((Number) 9F));
+        assertEquals(not, is((Number) 9F));
     }
 
     /**
@@ -102,7 +99,7 @@ public class SistInfDataTestXLS {
     public void testMinColumn() throws FilloException {
         String tableName = "N3_Historico";
         Number not = sistInfData.getMinColumn("Nota", tableName);
-        assertThat(not, is((Number) 4F));
+        assertEquals(not, is((Number) 4F));
     }
 
     /**
@@ -117,7 +114,7 @@ public class SistInfDataTestXLS {
     public void testStdvColumn() throws FilloException { 
         String tableName = "N3_Historico";
         Number not = sistInfData.getStdvColumn("Nota", tableName);
-        assertThat(not, is((Number) 1.8980723303996008));
+        assertEquals(not, is((Number) 1.8980723303996008));
     }
 
     /**
@@ -130,28 +127,28 @@ public class SistInfDataTestXLS {
     public void testResultSet() throws FilloException {
     	String tableName = "N3_Historico";
 
-        assertThat(sistInfData.getResultSet(tableName, "Nota",
+    	assertEquals(sistInfData.getResultSet(tableName, "Nota",
                 "Descripcion='La descripción del TFG/TFM'"), notNullValue());
 
         String[] metricValoreSelect = { "Titulo", "Nota", "Descripcion" };
-        assertThat(sistInfData.getResultSet(tableName, "Nota", null,
+        assertEquals(sistInfData.getResultSet(tableName, "Nota", null,
                 metricValoreSelect), notNullValue());
-        assertThat(sistInfData.getResultSet(tableName, "Nota",
+        assertEquals(sistInfData.getResultSet(tableName, "Nota",
                 metricValoreSelect, null), notNullValue());
     }
 
     /**
      * Este test comprueba que el método devuelva correctamente el número de
      * filas según la ejecución SQL.
-     * <p>
-     * - En la primera pedimos que nos cuente el número de filas distintas donde
+     * 
+     * En la primera pedimos que nos cuente el número de filas distintas donde
      * la nota sea un 5, que solo tenemos 1.
-     * <p>
-     * - En la segunda le pedimos que nos cuente el número de filas distintas de
+     * 
+     * En la segunda le pedimos que nos cuente el número de filas distintas de
      * la columna "nota" y "descripcion", por lo que esperamos 10 de la columna
      * "nota" + 2 de la columna "descripcion". Un total de 12.
-     * <p>
-     * - Y por último, pedimos que nos cuente una columna nula, que como no
+     * 
+     * Y por último, pedimos que nos cuente una columna nula, que como no
      * existe pues nos devolverá 0. Y una columna que no existe, por lo que
      * lanzará una excepción .
      * 
@@ -161,23 +158,23 @@ public class SistInfDataTestXLS {
     	String tableName = "N3_Historico";
         Number obtenido = sistInfData.getTotalNumber("Nota", tableName,
                 "Nota='5'");
-        assertThat(obtenido, is((Number) 1F));
+        assertEquals(obtenido, is((Number) 1F));
 
         String[] columnNames = { "Nota", "Descripcion" };
         Number obt = sistInfData.getTotalNumber(columnNames, tableName);
-        assertThat(obt, is((Number) 8F));
+        assertEquals(obt, is((Number) 8F));
 
         columnNames = null;
         obt = sistInfData.getTotalNumber(columnNames, tableName);
-        assertThat(obt, is((Number) 0));
+        assertEquals(obt, is((Number) 0));
 
     }
 
     @Test
     public void testQuartilColumn() throws FilloException {
     	String tableName = "N3_Historico";
-        assertThat(sistInfData.getQuartilColumn("Nota", tableName, new Double(
-                0.25)), notNullValue());
+    	Double quartil = 0.25;
+    	assertEquals(sistInfData.getQuartilColumn("Nota", tableName, quartil), notNullValue());
     }
 
     /**
@@ -218,7 +215,7 @@ public class SistInfDataTestXLS {
      * @throws ParseException 
      */
     @Test
-    public void testFormatDate() throws FilloException, ParseException { //TODO: Revisar
+    public void testFormatDateHistorico() throws FilloException, ParseException { 
     	String tableName = "N3_Historico";
         List<String> dates = sistInfData.getDates("FechaAsignacion", tableName);
         
@@ -250,26 +247,26 @@ public class SistInfDataTestXLS {
     }
 
     /**
-     * Test que comprueba que salta la excepción SQLException al intentar
+     * Test que comprueba que salta la excepción FilloException al intentar
      * obtener datos de una tabla que no existe.
      * 
-     * @throws SQLException
+     * @throws FilloException
      */
-    /*@Test(expected = FilloException.class)
-    public void testSinTabla() throws FilloException { //TODO:Revisar
+    @Test(expected = FilloException.class)
+    public void testSinTabla() throws FilloException {
         sistInfData.getAvgColumn("Nada", "Nada");
-    }*/
+    }
 
     /**
-     * Test que comprueba que salta la excepción SQLException al intentar
+     * Test que comprueba que salta la excepción FilloException al intentar
      * obtener datos de una tabla que está vacía.
      * 
-     * @throws SQLException
+     * @throws FilloException
      */
-    /*@Test(expected = FilloException.class)
+    @Test(expected = FilloException.class)
     public void testTablaVacia() throws FilloException {
         sistInfData.getAvgColumn("Nada", "Vacia");
-    }*/
+    }
 
     /**
      * Método main.
@@ -278,7 +275,7 @@ public class SistInfDataTestXLS {
      */
     public static void main(String[] args) {
         JUnitCore.main("ubu.digit.pesistence.SistInfDataTestXLS");
-    } 
+    }
     
     /**
      * Test que comprueba los proyectos activos (año actual)
