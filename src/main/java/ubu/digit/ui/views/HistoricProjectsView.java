@@ -29,6 +29,8 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
@@ -56,8 +58,8 @@ import static ubu.digit.util.Constants.*;
  */
 @Route(value = "Historic")
 @PageTitle("Histórico de los proyectos")
-//@CssImport("./styles/shared-styles.css")
-//@CssImport(value = "./styles/shared-styles.css", themeFor = "sistinftheme")
+@CssImport(value = "./styles/shared-styles.css", themeFor = "sistinftheme")
+@HtmlImport("./styles/grid-styles.html")
 public class HistoricProjectsView extends VerticalLayout {
 
 	/**
@@ -713,8 +715,6 @@ public class HistoricProjectsView extends VerticalLayout {
 				gridHistoric.setItems(dataHistoricGrid);
 			}
 		});
-
-		
 		filters.add(projectFilter, tutorsFilter, assignmentDateFilter, presentationDateFilter);
 		add(filters);
 		
@@ -746,11 +746,12 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		gridHistoric.getColumns().forEach(columna -> columna.setResizable(true));
 		gridHistoric.getColumns().forEach(columna -> columna.setSortable(true));
+		gridHistoric.getColumns().forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 		
-		/*gridHistoric.getColumnByKey("Ranking Percentiles").setClassNameGenerator(historic -> {
+		/*gridHistoric.setClassNameGenerator(historic -> {
 			switch(historic.getRankingPercentile()) {
 				case "A":
-					return "ranking-styleA"; 
+					return "error_row"; 
 				case "B":
 					return "ranking-styleB"; 
 				case "C":
@@ -758,9 +759,9 @@ public class HistoricProjectsView extends VerticalLayout {
 				case "D":
 					return "ranking-styleD"; 
 				case "E":
-					return "ranking-styleE"; 
+					return "ranking-styleE";
 			}
-			return " ";
+			return null;
 		});*/
 		
 		gridHistoric.setItemDetailsRenderer(
@@ -844,15 +845,13 @@ public class HistoricProjectsView extends VerticalLayout {
 			HistoricProject historicProject = iterator.next();
 			
 			tutors = historicProject.getTutor1();	
-			if(tutors.equals("")) {
-				tutors += historicProject.getTutor2();
-			}else {
-				tutors += ", " + historicProject.getTutor2();
-			}
-			if(tutors.equals("")) {
-				tutors +=historicProject.getTutor3();
-			}else{	
-				tutors += ", " + historicProject.getTutor3();
+			if(!tutors.equals("")) {
+				if(!historicProject.getTutor2().equals("")) {
+					tutors +=  ", " + historicProject.getTutor2();
+					if(!historicProject.getTutor3().equals("")) {
+						tutors +=  ", " + historicProject.getTutor3();
+					}
+				}
 			}
 			
 			HistoricProject historic = new HistoricProject(historicProject.getTitle(), tutors, historicProject.getNumStudents(), 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
@@ -261,6 +262,7 @@ public class ActiveProjectsView extends VerticalLayout{
 			
 			table.getColumns().forEach(columna -> columna.setResizable(true));
 			table.getColumns().forEach(columna -> columna.setSortable(true));
+			table.getColumns().forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 			
 			table.setItemDetailsRenderer(
 				    new ComponentRenderer<>(ActiveProject -> {
@@ -343,29 +345,25 @@ public class ActiveProjectsView extends VerticalLayout{
 			ActiveProject activeproject = iterator.next();
 			
 			tutors = activeproject.getTutor1();	
-			if(tutors.equals("")) {
-				tutors += activeproject.getTutor2();
-			}else {
-				tutors += ", " + activeproject.getTutor2();
-			}
-			if(tutors.equals("")) {
-				tutors +=activeproject.getTutor3();
-			}else{	
-				tutors += ", " + activeproject.getTutor3();
+			if(!tutors.equals("")) {
+				if(!activeproject.getTutor2().equals("")) {
+					tutors +=  ", " + activeproject.getTutor2();
+					if(!activeproject.getTutor3().equals("")) {
+						tutors +=  ", " + activeproject.getTutor3();
+					}
+				}
 			}
 			
-			students = activeproject.getStudent1();	
-			if(students.equals("")) {
-				students += activeproject.getStudent2();
-			}else {
-				students += ", " + activeproject.getStudent2();
+			students = activeproject.getStudent1();
+			if(!students.equals("")) {
+				if(!activeproject.getStudent2().equals("")) {
+					students +=  ", " + activeproject.getStudent2();
+					if(!activeproject.getStudent3().equals("")) {
+						students +=  ", " + activeproject.getStudent3();
+					}
+				}
 			}
-			if(students.equals("")) {
-				students +=activeproject.getStudent3();
-			}else{
-				students += ", " + activeproject.getStudent3();
-			}
-			
+
 			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
 					tutors, students, activeproject.getCourseAssignment());
 			dataActiveProjectsGrid.add(actives);
