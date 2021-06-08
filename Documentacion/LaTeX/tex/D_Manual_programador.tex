@@ -1,9 +1,36 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
-En esta sección se explica la estructura del proyecto, el proceso de instalación del framework y herramientas necesarias para desarrollar el trabajo, cómo realizar la compilación, instalación y ejecución del proyecto y las pruebas que se han llevado a cabo.
+En esta sección se describe la estructura del proyecto, el proceso de instalación del framework y herramientas necesarias para desarrollar el trabajo, cómo realizar la compilación,las pruebas realizadas, la instalación y ejecución del proyecto.
 
 \section{Estructura de directorios}
+Se enumerarán y describirán brevemente los directorios del proyecto.
+
+\begin{itemize}
+	\item \textbf{/:} directorio raíz donde se ubican el README, el fichero de configuración para el despliegue de Heroku, los archivos de configuración de Vaadin 14, Spring Boot y Maven. 
+	\item \textbf{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub cómo para el análisis de la calidad del código en SonarCloud.
+	\item \textbf{/Documentacion} material de documentación del proyecto y aplicaciones de prueba empleadas.
+		\begin{itemize}
+			\tightlist
+			\item \textbf{/Documentacion/LaTeX} ficheros para generar la memoria y los anexos.
+			\item \textbf{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con Vaadin.
+		\end{itemize}
+	\item \textbf{/frontend} código encargado del diseño gráfico de la aplicación por el lado del cliente.
+	\item \textbf{/src} código \textit{backend} de la aplicación web principal, \textbf{sistinf}.
+	\begin{itemize}
+		\tightlist
+		\item \textbf{/src/main/java/ubu/digit} código fuente en Java de la aplicación web.
+			\begin{itemize}
+				\item \textbf{/src/main/java/ubu/digit/persistence} código fuente encargado de la conexión y lectura de los ficheros de datos (fachada de datos).
+				\item \textbf{/src/main/java/ubu/digit/security} código fuente de conexión y consulta con el Moodle de UbuVirtual.
+				\item \textbf{/src/main/java/ubu/digit/ui} código en relación a las ventanas y vistas de la aplicación.
+				\item \textbf{/src/main/java/ubu/digit/util} incluye los métodos empleados de utilidad empleados en toda la app. 
+				\item \textbf{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en Moodle.
+			\end{itemize}
+		\item \textbf{/src/test} tests unitarios
+	\end{itemize}
+\end{itemize}
+
 
 \section{Manual del programador}
 A continuación se explicará cómo realizar la instalación de los programas necesarios para el desarrollo de la aplicación.
