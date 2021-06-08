@@ -1,38 +1,55 @@
 \apendice{Especificación de Requisitos}
 
 \section{Introducción}
-Los requisitos\cite{requisitos} del proyecto son los puntos clave que se deben cumplir.
+La especificación de requisitos hace referencia a los requerimientos que debe cumplir el software para satisfacer las necesidades del cliente. Debe incluir la suficiente cantidad de detalles para permitir a los desarrolladores software diseñar el sistema.
 
 \section{Objetivos generales}
-El objetivo del proyecto es la mejora de la aplicación Web centrándose en los siguientes puntos:
+El objetivo general del proyecto es continuar con el desarrollo y la mejora de la aplicación web, Gestor de Trabajos de Fin de Grado, centrándose en los siguientes puntos:
 \begin{itemize}
-	\item Incorporación y validación de un nuevo tipo de datos (XLS)
-	\item Realización de la métricas con los resultados del análisis de la calidad del código de los TFG (SonarCloud)
-	\item Mejoras en la estética de la aplicación Web.
-	\item Modificación del Login para conectarse con la cuenta de la Universidad.
+	\item Agregar y validar un nuevo tipo de datos, Microsoft Excel(xls).	
+	\item Analizar la calidad del código de los Trabajos de Fin de Grado de años anteriores empleando la plataforma SonarCloud.
+	\item Mejorar la estética de la aplicación Web.
+	\item Incorporar un sistema de autenticación de los usuarios al loguearse.
+	\item Añadir nuevos valores estadísticos sobre los Trabajos de Fin de Grado. 
 \end{itemize}
 
 \section{Catalogo de requisitos}
 Se describirán los requisitos específicos, funcionales y los no funcionales.
-\section{Especificación de requisitos}
 
 \subsection{Requisitos funcionales}
 \begin{itemize}
 	
-	\item \textbf{RF-1 Adicción nueva capa de datos}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
+	\item \textbf{RF-1 Autenticación de usuarios}: la aplicación debe permitir comprobar la identidad del usuario.
 	\begin{itemize}
-		\item \textbf{RF-1.1 Subida de datos:} el usuario que tenga permisos podrá subir archivos de datos, tanto en el formato xls como en el csv. 
+		\item \textbf{RF-1.1 Verificación de la identidad del usuario:} se comprobará la identidad del usuario al intentar acceder al login.
+		\item \textbf{RF-1.2 Chequeo de permisos del usuario:} la aplicación revisará si el usuario posee permisos de actualización en la aplicación.
+		\item \textbf{RF-1.2 Conceder el acceso al usuario:} se deberá aprobar la entrada del usuario autentificado a las páginas restringidas.
 	\end{itemize}
-	
-	\item \textbf{RF-2 Login}: el sistema permitirá la subida de datos a ciertos usuarios que se autentificarán a  través del login de la aplicación.
+
+	\item \textbf{RF-2 Actualización de ficheros xls}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
+	\begin{itemize}
+		\item \textbf{RF-2.1 Subida de datos:} el usuario autentificado podrá subir archivos de datos, tanto en el formato xls como en el csv. 
+		\item \textbf{RF-2.2 Validación de los datos:} se permitirá subir unicamente los ficheros en el formato establecido.
+		\item \textbf{RF-2.3 Actualización de la información:} la aplicación deberá actualizar los datos con los existentes en el fichero subido.
+	\end{itemize}
+
+	\item \textbf{RF-3 Introducción de nuevas estadísticas}: se incluirá nueva información acerca de los TFGs realizados anteriomente.
+	\begin{itemize}
+		\item \textbf{RF-2.1 Mostrar rankings de notas:} se mostrarán las clasificaciones de los proyectos realizados a modo de rankings.
+	\end{itemize}
+		
 \end{itemize}
 
 \subsection{Requisitos no funcionales}
 \begin{itemize}
 	\item \textbf{RNF-1 Seguridad}: la aplicación solamente debe permitir la subida de datos a los usuarios con permisos.
 	
-	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la escalabilidad y incorporación de nuevas modificaciones en el futuro de forma sencilla. Un ejemplo de esto sería la actualización de Vaadin a una versión nueva para conservar el soporte en el futuro.
+	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la escalabilidad y incorporación de nuevas modificaciones en el futuro de forma sencilla. 
 	
-	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras para que la aplicación sea más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.
+	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras gráficas de la aplicación para que resulte más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.
+	
+	\item \textbf{RNF-3 Analizar la calidad de código}: cómo parte del apartado de las Métricas se examinaran Trabajos de Fin de Grado de años anteriores, con el fin de añadir más información acerca de ellos.
 
 \end{itemize}
+
+\section{Especificación de casos de uso}
