@@ -1,7 +1,9 @@
 package ubu.digit.ui.views;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +98,7 @@ public class LoginView extends VerticalLayout{
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
 			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
 			if(!isAutentificarte) {
+				LOGGER.info("Usuario no validado ");
 				CONTROLLER.setUsername("");
 				login.setEnabled(true);
 				i18n.getErrorMessage().setTitle(errorMessage.getTitle());
@@ -103,6 +106,7 @@ public class LoginView extends VerticalLayout{
 				login.setI18n(i18n);
 				login.setError(true);
 			}else {
+				LOGGER.info("Usuario validado ");
 				login.setEnabled(true);
 				UI.getCurrent().navigate(UploadView.class);
 			}
@@ -166,9 +170,19 @@ public class LoginView extends VerticalLayout{
 			
 			//Se obtiene los id de los cursos del moodleUser con los que se buscará los permisos del usuario en la asignatura
 			Collection<Integer> courseids = moodleUser.getCourses().stream().map(Course::getId).collect(Collectors.toList());
+			LOGGER.info("Cursos del usuario: " + courseids);
+			Collection<Integer> idTFG = new ArrayList<Integer>();
+			Iterator<Integer> it = courseids.iterator();
+			while(it.hasNext()) {
+				int id = it.next();
+				if(id == 2204) {
+					idTFG.add(id);
+				}
+			}   
+			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
 			
 			JSONArray jsonArray;
-			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(courseids)).getJSONArray(Constants.COURSES);
+			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
 			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
 			
 		} catch (Exception e) {

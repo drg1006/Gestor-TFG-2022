@@ -116,6 +116,8 @@ public class CreateUserCourses {
 		for (int i = 0; i < jsonArray.length(); ++i) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			course.setCourseAccess(true);
+			LOGGER.info("Cursos usuario: " + course.getId() );
+			LOGGER.info("Cursos json usuario: " + jsonArray );
 			JSONArray options = jsonObject.getJSONArray(Constants.OPTIONS);
 			LOGGER.info("Permisos del usuario: " );
 			for (int j = 0; j < options.length(); ++j) {
