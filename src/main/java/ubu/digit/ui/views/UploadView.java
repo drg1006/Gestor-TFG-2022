@@ -14,6 +14,7 @@ import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -33,6 +34,7 @@ import com.vaadin.flow.router.Route;
 
 import elemental.json.Json;
 import ubu.digit.persistence.SistInfDataFactory;
+import ubu.digit.security.Connection;
 import ubu.digit.security.Controller;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
@@ -130,6 +132,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 				
 		buffer = new MemoryBuffer();
         upload = new Upload(buffer);
+        upload.setWidth("1800px");
         upload.setI18n(createSpanishI18n());
         output = new Div();
 		ConfigureLogin();
@@ -152,7 +155,6 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	 * Función que establece los listener para el login.
 	 */
 	private void ConfigureLogin() {
-        upload.setWidthFull();
         upload.addStartedListener(event -> {
         	Boolean isNameValid = checkNameFile(event);
         	if(!isNameValid) {
@@ -225,9 +227,10 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	        upload.getElement().setPropertyJson("files", Json.createArray());});
 
         add(upload, output);
-        logout = new Button("Desconectar");
+        logout = new Button("Cerrar sesión");
 		logout.addClickListener(e ->  {
-			CONTROLLER.setLogin(null);
+			LOGGER.info("Cerrando sesión");
+			CONTROLLER.setUsername("");
 			UI.getCurrent().navigate(InformationView.class);
 		});
 		add(logout);
@@ -345,7 +348,9 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	 *            before navigation event with event details
 	 */
 	public void beforeEnter(BeforeEnterEvent event) {
+		LOGGER.info("Inicio de la vista de actualización de archivos");
 		if (CONTROLLER.getUsername() == "") {
+			LOGGER.info("Inicio de sesión no verificado");
 			event.rerouteTo(LoginView.class);
 		}
 	}
