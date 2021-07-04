@@ -4,38 +4,39 @@
 La especificación de requisitos hace referencia a los requerimientos que debe cumplir el software para satisfacer las necesidades del cliente. Debe incluir la suficiente cantidad de detalles para permitir a los desarrolladores software diseñar el sistema.
 
 \section{Objetivos generales}
-El objetivo general del proyecto es continuar con el desarrollo y la mejora de la aplicación web, Gestor de Trabajos de Fin de Grado, centrándose en los siguientes puntos:
+El objetivo general del proyecto es continuar con el desarrollo y la mejora de la aplicación web respecto a la versión anterior, centrándose en los siguientes puntos:
 \begin{itemize}
-	\item Agregar y validar un nuevo tipo de datos, Microsoft Excel(xls).	
-	\item Analizar la calidad del código de los Trabajos de Fin de Grado de años anteriores empleando la plataforma SonarCloud.
-	\item Mejorar la estética de la aplicación Web.
-	\item Incorporar un sistema de autenticación de los usuarios al loguearse.
-	\item Añadir nuevos valores estadísticos sobre los Trabajos de Fin de Grado. 
+	\item Optimizar la actualización de la información pública en la página Web añadiendo la posibilidad de actualizar con una hoja de datos \textbf{Excel} con múltiples hojas. Se deberá conservar la opción de renovar la información con diversos ficheros en formato .csv. 
+	\item Evolucionar el análisis de proyectos a una plataforma pública en la nube, \textbf{SonarCloud}, en lugar de emplear un servidor local de Sonarqube. Se deberán analizar la calidad del código de los TFG de cursos anteriores que cuenten con un repositorio público en Github.
+	\item Mejorar la \emph{interface} gráfica de la aplicación empleando nuevos componentes gráficos de la biblioteca Vaadin. 
+	\item Incorporar un sistema de autenticación de usuarios para la actualización de la información de la página Web de los TFG.
+	\item Añadir tres indicadores cualitativos de tipo ranking sobre las notas de los Trabajos de Fin de Grado presentados. Se trata de un ranking por curso, un ranking sobre todos los TFG (total) y un ranking de percentiles sobre el total de los TFG que consta de cinco niveles A,B,C,D,E según el percentil calculado, siendo la A el mejor resultado.
 \end{itemize}
 
-\section{Catalogo de requisitos}
+\section{Catálogo de requisitos}
 Se describirán los requisitos específicos, funcionales y los no funcionales.
 
 \subsection{Requisitos funcionales}
 \begin{itemize}
 	
-	\item \textbf{RF-1 Autenticación de usuarios}: la aplicación debe permitir comprobar la identidad del usuario.
+	\item \textbf{RF-1 Autenticar usuarios}: la aplicación debe permitir comprobar la identidad del usuario mediante UbuVirtual.
 	\begin{itemize}
-		\item \textbf{RF-1.1 Verificación de la identidad del usuario:} se comprobará la identidad del usuario al intentar acceder al login.
-		\item \textbf{RF-1.2 Chequeo de permisos del usuario:} la aplicación revisará si el usuario posee permisos de actualización en la aplicación.
-		\item \textbf{RF-1.2 Conceder el acceso al usuario:} se deberá aprobar la entrada del usuario autentificado a las páginas restringidas.
+		\item \textbf{RF-1.1 Verificación de la identidad del usuario:} se comprobará si las credenciales introducidas en el inicio de sesión corresponden con alguna cuenta de la UBU.
+		\item \textbf{RF-1.2 Obtención del curso correspondiente al Trabajo de Fin de Grado:} se buscará si el usuario tiene asignada la asignatura de Trabajo de Fin de Grado.
+		\item \textbf{RF-1.3 Chequeo de permisos del usuario:} la aplicación revisará si el usuario posee permisos de actualización en el curso del TFG y, por tanto, en la aplicación Web.
+		\item \textbf{RF-1.4 Conceder el acceso al usuario:} se aprobará la entrada del usuario autentificado a las páginas restringidas.
 	\end{itemize}
 
-	\item \textbf{RF-2 Actualización de ficheros xls}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
+	\item \textbf{RF-2 Actualizar ficheros xls}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
 	\begin{itemize}
-		\item \textbf{RF-2.1 Subida de datos:} el usuario autentificado podrá subir archivos de datos, tanto en el formato xls como en el csv. 
+		\item \textbf{RF-2.1 Subida de datos:} el usuario autentificado podrá subir un fichero de datos, ya sea en el formato xls como en el csv. 
 		\item \textbf{RF-2.2 Validación de los datos:} se permitirá subir unicamente los ficheros en el formato establecido.
-		\item \textbf{RF-2.3 Actualización de la información:} la aplicación deberá actualizar los datos con los existentes en el fichero subido.
+		\item \textbf{RF-2.3 Actualización de la información:} la aplicación deberá refrescar los datos con los existentes en el fichero subido.
 	\end{itemize}
 
-	\item \textbf{RF-3 Introducción de nuevas estadísticas}: se incluirá nueva información acerca de los TFGs realizados anteriomente.
+	\item \textbf{RF-3 Visualizar los rankings sobre las notas de los TFG}: se incluirán tres rankings en la tabla del Histórico.
 	\begin{itemize}
-		\item \textbf{RF-2.1 Mostrar rankings de notas:} se mostrarán las clasificaciones de los proyectos realizados a modo de rankings.
+		\item \textbf{RF-3.1 Mostrar los rankings de notas:} se visualizarán las clasificaciones de los notas de los proyectos realizados a modo de rankings.
 	\end{itemize}
 		
 \end{itemize}
@@ -44,12 +45,84 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 \begin{itemize}
 	\item \textbf{RNF-1 Seguridad}: la aplicación solamente debe permitir la subida de datos a los usuarios con permisos.
 	
-	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la escalabilidad y incorporación de nuevas modificaciones en el futuro de forma sencilla. 
+	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la incorporación de nuevas modificaciones en el futuro de forma sencilla. 
 	
 	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras gráficas de la aplicación para que resulte más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.
 	
-	\item \textbf{RNF-3 Analizar la calidad de código}: cómo parte del apartado de las Métricas se examinaran Trabajos de Fin de Grado de años anteriores, con el fin de añadir más información acerca de ellos.
+	\item \textbf{RNF-3 Analizar la calidad de código}: cómo parte del apartado de las métricas se examinaran Trabajos de Fin de Grado de años anteriores, con el fin de añadir más información acerca de ellos.
 
 \end{itemize}
 
-\section{Especificación de casos de uso}
+\section{Especificación de requisitos}
+
+\subsection{Diagrama de casos de uso}
+En esta sección se mostrarán los diagramas de casos de uso. En la aplicación hay dos actores: el usuario con permisos de actualización de los datos de la aplicación y el usuario normal.
+
+\tablaSmallSinColores{Actores de la aplicación}{ l | l }{Actores_aplicación}
+{\textbf{Usuario} & \textbf{Funcionalidad} \\}{
+	\multirow{2}{*}{Usuario con permisos de actualización} 
+	& Generalmente se tratará de un profesor, aunque también puede tratarse de un usuario que cuente con los permisos de actualización en la asignatura de Trabajos de Fin de Grado. \\
+	& Podrá acceder, a través del login, a la vista de actualización de ficheros donde tendrá la posibilidad de subir ficheros, en formato .xls o .csv, para reemplazar los datos mostrados en la aplicación \\ \hline
+	
+	Responsable & El usuario podrá acceder a todas las vistas de la aplicación exceptuando la actualización de ficheros la cual, por razones de seguridad, solamente los usuarios con permisos podrán. \\
+}
+
+Se puede ver un resumen de los casos de uso descritos anteriormente en la siguiente imagen.\ref{fig:UseCaseDiagram}.
+
+\imagenflotante{UseCaseDiagram}{Diagrama de casos de uso}{0.9}
+
+\subsection{Especificación de casos de uso}
+
+\tablaSmallSinColores{Caso de uso 1: Autenticar usuarios.}{p{3cm} p{.75cm} p{9cm}}{tablaCU1}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 1: Autenticar usuarios.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Verificación de un usuario en el login de la aplicación mediante UbuVirtual} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Validar el usuario a través del login} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-2.1, RF-2.2, RF-2.3} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El sistema comprobará si las credenciales introducidas corresponden con alguna cuenta de la UBU \\\cline{2-3}
+	& 2    & Se verificará si el usuario tiene la asignatura de Trabajo de Fin de Grado asignada. \\\cline{2-3}
+	& 3    & El sistema revisará si el usuario posee permisos de actualización. \\\cline{2-3}
+	& 4    & En caso de que tenga permisos de actualización, se permitirá el acceso a la vista de actualización. \\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Introducir credenciales en el login} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Usuario/contraseña inválidos. El usuario no tiene los permisos requeridos para acceder. }\\\hline
+	Frecuencia                             & Baja \\\hline
+	Importancia                            & Alta \\\hline
+	Urgencia                               & Alta \\
+}
+
+\tablaSmallSinColores{Caso de uso 2: Actualizar ficheros xls.}{p{3cm} p{.75cm} p{9cm}}{tablaCU2}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 2: Actualizar con ficheros xls.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Actualizar la información de la aplicación con ficheros xls} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Validar el usuario a través del login} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-2.1, RF-2.2, RF-2.3} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se selecciona el fichero en formato xls que se desea subir \\\cline{2-3}
+	& 2    & Se presiona el símbolo de \emph{play} para que comience el proceso de actualización \\\cline{2-3}
+	& 3    & Se espera a que finalice la carga del fichero \\\cline{2-3}
+	& 4    & Al finalizar la carga se puede subir más ficheros \\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se modifican los nombres en la visualizaciones} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Error al cargar el fichero. } \\\hline
+	Frecuencia                             & Baja \\\hline
+	Importancia                            & Alta \\\hline
+	Urgencia                               & Alta \\
+}
+
+\tablaSmallSinColores{Caso de uso 3: Visualizar los rankings sobre las notas de los TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU3}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 3: Visualizar rankings de la tabla del Histórico.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Se mostrará en la tabla del histórico tres rankings sobre las notas de los proyectos} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-3.1} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Acceder a la vista del histórico \\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Niguna}\\\hline
+	Frecuencia                             & Alta \\\hline
+	Importancia                            & Media \\\hline
+	Urgencia                               & Baja \\
+}
