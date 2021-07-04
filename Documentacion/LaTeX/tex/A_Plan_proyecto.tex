@@ -4,7 +4,7 @@
 En esta sección se detallará la planificación que se ha realizado, el estudio de viabilidad tanto de la parte económica como de la legal.
 
 \section{Planificación temporal}
-\subsection{Sprint 0 (26/10/2020 - 25/11/2020)}
+\subsection{Sprint 0 - Puesta a punto (26/10/20 - 25/11/20)}
 Puesta a punto del proyecto, planteamiento de las herramientas con las que trabajar, búsqueda de alternativas y toma de contacto con las herramientas nuevas que se van a emplear.
 Las tareas que se realizaron fueron:
 \begin{itemize}
@@ -26,7 +26,7 @@ Se puede ver el trascurso de estas tareas gráficamente en la siguiente ilustrac
 \imagenflotante{Sprint0_Graficos}{Gráfica Control chart- Sprint 0}{0.9}
 
 
-\subsection{Sprint 1 (25/11/2020 - 12/01/2021)}
+\subsection{Sprint 1 - Toma de contacto y comienzo de documentación (25/11/20 - 12/01/21)}
 Generación de test unitarios, búsqueda de trabajos similares, cambio del driver para conectarse con el excel, información para obtener ideas de como realizar ciertas mejoras y comienzo de la documentación del proyecto. Mejora de la cobertura de la aplicación web.
 
 Las tareas planteadas fueron:
@@ -52,7 +52,7 @@ Se puede ver el trascurso a través de la siguiente imagen \ref{fig:Sprint1_Graf
 
 \imagenflotante{Sprint1_Graficos}{Gráfica Control chart- Sprint 1}{0.9}
 
-\subsection{Sprint 2 (12/01/2021 - 26/01/2021)}
+\subsection{Sprint 2 - Incorporación de la API Fillo (12/01/21 - 26/01/21)}
 Búsqueda de nuevos drivers que implementen JDBC para ficheros .xls. Verificar el funcionamiento de las opciones encontradas para leer los .xls como \href{https://poi.apache.org/}{Apache POI}, \href{https://code.google.com/archive/p/sqlsheet/}{SQLSheet}, \href{https://codoid.com/fillo/}{API Fillo}, \href{https://www.cdata.com/drivers/excel/jdbc/}{Cdata JDBC for Excel} y JdbcOdbcDriver. Integrar la API Fillo en el proyecto. 
 
 Las tareas planteadas fueron:
@@ -88,7 +88,7 @@ La siguiente imagen \ref{fig:Sprint2_Graficos} muestra cómo se han desarrollado
 
 \imagenflotante{Sprint2_Graficos}{Gráfica Control chart- Sprint 2}{0.9}
 
-\subsection{Sprint 3 (26/01/2021 - 11/02/2021)}
+\subsection{Sprint 3 - Rediseño e integración API Fillo (26/01/21 - 11/02/21)}
 
 Las tareas planteadas fueron:
 \begin{itemize}
@@ -118,7 +118,7 @@ En la siguiente imagen se enseña gráficamente el desarrollo de las issues \ref
 
 \imagenflotante{Sprint3_Graficos}{Gráfica Control chart- Sprint 3}{0.9}
 
-\subsection{Sprint 4 (11/02/2021 - 23/02/2021)}
+\subsection{Sprint 4 - Integración Continua (11/02/2021 - 23/02/2021)}
 Se intentará incorporar la integración continua. Realizar el despliegue de la aplicación con Heroku. Añadir una columna de rankings en el Histórico. Cambiar las notas del histórico a privadas.
 
 Las tareas planteadas fueron:
@@ -133,7 +133,7 @@ Las tareas planteadas fueron:
 	\item Añadir dependencia Apache Commons Math
 		Se empleará Apache Commons Math para calcular los percentiles de los ranking de las notas.
 	\item Crear ranking de notas en Histórico
-		Para sustituir la columna de notas se integrarán tres nuevas columnas con rankings.
+		Para sustituir la columna de notas se integrarán tres nuevas columnas con rankings. Se trata de un ranking por curso, un ranking sobre todos los TFG (total) y un ranking de percentiles sobre el total de 5 niveles A,B,C,D,E.
 	\item Actualización del despliegue del proyecto de prueba en Heroku 
 		Se desplegó el proyecto principal, sistinf, en \textbf{Heroku}. Se podrá encontrar cómo realizar este proceso tanto en la \href{https://github.com/dbo1001/Gestor-TFG-2021/issues/36}{issue en Github} como en el apartado del \textbf{Manual del programador}.
 	\item Mejora de test JUnit
@@ -145,7 +145,7 @@ Se puede apreciar gráficamente el desarrollo de las issues en la siguiente ilus
 
 \imagenflotante{Sprint4_Graficos}{Gráfica Control chart- Sprint 4}{0.9}
 
-\subsection{Sprint 5 (23/02/2021 - 09/03/2021)}
+\subsection{Sprint 5 - Investigación de la plataforma SonarCloud y creación de rankings (23/02/21 - 09/03/21)}
 Añadir de nuevas columnas en la tabla de Históricos para reemplazar la columna Notas, la cual será eliminada. Crear test para comprobar los datos de los ficheros XLS. Investigación y prueba de análisis de la calidad del código con \href{https://sonarcloud.io/}{SonarCloud}.
 
 Las tareas realizadas fueron:
@@ -184,7 +184,7 @@ En la siguiente gráfica se puede ver el desarrollo de las tareas del Sprint\ref
 
 \imagenflotante{Sprint5_Graficos}{Gráfica Control chart- Sprint 5}{0.9}
 
-\subsection{Sprint 6 (09/03/2021 - 23/03/2021)}
+\subsection{Sprint 6 - Integración y actualización de ficheros (09/03/21 - 23/03/21)}
 Análisis del proyecto poolobject del código en Java en SonarCloud. Se investigó y probó a realizar el login a través de distintos métodos.
 
 Las tareas realizadas fueron:
@@ -217,7 +217,7 @@ Se puede ver el transcurso de las tareas del Sprint en las siguientes gráficas\
 
 \imagenflotante{Sprint6_GraficoBurndown}{Gráfica Burndown- Sprint 6}{0.9}
 
-\subsection{Sprint 7 (23/03/2021 - 13/04/2021)}
+\subsection{Sprint 7 - Análisis de proyectos con SonarCloud (23/03/21 - 13/04/21)}
 Análisis de la calidad del código de los proyectos presentados en 2020 con SonarCloud. Investigar cómo realizar el login con Firebase. Búsqueda y comienzo de proceso de migración de versión de Vaadin.
 
 Las tareas realizadas fueron:
@@ -293,7 +293,7 @@ Se puede apreciar el progreso de las tareas del Sprint 7 en las siguientes gráf
 
 \imagenflotante{Sprint7_GraficoBurndown}{Gráfica Burndown- Sprint 7}{0.9}
 
-\subsection{Sprint 8 (13/04/2021 - 04/05/2021)}
+\subsection{Sprint 8 - Migración a Vaadin 14 y Release 0.7 (13/04/21 - 04/05/21)}
 Continuación del proceso de migración el proyecto a Vaadin 14. Creación de la primera release (versión 0.6) con la app incluyendo la posibilidad de subir tanto .csv, como .xls, y su correspondiente actualización de las vistas.
 
 Las tareas realizadas fueron:
@@ -317,7 +317,7 @@ Se puede ver el transcurso de las tareas del Sprint en las gráficas\ref{fig:Spr
 
 \imagenflotante{Sprint8_GraficoBurndown}{Gráfica Burndown- Sprint 8}{0.9}
 
-\subsection{Sprint 9 (04/05/2021 - 11/05/2021)}
+\subsection{Sprint 9 - Migración Vaadin 14 (04/05/21 - 11/05/21)}
 Finalización del proceso de migración del proyecto a Vaadin 14 y despliegue de la aplicación en su nueva versión en \textbf{Heroku}.
 
 Las tareas realizadas fueron:
@@ -342,7 +342,7 @@ En la siguiente ilustración se muestra la realización de las tareas del Sprint
 
 \imagenflotante{Sprint9_GraficoBurndown}{Gráfica Burndown- Sprint 9}{0.9}
 
-\subsection{Sprint 10 (11/05/2021 - 18/05/2021)}
+\subsection{Sprint 10 - Despliegue en Heroku y Login Firebase (11/05/21 - 18/05/21)}
 Realizar despliegue en Java 11 con la nueva versión en Vaadin 14. Continuar con el nuevo login con Firebase. Introducir mejoras en el código.
 
 Las tareas realizadas fueron:
@@ -360,7 +360,7 @@ Las tareas realizadas fueron:
 		En los últimos commits no se pasaron exitosamente los test de la Integración continua, debido a que se cambio la aplicación a Java 11, en el pom.xml, pero no en el workflow. Esto se solucionará cambiando la versión de Java (java-version) en el workflow, en el fichero github-ci.yml concretamente.
 	\item Creación release 0.8
 		Creación nueva release con la aplicación en \textbf{Java 11} y Vaadin 14.
-	\item Actualizar styles del proyecto.
+	\item Actualizar estilos del diseño gráfico del proyecto.
 		Modificaciones estéticas de la aplicación para conseguir un resultado más similar a la versión anterior de la aplicación, con Vaadin 7. En estos cambios destacan, por ejemplo, el cambio del estilo del texto, tablas o títulos.
 	
 \end{itemize}
@@ -371,7 +371,7 @@ Se puede ver el tiempo qué se tardó en realizar las tareas y valores estadíst
 
 \imagenflotante{Sprint10_GraficoBurndown}{Gráfica Burndown- Sprint 10}{0.9}
 
-\subsection{Sprint 11 (18/05/2021 - 01/06/2021)}
+\subsection{Sprint 11 - Login Firebase(18/05/21 - 01/06/21)}
 Realizar login con base de datos Firestore. Añadir comprobaciones antes de acceder a la vista de la actualización de ficheros para que no se pueda acceder si no hay un usuario logueado. Modificaciones estéticas de la app. Cambiar la vista al iniciar la app a la vista de InformationView. Añadir en la vista de Métricas los análisis de calidad de código de SonarCloud.
 
 Las tareas realizadas fueron:
@@ -385,13 +385,13 @@ Las tareas realizadas fueron:
 		Tras crear la base de datos Firestore se añadirán nuevas reglas de seguridad para impedir su modificación a usuarios no permitidos. Para realizar las modificaciones se siguió la documentación de \href{https://firebase.google.com/docs/firestore/security/insecure-rules}{Firebase} cómo se ve en la \href{https://github.com/dbo1001/Gestor-TFG-2021/issues/130}{issue}.
 	\item Añadir iconos faltantes en la app.
 		Se buscó iconos equivalentes a los que anteriormente había en las vistas de la aplicación, ya que al actualizar de versión de Vaadin ya no existen.
-	\item Actualizar Footer.
+	\item Actualizar el pie de página web (footer).
 		Añadir iconos en el Footer, los nombres faltantes (y sus respectivos correos de la ubu) y revisar fecha actualización ficheros. Se agregó, además de la fecha de actualización de los ficheros CSV, la fecha de actualización del archivo XLS.
 	\item Renombrar ficheros XLS al subirse.
 		Se modificó la lógica de la vista de actualización de ficheros (UploadView) para que se pudiese subir el fichero XLS con cualquier nombre y fuese la propia app la que lo renombrará con el nombre requerido. En el caso de los ficheros csv, se indicará en la vista de UploadView cómo deben llamarse: $N1_Documento$, $N1_Norma$, $N1_Tribunal$,$N2_Alumno$,$N2_Proyecto$ y $N3_Historico$.
-	\item Añadir seguridad con Spring boot.
+	\item Añadir seguridad con \emph{Spring boot}.
 		Para evitar que se pueda acceder a la vista de la actualización de ficheros sin haber iniciado sesión previamente, se comenzó introduciendo Spring boot security pero, finalmente se encontró una forma más sencilla y se descarto el uso de esta opción.
-	\item Modificar UploadView para verificar si hay un usuario logueado.
+	\item Modificar UploadView para verificar si hay un usuario que haya iniciado sesión (logueado).
 		Se añadió un método que comprueba y controla, antes de entrar al evento de UploadView, si hay algún usuario logueado. En caso contrario, redirige al login para que el usuario inicie sesión. 
 	
 \end{itemize}
@@ -402,7 +402,7 @@ En la siguiente gráfica se ilustrará el transcurso de las tareas del Sprint 11
 
 \imagenflotante{Sprint11_GraficoBurndown}{Gráfica Burndown- Sprint 11}{0.9}
 
-\subsection{Sprint 12 (01/06/2021 - 08/06/2021)}
+\subsection{Sprint 12 - Login con UbuVirtual (01/06/2021 - 08/06/2021)}
 Reemplazar el login existente por un login empleando \textbf{UbuVirtual} con Moodle. Añadir enlace en el botón de métricas de la navegación a SonarCloud, a los análisis de los proyectos. Realizar mejoras de código y documentar. Revisar análisis de proyectos realizados anteriormente con SonarCloud y crear nuevos con los proyectos entregado en 2019.
 
 Las tareas realizadas fueron:
@@ -489,7 +489,7 @@ Se puede ver el desarrollo del Sprint 12 en la ilustración mostrada previamente
 
 \imagenflotante{Sprint12_GraficoBurndown}{Gráfica Burndown- Sprint 12}{0.9}
 
-\subsection{Sprint 13 (08/06/2021 - 18/06/2021)}
+\subsection{Sprint 13 - Revisión de la conexión con UbuVirtual (08/06/21 - 18/06/21)}
 Revisión de la autenticación con \href{https://moodle.org/}{Moodle} y añadir test para comprobar la conexión por \textbf{webServices}.
 
 Las tareas realizadas fueron:
@@ -510,21 +510,22 @@ A continuación, se expondrán dos ilustración para mostrar el trascurso del Sp
 
 \section{Estudio de viabilidad}
 \subsection{Viabilidad económica}
-En este apartado se detallan los costes que llevaría realizar este proyecto.
+En este apartado se detallan los costes que llevaría realizar este proyecto. Se considerarán los costes de recursos humanos, el material empleado y el \emph{Software} usado. 
 
 \subsubsection{Coste del personal}
+El proyecto ha sido desarrollado por una única persona durante 9 meses a tiempo parcial. Considerando un salario bruto mensual de 2000, el coste total del personal sería el siguiente:
 
 \subsubsection{Coste hardware}
 Referente a los costes del equipo utilizado en el desarrollo del trabajo. Teniendo en cuenta el precio del ordenador empleado de aproximadamente 700 euros.
 
-\subsubsection{Coste software}
-Referente a los costes de las herramientas software no gratuitas empleadas en el proyecto. Como es el caso del Sistema Operativo Windows o el Microsoft Office 365.
+\subsubsection{Coste \emph{software}}
+Referente a los costes de las herramientas software no gratuitas empleadas en el proyecto. Como es el caso del Sistema Operativo Windows 8 Home que se emplea en el equipo usado
 
 \subsection{Viabilidad legal}
-En este apartado se detallaran las licencias de cada dependencia que se ha utilizado en el proyecto
+Se detallaran las licencias \emph{Software} de cada dependencia que se ha utilizado en el proyecto.
 
 \tablaSmallSinColores{Dependencias del proyecto}{ l | l | l }{dependencias}
 {\textbf{Software} & \textbf{Licencia} \\}{
 	Vaadin & Apache License 2.0 \\
-	Vaadin Maven Plugin & Apache License 2.0 \\
+	Spring Boot Maven Plugin & Apache License 2.0 \\	
 }
