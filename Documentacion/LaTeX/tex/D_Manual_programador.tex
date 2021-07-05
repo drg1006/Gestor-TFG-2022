@@ -4,16 +4,16 @@
 En esta sección se describe la estructura del proyecto, el proceso de instalación del framework y herramientas necesarias para desarrollar el trabajo, cómo realizar la compilación,las pruebas realizadas, la instalación y ejecución del proyecto.
 
 \section{Estructura de directorios}
-Se enumerarán y describirán brevemente los directorios del proyecto.
+Se enumerarán y describirán brevemente los directorios del proyecto. Se puede encontrar el código fuente en el repositorio de Github denominado \href{https://github.com/dbo1001/Gestor-TFG-2021}{''Gestor-TFG-2021''}.
 
 \begin{itemize}
-	\item \textbf{/:} directorio raíz donde se ubican el README, el fichero de configuración para el despliegue de Heroku, los archivos de configuración de Vaadin 14, Spring Boot y Maven. 
-	\item \textbf{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub cómo para el análisis de la calidad del código en SonarCloud.
+	\item \textbf{/:} directorio raíz donde se ubican el README, el fichero de configuración para el despliegue de \href{https://dashboard.heroku.com/}{Heroku}, los archivos de configuración de Vaadin 14, Spring Boot y Maven. 
+	\item \textbf{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub cómo para el análisis de la calidad del código en \href{https://sonarcloud.io/}{SonarCloud}.
 	\item \textbf{/Documentacion} material de documentación del proyecto y aplicaciones de prueba empleadas.
 		\begin{itemize}
 			\tightlist
 			\item \textbf{/Documentacion/LaTeX} ficheros para generar la memoria y los anexos.
-			\item \textbf{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con Vaadin.
+			\item \textbf{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con \href{https://vaadin.com/}{Vaadin}.
 		\end{itemize}
 	\item \textbf{/frontend} código encargado del diseño gráfico de la aplicación por el lado del cliente.
 	\item \textbf{/src} código \textit{backend} de la aplicación web principal, \textbf{sistinf}.
@@ -22,12 +22,12 @@ Se enumerarán y describirán brevemente los directorios del proyecto.
 		\item \textbf{/src/main/java/ubu/digit} código fuente en Java de la aplicación web.
 			\begin{itemize}
 				\item \textbf{/src/main/java/ubu/digit/persistence} código fuente encargado de la conexión y lectura de los ficheros de datos (fachada de datos).
-				\item \textbf{/src/main/java/ubu/digit/security} código fuente de conexión y consulta con el Moodle de UbuVirtual.
+				\item \textbf{/src/main/java/ubu/digit/security} código fuente de conexión y consulta con el moodle de UbuVirtual.
 				\item \textbf{/src/main/java/ubu/digit/ui} código en relación a las ventanas y vistas de la aplicación.
 				\item \textbf{/src/main/java/ubu/digit/util} incluye los métodos empleados de utilidad empleados en toda la app. 
-				\item \textbf{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en Moodle.
+				\item \textbf{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en moodle.
 			\end{itemize}
-		\item \textbf{/src/test} tests unitarios
+		\item \textbf{/src/test} tests unitarios sobre las clases fachada, ''SistInfDataCsv'' y ''SistInfDataXls'', y sobre los servicios web (\emph{web service}).
 	\end{itemize}
 \end{itemize}
 
@@ -36,16 +36,15 @@ Se enumerarán y describirán brevemente los directorios del proyecto.
 A continuación se explicará cómo realizar la instalación de los programas necesarios para el desarrollo de la aplicación.
 
 \subsection{Instalación de Java}
-Como en el proyecto se usa Vaadin 8, se debe emplear la \textbf{versión 8 de Java}, en concreto se ha usado la jdk1.8.0\_271.
+
+Anteriormente se empleaba Vaadin 8, por lo que se debía emplear la versión Java 8, en concreto se usaba jdk1.8.0\_271. Pero, con la migración a Vaadin 14 se cambió a Java 11.
  
-Para ello se deberá ir a la \href{https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html}{página de descargas de Oracle Java SE 8.0} y descargar la versión de JDK 8 correspondiente con tu sistema operativo y su arquitectura, ya sea de 64 o 32 bits. Ver imagen \ref{fig:Descarga_JDK_8}.
+Para ello se debe descargar la \href{https://www.oracle.com/es/java/technologies/javase/jdk11-archive-downloads.html}{página de descargas de Oracle Java SE 11.0} y descargar la versión de JDK 11, correspondiente con el sistema operativo que se posea y su arquitectura, ya sea de 64 o 32 bits. Ver imagen \ref{fig:Descarga_JDK_11}.
 
-Tras escoger la versión según nuestro SO se deberán de leer y aceptar las licencias de uso de Oracle, como se muestra en la figura \ref{fig:Descarga_JDK8_Licencia}, y dar a descargar. 
+Tras escoger la versión según el SO, se deberán de leer y aceptar las licencias de uso de Oracle, como se muestra en la figura \ref{fig:Descarga_JDK11_Licencia}, y dar a descargar. También se deberá cambiar la variable de entorno de java del sistema.
 
-\imagenflotante{Descarga_JDK_8}{Descarga de JDK 8}{0.9}
-\imagenflotante{Descarga_JDK8_Licencia}{Descarga JDK 8 Licencia}{0.9}
-
-Una vez descargado, se deberá ejecutar el instalador y seguir el proceso de instalación del asistente.
+\imagenflotante{Descarga_JDK_11}{Descarga de JDK 11}{0.9}
+\imagenflotante{Descarga_JDK11_Licencia}{Descarga JDK 11 Licencia}{0.9}
 
 \subsection{Instalación de Eclipse}
 A continuación se instalará un entorno de desarrollo integrado(IDE) para Java, en este caso se ha utilizado \textbf{Eclipse IDE for Enterprise Java Developers} en la versión 2020-06. 
@@ -70,11 +69,13 @@ Una vez en el Eclipse Marketplace, se buscará ``\textbf{Vaadin}'' y se pulsará
 
 \imagenflotante{Plugin_Vaadin}{Plugin Vaadin}{1.0}
 
+\subsection{Instalación de Heroku CLI}
+
 \section{Compilación, instalación y ejecución del proyecto}
 Se explicará como compilar, instalar e ejecutar el proyecto. En el caso de la ejecución, se detallará como hacerlo con el términal de Windows y mediante Eclipse (IDE).
 
 \subsection{Descarga del repositorio}
-El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2016}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio.
+El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2021}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio.
 
 \imagenflotante{GitHub_Code}{Copiar URL repositorio}{1.1}
 
@@ -84,4 +85,8 @@ Para abrir el proyecto con Eclipse se seleccionara en la barra de herramientas \
 
 Después se hará click en ``\textbf{\textit{Directory\dots}}'' y se seleccionará la carpeta del proyecto con nombre ``\textbf{sistinf}'' y términaremos la importación con ``\textbf{\textit{Finish}}''.
 	
-\section{Pruebas del sistema}
+\subsection{Ejecución del proyecto}
+
+\subsection{Despliegue del proyecto}
+
+\subsection{Pruebas del sistema}
