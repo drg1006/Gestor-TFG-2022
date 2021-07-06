@@ -110,57 +110,58 @@ public class InformationView extends VerticalLayout {
 	 * Crea las normas de entrega.
 	 */
 	private void createNormas() {
-		H1 normasTitle = new H1(ESPECIFICACIONES_DE_ENTREGA);
-		normasTitle.addClassName(TITLE_STYLE);
-		add(normasTitle);
+		H1 rulesTitle = new H1(ESPECIFICACIONES_DE_ENTREGA);
+		rulesTitle.addClassName(TITLE_STYLE);
+		add(rulesTitle);
 		
-		final VerticalLayout normas = new VerticalLayout();
-		normas.setSpacing(true);
+		final VerticalLayout rules = new VerticalLayout();
+		rules.setSpacing(true);
 
 		//Se obtienen las descripciones de las normas 
-		List<String> listaNormas;
-		listaNormas = fachadaDatos.getNormas();
+		List<String> rulesList;
+		rulesList = fachadaDatos.getNormas();
 		LOGGER.info("Obteniendo normas de entrega ");
 		
-		for(int i=0;i<listaNormas.size();i++) {
-			normas.add(new Label(" - " + listaNormas.get(i)));
+		for(int i=0;i<rulesList.size();i++) {
+			rules.add(new Label(" - " + rulesList.get(i)));
 		}
-		add(normasTitle, normas);
+		add(rulesTitle, rules);
 	}
 	
 	/**
 	 * Crea el calendario.
 	 */
 	private void createCalendar() {	
-		H1 fechasTitle = new H1(FECHAS_DE_ENTREGA);
-		fechasTitle.addClassName(TITLE_STYLE);
+		H1 datesTitle = new H1(FECHAS_DE_ENTREGA);
+		datesTitle.addClassName(TITLE_STYLE);
 
 		String urlCalendario = config.getSetting("urlCalendario");
 		IFrame calendar = new IFrame("https://" + urlCalendario);
 		calendar.setWidth(85, Unit.PERCENTAGE);
 		calendar.setHeight(500, Unit.PIXELS);
-		add(fechasTitle, calendar);
+		add(datesTitle, calendar);
 	}
 
 	/**
 	 * Crea los documentos de entrega.
 	 */
 	private void createDocumentos() { 
-		H1 documentosTitle = new H1(DOCUMENTOS);
-		documentosTitle.addClassName(TITLE_STYLE);
+		H1 documentsTitle = new H1(DOCUMENTOS);
+		documentsTitle.addClassName(TITLE_STYLE);
 
-		final VerticalLayout documentos = new VerticalLayout();
-		documentos.setSpacing(true);
+		final VerticalLayout documents = new VerticalLayout();
+		documents.setSpacing(true);
 
 		//Se obtienen las descripciones y la url de los documentos 
-		List<String> listaDocumentos;
-		listaDocumentos = fachadaDatos.getDocumentos();
+		List<String> listDocuments;
+		listDocuments = fachadaDatos.getDocumentos();
 		LOGGER.info("Obteniendo documentos a entregar ");
 		
-		for(int i=0;i<listaDocumentos.size();i++) {
-			Anchor link = new Anchor(listaDocumentos.get(i), listaDocumentos.get(++i));
-			documentos.add(new HorizontalLayout(new Icon(VaadinIcon.LINK),link));
+		for(int i=0;i<listDocuments.size();i++) {
+			String nameLink = listDocuments.get(i);
+			Anchor link = new Anchor(listDocuments.get(++i), nameLink);
+			documents.add(new HorizontalLayout(new Icon(VaadinIcon.LINK),link));
 		}
-		add(documentosTitle, documentos);
+		add(documentsTitle, documents);
 	}
 }
