@@ -18,25 +18,28 @@ import okhttp3.Response;
  */
 public class Connection {
 
-	private static final OkHttpClient CLIENT;
-	private static final CookieManager COOKIES_MANAGER;
+	private static OkHttpClient CLIENT;
+	private static CookieManager COOKIE_MANAGER;
 
 	static {
-		COOKIES_MANAGER = new CookieManager();
-		COOKIES_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-		CookieHandler.setDefault(COOKIES_MANAGER);
-		CLIENT = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(COOKIES_MANAGER))
+		COOKIE_MANAGER = new CookieManager();
+		COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+		CookieHandler.setDefault(COOKIE_MANAGER);
+		CLIENT = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(COOKIE_MANAGER))
 				.readTimeout(Duration.ofMinutes(5)).build();
 	}
 
+	/*
+	 * Constructor vacío.
+	 */
 	private Connection() {
 	}
 
 	/**
-	 * Obtiene la respuesta de la petición 
+	 * Obtiene la respuesta de la petición .
 	 * @param url
 	 * @return Response
-	 * @throws IOException exception
+	 * @throws IOException
 	 */
 	public static Response getResponse(String url) throws IOException {
 		return getResponse(new Request.Builder().url(url)
@@ -44,18 +47,24 @@ public class Connection {
 	}
 
 	/**
-	 * Obtiene la respuesta a la petición
+	 * Obtiene la respuesta a la petición.
 	 * @param request
 	 * @return response
-	 * @throws IOException I/O exception
+	 * @throws IOException
 	 */
 	public static Response getResponse(Request request) throws IOException {
-		return CLIENT.newCall(request)
-				.execute();
+		return CLIENT.newCall(request).execute();
+	}
+	
+	/**
+	 * Limpia todas las cookies.
+	 */
+	public static void clearCookies() {
+		COOKIE_MANAGER.getCookieStore().removeAll();
 	}
 
 	/**
-	 * Devuelve la instancia del cliente
+	 * Devuelve la instancia del cliente.
 	 * @return la instancia del cliente
 	 */
 	public static OkHttpClient getClient() {
@@ -63,17 +72,10 @@ public class Connection {
 	}
 
 	/**
-	 * Devuelve el cookieManager que almacenan las cookies
+	 * Devuelve el cookieManager que almacenan las cookies.
 	 * @return cookies manager
 	 */
 	public static CookieManager getCookieManager() {
-		return COOKIES_MANAGER;
-	}
-	
-	/**
-	 * Limpia las cookies
-	 */
-	public static void clearCookies() {
-		COOKIES_MANAGER.getCookieStore().removeAll();
+		return COOKIE_MANAGER;
 	}
 }
