@@ -11,9 +11,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import ubu.digit.security.Controller;
 import ubu.digit.ui.views.LoginView;
-import ubu.digit.ui.views.UploadView;
 import ubu.digit.util.ExternalProperties;
 
 import static ubu.digit.util.Constants.*;
@@ -21,6 +19,8 @@ import static ubu.digit.util.Constants.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,11 +61,6 @@ public class Footer extends VerticalLayout {
 	private String fileName;
 	
 	/**
-	 * Controlador del acceso al moodle de UbuVirtual
-	 */
-	private static Controller CONTROLLER;
-	
-	/**
 	 * Logger de la clase.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(Footer.class.getName());
@@ -80,9 +75,6 @@ public class Footer extends VerticalLayout {
 		
 		H2 subtitle = new H2(INFORMACION);
 		subtitle.addClassName(SUBTITLE_STYLE);
-		
-		//Se crea la instancia del controlador de acceso al moodle de UbuVirtual
-		CONTROLLER = Controller.getInstance();
 		
 		addInformation();
 		addLicense();
@@ -137,21 +129,26 @@ public class Footer extends VerticalLayout {
 	 */
 	private String getLastModified(String fileName) {
 		String path = this.getClass().getClassLoader().getResource("").getPath();
-		String serverPath = path.substring(1, path.length()-17);
-		LOGGER.info("Ruta Footer " + serverPath);
+  		String serverPath = path.substring(0, path.length()-17);
+  		
+  		ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+		String dir = config.getSetting("dataIn");
+		String completeDir = serverPath + dir + "/";
 		
-		ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
-		String dirCsv = config.getSetting("dataIn");
-		String dir = serverPath + dirCsv + "/";
+		TimeZone zoneId = TimeZone.getTimeZone( "Europe/Madrid" );
+		Locale locale = new Locale("es","ES");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale);
+		sdf.setTimeZone(zoneId);
 		
-		LOGGER.info("Ruta config.properties Footer " + dir);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String lastModified = null;
-		File file = new File(dir + fileName);
+		File file = new File(completeDir + fileName);
+		LOGGER.info("Comprobar si existe el fichero " + file + " en el path " + completeDir + fileName);
 		if (file.exists()) {
+			LOGGER.info("Path file" + file);
 			Date date = new Date(file.lastModified());
 			lastModified = sdf.format(date);
+			LOGGER.info("Fecha de última modificación sin formato  " + date);
+			LOGGER.info("Fecha empleando la zona horaria Europe/Madrid " + lastModified);
 		}
 		return lastModified;
 	}
@@ -171,6 +168,7 @@ public class Footer extends VerticalLayout {
 		license.add(licenseText, ccLink);
 		
 		if (fileName != null) {
+			LOGGER.info("actualización fecha fichero " + fileName);
 			String lastModifiedCsv = getLastModified(fileName);
 			String lastModifiedXls = getLastModified("BaseDeDatosTFGTFM.xls");
 			license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
@@ -179,11 +177,7 @@ public class Footer extends VerticalLayout {
 
 		Button login = new Button("Actualizar");
 		login.addClickListener(e -> {	
-			if(CONTROLLER.getLogin() != null) {
-				UI.getCurrent().navigate(UploadView.class);
-			}else {	
-				UI.getCurrent().navigate(LoginView.class);
-			}
+			UI.getCurrent().navigate(LoginView.class);
 		});
 		license.add(login);
 	}
