@@ -748,22 +748,6 @@ public class HistoricProjectsView extends VerticalLayout {
 		gridHistoric.getColumns().forEach(columna -> columna.setSortable(true));
 		gridHistoric.getColumns().forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 		
-		/*gridHistoric.setClassNameGenerator(historic -> {
-			switch(historic.getRankingPercentile()) {
-				case "A":
-					return "error_row"; 
-				case "B":
-					return "ranking-styleB"; 
-				case "C":
-					return "ranking-styleC"; 
-				case "D":
-					return "ranking-styleD"; 
-				case "E":
-					return "ranking-styleE";
-			}
-			return null;
-		});*/
-		
 		gridHistoric.setItemDetailsRenderer(
 			    new ComponentRenderer<>(HistoricProject -> {
 			        VerticalLayout layout = new VerticalLayout();
