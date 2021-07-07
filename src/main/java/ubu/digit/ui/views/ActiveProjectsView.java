@@ -296,7 +296,7 @@ public class ActiveProjectsView extends VerticalLayout{
 	private void applyFilter(String column, String valueChange) {
 		dataFilteredGrid = new ArrayList<ActiveProject>();
 		Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
-		if(valueChange.equals(" ")) {
+		if(!valueChange.equals(" ")) {
 			while (iterator.hasNext()) {
 				ActiveProject activeproject = iterator.next();
 				
