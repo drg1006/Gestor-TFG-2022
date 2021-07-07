@@ -1,29 +1,29 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado se recoge los aspectos más interesantes del desarrollo del proyecto. Incluirá los detalles de mayor relevancia en cuanto al análisis, diseño e implementación del proyecto. Este apartado debe resumir la experiencia práctica del proyecto.
+Este apartado se recogen los aspectos más interesantes del desarrollo del proyecto.
 
 \section{Gestión del proyecto mediante metodología ágil}
-Para realizar el seguimiento y control del proyecto se implemento la metodología ágil con herramientas como \href{https://github.com/}{GitHUb} y \href{https://www.zenhub.com/}{ZenHub}. 
+Se introdujo el uso de la \textbf{integración continua (CI)} de forma automática con \href{https://github.com/dbo1001/Gestor-TFG-2021/blob/master/.github/workflows/github-ci.yml}{GitHub} mediante la opción \textbf{\href{https://github.com/dbo1001/Gestor-TFG-2021/actions}{GitHub Actions}}. 
 
-Se realizaron reuniones se seguimiento cada, aproximadamente 15 días, donde se exponían los cambios realizados en el periodo anterior (denominado \emph{Sprint}) y las tareas que debían realizarse en el próximo periodo de tiempo. Esto permitía un mejor control del tiempo y de las tareas pendientes. 
+Se creó un flujo de trabajo (\emph{workflows}) que compilaba y  ejecutaba los tests del código con el fin de verificar que no existían fallos en el código. Se realizaba esta comprobación cada vez que se realizaban actualizaciones en el código, subido al repositorio de GitHub, consiguiendo detectar los errores con mayor brevedad.
 
-Se introdujo el uso de la \textbf{integración continua} de forma automática con GitHub, donde se compilaba y ejecutaban tests para verificar que no existían fallos en el código. También se realizaron actualizaciones del despliegue de la aplicación con cada modificación del código para mantener el estado de la aplicación web desplegada al día.  
+También se realizaron \textbf{actualizaciones del despliegue de la aplicación} en \href{https://gestor-tfg-2021.herokuapp.com/}{Heroku} con cada modificación del código para mantener el estado de la aplicación web desplegada al día. En lugar de usar la aplicación desplegada en local en las reuniones de seguimiento con los tutores, se empleaba la aplicación desplegada porque funcionaba con mayor fluidez y rapidez.
 
 \section{Métricas -Análisis de la calidad del código}
 Un requisito era la realización del \textbf{análisis de la calidad del código a proyectos realizados en años anteriores} en una plataforma online, \href{https://sonarcloud.io/organizations/dbo1001/projects/}{SonarCloud}. 
 
 Primero se creó una cuenta en \href{https://sonarcloud.io}{SonarCloud} y se comenzó a indagar como realizar las mediciones de la calidad en la \href{https://sonarcloud.io/documentation}{documentación de SonarCloud}. 
 
-Con los proyectos con lenguajes de programación compatibles con SonarCloud, por ejemplo css, se podría realizar el análisis automático con lo que era mucho más sencillo porque no hacía falta especificar nada acerca del proyecto. Sin embargo, con los lenguajes no soportados como Java se requería especificar donde se encontraban los archivos fuente y binarios.
+Con los proyectos con lenguajes de programación compatibles con SonarCloud, por ejemplo css, se podría realizar el análisis automático con lo que era mucho más sencillo porque no hacía falta especificar nada acerca del proyecto. Sin embargo, con los lenguajes no soportados como Java se requería especificar dónde se encontraban los archivos fuente y binarios.
 En la documentación de \href{https://sonarcloud.io/documentation/analysis/automatic-analysis/}{SonarCloud acerca del análisis automático} se nombran los lenguajes soportados por la plataforma.
  
 Se analizaron alrededor de 36 proyectos, sin contar los proyectos que no se pudieron realizar por fallos.
 
 \section{Integración de la API Fillo}
 Uno de los objetivos era introducir la recuperación de datos con ficheros de múltiples hojas, concretamente en formato ods.
-Para ello se investigó una alternativa similar al driver empleado para leer los ficheros csv. Primero se probó la opción de \textbf{\href{https://www.cdata.com/drivers/excel/jdbc/}{Microsoft Excel JDBC Driver}} con el cual se puede leer, escribir y actualizar Excel mediante JDBC. Sin embargo, está opción es de pago, por lo que fue descartada. 
+Para ello se investigó una alternativa similar al driver empleado para leer los ficheros csv. Primero se probó la opción de \textbf{\href{https://www.cdata.com/drivers/excel/jdbc/}{Microsoft Excel JDBC Driver}} con el cual se puede leer, escribir y actualizar Excel mediante JDBC. Sin embargo, es una opción es de pago, por lo que fue descartada. 
 
-Después se testeo dos drivers gratuitos, \textbf{\href{https://odftoolkit.org/}{ODFDOM}} y \textbf{\href{http://www.jopendocument.org/}{JopenDocument}}, los cuales eran bastante viejos y en desuso.
+Después se testeó dos drivers gratuitos, \textbf{\href{https://odftoolkit.org/}{ODFDOM}} y \textbf{\href{http://www.jopendocument.org/}{JopenDocument}}, los cuales eran bastante viejos y en desuso.
 
 Como no se encontró ninguna solución válida, se decidió con los tutores cambiar el formato del fichero xls, ya que en este formato existían más opciones. Se volvió a realizar una búsqueda de drivers o APIs para realizar la conexión con ficheros xls y se encontraron varias opciones: 
 \begin{itemize}
@@ -32,40 +32,40 @@ Como no se encontró ninguna solución válida, se decidió con los tutores camb
 	\item \textbf{\href{https://codoid.com/fillo/}{Fillo}}: es una API(Interfaz de Programación de Aplicaciones) de Excel en Java que permite realizar consultas en lenguaje SQL sobre ficheros en formato xls y xlsx. Para testearlo se uso el proyecto de prueba ``HolaMundoVaadin'' y tras verificar su funcionamiento se incluyó en el proyecto principal. Se escogió esta opción porque exigía menos modificaciones y la posibilidad de utilizar de código.
 \end{itemize}
 
-Para realizar la integración de \textbf{\href{https://codoid.com/fillo/}{Fillo}} se separó el código, referente a la lectura de los datos en dos partes, una para cada tipo de fichero que la aplicación permite. Esto ocasionó la creación de nuevos tests para la comprobación de la obtención de la información en el nuevo tipo de fichero.
+Para realizar la integración de \textbf{\href{https://codoid.com/fillo/}{Fillo}} se separó el código referente a la lectura de los datos en dos partes, una para cada tipo de fichero que la aplicación permite. Esto ocasionó la creación de nuevos tests para la comprobación de la obtención de la información en el nuevo tipo de fichero.
 
 \section{Migración a Vaadin 14}
 La aplicación empleaba Vaadin 7 pero, cómo ya no contaba con soporte y requería usar Java 8 se decidió actualizar Vaadin a la versión 14, la última versión estable.  
 
-Para realizar la migración se intentó incorporar \textbf{MPR}(siglas en inglés,\emph{Multiplatform Runtime}) que ejecuta la aplicación original, en Vaadin 7, dentro de una aplicación en \textbf{Vaadin 14}. Para ello, se siguió la \href{https://vaadin.com/docs/v14/tools/mpr/introduction/step-1-maven-v7}{documentación de MPR en Vaadin} y se tomó como ejemplo el \href{https://github.com/OlliTietavainenVaadin/mpr-demo/tree/v7}{repositorio de demostración} mencionado en la documentación.
+Para realizar la migración se intentó incorporar \textbf{MPR}(siglas en inglés, \emph{Multiplatform Runtime}) que ejecuta la aplicación original, en Vaadin 7, dentro de una aplicación en \textbf{Vaadin 14}. Para ello, se siguió la \href{https://vaadin.com/docs/v14/tools/mpr/introduction/step-1-maven-v7}{documentación de MPR en Vaadin} y se tomó como ejemplo el \href{https://github.com/OlliTietavainenVaadin/mpr-demo/tree/v7}{repositorio de demostración} mencionado en la documentación.
 
-Tras intentar realizar la migración mediante \textbf{MPR}(siglas en inglés,\emph{Multiplatform Runtime}) y no conseguir resultados, se desistió y se comenzó a realizar la \textbf{migración de cero a Vaadin 14}. Se descargó uno de los proyectos de ejemplo de Vaadin 14, para tomarlo como referencia. 
+Tras intentar realizar la migración mediante \textbf{MPR}(siglas en inglés, \emph{Multiplatform Runtime}) y no conseguir resultados, se desistió y se comenzó a realizar la \textbf{migración de cero a Vaadin 14}. Se descargó uno de los proyectos de ejemplo de Vaadin 14, para tomarlo como referencia. 
 
-La actualización de los componentes y la navegación conllevo realizar una búsqueda y aprendizaje de los componentes en Vaadin 14, ya que se apreciaba un gran cambio.
+La actualización de los componentes y la navegación conllevó realizar una búsqueda y aprendizaje de los componentes en Vaadin 14, ya que se apreciaba un gran cambio.
 
 Otro apartado en el que se apreció un gran cambio fue en la navegación de la aplicación que se incluyó \textbf{Spring Boot} porque ofrecía una manera sencilla y rápida de ejecutar la aplicación sin necesidad de añadir un servidor web embebido.
 
-La migración requirió más cambios de los esperados por lo que conllevo mucho tiempo realizarla.
+La migración requirió más cambios de los esperados y como consecuencia se invirtió mucho tiempo en la tarea.
 
 \subsection{Mejoras de componentes de la aplicación}
-Con el cambio de versión se realizo una \textbf{mejora de los componentes}, como por ejemplo el reemplazo del elemento para realizar los gráficos por \textbf{ApexCharts} consiguiendo gráficos interactivos y atractivos \ref{fig:Ejemplo_gráfica}.
+Con el cambio de versión se realizó una \textbf{mejora de los componentes}, como por ejemplo el reemplazo del elemento para realizar los gráficos por \textbf{ApexCharts} consiguiendo gráficos interactivos y atractivos \ref{fig:Ejemplo_gráfica}.
 
 \imagenflotante{Ejemplo_gráfica}{Gráfica de ejemplo de la aplicación}{1}
 
 La mejora de las \textbf{tablas} e introducción de nuevas funcionalidades como los rankings de las calificaciones \ref{fig:Grid_example} y la posibilidad de ampliar las filas para ver con más detalle su contenido \ref{fig:Grid_description}.
 
-\imagenflotante{Grid_example}{Ejemplo tabla con la descripción de proyectos - Proyectos Activos}{1}.
+\imagenflotante{Grid_example}{Ejemplo tabla con la descripción de proyectos - Proyectos Activos}{1}
 
-\imagenflotante{Grid_description}{Ejemplo tabla con la descripción de proyectos ampliada (en detalle) - Proyectos Activos}{1}.
+\imagenflotante{Grid_description}{Ejemplo tabla con la descripción de proyectos ampliada (en detalle) - Proyectos Activos}{1}
 
 \section{Autenticación de usuarios con UbuVirtual}
 
-Uno de los requisitos era realizar un login que permita autentificarse con el correo de la Universidad de Burgos, para lo cual se realizó una recopilo posibles herramientas podían usarse para realizar la conexión y verificación del usuario.
+Uno de los requisitos era realizar un login que permita autentificarse con el correo de la Universidad de Burgos, para lo cual se realizó una recopiló posibles herramientas podían usarse para realizar la conexión y verificación del usuario.
 
 Primero se intentó realizar \textbf{la conexión a través de Microsoft} como se indica en su \href{https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-java-webapp}{documentación sobre Azure} pero no se consiguió.
 
-Después se probó con \href{https://firebase.google.com/}{Firebase}, con la opción de ``\textbf{Authentication}'' desde la cual se puede añadir usuarios y gestionar sus permisos. El problema era que requería de una persona que introdujera los datos y de realizar un proceso de codificación y descodificación de las contraseñas, por lo que no era viable. Con el caso de la base de datos online que tiene Firebase, ``\textbf{Firestore}'' ocurría lo mismo por lo que también se descarto.  
+Después se probó con \href{https://firebase.google.com/}{Firebase}, con la opción de ``\textbf{Authentication}'' desde la cual se puede añadir usuarios y gestionar sus permisos. El problema era que requería de una persona que introdujera los datos y de realizar un proceso de codificación y descodificación de las contraseñas, por lo que no era viable. Con el caso de la base de datos online que tiene Firebase, ``\textbf{Firestore}'' ocurría lo mismo por lo que también se descartó.  
 
-Se quería introducir un sistema que no necesitase de una persona para gestionarlo, por tanto, se optó por la autenticación mediante el \textbf{\href{https://moodle.org/}{moodle} de \href{https://ubuvirtual.ubu.es/}{UbuVirtual}}. 
+Se quería introducir un sistema que no necesitase de una persona para gestionarlo, por tanto, se optó por la autenticación mediante la instancia del \textbf{\href{https://moodle.org/}{Moodle} de \href{https://ubuvirtual.ubu.es/}{UbuVirtual}}. 
 
-Como consecuencia de esta modificación se tuvo que añadir mucho código y aprender cómo realizar la conexión y obtención de la información de moodle ya que nunca se había trabajo con esta plataforma.
+Como consecuencia de esta modificación se tuvo que añadir mucho código y aprender cómo realizar la conexión y obtención de la información de moodle ya que nunca se había trabajó con esta plataforma.
