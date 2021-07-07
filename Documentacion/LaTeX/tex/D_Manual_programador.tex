@@ -1,7 +1,7 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
-En esta sección se describe la estructura del proyecto, el proceso de instalación del framework y herramientas necesarias para desarrollar el trabajo, cómo realizar la compilación,las pruebas realizadas, la instalación y ejecución del proyecto.
+En esta sección se describe la estructura del proyecto, el proceso de instalación del framework y herramientas necesarias para desarrollar el trabajo, cómo realizar la compilación, las pruebas realizadas, la instalación y ejecución del proyecto.
 
 \section{Estructura de directorios}
 Se enumerarán y describirán brevemente los directorios del proyecto. Se puede encontrar el código fuente en el repositorio de Github denominado \href{https://github.com/dbo1001/Gestor-TFG-2021}{''Gestor-TFG-2021''}.
@@ -53,29 +53,29 @@ Para descargar el IDE se accederá a la \href{https://www.eclipse.org/downloads/
 
 \imagenflotante{Descargar_IDE}{Descargar IDE Eclipse}{0.9}
 
-En el caso de los sistemas operativos Windows se descargará un archivo ejecutable que se deberá ejecutar como administrador. Una vez ejecutado se deberá seleccionar la opción ``\textbf{\textit{Eclipse IDE for Enterprise Java Developers}}''. 
+En el caso de los sistemas operativos Windows se descargará un archivo ejecutable que se deberá ejecutar como administrador. Una vez ejecutado se deberá seleccionar la opción ``\textbf{\textit{Eclipse IDE for Enterprise Java Developers}}'' \ref{fig:Eclipse_Installer}. 
 
-En el siguiente paso, en el apartado de ``\textbf{Java 1.8 + VM}'' se deberá seleccionar la carpeta donde se encuentra el JDK 8, instalado anteriormente.
+En el siguiente paso, en el apartado de ``\textbf{Java 1.8 + VM}'' se deberá seleccionar la carpeta donde se encuentra el JDK 8, instalado anteriormente \ref{fig:Eclipse_Installer_JDK}.
 
 \imagenflotante{Eclipse_Installer}{Seleccionar Eclipse}{0.8}
 \imagenflotante{Eclipse_Installer_JDK}{Seleccionar JDK que usará el IDE}{0.8}
 
 \subsection{Instalación del \textit{plugin de Vaadin} para Eclipse}
-Una vez se haya instalado Eclipse, se procederá a añadir el plugin de Vaadin para Eclipse. Esto se realizará mediante el \textbf{Eclipse Marketplace de Eclipse}, el cual se encuentra en la opción de ``\textbf{\textit{Help/Eclipse Marketplace...}}'' de la barra de herramientas.
+Una vez se haya instalado Eclipse, se procederá a añadir el plugin de Vaadin para Eclipse. Esto se realizará mediante el \textbf{Eclipse Marketplace de Eclipse} \ref{fig:Eclipse_marketplace}, el cual se encuentra en la opción de ``\textbf{\textit{Help/Eclipse Marketplace...}}'' de la barra de herramientas.
 
 \imagenflotante{Eclipse_marketplace}{Eclipse marketplace}{0.7}
 
-Una vez en el Eclipse Marketplace, se buscará ``\textbf{Vaadin}'' y se pulsará ``\textbf{Go}''. Tras salir el plugin ``\textbf{\textit{Vaadin Plugin for Eclipse}}'', se dará a ``\textbf{Install}'' y comenzará la instalación del plugin.
+Una vez en el Eclipse Marketplace, se buscará ``\textbf{Vaadin}'' y se pulsará ``\textbf{Go}''. Tras salir el plugin ``\textbf{\textit{Vaadin Plugin for Eclipse}}'', se dará a ``\textbf{Install}'' y comenzará la instalación del plugin \ref{fig:Plugin_Vaadin}.
 
 \imagenflotante{Plugin_Vaadin}{Plugin Vaadin}{1.0}
 
 \subsection{Instalación de Heroku CLI}
 
 \section{Compilación, instalación y ejecución del proyecto}
-Se explicará como compilar, instalar e ejecutar el proyecto. En el caso de la ejecución, se detallará como hacerlo con el términal de Windows y mediante Eclipse (IDE).
+Se explicará como compilar, instalar y ejecutar el proyecto. En el caso de la ejecución, se detallará como hacerlo desde un terminal y mediante Eclipse (IDE).
 
 \subsection{Descarga del repositorio}
-El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2021}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio.
+El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2021}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio \ref{GitHub_Code}.
 
 \imagenflotante{GitHub_Code}{Copiar URL repositorio}{1.1}
 
@@ -85,8 +85,28 @@ Para abrir el proyecto con Eclipse se seleccionara en la barra de herramientas \
 
 Después se hará click en ``\textbf{\textit{Directory\dots}}'' y se seleccionará la carpeta del proyecto con nombre ``\textbf{sistinf}'' y términaremos la importación con ``\textbf{\textit{Finish}}''.
 	
-\subsection{Ejecución del proyecto}
+\section{Ejecución del proyecto}
 
-\subsection{Despliegue del proyecto}
+\section{Despliegue del proyecto}
 
-\subsection{Pruebas del sistema}
+\subsection{Creación aplicación en Heroku}
+
+\subsection{Despliegue con Heroku}
+
+El despliegue del proyecto se realizará en Heroku de forma local. Se intentó realizar el despligue de forma automática empleando Github pero, no se consiguió, en la \href{https://github.com/dbo1001/Gestor-TFG-2021/issues/112}{issue de Github}, en el apartado ''Despliegue a través de github'', se puede ver el proceso que se realizó en más detalle.
+
+Se comenzará por empaquetar el proyecto, para ello se abrirá un terminal en el directorio de nuestro proyecto y se ejecutará el comando \emph{''mvn clean package -Pproduction''}. Con este comando se empaquetará el proyecto en formato .war, en modo producción (\emph{''-Pproduction''}) \ref{fig:Descargar_IDE}.
+
+\imagenflotante{empaquetarWAR}{Despliegue en Heroku - Empaquetar aplicación en .war}{0.9}
+
+Ahora se deberá cambiar la versión de Java en Heroku. Para migrar a Java 11 en heroku, unicamente hará falta incluir un fichero llamado "system.properties", donde se especificará la versión: \emph{''java.runtime.version=11''}.
+
+Por último, se ejecuta \emph{''heroku war:deploy target/sistinf-0.5.war --app gestor-tfg-2021''} para desplegar el proyecto en Heroku \ref{fig:Descargar_IDE}. 
+
+\imagenflotante{despliegueHeroku}{Despliegue en Heroku - Realizar despliegue con el war}{0.9}
+
+Para acceder a la aplicación web se puede ejecutar el comando \emph{“heroku open –-app gestor-tfg-2021”} en la consola o a través del siguiente enlace \href{https://gestor-tfg-2021.herokuapp.com/}{https://gestor-tfg-2021.herokuapp.com/}. Otra opción, aunque unicamente se podría hacer si se conoce los credenciales de la cuenta de Heroku, es a través de la página del apartado donde 
+
+Para ver los mensajes internos de la aplicación (\emph{logs}) se deberá ejecutar el comando \emph{''heroku logs --tail --app gestor-tfg-2021''}
+
+\section{Pruebas del sistema}

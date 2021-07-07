@@ -2,6 +2,7 @@
 
 \section{Introducción}
 La especificación de requisitos hace referencia a los requerimientos que debe cumplir el software para satisfacer las necesidades del cliente. Debe incluir la suficiente cantidad de detalles para permitir a los desarrolladores software diseñar el sistema.
+Solo se incluirán los requisitos realizados en esta mejora.
 
 \section{Objetivos generales}
 El objetivo general del proyecto es continuar con el desarrollo y la mejora de la aplicación web respecto a la versión anterior, centrándose en los siguientes puntos:
@@ -58,16 +59,15 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 \subsection{Diagrama de casos de uso}
 En esta sección se mostrarán los diagramas de casos de uso. En la aplicación hay dos actores: el usuario con permisos de actualización de los datos de la aplicación y el usuario normal.
 
-\tablaSmallSinColores{Actores de la aplicación}{ l | l }{Actores_aplicación}
+\tablaSmallSinColores{Actores de la aplicación}{p{0.3\textwidth} | p{0.7\textwidth}}{Actores_aplicación}
 {\textbf{Usuario} & \textbf{Funcionalidad} \\}{
-	\multirow{2}{*}{Usuario con permisos de actualización} 
-	& Generalmente se tratará de un profesor, aunque también puede tratarse de un usuario que cuente con los permisos de actualización en la asignatura de Trabajos de Fin de Grado. \\
-	& Podrá acceder, a través del login, a la vista de actualización de ficheros donde tendrá la posibilidad de subir ficheros, en formato .xls o .csv, para reemplazar los datos mostrados en la aplicación \\ \hline
+	Responsable & Generalmente se tratará de un profesor, aunque también puede tratarse de un usuario que cuente con los permisos de actualización en la asignatura de Trabajos de Fin de Grado. \\\hline
+	& Podrá acceder, a través del login, a la vista de actualización de ficheros donde tendrá la posibilidad de subir ficheros, en formato .xls o .csv, para reemplazar los datos mostrados en la aplicación \\
 	
-	Responsable & El usuario podrá acceder a todas las vistas de la aplicación exceptuando la actualización de ficheros la cual, por razones de seguridad, solamente los usuarios con permisos podrán. \\
+	Usuario & El usuario podrá acceder a todas las vistas de la aplicación exceptuando la actualización de ficheros la cual, por razones de seguridad, solamente los usuarios con permisos podrán. \\
 }
 
-Se puede ver un resumen de los casos de uso descritos anteriormente en la siguiente imagen.\ref{fig:UseCaseDiagram}.
+Se puede ver un resumen de los casos de uso descritos anteriormente en la imagen \ref{fig:UseCaseDiagram}.
 
 \imagenflotante{UseCaseDiagram}{Diagrama de casos de uso}{0.9}
 

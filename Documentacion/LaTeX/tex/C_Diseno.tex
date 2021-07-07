@@ -18,6 +18,19 @@ Uno de los requisitos del proyecto era incluir la posibilidad de subir los datos
 
 En el caso que no se cumpla estas condiciones en las vistas del histórico y los proyectos activos no se mostraran los datos.
 
+El fichero en formato xls no requerirá de un nombre especifico pero, los \textbf{ficheros csv deberán llamarse de una determinada manera}. Los ficheros csv deben nombrarse, en función del tipo de datos que almacenen, de alguna de las siguientes formas:
+\begin{itemize}
+	\tightlist
+	\item El documento de fichero de datos con los documentos a presentar en el TFG: ''N1\_Documento''.
+	\item El fichero csv con los nombres de los miembros del tribunal: ''N1\_Tribunal''.
+	\item El fichero con los datos referentes a las normas: ''N1\_Norma''.
+	\item La hoja de datos con la información de los alumnos: ''N2\_Alumno ''.
+	\item La información de los proyectos en desarrollo o pendientes de seleccionar en el fichero denominado: ''N2\_Proyecto ''.
+	\item La hoja de datos referente a los proyectos realizados se deberá llamar: ''N3\_Historico''.
+\end{itemize}
+
+Si se intenta subir un fichero csv con un nombre diferente a los nombrados anteriormente parecerá un error en la pantalla indicando que el nombre del archivo no es válido.
+
 \subsection{Diagramas de clases}	
 
 Con la introducción de la posibilidad de actualizar los datos de la página web con una hoja de datos Excel con múltiples hojas (.xls) se requirió una modificación en las clases fachada para la obtención de los datos. 
@@ -26,38 +39,38 @@ Se dividió la clase fachada que existía anteriormente en dos, una encargada de
 
 Se encuentra en el paquete \textbf{ubu.digit.persistence} donde se emplea el patrón de diseño \textbf{Singleton} que permite restringir la creación de ob de una clase para garantizar que unicamente existe una instancia de la clase. También se emplea el patrón \textbf{Fachada}, con una nueva clase ''SistInfFactory'', la cual se encarga de interactuar y intercambiar las dos fachadas de datos que existe.
 
-\imagenflotante{Diagrama_clase_Persistencia}{Diagrama de clase - Persistencia}{1.0}
+\imagenflotante{Diagrama_clase_Persistencia}{Diagrama de clase - Persistencia}{1}
 
 Con la adicción de nuevas funcionalidades se realizaron mejoras o adicciones de funciones en todas las clases del proyecto, por lo que la estructura de las clases cambio con respecto a la versión anterior de la aplicación.
 \begin{itemize}
 	\tightlist
 	\item En \textbf{ubu.digit.view} \ref{fig:Diagrama_clase_View} se encuentran las vistas de la aplicación que acceden a los datos de los ficheros a través de las dos clases fachada, ''SistInfDataCsv'' y  ''SistInfDataXls''.
-	\imagenflotante{Diagrama_clase_View}{Diagrama de clase - Vistas}{1.0}
+	\imagenflotante{Diagrama_clase_View}{Diagrama de clase - Vistas}{1}
 	
 	\item En \textbf{ubu.digit.components} donde se encuentran las clases de los elementos correspondientes al pie de página (\emph{footer}) y a la barra del navegador comunes a todas las vistas. \ref{fig:Diagrama_clase_Components}. 
 	
-	\imagenflotante{Diagrama_clase_Components}{Diagrama de clase - Componentes}{0.9}
+	\imagenflotante{Diagrama_clase_Components}{Diagrama de clase - Componentes}{1}
 		
 	\item En el paquete \textbf{ubu.digit.util} se creo una clase nueva, ''UtilMethods'' para albergar las funciones que obtienen la información, en formato en JSON, del moodle de UbuVirtual que se emplea en la validación de los usuario en el login.\ref{fig:Diagrama_clase_util}. Se añadieron nuevas constantes (en ''Constants'') y se reemplazo la forma de obtener las rutas de los ficheros en la clase ''ExternalProperties''.
 	
-	\imagenflotante{Diagrama_clase_util}{Diagrama de clase - Util}{0.9}
+	\imagenflotante{Diagrama_clase_util}{Diagrama de clase - Util}{1}
 	
 	\item Se creo un nuevo paquete, \textbf{ubu.digit.entity}, para almacenar las entidades o clases donde se almacena la información respecto a los proyectos y los usuarios \ref{fig:Diagrama_clase_Entity}. 
 	
-	\imagenflotante{Diagrama_clase_Entity}{Diagrama de clase - Entidades}{1.0}
+	\imagenflotante{Diagrama_clase_Entity}{Diagrama de clase - Entidades}{1}
 	
 	\item Para la realizar la conexión con el moodle de UbuVirtual se añadió un nuevo paquete, denominado \textbf{ubu.digit.security}, que alberga las clases necesarias para realizar el login del usuario en el moodle, obtener los cursos del usuario y comprobar los permisos del usuario en la asignatura de Trabajos de Fin de Grado \ref{fig:Diagrama_clase_Security}. 
 	
-	\imagenflotante{Diagrama_clase_Security}{Diagrama de clase - Autenticación con moodle}{1.0}
+	\imagenflotante{Diagrama_clase_Security}{Diagrama de clase - Autenticación con moodle}{1}
 	
 	\item Para manejar la información contenida en moodle se emplearan servicios web (\emph{web services}). Se emplearán por ejemplo en la obtención de los cursos del usuario o de los permisos de dicho usuario en las asignaturas. Se creará una clase para cada servicio web  \ref{fig:Diagrama_clase_WebService}.
 	
-	\imagenflotante{Diagrama_clase_WebService}{Diagrama de clase -Servicios web}{1.0}
+	\imagenflotante{Diagrama_clase_WebService}{Diagrama de clase -Servicios web}{1}
 \end{itemize}
 
 Con la separación de la clase fachada se requirió crear una clase test para cada fachada, ''SistInfDataTestCSV'' y ''SistInfDataTestXLS''. También se incluyó una clase, ''WebServiceTest'', para testear la autenticación y comprobación de permisos del usuario. Para ello se empleo uno de los \href{https://school.moodledemo.net/}{moodle de ejemplo} que se proporciona en su \href{https://moodle.org/demo}{página oficial}. Estas clases se encuentran en el paquete \textbf{ubu.digit.persistence} \ref{fig:Diagrama_clase_Test}
 
-\imagenflotante{Diagrama_clase_Test}{Diagrama de clase - Tests}{1.0}
+\imagenflotante{Diagrama_clase_Test}{Diagrama de clase - Tests}{1}
 
 \section{Diseño procedimental}
 
@@ -70,25 +83,27 @@ En este apartado se hablará de los patrones y estructuras que se han empleado e
 \subsection{Singleton}
 Es un patrón de diseño que se basa en restringir la creación de objetos de una clase a un objeto a una única instancia. Es usado en las clases fachadas donde \textbf{solamente se tiene una instancia en todo el sistema} \ref{fig:Singleton_diagrama}.
 
-\imagenflotante{Singleton_diagrama}{Diagrama uml de la estructura del Singleton}{0.5}
+\imagenflotante{Singleton_diagrama}{Diagrama uml de la estructura del Singleton~\cite{imagen_Singleton}}{1}
 
 \subsection{Fachada}
 Es un patrón de diseño estructural que reduce la complejidad introduciendo una división de los sistemas, consiguiendo minimizar la comunicación del sistema con los datos. 
-Se usa en las clases de persistencia de datos, ''SistInfDataCsv'' y ''SistInfDataXls'', las cuales se relacionan directamente con los ficheros de datos y, el resto de las clases obtienen la información a través de las clases fachada \ref{fig:Fachada_diagrama}.
+Se usa en las clases de persistencia de datos, ``SistInfDataCsv'' y ``SistInfDataXls'', las cuales se relacionan directamente con los ficheros de datos y, el resto de las clases obtienen la información a través de las clases fachada \ref{fig:Fachada_diagrama}.
 
-\imagenflotante{Fachada_diagrama}{Diagrama uml de la estructura de la Fachada}{0.9}
+\imagenflotante{Fachada_diagrama}{Diagrama uml de la estructura de la Fachada~\cite{imagen_Fachada}}{1}
 
-\section{Diseño gráfico}
+\section{Especificaciones de diseño}
 
-Uno de los cambios de diseño más grandes que presenta la aplicación es debido a la migración que se realizó a \textbf{Vaadin 14}. Al realizar este cambio muchos componentes pasaron a ser inválidos y se tuvieron que sustituir por nuevos. Esto supuso realizar un aprendizaje del manejo de los componentes y herramientas que Vaadin 14 proporcionaba.
+Uno de los cambios de diseño más grandes que presenta la aplicación es debido a la \textbf{migración} que se realizó a \textbf{Vaadin 14}. Al realizar este cambio muchos componentes pasaron a ser inválidos y se tuvieron que sustituir por nuevos. Esto supuso realizar un aprendizaje del manejo de los componentes y herramientas que Vaadin 14 proporcionaba.
 Los cambios a través de componentes de Vaadin 14 más significativos son:
 \begin{itemize}
 	\tightlist
 	\item La introducción del \textbf{\href{https://vaadin.com/components/vaadin-login}{login}} que permite introducir credenciales y gestionar los mensajes de errores mostrados \ref{fig:login}. 
 	
-	\imagenflotante{login}{Login de la aplicación}{0.8}
+	\imagenflotante{login}{Login de la aplicación}{0.6}
 	
-	\item La modificación del sistema de subida de ficheros a través del componente de \textbf{\href{https://vaadin.com/components/vaadin-upload}{actualización}} con el que se puede especificar el número máximo de ficheros a subir, el formato, entre otras muchas opciones.  
+	\item La modificación del sistema de subida de ficheros a través del componente de \textbf{\href{https://vaadin.com/components/vaadin-upload}{actualización}} \ref{fig:Actualización_ficheros} con el que se puede especificar el número máximo de ficheros a subir, el formato, entre otras muchas opciones. 
+	
+	\imagenflotante{Actualización_ficheros}{Actualización de ficheros csv y xls en la aplicación}{1.2} 
 	
 	\item La migración de las tablas al componente \textbf{\href{https://vaadin.com/docs/v14/flow/components/tutorial-flow-grid}{Grid}}, el cual permite mostrar la información en forma de tablas e incluye diversas funcionalidades como ordenar columnas, añadir filtros y opciones para el diseño de la tabla.  	
 \end{itemize}
@@ -97,4 +112,4 @@ Otra modificación a mencionar es el cambio de la \textbf{herramienta empleada p
 Esta herramienta proporciona una interface más atractiva debido en gran parte a la interacción con las gráficas que incluye, teniendo la posibilidad, por ejemplo, de elegir si solamente queremos que se muestre una línea de la gráfica \ref{fig:Ejemplo_gráfica}. 
 Además, añade la opción de descargar la gráfica en varios formatos como por ejemplo, pdf. 
 
-\imagenflotante{Ejemplo_gráfica}{Gráfica de ejemplo de la aplicación}1.2}
+\imagenflotante{Ejemplo_gráfica}{Gráfica de ejemplo de la aplicación}{1}
