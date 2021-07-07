@@ -112,7 +112,7 @@ public class Footer extends VerticalLayout {
 		information.add(tutor1);
 		
 		Text tutor2 = new Text("Tutorizado por Alvar Arnaiz Gonzalez");
-		Anchor linkT2 = new Anchor("mailto:alvarag@alu.ubu.es", "alvarag@ubu.es");
+		Anchor linkT2 = new Anchor("mailto:alvarag@ubu.es", "alvarag@ubu.es");
 		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),linkT2));
 		information.add(tutor2);
 		
