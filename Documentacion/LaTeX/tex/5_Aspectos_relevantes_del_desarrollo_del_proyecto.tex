@@ -1,30 +1,35 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+Este apartado se recoge los aspectos más interesantes del desarrollo del proyecto. Incluirá los detalles de mayor relevancia en cuanto al análisis, diseño e implementación del proyecto. Este apartado debe resumir la experiencia práctica del proyecto.
 
 \section{Gestión del proyecto mediante metodología ágil}
 Para realizar el seguimiento y control del proyecto se implemento la metodología ágil con herramientas como \href{https://github.com/}{GitHUb} y \href{https://www.zenhub.com/}{ZenHub}. 
 
 Se realizaron reuniones se seguimiento cada, aproximadamente 15 días, donde se exponían los cambios realizados en el periodo anterior (denominado \emph{Sprint}) y las tareas que debían realizarse en el próximo periodo de tiempo. Esto permitía un mejor control del tiempo y de las tareas pendientes. 
 
-Se introdujo el uso de la integración continua de forma automática a través de GitHub donde se compilaba y ejecutaban tests para verificar que no existían fallos en el código. Esto permitió 
+Se introdujo el uso de la \textbf{integración continua} de forma automática con GitHub, donde se compilaba y ejecutaban tests para verificar que no existían fallos en el código. También se realizaron actualizaciones del despliegue de la aplicación con cada modificación del código para mantener el estado de la aplicación web desplegada al día.  
 
+\section{Métricas -Análisis de la calidad del código}
+Un requisito era la realización del \textbf{análisis de la calidad del código a proyectos realizados en años anteriores} en una plataforma online, \href{https://sonarcloud.io/organizations/dbo1001/projects/}{SonarCloud}. 
+
+Primero se creó una cuenta en \href{https://sonarcloud.io}{SonarCloud} y se comenzó a indagar como realizar las mediciones de la calidad en la \href{https://sonarcloud.io/documentation}{documentación de SonarCloud}. 
+
+Con los proyectos con lenguajes de programación compatibles con SonarCloud, por ejemplo css, se podría realizar el análisis automático con lo que era mucho más sencillo porque no hacía falta especificar nada acerca del proyecto. Sin embargo, con los lenguajes no soportados como Java se requería especificar donde se encontraban los archivos fuente y binarios.
+En la documentación de \href{https://sonarcloud.io/documentation/analysis/automatic-analysis/}{SonarCloud acerca del análisis automático} se nombran los lenguajes soportados por la plataforma.
+ 
+Se analizaron alrededor de 36 proyectos, sin contar los proyectos que no se pudieron realizar por fallos.
 
 \section{Integración de la API Fillo}
 Uno de los objetivos era introducir la recuperación de datos con ficheros de múltiples hojas, concretamente en formato ods.
 Para ello se investigó una alternativa similar al driver empleado para leer los ficheros csv. Primero se probó la opción de \textbf{\href{https://www.cdata.com/drivers/excel/jdbc/}{Microsoft Excel JDBC Driver}} con el cual se puede leer, escribir y actualizar Excel mediante JDBC. Sin embargo, está opción es de pago, por lo que fue descartada. 
 
-Después se testeo dos drivers gratuitos, \href{https://odftoolkit.org/}{ODFDOM} y \href{http://www.jopendocument.org/}{JopenDocument}, los cuales eran bastante viejos y en desuso.
+Después se testeo dos drivers gratuitos, \textbf{\href{https://odftoolkit.org/}{ODFDOM}} y \textbf{\href{http://www.jopendocument.org/}{JopenDocument}}, los cuales eran bastante viejos y en desuso.
 
 Como no se encontró ninguna solución válida, se decidió con los tutores cambiar el formato del fichero xls, ya que en este formato existían más opciones. Se volvió a realizar una búsqueda de drivers o APIs para realizar la conexión con ficheros xls y se encontraron varias opciones: 
 \begin{itemize}
-	\item \href{https://poi.apache.org/}{Apache POI}: permite, mediante el empleo de bibliotecas en Java puro, leer y escribir en archivos en formatos de Microsoft Office como Excel. Para verificar su funcionamiento, se incluyo en el proyecto de prueba ``HolaMundoVaadin'' y se realizaron diversas pruebas. Aunque funcionaba bien fue descartado ya que su inclusión requería de rehacer todas las funciones de obtención de datos y no se podría reutilizar código, empleado en la lectura de los ficheros csv.
-	\item \href{https://code.google.com/archive/p/sqlsheet/}{SqlSheet}: driver en JDBC para a conexión con ficheros xls y xlsx basado en Apache POI. Aunque era una buena opción, fue eliminada porque solo permitía hacer consultas sencillas de todo el documento, en lugar de seleccionar los datos por columnas o según una condición. 
-	\item \href{https://codoid.com/fillo/}{Fillo}: es una API(Interfaz de Programación de Aplicaciones) de Excel en Java que permite realizar consultas en lenguaje SQL sobre ficheros en formato xls y xlsx. Para testearlo se uso el proyecto de prueba ``HolaMundoVaadin'' y tras verificar su funcionamiento se incluyó en el proyecto principal. Se escogió esta opción porque exigía menos modificaciones y la posibilidad de utilizar de código.
+	\item \textbf{\href{https://poi.apache.org/}{Apache POI}}: permite, mediante el empleo de bibliotecas en Java puro, leer y escribir en archivos en formatos de Microsoft Office como Excel. Para verificar su funcionamiento, se incluyo en el proyecto de prueba ``HolaMundoVaadin'' y se realizaron diversas pruebas. Aunque funcionaba bien fue descartado ya que su inclusión requería de rehacer todas las funciones de obtención de datos y no se podría reutilizar código, empleado en la lectura de los ficheros csv.
+	\item \textbf{\href{https://code.google.com/archive/p/sqlsheet/}{SqlSheet}}: driver en JDBC para a conexión con ficheros xls y xlsx basado en Apache POI. Aunque era una buena opción, fue eliminada porque solo permitía hacer consultas sencillas de todo el documento, en lugar de seleccionar los datos por columnas o según una condición. 
+	\item \textbf{\href{https://codoid.com/fillo/}{Fillo}}: es una API(Interfaz de Programación de Aplicaciones) de Excel en Java que permite realizar consultas en lenguaje SQL sobre ficheros en formato xls y xlsx. Para testearlo se uso el proyecto de prueba ``HolaMundoVaadin'' y tras verificar su funcionamiento se incluyó en el proyecto principal. Se escogió esta opción porque exigía menos modificaciones y la posibilidad de utilizar de código.
 \end{itemize}
 
 Para realizar la integración de \textbf{\href{https://codoid.com/fillo/}{Fillo}} se separó el código, referente a la lectura de los datos en dos partes, una para cada tipo de fichero que la aplicación permite. Esto ocasionó la creación de nuevos tests para la comprobación de la obtención de la información en el nuevo tipo de fichero.
@@ -41,6 +46,17 @@ La actualización de los componentes y la navegación conllevo realizar una bús
 Otro apartado en el que se apreció un gran cambio fue en la navegación de la aplicación que se incluyó \textbf{Spring Boot} porque ofrecía una manera sencilla y rápida de ejecutar la aplicación sin necesidad de añadir un servidor web embebido.
 
 La migración requirió más cambios de los esperados por lo que conllevo mucho tiempo realizarla.
+
+\subsection{Mejoras de componentes de la aplicación}
+Con el cambio de versión se realizo una \textbf{mejora de los componentes}, como por ejemplo el reemplazo del elemento para realizar los gráficos por \textbf{ApexCharts} consiguiendo gráficos interactivos y atractivos \ref{fig:Ejemplo_gráfica}.
+
+\imagenflotante{Ejemplo_gráfica}{Gráfica de ejemplo de la aplicación}{1}
+
+La mejora de las \textbf{tablas} e introducción de nuevas funcionalidades como los rankings de las calificaciones \ref{fig:Grid_example} y la posibilidad de ampliar las filas para ver con más detalle su contenido \ref{fig:Grid_description}.
+
+\imagenflotante{Grid_example}{Ejemplo tabla con la descripción de proyectos - Proyectos Activos}{1}.
+
+\imagenflotante{Grid_description}{Ejemplo tabla con la descripción de proyectos ampliada (en detalle) - Proyectos Activos}{1}.
 
 \section{Autenticación de usuarios con UbuVirtual}
 
