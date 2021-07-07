@@ -163,7 +163,7 @@ public class Footer extends VerticalLayout {
 		license.setSpacing(true);
 
 		Text licenseText = new Text("This work is licensed under: ");
-		Anchor ccLink = new Anchor("https://creativecommons.org/licenses/by/4.0/", "Creative Commons Attribution 4.0 International License.");
+		Anchor ccLink = new Anchor("https://github.com/dbo1001/Gestor-TFG-2021/blob/master/LICENSE.md", "MIT License.");
 		
 		license.add(licenseText, ccLink);
 		
