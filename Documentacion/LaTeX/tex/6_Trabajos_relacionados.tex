@@ -1,27 +1,27 @@
 \capitulo{6}{Trabajos relacionados}
-Se nombraran algunos proyectos y aplicaciones similares o relacionados con la gestión de trabajos de fin de grado o master (TFG/TFM). 
+Se nombrarán algunos proyectos y aplicaciones similares o relacionados con la gestión de trabajos de fin de grado o master (TFG/TFM). 
 
 \section{GII15.9 Gestión de trabajos fin de grado v2.0}
-Es el proyecto que se propone para mejorar. Consiste en una aplicación web para la gestión de TFG de la Universidad de Burgos. Emplea como lenguaje de programación Java y Vaadin 7 como plataforma de código abierto para la interfaz web. 
+Es el proyecto que se propone para mejorar consiste en una aplicación web para la gestión de TFG de la Universidad de Burgos. Emplea como lenguaje de programación Java y Vaadin 7 como plataforma de código abierto para la interfaz web. 
 
-Este proyecto es una mejora del proyecto denominado \textbf{Revisiones automáticas de calidad de proyectos con SonarQube}. Se introdujo la lectura de ficheros csv con el driver ``CsvDriver'', el análisis local de los proyectos en \href{https://www.sonarqube.org/}{SonarQube} y la generación de las vistas de la aplicación empleando los datos obtenidos de los csv.
+Se trata de una actualización del TFG denominado \textbf{Revisiones automáticas de calidad de proyectos con SonarQube}. Se introdujo la lectura de ficheros csv con el driver ``CsvDriver'', el análisis local de los trabajos de fin de grado en \href{https://www.sonarqube.org/}{SonarQube} y la generación de las vistas de la aplicación empleando los datos obtenidos de los csv.
 
-El código fuente del proyecto se puede encontrar en el \href{https://github.com/jfb0019/Gestor-TFG-2016}{repositorio de GitHub}. Para ejecutar el código se abrirá un terminal dentro del proyecto principal llamado \textbf{``sistinf''} y se instalaran las dependencias con \emph{``mvn install''}. 
+El código fuente se puede encontrar en el \href{https://github.com/jfb0019/Gestor-TFG-2016}{repositorio de GitHub}. Para ejecutar el código se abrirá un terminal dentro del proyecto principal llamado \textbf{``sistinf''} y se instalarán las dependencias con \emph{``mvn install''}. 
 
-Después se compilará y empaquetará, el código, en un war con el comando \emph{``mvn clean package''} y, por último, se desplegará con el servidor HTTP, \href{https://www.eclipse.org/jetty/}{Jetty} con \emph{``mvn jetty:run-war''}. 
+Después se compilará y empaquetará el código en un war con el comando \emph{``mvn clean package''} y, por último, se desplegará con el servidor HTTP, \href{https://www.eclipse.org/jetty/}{Jetty} con \emph{``mvn jetty:run-war''}. 
 
-Si en lugar de desplegar el proyecto se desea ejecutar a través de un IDE, Eclipse por ejemplo, se realizará unicamente la instalación de dependencias y la ejecución de la app con \emph{``mvn jetty:run''}.
+Si en lugar de desplegar el proyecto se desea ejecutar a través de un IDE, se realizará unicamente la instalación de dependencias y la ejecución de la app con \emph{``mvn jetty:run''}.
 
 La aplicación se desplegará en la url por defecto \href{http://localhost:8080/}{http://localhost:8080/}.
 
 \section{GESTFG - Plataforma de Gestión y Evaluación de trabajos de Fin de Grado y Master}
-Es un sistema de gestión de TFG y TFM empleado en la Escuela Técnica Superior de Ingenierías Informática y Telecomunicaciones de Granada. Se empleo el framework \href{https://www.djangoproject.com/}{Django}. La plataforma administra la información relacionada con los TFGs, usuarios, las diferentes fases (asignación, evaluación), interacción entre los miembros asignados a un TFG (alumnos, tutores y tribunal), notificaciones vía correo electrónico, evaluación de los TFG, entre otras funcionalidades.
+Es un sistema de gestión de TFG y TFM empleado en la Escuela Técnica Superior de Ingenierías Informática y Telecomunicaciones de Granada. Se empleó el framework \href{https://www.djangoproject.com/}{Django}. La plataforma administra la información relacionada con los TFGs, usuarios, las diferentes fases (asignación, evaluación), interacción entre los miembros asignados a un TFG (alumnos, tutores y tribunal), notificaciones vía correo electrónico, evaluación de los TFG, entre otras funcionalidades.
 
-El proyecto se encontraba almacenado en \href{https://www.docker.com/}{Docker}, plataforma online de almacenaje y despliegue de proyectos en contenedores. 
+El proyecto se encontraba almacenado en \href{https://www.docker.com/}{Docker}, plataforma online de almacenaje y despliegue  de proyectos en contenedores. 
 
-Para probar el código del proyecto, ubicado en el repositorio \href{https://github.com/gabriel-stan/gestion-tfg}{gestion-tfg}, se ha descargado la imagen del docker y se hanr ealizado los pasos descritos en la \href{https://github.com/gabriel-stan/gestion-tfg/blob/master/docs/README-contenerizacion.md}{propia documentación del proyecto}. Pero, al ejecutar dicha imagen da error. Se ha intentado realizar con otros métodos, recomendados por los tutores, pero no se logró.
+Con el fin de probar el código del trabajo, ubicado en el repositorio \href{https://github.com/gabriel-stan/gestion-tfg}{gestion-tfg}, se ha descargado la imagen del docker y se han realizado los pasos descritos en la \href{https://github.com/gabriel-stan/gestion-tfg/blob/master/docs/README-contenerizacion.md}{propia documentación del proyecto}. Pero, al ejecutar dicha imagen da error. Se ha intentado realizar con otros métodos, recomendados por los tutores, pero no fue posible.
 
-El proyecto anteriormente se encontraba desplegado a través de GitHub pero ya no se encuentra disponible, debido seguramente a la falta de mantenimiento ya que es un proyecto de hace cinco años. 
+Anteriormente se encontraba desplegado a través de GitHub pero ya no se encuentra disponible, debido seguramente a la falta de mantenimiento, ya que la última fecha de modificación es de hace cinco años. 
 
 
                                                                                                                                 
