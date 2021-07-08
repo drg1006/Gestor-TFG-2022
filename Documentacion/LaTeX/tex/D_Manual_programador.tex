@@ -90,10 +90,21 @@ Para la ejecución del proyecto en local desde terminal se usará:
 \begin{itemize}
 	\item Limpiar las dependencias: \textbf{``mvn clean''}.
 	\item Instalar dependencias y compilar: \textbf{``mvn install''}.
-	\item Instalar en modo producción (para desplegar): \textbf{``mvn package -Pproduction''}. 
-	\item Iniciar app con Spring Boot:  \textbf{``mvn spring-boot:run''}. 
+	\item Instalar en modo producción (para desplegar): \textbf{``mvn package -Pproduction''}.  
 	\item Ejecutar test: \textbf{``mvn test''}.	
 \end{itemize}
+
+Para ejecutar el proyecto a través del IDE de Eclipse se deberá importar como proyecto Maven con el pom.xml. Para ejecutar la aplicación se usará un servidor local de \href{https://tomcat.apache.org/download-90.cgi}{Apache Tomcat}. Se descargará la versión 9 desde la  \href{https://tomcat.apache.org/download-90.cgi}{página oficial de Apache Tomcat}. 
+
+Una vez descargado y descomprimido, se creará un servicio de Tomcat \ref{añadirTomcat} con la ruta donde se tiene descargado Tomcat y se le dará un nombre \ref{nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'' \ref{tomcatAñadirProyecto}.
+
+\imagenflotante{añadirTomcat}{Añadir servidor de Tomcat a Eclipse}{0.9}
+\imagenflotante{nombreServerTomcat}{Seleccionar carpeta contenedora de Tomcat}{0.9}
+\imagenflotante{tomcatAñadirProyecto}{Añadir proyectos a servidor}{0.9}
+
+Primero se deberá ejecutar las dependencias, bien desde comando o desde Eclipse (click derecho en el proyecto>``Run As''>``Maven install'') y después iniciar el servicio con la opción start que aparece en la vista de los servidores. 
+
+Si no aparece la vista de los servicios se puede añadir desde la barra de herramientas>``Window''>``Show View''. Para configurar la ruta donde se ejecuta la aplicación, por defecto en \href{http://localhost:8080/}{localhost:8080/}, y el \emph{timeout}, se hará en el archivo de configuración pulsando doble click sobre el servicio.
 
 \subsection{Despliegue con Heroku}
 El proceso de creación de cuenta, instalación y despliegue viene documentado en la \href{https://devcenter.heroku.com/articles/getting-started-with-java}{página oficial de Heroku}.

@@ -28,7 +28,6 @@ import com.vaadin.flow.component.upload.UploadI18N.DropFiles;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -352,17 +351,5 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 			LOGGER.info("Inicio de sesión no verificado curr");
 			event.rerouteTo(LoginView.class);
 		}
-	}
-	
-	/** 
-	 * Controla el evento justo antes de salir del mismo. 
-	 * Al salir de la vista de actualización se cierra la sesión del usuario.
-	 * 
-	 * @param event
-	 *            before navigation event with event details
-	 */
-	 public void beforeLeave(BeforeLeaveEvent event) {
-		 LOGGER.info("Cerrando sesión");
-		 CONTROLLER.setUsername("");
 	}
 }

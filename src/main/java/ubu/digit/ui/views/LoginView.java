@@ -73,8 +73,6 @@ public class LoginView extends VerticalLayout{
 	 */
 	public static ErrorMessage errorMessage;
 	
-	private static String userName = "";
-	
 	/**
 	 * Constructor donde se crea el login
 	 */
@@ -99,7 +97,6 @@ public class LoginView extends VerticalLayout{
 			login.setEnabled(false);
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
 			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
-			userName = e.getUsername();
 			if(!isAutentificarte) {
 				LOGGER.info("Usuario no validado ");
 				CONTROLLER.setUsername("");
