@@ -1,4 +1,4 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dbo1001_Gestor-TFG-2021&metric=alert_status)](https://sonarcloud.io/dashboard?id=dbo1001_Gestor-TFG-2021) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://gestor-tfg-2021.herokuapp.com)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://gestor-tfg-2021.herokuapp.com)
 
 # GII 20.09 Herramienta web repositorios de TFGII - Gestor TFG/TFM 2021
 
