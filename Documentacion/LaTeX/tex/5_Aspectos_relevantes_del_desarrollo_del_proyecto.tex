@@ -25,7 +25,7 @@ Para ello se investigó una alternativa similar al driver empleado para leer los
 
 Después se testeó dos drivers gratuitos, \textbf{\href{https://odftoolkit.org/}{ODFDOM}} y \textbf{\href{http://www.jopendocument.org/}{JopenDocument}}, los cuales estaban en desuso.
 
-Como no se encontró ninguna solución válida, se decidió con los tutores cambiar el formato del fichero xls, ya que en este formato existían más opciones. Se volvió a realizar una búsqueda de drivers o APIs para realizar la conexión con ficheros xls y se encontraron varias opciones: 
+Como no se encontró ninguna solución válida, se decidió con los tutores cambiar el formato del fichero a xls, ya que en este formato existían más opciones. Se volvió a realizar una búsqueda de drivers o APIs para realizar la conexión con ficheros xls y se encontraron varias opciones: 
 \begin{itemize}
 	\item \textbf{\href{https://poi.apache.org/}{Apache POI}}: permite, mediante bibliotecas en Java puro, leer y escribir en archivos en formatos de Microsoft Office como Excel. Para verificar su funcionamiento, se incluyo en el proyecto de prueba ``HolaMundoVaadin'' y se realizaron diversas pruebas. Aunque funcionaba bien fue descartado ya que su inclusión requería de rehacer todas las funciones de obtención de datos y no se podría reutilizar código, empleado en la lectura de los ficheros csv.
 	\item \textbf{\href{https://code.google.com/archive/p/sqlsheet/}{SqlSheet}}: driver en JDBC para la conexión con ficheros xls y xlsx basado en Apache POI. Aunque era una buena opción, fue eliminada porque solo permitía hacer consultas sencillas de todo el documento, en lugar de seleccionar los datos por columnas o según una condición. 

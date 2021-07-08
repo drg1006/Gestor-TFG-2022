@@ -7,7 +7,7 @@ Solo se incluirán los requisitos realizados en esta mejora.
 \section{Objetivos generales}
 El objetivo general del proyecto es continuar con el desarrollo y la mejora de la aplicación web respecto a la versión anterior, centrándose en los siguientes puntos:
 \begin{itemize}
-	\item Optimizar la actualización de la información pública en la página Web añadiendo la posibilidad de actualizar con una hoja de datos \textbf{Excel} con múltiples hojas. Se deberá conservar la opción de renovar la información con diversos ficheros en formato .csv. 
+	\item Optimizar la actualización de la información pública en la página web añadiendo la posibilidad de actualizar con una hoja de datos \textbf{Excel} con múltiples hojas. Se deberá conservar la opción de renovar la información con diversos ficheros en formato .csv. 
 	\item Evolucionar el análisis de proyectos a una plataforma pública en la nube, \textbf{SonarCloud}, en lugar de emplear un servidor local de Sonarqube. Se deberán analizar la calidad del código de los TFG de cursos anteriores que cuenten con un repositorio público en Github.
 	\item Mejorar la \emph{interface} gráfica de la aplicación empleando nuevos componentes gráficos de la biblioteca Vaadin. 
 	\item Incorporar un sistema de autenticación de usuarios para la actualización de la información de la página Web de los TFG.
@@ -19,7 +19,6 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 
 \subsection{Requisitos funcionales}
 \begin{itemize}
-	
 	\item \textbf{RF-1 Autenticar usuarios}: la aplicación debe permitir comprobar la identidad del usuario mediante UbuVirtual.
 	\begin{itemize}
 		\item \textbf{RF-1.1 Verificación de la identidad del usuario:} se comprobará si las credenciales introducidas en el inicio de sesión corresponden con alguna cuenta de la UBU.
@@ -27,29 +26,23 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 		\item \textbf{RF-1.3 Chequeo de permisos del usuario:} la aplicación revisará si el usuario posee permisos de actualización en el curso del TFG y, por tanto, en la aplicación Web.
 		\item \textbf{RF-1.4 Conceder el acceso al usuario:} se aprobará la entrada del usuario autentificado a las páginas restringidas.
 	\end{itemize}
-
 	\item \textbf{RF-2 Actualizar ficheros xls}: la aplicación permite emplear dos tipos de archivos, xls y csv, como entrada de datos.
 	\begin{itemize}
 		\item \textbf{RF-2.1 Subida de datos:} el usuario autentificado podrá subir un fichero de datos, ya sea en el formato xls como en el csv. 
 		\item \textbf{RF-2.2 Validación de los datos:} se permitirá subir unicamente los ficheros en el formato establecido.
 		\item \textbf{RF-2.3 Actualización de la información:} la aplicación deberá refrescar los datos con los existentes en el fichero subido.
 	\end{itemize}
-
 	\item \textbf{RF-3 Visualizar los rankings sobre las notas de los TFG}: se incluirán tres rankings en la tabla del Histórico.
 	\begin{itemize}
 		\item \textbf{RF-3.1 Mostrar los rankings de notas:} se visualizarán las clasificaciones de los notas de los proyectos realizados a modo de rankings.
-	\end{itemize}
-		
+	\end{itemize}	
 \end{itemize}
 
 \subsection{Requisitos no funcionales}
 \begin{itemize}
-	\item \textbf{RNF-1 Seguridad}: la aplicación solamente debe permitir la subida de datos a los usuarios con permisos.
-	
-	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la incorporación de nuevas modificaciones en el futuro de forma sencilla. 
-	
-	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras gráficas de la aplicación para que resulte más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.
-	
+	\item \textbf{RNF-1 Seguridad}: la aplicación solamente debe permitir la subida de datos a los usuarios con permisos.	
+	\item \textbf{RNF-2 Mantenibilidad}: mejora de la aplicación para permitir la incorporación de nuevas modificaciones en el futuro de forma sencilla. 	
+	\item \textbf{RNF-2 Mejora diseño}: se realizarán mejoras gráficas de la aplicación para que resulte más atractiva e informativa. Se optará siempre por opciones intuitivas y sencillas de utilizar.	
 	\item \textbf{RNF-3 Analizar la calidad de código}: cómo parte del apartado de las métricas se examinaran Trabajos de Fin de Grado de años anteriores, con el fin de añadir más información acerca de ellos.
 
 \end{itemize}
@@ -66,13 +59,10 @@ En esta sección se mostrarán los diagramas de casos de uso. En la aplicación 
 	
 	Usuario & El usuario podrá acceder a todas las vistas de la aplicación exceptuando la actualización de ficheros la cual, por razones de seguridad, solamente los usuarios con permisos podrán. \\
 }
-
 Se puede ver un resumen de los casos de uso descritos anteriormente en la imagen \ref{fig:UseCaseDiagram}.
-
 \imagenflotante{UseCaseDiagram}{Diagrama de casos de uso}{0.9}
 
 \subsection{Especificación de casos de uso}
-
 \tablaSmallSinColores{Caso de uso 1: Autenticar usuarios.}{p{3cm} p{.75cm} p{9cm}}{tablaCU1}{
 	\multicolumn{3}{p{10.25cm}}{Caso de uso 1: Autenticar usuarios.} \\
 }
@@ -91,7 +81,6 @@ Se puede ver un resumen de los casos de uso descritos anteriormente en la imagen
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
 }
-
 \tablaSmallSinColores{Caso de uso 2: Actualizar ficheros xls.}{p{3cm} p{.75cm} p{9cm}}{tablaCU2}{
 	\multicolumn{3}{p{10.25cm}}{Caso de uso 2: Actualizar con ficheros xls.} \\
 }
@@ -110,7 +99,6 @@ Se puede ver un resumen de los casos de uso descritos anteriormente en la imagen
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
 }
-
 \tablaSmallSinColores{Caso de uso 3: Visualizar los rankings sobre las notas de los TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU3}{
 	\multicolumn{3}{p{10.25cm}}{Caso de uso 3: Visualizar rankings de la tabla del Histórico.} \\
 }

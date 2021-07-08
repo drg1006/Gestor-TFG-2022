@@ -1,13 +1,7 @@
 \apendice{Documentación de usuario}
 
 \section{Introducción}
-Se describirán los requisitos mínimos a cumplir para que el usuario puede acceder a la aplicación y el uso de la misma.
-
-\section{Requisitos de usuarios}
-El único requisito es disponer de Internet para acceder a la página web a través de un dispositivo electrónico, preferiblemente desde ordenador.
-
-\section{Instalación}
-No se requiere ninguna instalación por parte del usuario, simplemente acceder a la aplicación web a través del enlace \href{https://gestor-tfg-2021.herokuapp.com/}{https://gestor-tfg-2021.herokuapp.com/}.
+Se describirán los requisitos mínimos a cumplir para que el usuario pueda entrar en la aplicación y usarla. Al estar la aplicación desplegada en \href{https://gestor-tfg-2021.herokuapp.com/}{https://gestor-tfg-2021.herokuapp.com/} solamente hará falta disponer de Internet.
 
 \section{Manual del usuario}
 A continuación se detallará el manejo de la aplicación web.
@@ -21,11 +15,11 @@ Se trata de un elemento común a todas las vistas \ref{fig:nav_bar} para la nave
 \subsection{Pie de página}
 El pie de página (en ingles, \emph{footer}) es un apartado, usado en todas las vistas de la aplicación, donde se muestra las personas involucradas en el desarrollo de la aplicación, la licencia empleada y las fechas de actualización de los ficheros csv y xls.
 
-Dentro de este apartado se incluye el acceso al login a través del botón ``Actualizar''\ref{fig:footer}. 
+Dentro de este apartado se incluye el acceso al login a través del botón ``Actualizar'' \ref{fig:footer}. 
 
 \imagenflotante{footer}{Pie de página}{1}
 
-En el login y la actualización no aparecerá la última fecha de actualización de los datos.
+En el login y la actualización no aparecerá la última fecha de modificación de los datos.
 
 \subsection{Información} 
 \textbf{Al entrar a la aplicación se cargará la vista \href{https://gestor-tfg-2021.herokuapp.com/}{Información}}, donde se encuentran los apartados: miembros del tribunal, los documentos a presentar \ref{fig:informationview_tribunal}, un calendario con las fechas de entrega y un apartado con enlaces a páginas sobre las normativas \ref{fig:informationview_calendar}.
@@ -43,7 +37,7 @@ En la vista de los \textbf{\href{https://gestor-tfg-2021.herokuapp.com/active-pr
 
 Los filtros funcionan de manera que al introducir una palabra o letra en la casilla de texto, correspondiente a cada columna, se mostrará unicamente las filas cuyo valor de la columna correspondiente contenga la palabra introducida. 
 
-Por ejemplo, para obtener en la tabla \ref{fig:activeProject_tabla} los proyectos con el título ``Titulo 1'', se escribirá ``Titulo 1'' y el contenido de la tabla se actualizará para mostrar unicamente los trabajos con ese título \ref{fig:activeProject_tablaFiltrada}.
+Por ejemplo, para obtener en la tabla \ref{fig:activeProject_tabla} los proyectos con el título ``Titulo 1'', se escribirá ``Titulo 1'' y el contenido de la tabla se actualizará para mostrar unicamente los trabajos que cumplan esa condición \ref{fig:activeProject_tablaFiltrada}.
 
 \imagenflotante{activeProject_tablaFiltrada}{Vista Proyectos activos - Filtros y tabla de descripción de proyectos}{1}
 
@@ -52,32 +46,32 @@ La tabla incorpora funciones como el ordenamiento por orden alfabético al reali
 \imagenflotante{activeProject_tablaDetalles}{Vista Proyectos activos - Desplegar detalles de una fila de la Tabla}{1} 
 
 \subsection{Histórico} 
-La ventana del \textbf{\href{https://gestor-tfg-2021.herokuapp.com/Historic}{Histórico}} se dispone información estadística sobre los proyectos realizados en años anteriores. 
+La ventana del \textbf{\href{https://gestor-tfg-2021.herokuapp.com/Historic}{Histórico}} proporciona información estadística sobre los proyectos realizados en años anteriores. 
 
-Con algunos de estos datos se realizaran dos gráficas: Una de ellas recoge los datos de los alumnos, proyectos y tutores asignados en función del curso escolar \ref{fig:historico_PrimeraGrafica} (periodo comprendido entre septiembre del primer mes y julio del siguiente).Y, la otra gráfica presentará la media de calificaciones de los proyectos por año escolar \ref{fig:historico_SegundaGrafica}.
+Con algunos de estos datos se realizaran dos gráficas: Una de ellas recoge los datos de los alumnos, proyectos y tutores asignados en función del curso escolar \ref{fig:historico_PrimeraGrafica} (periodo comprendido entre septiembre del primer mes y julio del siguiente).Y la otra gráfica presentará la media de calificaciones de los proyectos por año escolar \ref{fig:historico_SegundaGrafica}.
 
 \imagenflotante{historico_PrimeraGrafica}{Vista Histórico - Información estadística y gráfica de calificaciones por curso}{0.9}
 
 \imagenflotante{historico_SegundaGrafica}{Vista Histórico - Información estadística y gráfica de asignaciones de profesores, alumnos y proyectos por curso}{0.9}
 
-Al igual que en los proyectos activos, se incluirá una tabla para la exposición de los proyectos y un apartado de filtros \ref{fig:historico_Tabla}. Esta tabla contará con las mismas funcionalidades que la de proyectos activos, como es el caso del despliegue de una fila para visualizar obtener más detalles acerca del proyecto. 
+Al igual que en los proyectos activos, se incluirá una tabla para la exposición de los proyectos y un apartado de filtros \ref{fig:historico_Tabla}. Esta tabla contará con las mismas funcionalidades que la de proyectos activos, como es el caso del despliegue de una fila para visualizar más detalles acerca del proyecto. 
 
 Los proyectos se filtraran de la misma forma que en proyecto activos \ref{fig:historico_Filtros}. Para eliminar el filtrado se deberá borrar el contenido de.
 
-Una de las modificaciones que se aplicó fue la introducción de \textbf{rankings de calificaciones} en lugar de mostrar la notas de los proyectos. El primer rankings se basa en percentiles con cinco posibles valores A, B, C, D y E, siendo el valor A el mejor resultado y el E, el peor. Y, un rankings por curso escolar y otro del total de los proyectos existentes.
+Una de las modificaciones que se aplicó fue la introducción de \textbf{rankings de calificaciones} en lugar de mostrar la notas de los proyectos. El primer rankings se basa en percentiles con cinco posibles valores A, B, C, D y E, siendo el valor A el mejor resultado y el E el peor. Y, un rankings por curso escolar y otro del total de los proyectos existentes.
 
-\imagenflotante{historico_Tabla}{Vista Histórico - Filtros y tabla de descripción de proyectos}{1}
+\imagenflotante{historico_Tabla}{Vista Histórico - Filtros y tabla de descripción de proyectos}{0.9}
 
-\imagenflotante{historico_Filtros}{Vista Histórico - Aplicar filtros en la tabla}{1}
+\imagenflotante{historico_Filtros}{Vista Histórico - Aplicar filtros en la tabla}{0.9}
 
 \subsection{Métricas} 
 Al pulsar sobre las Métricas en la barra de navegación se abrirá una nueva pestaña con los análisis de la calidad del código de los proyectos entregados, en los cursos académicos de 2020-2019 y 2019-2018. Son un total de 37 trabajos de fin de grado.
 
 \subsection{Login} 
 Se accederá al login a través del pie de página de cualquiera de las vistas de la aplicación. Se deberá introducir las credenciales correspondientes a la cuenta de UbuVirtual, el email y la contraseña \ref{fig:login}, para poder acceder a la vista de la actualización de ficheros.
-\imagenflotante{login}{Inicio de sesión de la aplicación}{0.9}
+\imagenflotante{login}{Inicio de sesión de la aplicación}{0.5}
 
-Es obligatorio rellenar, tanto el campo del usuario (email) \ref{fig:SinUsuarioLogin} como, el de la contraseña \ref{fig:SinpasswordLogin}.
+Es obligatorio rellenar, tanto el campo del usuario (email) \ref{fig:SinUsuarioLogin} como el de la contraseña \ref{fig:SinpasswordLogin}.
 
 \imagenflotante{SinUsuarioLogin}{Intento de inicio de sesión sin rellenar el usuario}{0.5}
 \imagenflotante{SinpasswordLogin}{Intento de inicio de sesión sin rellenar la contraseña}{0.5}
@@ -101,7 +95,7 @@ La entrada a esta vista \ref{fig:actualización_ficherosView} está restringida 
 
 \imagenflotante{actualización_ficherosView}{Actualización ficheros csv y xls}{0.9}
 
-Pulsando ``Suba un archivo'' se abrirá un explorador \ref{fig:explorador_archivos} con el que seleccionar el fichero que se desea subir. Solamente se permitirá subir un fichero cada vez y, en formato xls o csv. Para completar el proceso \ref{fig:actualizar_fileCsv} se pulsará el icono de \emph{play} \ref{fig:ActualizaciónFinalizada}, en caso de querer cancelarlo se hará click en la cruz.
+Al pulsar ``Suba un archivo'' se abrirá un explorador \ref{fig:explorador_archivos} con el que seleccionar el fichero que se desea subir. Solamente se permitirá subir un fichero cada vez, y en formato xls o csv. Para completar el proceso \ref{fig:actualizar_fileCsv} se pulsará el icono de \emph{play} \ref{fig:ActualizaciónFinalizada}, en caso de querer cancelarlo se hará click en la cruz.
 
 \imagenflotante{explorador_archivos}{Actualización ficheros - Explorador de archivos}{0.9}
 \imagenflotante{actualizar_fileCsv}{Actualización ficheros - Archivo en cola}{0.9}
