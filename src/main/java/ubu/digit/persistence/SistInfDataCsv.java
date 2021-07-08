@@ -85,7 +85,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 			}
 			
 			new BOMRemoveUTF().bomRemoveUTFDirectory(serverPath + DIRCSV);
-			LOGGER.info("Creación de la conexión con los ficheros CSV: " + serverPath + DIRCSV);
 			
 			Properties props = new java.util.Properties();
 			props.put("ignoreNonParseableLines", true);
