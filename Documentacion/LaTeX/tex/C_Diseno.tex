@@ -39,13 +39,13 @@ Se encuentra en el paquete \textbf{ubu.digit.persistence} donde se emplea el pat
 
 Al incluir nuevas funcionalidades se realizaron mejoras en todas las clases del proyecto, por lo que la estructura de las clases cambio con respecto a la versión anterior de la aplicación.
 \begin{itemize}
-	\item En \textbf{ubu.digit.view} \ref{fig:ViewClass} se encuentran las vistas de la aplicación que acceden a los datos de los ficheros a través de las dos clases fachada, ``SistInfDataCsv'' y  ``SistInfDataXls''.
+	\item En \textbf{ubu.digit.view} \ref{fig:ViewClass} se encuentran las vistas de la aplicación que obtienen la información a exponer a través de las dos clases fachada, ``SistInfDataCsv'' y  ``SistInfDataXls''.
 	\imagenflotante{ViewClass}{Diagrama de clase - Vistas}{0.9}	
 	\item En \textbf{ubu.digit.components} donde se encuentran las clases de los elementos correspondientes al pie de página (\emph{footer}) y a la barra del navegador comunes a todas las vistas \ref{fig:ComponentsClass}. 	
 	\imagenflotante{ComponentsClass}{Diagrama de clase - Componentes}{0.9}		
 	\item En el paquete \textbf{ubu.digit.util} se creo una clase nueva, ``UtilMethods'' para albergar las funciones que obtienen la información, en formato en JSON, del moodle de UbuVirtual \ref{fig:utilClass}. Se añadieron nuevas constantes (en ``Constants'') y se reemplazo la forma de obtener las rutas de los ficheros en la clase ``ExternalProperties''.	
 	\imagenflotante{utilClass}{Diagrama de clase - Util}{0.9}	
-	\item Se creo un nuevo paquete, \textbf{ubu.digit.entity}, para almacenar las entidades o clases donde se almacena la información respecto a los proyectos y los usuarios \ref{fig:entityClass}. 	
+	\item Se creo un nuevo paquete, \textbf{ubu.digit.entity}, para almacenar las entidades o clases donde se guarda la información respecto a los proyectos y los usuarios \ref{fig:entityClass}. 	
 	\imagenflotante{entityClass}{Diagrama de clase - Entidades}{0.9}	
 	\item Para la realizar la conexión con el moodle de UbuVirtual se añadió un nuevo paquete, denominado \textbf{ubu.digit.security}, que alberga las clases necesarias para realizar el login del usuario en el moodle, obtener los cursos del usuario y comprobar los permisos del usuario en la asignatura de Trabajos de Fin de Grado \ref{fig:securityClass}. 	
 	\imagenflotante{securityClass}{Diagrama de clase - Autenticación con moodle}{0.9}	

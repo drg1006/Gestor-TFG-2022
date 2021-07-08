@@ -74,7 +74,7 @@ Una vez en el Eclipse Marketplace, se buscará ``\textbf{Vaadin}'' y se pulsará
 Se explicará como compilar, instalar y ejecutar el proyecto. En el caso de la ejecución, se detallará como hacerlo desde un terminal y mediante Eclipse (IDE).
 
 \subsection{Descarga del repositorio}
-El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2021}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio \ref{GitHub_Code}.
+El código fuente se encuentra en el \href{https://github.com/dbo1001/Gestor-TFG-2021}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio \ref{fig:GitHub_Code}.
 
 \imagenflotante{GitHub_Code}{Copiar URL repositorio}{0.9}
 
@@ -94,15 +94,15 @@ Para la ejecución del proyecto en local desde terminal se usará:
 	\item Ejecutar test: \textbf{``mvn test''}.	
 \end{itemize}
 
-Para ejecutar el proyecto a través del IDE de Eclipse se deberá importar como proyecto Maven con el pom.xml. Para ejecutar la aplicación se usará un servidor local de \href{https://tomcat.apache.org/download-90.cgi}{Apache Tomcat}. Se descargará la versión 9 desde la  \href{https://tomcat.apache.org/download-90.cgi}{página oficial de Apache Tomcat}. 
+Para ejecutar el proyecto a través del IDE de Eclipse se deberá importar como proyecto Maven, con el pom.xml. Se usará un servidor local de \href{https://tomcat.apache.org/download-90.cgi}{Apache Tomcat}, en concreto, la versión 9. Se puede descargar en \href{https://tomcat.apache.org/download-90.cgi}{la página oficial de Apache Tomcat}.
 
-Una vez descargado y descomprimido, se creará un servicio de Tomcat \ref{añadirTomcat} con la ruta donde se tiene descargado Tomcat y se le dará un nombre \ref{nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'' \ref{tomcatAñadirProyecto}.
+Una vez descargado y descomprimido, se creará un servicio de Tomcat \ref{fig:añadirTomcat} con la ruta donde se tiene descargado Tomcat y se le dará un nombre \ref{fig:nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'' \ref{fig:tomcatAñadirProyecto}.
 
 \imagenflotante{añadirTomcat}{Añadir servidor de Tomcat a Eclipse}{0.9}
 \imagenflotante{nombreServerTomcat}{Seleccionar carpeta contenedora de Tomcat}{0.9}
 \imagenflotante{tomcatAñadirProyecto}{Añadir proyectos a servidor}{0.9}
 
-Primero se deberá ejecutar las dependencias, bien desde comando o desde Eclipse (click derecho en el proyecto>``Run As''>``Maven install'') y después iniciar el servicio con la opción start que aparece en la vista de los servidores. 
+Primero se deberá ejecutarán las dependencias, bien desde comando o desde Eclipse (click derecho en el proyecto>``Run As''>``Maven install'') y después se iniciará el servicio con la opción \emph{start} que aparece en la vista de los servidores. 
 
 Si no aparece la vista de los servicios se puede añadir desde la barra de herramientas>``Window''>``Show View''. Para configurar la ruta donde se ejecuta la aplicación, por defecto en \href{http://localhost:8080/}{localhost:8080/}, y el \emph{timeout}, se hará en el archivo de configuración pulsando doble click sobre el servicio.
 
@@ -110,12 +110,12 @@ Si no aparece la vista de los servicios se puede añadir desde la barra de herra
 El proceso de creación de cuenta, instalación y despliegue viene documentado en la \href{https://devcenter.heroku.com/articles/getting-started-with-java}{página oficial de Heroku}.
 
 \subsection{Instalación de Heroku CLI}
-Para desplegar la aplicación deberá instalar instalar el cliente de Heroku, Heroku CLI. Se descargará \href{https://devcenter.heroku.com/articles/heroku-cli#download-and-install}{Heroku CLI} según arquitectura Windows de la que se disponga y se ejecutará el instalador obtenido \ref{HerokuCLI}.
+Para desplegar la aplicación deberá instalar instalar el cliente de Heroku, Heroku CLI. Se descargará \href{https://devcenter.heroku.com/articles/heroku-cli#download-and-install}{Heroku CLI} según arquitectura Windows de la que se disponga y se ejecutará el instalador obtenido \ref{fig:HerokuCLI}.
 
 \imagenflotante{HerokuCLI}{Descarga Heroku CLI}{0.9}
 
 \subsection{Creación aplicación en Heroku}
-Primero se creará una cuenta de Heroku, desde la página de \href{https://dashboard.heroku.com/}{Heroku}. Una vez realizado esto se creará una aplicación de prueba desde la opción ``Creat new app'' \ref{CrearAppHeroku} y se introducirá el nombre que se desee darle a la app \ref{CrearApp2}, finalizando la creación pulsando al botón``Create app''. 
+Primero se creará una cuenta de Heroku, desde la página de \href{https://dashboard.heroku.com/}{Heroku}. Una vez realizado esto se creará una aplicación de prueba desde la opción ``Creat new app'' \ref{fig:CrearAppHeroku} y se introducirá el nombre que se desee darle a la app \ref{fig:CrearApp2}, finalizando la creación pulsando al botón``Create app'' \ref{fig:CrearApp3}. 
 
 \imagenflotante{CrearAppHeroku}{Crear app en Heroku}{0.9}
 \imagenflotante{CrearApp2}{Introducir datos de la nueva app}{0.9}
