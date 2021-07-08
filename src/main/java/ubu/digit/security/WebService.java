@@ -45,9 +45,12 @@ public class WebService {
 	 * Intenta conectarse al servicio del moodle(UbuVirtual) para recuperar el token del usuario
 	 * en la API.
 	 * 
-	 * @param host host de moodle
-	 * @param userName username de moodle
-	 * @param password contraseña de moodle
+	 * @param host 
+	 * 			host de moodle
+	 * @param userName 
+	 * 			username de moodle
+	 * @param password 
+	 * 				contraseña de moodle
 	 * @throws IOException si no se ha podido conectar al host
 	 */
 	public WebService(String host, String email, String password) throws IOException {
@@ -70,7 +73,7 @@ public class WebService {
 	}
 	
 	/**
-	 * Se establece el host, el token y el privateToken
+	 * Se establece el host, el token y el privateToken.
 	 * @param host
 	 * @param token
 	 * @param privateToken
@@ -84,7 +87,8 @@ public class WebService {
 	}
 	
 	/**
-	 * Obtiene la respuesta de una funcion de un servicio web
+	 * Obtiene la respuesta de una funcion de un servicio web.
+	 * 
 	 * @param wsFunction
 	 * @return respuesta
 	 * @throws IOException

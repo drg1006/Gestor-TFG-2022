@@ -3,6 +3,10 @@ package ubu.digit.webService;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que obtiene los cursos con el web service CORE_COURSE_GET_COURSES_BY_FIELD de un alumno.
+ * 
+ */
 public class CoreCourseGetCoursesByField extends WSFunctionAbstract {
 
 	public CoreCourseGetCoursesByField() {

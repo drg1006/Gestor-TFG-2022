@@ -274,24 +274,4 @@ public class SistInfDataTestCSV {
     public static void main(String[] args) {
         JUnitCore.main("ubu.digit.pesistence.SistInfDataTestCSV");
     } 
-    
-    /**
-     * Test que comprueba los proyectos activos (año actual)
-     * 
-     * @throws Exception
-     */
-   /* @Test
-    public void testProjectActivos() throws Exception {
-    	//Para obtener el año en el que estamos
-    	Calendar cal= Calendar.getInstance();
-    	int year= cal.get(Calendar.YEAR);
-    	
-    	Number num_esperado = 0;
-		num_esperado = sistInfData.getProjectActivos("Titulo","FechaPresentacion", "N3_Historico", year);
-        assertThat(num_esperado, is((Number) 2F));
-    }*/
-    
-    /**Test que compruba que los alumnos que figuran tienen un proyecto esten en la tabla de alumnos*/
-
-    /**Comprueba que el total dias sea la resta del final presentacion con el inicio*/
 }

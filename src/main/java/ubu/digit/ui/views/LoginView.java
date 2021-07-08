@@ -71,7 +71,9 @@ public class LoginView extends VerticalLayout{
 	 * Mensaje de error que se mostrará en el login 
 	 * en caso de no poder acceder.
 	 */
-	static ErrorMessage errorMessage;
+	public static ErrorMessage errorMessage;
+	
+	private static String userName = "";
 	
 	/**
 	 * Constructor donde se crea el login
@@ -97,6 +99,7 @@ public class LoginView extends VerticalLayout{
 			login.setEnabled(false);
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
 			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
+			userName = e.getUsername();
 			if(!isAutentificarte) {
 				LOGGER.info("Usuario no validado ");
 				CONTROLLER.setUsername("");
@@ -107,6 +110,7 @@ public class LoginView extends VerticalLayout{
 				login.setError(true);
 			}else {
 				LOGGER.info("Usuario validado ");
+				CONTROLLER.setUsername(e.getUsername());
 				login.setEnabled(true);
 				UI.getCurrent().navigate(UploadView.class);
 			}
@@ -165,6 +169,7 @@ public class LoginView extends VerticalLayout{
 			//Si no la tiene, se impide inciar seción.
 			Course courseTFG = createUserCourses.checkCourseTFG(userCourses);
 			if(courseTFG == null) {
+				createErrorLogin("Usuario sin acceso", "El usuario no cuenta con la asignatura de Trabajos de Final de Grado");
 				return false;
 			}
 			

@@ -14,7 +14,6 @@ import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -29,12 +28,12 @@ import com.vaadin.flow.component.upload.UploadI18N.DropFiles;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import elemental.json.Json;
 import ubu.digit.persistence.SistInfDataFactory;
-import ubu.digit.security.Connection;
 import ubu.digit.security.Controller;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
@@ -132,7 +131,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 				
 		buffer = new MemoryBuffer();
         upload = new Upload(buffer);
-        upload.setWidth("1800px");
+        upload.setWidth("1400px");
         upload.setI18n(createSpanishI18n());
         output = new Div();
 		ConfigureLogin();
@@ -342,7 +341,7 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	
 	/** 
 	 * Controla el evento antes de acceder al mismo. 
-	 * Redirige al usuario si no tiene permisos de acceso a la vista del login.
+	 * Redirige al usuario al login para que inicie sesión.
 	 * 
 	 * @param event
 	 *            before navigation event with event details
@@ -350,8 +349,20 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
 	public void beforeEnter(BeforeEnterEvent event) {
 		LOGGER.info("Inicio de la vista de actualización de archivos");
 		if (CONTROLLER.getUsername() == "") {
-			LOGGER.info("Inicio de sesión no verificado");
+			LOGGER.info("Inicio de sesión no verificado curr");
 			event.rerouteTo(LoginView.class);
 		}
+	}
+	
+	/** 
+	 * Controla el evento justo antes de salir del mismo. 
+	 * Al salir de la vista de actualización se cierra la sesión del usuario.
+	 * 
+	 * @param event
+	 *            before navigation event with event details
+	 */
+	 public void beforeLeave(BeforeLeaveEvent event) {
+		 LOGGER.info("Cerrando sesión");
+		 CONTROLLER.setUsername("");
 	}
 }
