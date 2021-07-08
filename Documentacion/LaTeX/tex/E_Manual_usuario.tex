@@ -51,43 +51,35 @@ La ventana del \textbf{\href{https://gestor-tfg-2021.herokuapp.com/Historic}{His
 Con algunos de estos datos se realizaran dos gráficas: Una de ellas recoge los datos de los alumnos, proyectos y tutores asignados en función del curso escolar \ref{fig:historico_PrimeraGrafica} (periodo comprendido entre septiembre del primer mes y julio del siguiente).Y la otra gráfica presentará la media de calificaciones de los proyectos por año escolar \ref{fig:historico_SegundaGrafica}.
 
 \imagenflotante{historico_PrimeraGrafica}{Vista Histórico - Información estadística y gráfica de calificaciones por curso}{0.9}
-
 \imagenflotante{historico_SegundaGrafica}{Vista Histórico - Información estadística y gráfica de asignaciones de profesores, alumnos y proyectos por curso}{0.9}
 
 Al igual que en los proyectos activos, se incluirá una tabla para la exposición de los proyectos y un apartado de filtros \ref{fig:historico_Tabla}. Esta tabla contará con las mismas funcionalidades que la de proyectos activos, como es el caso del despliegue de una fila para visualizar más detalles acerca del proyecto. 
-
-Los proyectos se filtraran de la misma forma que en proyecto activos \ref{fig:historico_Filtros}. Para eliminar el filtrado se deberá borrar el contenido de.
+Los proyectos se filtraran de la misma forma que en proyecto activos \ref{fig:historico_Filtros}. Para eliminar el filtrado se deberá borrar el contenido del campo de texto.
 
 Una de las modificaciones que se aplicó fue la introducción de \textbf{rankings de calificaciones} en lugar de mostrar la notas de los proyectos. El primer rankings se basa en percentiles con cinco posibles valores A, B, C, D y E, siendo el valor A el mejor resultado y el E el peor. Y, un rankings por curso escolar y otro del total de los proyectos existentes.
 
 \imagenflotante{historico_Tabla}{Vista Histórico - Filtros y tabla de descripción de proyectos}{0.9}
-
 \imagenflotante{historico_Filtros}{Vista Histórico - Aplicar filtros en la tabla}{0.9}
 
 \subsection{Métricas} 
-Al pulsar sobre las Métricas en la barra de navegación se abrirá una nueva pestaña con los análisis de la calidad del código de los proyectos entregados, en los cursos académicos de 2020-2019 y 2019-2018. Son un total de 37 trabajos de fin de grado.
+Al pulsar sobre las Métricas en la barra de navegación se abrirá una nueva pestaña con los \href{https://sonarcloud.io/organizations/dbo1001/projects/}{análisis de la calidad del código de los proyectos entregados}, en los cursos académicos de 2020-2019 y 2019-2018. Son un total de 37 trabajos de fin de grado.
 
 \subsection{Login} 
-Se accederá al login a través del pie de página de cualquiera de las vistas de la aplicación. Se deberá introducir las credenciales correspondientes a la cuenta de UbuVirtual, el email y la contraseña \ref{fig:login}, para poder acceder a la vista de la actualización de ficheros.
-\imagenflotante{login}{Inicio de sesión de la aplicación}{0.5}
+Se accederá al login a través del pie de página de cualquiera de las vistas de la aplicación. Se deberá introducir las credenciales correspondientes a la cuenta de UbuVirtual, el email y la contraseña, para poder acceder a la vista de la actualización de ficheros.
 
 Es obligatorio rellenar, tanto el campo del usuario (email) \ref{fig:SinUsuarioLogin} como el de la contraseña \ref{fig:SinpasswordLogin}.
-
-\imagenflotante{SinUsuarioLogin}{Intento de inicio de sesión sin rellenar el usuario}{0.5}
-\imagenflotante{SinpasswordLogin}{Intento de inicio de sesión sin rellenar la contraseña}{0.5}
+\imagenflotante{SinUsuarioLogin}{Intento de inicio de sesión sin rellenar el usuario}{0.9}
+\imagenflotante{SinpasswordLogin}{Intento de inicio de sesión sin rellenar la contraseña}{0.9}
 
 Al intentar iniciar sesión se pueden dar varias situaciones:
 \begin{itemize}
-	\item Inicio de sesión exitoso: se permitirá el acceso a la vista de la actualización de datos.
-	
+	\item Inicio de sesión exitoso: se permitirá el acceso a la vista de la actualización de datos.	
 	\item No disponer de la asignatura correspondiente al trabajo de fin de grado: se obtendrá de un mensaje de error \ref{fig:LoginSinTFG}.  	
-	\imagenflotante{LoginSinTFG}{Inicio de sesión - Error de acceso por no tener la asignatura de TFG}{0.9}
-	
+	\imagenflotante{LoginSinTFG}{Inicio de sesión - Error de acceso por no tener la asignatura de TFG}{0.9}	
 	\item Introducir credenciales que no correspondan a una cuenta de UbuVirtual: se mostrará el error \ref{fig:LoginError_Inválido}.	
-	\imagenflotante{LoginError_Inválido}{Inicio de sesión - Error por credenciales inválidos}{0.9}
-	
-	\item No contar con los permisos necesarios para acceder a la actualización de ficheros: ocasionando el error \ref{fig:LoginError_Inválido}.
-	\imagenflotante{LoginError_Inválido}{Inicio de sesión - Error por credenciales inválidos}{0.9}
+	\imagenflotante{LoginError_Inválido}{Inicio de sesión - Error por credenciales inválidos}{0.9}	
+	\item No contar con los permisos necesarios para acceder a la actualización de ficheros: ocasionando el error \ref{fig:LoginError_Permisos}.
+	\imagenflotante{LoginError_Permisos}{Inicio de sesión - Error de permisos}{0.9}
 \end{itemize}
 
 \subsection{Actualización ficheros} 

@@ -9,11 +9,8 @@ En este anexo se detallarán los aspectos referentes al diseño de la aplicació
 
 Uno de los requisitos del proyecto era incluir la posibilidad de subir los datos de la aplicación mediante ficheros con varios hojas de datos, en lugar de tener que subir cada hoja de datos en documentos por separado (csv). Se deben \textbf{cumplir algunas condiciones} para asegurar la \textbf{correcta obtención de los datos}:
 \begin{itemize}
-	\tightlist
-	\item En el caso de las \textbf{fechas} existen dos formatos: uno de ellos en las hojas con la información acerca de los proyectos activos (``N2\_Proyecto''), donde deben figurar los años referentes al curso de asignación separados de guiones. Por ejemplo 2016-2017. 
-	
-	Y, en cuanto a las fechas de presentación y asignación, de las hojas con los datos de los proyecto realizados anteriormente (``N3\_Historico'') deberán estar el estándar europeo DD/MM/AAAA tal como 08/07/2021.
-	
+	\item En el caso de las \textbf{fechas} existen dos formatos: uno de ellos en las hojas con la información acerca de los proyectos activos (``N2\_Proyecto''), donde deben figurar los años referentes al curso de asignación separados de guiones. Por ejemplo 2016-2017. 	
+	Y, en cuanto a las fechas de presentación y asignación, de las hojas con los datos de los proyecto realizados anteriormente (``N3\_Historico'') deberán estar el estándar europeo DD/MM/AAAA tal como 08/07/2021.	
 	\item Respecto a las \textbf{calificaciones} de las notas del histórico (``N3\_Historico''), los números deberán usar el punto como separador de decimales, como por ejemplo 5.5.
 \end{itemize}
 
@@ -21,7 +18,6 @@ En el caso que no se cumpla estas condiciones en las vistas del histórico y los
 
 El fichero en formato xls no requerirá de un nombre especifico pero, los \textbf{ficheros csv deberán llamarse de una determinada manera}. Los ficheros csv deben nombrarse, en función del tipo de datos que almacenen, de alguna de las siguientes formas:
 \begin{itemize}
-	\tightlist
 	\item El documento de fichero de datos con los documentos a presentar en el TFG: ``N1\_Documento''.
 	\item El fichero csv con los nombres de los miembros del tribunal: ``N1\_Tribunal''.
 	\item El fichero con los datos referentes a las normas: ``N1\_Norma''.
@@ -35,7 +31,7 @@ Si se intenta subir un fichero csv con un nombre diferente a los nombrados anter
 \subsection{Diagramas de clases}	
 Con la introducción de la posibilidad de actualizar los datos con ficheros xls, se requirió una modificación en las clases fachada para la obtención de los datos. 
 
-Se dividió la clase fachada que existía anteriormente en dos, una encargada de los ficheros en formato csv y otra con los formatos xls. Se creará una clase abstracta de la que heredarán las dos clases fachada, las cuales comparten la misma estructura de funciones \ref{fig:Diagrama_clase_Persistencia}.
+Se dividió la clase fachada que existía anteriormente en dos, una encargada de los ficheros en formato csv y otra con los formatos xls. Se creará una clase abstracta de la que heredarán las dos clases fachada, las cuales comparten la misma estructura de funciones \ref{fig:persistenceClass}.
 
 Se encuentra en el paquete \textbf{ubu.digit.persistence} donde se emplea el patrón de diseño \textbf{Singleton} que permite restringir la creación de una clase para garantizar que unicamente existe una instancia de la clase. También se emplea el patrón \textbf{Fachada}, con una nueva clase ``SistInfFactory'', la cual se encarga de interactuar y cambiar entre las dos fachadas de datos que existe.
 
@@ -43,28 +39,17 @@ Se encuentra en el paquete \textbf{ubu.digit.persistence} donde se emplea el pat
 
 Al incluir nuevas funcionalidades se realizaron mejoras en todas las clases del proyecto, por lo que la estructura de las clases cambio con respecto a la versión anterior de la aplicación.
 \begin{itemize}
-	\tightlist
-	\item En \textbf{ubu.digit.view} \ref{fig:Diagrama_clase_View} se encuentran las vistas de la aplicación que acceden a los datos de los ficheros a través de las dos clases fachada, ``SistInfDataCsv'' y  ``SistInfDataXls''.
-	\imagenflotante{ViewClass}{Diagrama de clase - Vistas}{0.9}
-	
-	\item En \textbf{ubu.digit.components} donde se encuentran las clases de los elementos correspondientes al pie de página (\emph{footer}) y a la barra del navegador comunes a todas las vistas \ref{fig:Diagrama_clase_Components}. 
-	
-	\imagenflotante{ComponentsClass}{Diagrama de clase - Componentes}{0.9}
-		
-	\item En el paquete \textbf{ubu.digit.util} se creo una clase nueva, ``UtilMethods'' para albergar las funciones que obtienen la información, en formato en JSON, del moodle de UbuVirtual \ref{fig:Diagrama_clase_util}. Se añadieron nuevas constantes (en ``Constants'') y se reemplazo la forma de obtener las rutas de los ficheros en la clase ``ExternalProperties''.
-	
-	\imagenflotante{utilClass}{Diagrama de clase - Util}{0.9}
-	
-	\item Se creo un nuevo paquete, \textbf{ubu.digit.entity}, para almacenar las entidades o clases donde se almacena la información respecto a los proyectos y los usuarios \ref{fig:Diagrama_clase_Entity}. 
-	
-	\imagenflotante{entityClass}{Diagrama de clase - Entidades}{0.9}
-	
-	\item Para la realizar la conexión con el moodle de UbuVirtual se añadió un nuevo paquete, denominado \textbf{ubu.digit.security}, que alberga las clases necesarias para realizar el login del usuario en el moodle, obtener los cursos del usuario y comprobar los permisos del usuario en la asignatura de Trabajos de Fin de Grado \ref{fig:Diagrama_clase_Security}. 
-	
-	\imagenflotante{securityClass}{Diagrama de clase - Autenticación con moodle}{0.9}
-	
-	\item Para manejar la información contenida en moodle se emplearan servicios web (\emph{web services}). Se emplearán por ejemplo en la obtención de los cursos del usuario o de los permisos de dicho usuario en las asignaturas. Se creará una clase para cada servicio web  \ref{fig:Diagrama_clase_WebService}.
-	
+	\item En \textbf{ubu.digit.view} \ref{fig:ViewClass} se encuentran las vistas de la aplicación que acceden a los datos de los ficheros a través de las dos clases fachada, ``SistInfDataCsv'' y  ``SistInfDataXls''.
+	\imagenflotante{ViewClass}{Diagrama de clase - Vistas}{0.9}	
+	\item En \textbf{ubu.digit.components} donde se encuentran las clases de los elementos correspondientes al pie de página (\emph{footer}) y a la barra del navegador comunes a todas las vistas \ref{fig:ComponentsClass}. 	
+	\imagenflotante{ComponentsClass}{Diagrama de clase - Componentes}{0.9}		
+	\item En el paquete \textbf{ubu.digit.util} se creo una clase nueva, ``UtilMethods'' para albergar las funciones que obtienen la información, en formato en JSON, del moodle de UbuVirtual \ref{fig:utilClass}. Se añadieron nuevas constantes (en ``Constants'') y se reemplazo la forma de obtener las rutas de los ficheros en la clase ``ExternalProperties''.	
+	\imagenflotante{utilClass}{Diagrama de clase - Util}{0.9}	
+	\item Se creo un nuevo paquete, \textbf{ubu.digit.entity}, para almacenar las entidades o clases donde se almacena la información respecto a los proyectos y los usuarios \ref{fig:entityClass}. 	
+	\imagenflotante{entityClass}{Diagrama de clase - Entidades}{0.9}	
+	\item Para la realizar la conexión con el moodle de UbuVirtual se añadió un nuevo paquete, denominado \textbf{ubu.digit.security}, que alberga las clases necesarias para realizar el login del usuario en el moodle, obtener los cursos del usuario y comprobar los permisos del usuario en la asignatura de Trabajos de Fin de Grado \ref{fig:securityClass}. 	
+	\imagenflotante{securityClass}{Diagrama de clase - Autenticación con moodle}{0.9}	
+	\item Para manejar la información contenida en moodle se emplearan servicios web (\emph{web services}). Se emplearán por ejemplo en la obtención de los cursos del usuario o de los permisos de dicho usuario en las asignaturas. Se creará una clase para cada servicio web  \ref{fig:webServiceClass}.	
 	\imagenflotante{webServiceClass}{Diagrama de clase -Servicios web}{0.9}
 \end{itemize}
 
@@ -93,9 +78,7 @@ En este apartado se hablará de los patrones y estructuras que se han empleado e
 
 \subsection{Estructura general}
 En el trabajo existe una clara distinción entre el \emph{frontend} y el \emph{backend}. 
-
-Los ficheros de estilos y las clases ubicadas en ubu.digit.ui.views y ubu.digit.ui.components, referentes a las \textbf{vistas} de la aplicación formarían parte del \emph{frontend}. 
-
+Los ficheros de estilos y las clases ubicadas en ubu.digit.ui.views y ubu.digit.ui.components, referentes a las \textbf{vistas} de la aplicación, formarían parte del \emph{frontend}. 
 Mientras que el resto de las clases en Java corresponderían a la parte \emph{backend}, encargada de la \textbf{lógica y la gestión de los datos}. En especial el paquete ubu.digit.persistence que se encarga de la comunicación directa con los datos. 
 
 \subsection{Singleton}

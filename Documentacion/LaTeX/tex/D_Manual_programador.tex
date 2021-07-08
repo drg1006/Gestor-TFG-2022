@@ -27,7 +27,7 @@ Se enumerarán y describirán brevemente los directorios del proyecto. Se puede 
 				\item \textbf{/src/main/java/ubu/digit/util} incluye los métodos empleados de utilidad empleados en toda la app. 
 				\item \textbf{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en moodle.
 			\end{itemize}
-		\item \textbf{/src/test} tests unitarios sobre las clases fachada, ``SistInfDataCsv'' y ``SistInfDataXls'', y sobre los servicios web (\emph{web service}).
+		\item \textbf{/src/test} tests unitarios sobre las clases fachada ``SistInfDataCsv'' y ``SistInfDataXls''.
 	\end{itemize}
 \end{itemize}
 
@@ -119,7 +119,7 @@ Se comenzará por empaquetar el proyecto, para ello se abrirá un terminal en el
 
 \imagenflotante{empaquetarWAR}{Despliegue en Heroku - Empaquetar aplicación en .war}{0.9}
 
-Ahora se deberá cambiar la versión de Java en Heroku. Para migrar a Java 11 en Heroku, solamente hará falta incluir un fichero llamado "system.properties", donde se especificará la versión: \emph{``java.runtime.version=11''}.
+Ahora se deberá cambiar la versión de Java en Heroku. Para migrar a Java 11 en Heroku, solamente hará falta incluir un fichero llamado ``system.properties'', donde se especificará la versión: \emph{``java.runtime.version=11''}.
 
 Por último, se ejecuta \emph{``heroku war:deploy target/sistinf-0.5.war --app gestor-tfg-2021''} para desplegar el proyecto en Heroku \ref{fig:Descargar_IDE}. 
 
@@ -131,8 +131,6 @@ Para ver los mensajes internos de la aplicación (\emph{logs}) se deberá ejecut
 
 \section{Pruebas del sistema}
 
-Para verificar el funcionamiento de algunas de las funciones principales para la obtención de datos de los ficheros se realizaron test de \href{https://junit.org/junit5/}{JUnit}. Al haber dos clases, una para cada tipo de fichero, se decidió separar la clase existente, procedente de la versión anterior, en dos, ``SistInfDataTestCSV'' y ''SistInfDataTestXLS''. 
+Para verificar el funcionamiento de algunas de las funciones principales para la obtención de datos de los ficheros se realizaron test de \href{https://junit.org/junit5/}{JUnit}. Al haber dos clases fachada, una para cada tipo de fichero, se decidió separar la clase existente, procedente de la versión anterior, en dos, ``SistInfDataTestCSV'' y ''SistInfDataTestXLS''. Para ejecutar los test se puede realizar el comando ``mvn test''.
 
-Se ejecutaron los test cada vez que se realizaba un modificación en el cambio mediante la integración Continua en \href{https://github.com/dbo1001/Gestor-TFG-2021/actions}{GitHub Actions}. Con este método se consigue detectar errores con mayor rapidez.
-
-Para ejecutar los test se puede realizar el comando ``mvn test''.
+Se ejecutaron los test cada vez que se realizaba una modificación mediante la integración Continua en \href{https://github.com/dbo1001/Gestor-TFG-2021/actions}{GitHub Actions} consiguiendo detectar errores con mayor rapidez.
