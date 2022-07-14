@@ -28,6 +28,7 @@ import com.github.appreciated.apexcharts.config.grid.builder.RowBuilder;
 import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -746,13 +747,24 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		gridHistoric.getColumns().forEach(columna -> columna.setResizable(true));
 		gridHistoric.getColumns().forEach(columna -> columna.setSortable(true));
-		gridHistoric.getColumns().forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
+		
+		gridHistoric.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
+		gridHistoric.getColumns().subList(1, gridHistoric.getColumns().size()).forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 		
 		gridHistoric.setItemDetailsRenderer(
 			    new ComponentRenderer<>(HistoricProject -> {
 			        VerticalLayout layout = new VerticalLayout();
 			        layout.add(new Label("Título: " +
 			        		HistoricProject.getTitle()));
+			        layout.add(new Label("Descripción: " +
+			        		HistoricProject.getDescription()));
+			        if(HistoricProject.getRepositoryLink() != null) {
+			        	String repo = HistoricProject.getRepositoryLink();
+			        	Html link = new Html("<label>Repositorio: <a href=\"" + repo + "\" target=\"_blank\">"+ repo +"</a></label>");
+			        	layout.add(link);
+			        }else {
+			        	layout.add(new Label("Repositorio: No tiene"));
+			        }
 			        layout.add(new Label("Tutor/es: " +
 			        		HistoricProject.getTutors()));
 			        layout.add(new Label("Nº Alumnos: " +
@@ -828,6 +840,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		while (iterator.hasNext()) {
 			HistoricProject historicProject = iterator.next();
 			
+			// para mi gusto, esta tiene que ser la lógica de la función getTutors()
 			tutors = historicProject.getTutor1();	
 			if(!tutors.equals("")) {
 				if(!historicProject.getTutor2().equals("")) {
@@ -838,10 +851,8 @@ public class HistoricProjectsView extends VerticalLayout {
 				}
 			}
 			
-			HistoricProject historic = new HistoricProject(historicProject.getTitle(), tutors, historicProject.getNumStudents(), 
-					historicProject.getAssignmentDate(), historicProject.getPresentationDate(), historicProject.getRankingPercentile(),
-					historicProject.getRankingTotal(),historicProject.getRankingCurse());
-			dataHistoricGrid.add(historic);
+			historicProject.setTutors(tutors);
+			dataHistoricGrid.add(historicProject);
 		}	
 	}
 }

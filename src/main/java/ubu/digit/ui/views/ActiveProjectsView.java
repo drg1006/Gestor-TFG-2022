@@ -262,7 +262,8 @@ public class ActiveProjectsView extends VerticalLayout{
 			
 			table.getColumns().forEach(columna -> columna.setResizable(true));
 			table.getColumns().forEach(columna -> columna.setSortable(true));
-			table.getColumns().forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
+			table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
+			table.getColumns().subList(1, table.getColumns().size()).forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 			
 			table.setItemDetailsRenderer(
 				    new ComponentRenderer<>(ActiveProject -> {
