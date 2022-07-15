@@ -758,7 +758,7 @@ public class HistoricProjectsView extends VerticalLayout {
 			        		HistoricProject.getTitle()));
 			        layout.add(new Label("Descripción: " +
 			        		HistoricProject.getDescription()));
-			        if(HistoricProject.getRepositoryLink() != null) {
+			        if(HistoricProject.getRepositoryLink() != "") {
 			        	String repo = HistoricProject.getRepositoryLink();
 			        	Html link = new Html("<label>Repositorio: <a href=\"" + repo + "\" target=\"_blank\">"+ repo +"</a></label>");
 			        	layout.add(link);
