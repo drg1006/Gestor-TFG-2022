@@ -177,7 +177,7 @@ public class LoginView extends VerticalLayout{
 			Iterator<Integer> it = courseids.iterator();
 			while(it.hasNext()) {
 				int id = it.next();
-				if(id == 2204) {
+				if(id == 2204 || id == 11707) {
 					idTFG.add(id);
 				}
 			}   
