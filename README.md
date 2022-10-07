@@ -3,16 +3,16 @@
 # GII 20.09 Herramienta web repositorios de TFGII - Gestor TFG/TFM 2021
 
 ### Autora
-Diana Bringas Ochoa
+David Renedo Gil
 
 ### Tutores
-Álvar Arnaiz González y Carlos López Nozal
+Álvar Arnaiz González y Ana Serrano Mamolar
 
 ### Resumen del proyecto
-El propósito del proyecto es evolucionar la aplicación web de Gestor de TFG/TFM del grado de Ingeniería Informática de la Universidad de Burgos. Se llevarán a cabo tanto mejoras funcionales, por ejemplo la incorporación de un nuevo modelo de datos, como mejoras de la interfaz gráfica html. 
+El propósito del proyecto es evolucionar la aplicación web de Gestor de TFG/TFM del grado de Ingeniería Informática de la Universidad de Burgos. Se llevarán a cabo tanto mejoras funcionales, como visuales. 
 Se trata de una aplicación Java, con el uso de componentes gráficos del framework de aplicaciones web Vaaddin https://vaadin.com/home.  
 
-El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://bitbucket.org/ubu_tfg/2014-beatriz.
+El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://github.com/mjuez/Gestor-TFG-2021.
 
 El proyecto está migrado a Vaadin 14 en la rama **master** y en Vaadin 7 en la rama **Sistinf-V7**.
 
