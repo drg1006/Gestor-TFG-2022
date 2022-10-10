@@ -1,8 +1,8 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://gestor-tfg-2021.herokuapp.com)
 
-# GII 20.09 Herramienta web repositorios de TFGII - Gestor TFG/TFM 2021
+# GII 20.09 Herramienta web repositorios de TFGII - Gestor TFG/TFM 2022
 
-### Autora
+### Autor
 David Renedo Gil
 
 ### Tutores
