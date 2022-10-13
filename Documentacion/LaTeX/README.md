@@ -23,6 +23,6 @@ Se ruega a los alumnos y tutores que detecten fallos o que quieran proponer una 
 
 # Gracias a los contribuidores
 César Ignacio García Osorio, Álvar Arnaiz Gonzalez, José Francisco Díez Pastor, Carlos Lopez Nozal.
-Álvaro López Cantero, Roberto Izquierdo Amo, David Miguel Lozano.
+Álvaro López Cantero, Roberto Izquierdo Amo, David Miguel Lozano, Daniel Puente Ramírez.
 
 
