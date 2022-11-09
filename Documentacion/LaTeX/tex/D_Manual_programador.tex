@@ -6,6 +6,124 @@
 
 \section{Manual del programador}
 
+A continuación se detallará el proceso de instalación de los programas
+necesarios para el desarrollo de la aplicación.
+
+\subsection{Instalación de Java}
+
+Actualmente se sigue ejecutando con la versión de Java 11. A pesar de que se necesitará actualizar cuando migremos a la versión 23 de vaadin.
+
+Para ello se debe descargar la \href{https://www.oracle.com/es/java/technologies/javase/jdk11-archive-downloads.html}{página de descargas de Oracle Java SE 11.0} y descargar la versión de JDK 11, correspondiente con el sistema operativo que se posea y su arquitectura, ya sea de 64 o 32 bits. Ver imagen \ref{fig:Descarga_JDK_11}.
+
+Tras escoger la versión según el SO, se leerán y aceptarán las licencias de uso de Oracle \ref{fig:Descarga_JDK11_Licencia}, y se dará a descargar.
+
+\imagenflotante{Descarga_JDK_11}{Descarga de JDK 11}{0.9}
+
+También se deberá cambiar la variable de entorno de Java del sistema.
+
+\imagenflotante{Descarga_JDK11_Licencia}{Descarga JDK 11 Licencia}{0.9}
+
+
+\subsection{Instalación de Eclipse}
+A continuación se instalará un entorno de desarrollo integrado(IDE) para Java, en este caso se ha utilizado \textbf{Eclipse IDE for Enterprise Java Developers} en la versión 2021-12. 
+
+Para descargar el IDE se accederá a la \href{https://www.eclipse.org/downloads/packages/release/2021-12/r}{página de descargas de Eclipse} y descargar la opción correspondiente a nuestro sistema operativo del \textbf{Eclipse Installer 2021-12 R}. Ver imagen \ref{fig:Descargar_IDE}.
+
+\imagenflotante{Descargar_IDE}{Descargar IDE Eclipse}{0.9}
+
+En el caso de los sistemas operativos Windows se descargará un archivo ejecutable que se deberá ejecutar como administrador. Una vez ejecutado se deberá seleccionar la opción ``\textbf{\textit{Eclipse IDE for Enterprise Java Developers}}'' \ref{fig:Eclipse_Installer}. 
+
+\imagenflotante{Eclipse_Installer}{Seleccionar Eclipse}{0.9}
+
+
+Por último seleccionaremos el JDK (11) que vayamos a utilizar y la carpeta donde queremos instalar nuestro IDE.
+
+\subsection{Instalación del \textit{plugin de Vaadin} para Eclipse}
+Una vez se haya instalado Eclipse, se procederá a añadir el plugin de Vaadin para Eclipse. Esto se realizará mediante el \textbf{Eclipse Marketplace de Eclipse} \ref{fig:Eclipse_marketplace}, el cual se encuentra en la opción de ``\textbf{\textit{Help/Eclipse Marketplace...}}'' de la barra de herramientas.
+
+\imagenflotante{Eclipse_marketplace}{Eclipse marketplace}{0.7}
+
+Una vez en el Eclipse Marketplace, se buscará ``\textbf{Vaadin}'' y se pulsará ``\textbf{Go}''. Tras salir el plugin ``\textbf{\textit{Vaadin Plugin for Eclipse}}'', se dará a ``\textbf{Install}'' y comenzará la instalación del plugin \ref{fig:Plugin_Vaadin}. En la imagen ya se muestra una vez instalado.
+
+\imagenflotante{Plugin_Vaadin}{Plugin Vaadin}{0.9}
+
 \section{Compilación, instalación y ejecución del proyecto}
+
+Se explicará como compilar, instalar y ejecutar el proyecto. En el caso de
+la ejecución, se detallará como hacerlo desde un terminal y mediante Eclipse (IDE).
+
+\subsection{Descarga del repositorio}
+El código fuente se encuentra en el \href{https://github.com/drg1006/Gestor-TFG-2022.git}{repositorio del proyecto} en GitHub. Para descargarlo se deberá hacer click en ``\textbf{\textit{Code}}'' y copiar la URL que aparece en el apartado de ``\textbf{HTTP}''. Con esta URL deberemos ir al ``\textbf{GitHub Desktop}'' y clonar el repositorio \ref{fig:GitHub_Code}.
+
+\imagenflotante{GitHub_Code}{Copiar URL repositorio}{0.9}
+
+Si se desea tener código en local se deberá descargar el zip ``\textbf{\textit{Download ZIP}}'' en la opción ``\textbf{\textit{Code}}'' anteriormente mencionada. Una vez descargado el zip se descomprimirá y abrirá con Eclipse. 
+
+\subsection{Compilación del proyecto}
+
+Para compilar el proyecto en local desde terminal se usará:
+\begin{itemize}
+	\item Limpiar las dependencias: \textbf{``mvn clean''}.
+	\item Instalar dependencias y compilar: \textbf{``mvn install''}.
+	\item Instalar en modo producción (para desplegar): \textbf{``mvn package -Pproduction''}.  
+	\item Ejecutar test: \textbf{``mvn test''}.	
+\end{itemize}
+
+\subsection{Ejecución del proyecto desde local}
+
+Para la ejecución del proyecto en local desde terminal se usará:
+\begin{itemize}
+	\item Entrar en la terminal que utilicemos.
+	\item Acceder a la carpeta donde tenemos nuestro servidor tomcat instalado y entrar en la carpeta \textbf{/bin}.
+	\item Ejecutar nuestro servidor local mediante \textbf{startup} \ref{fig:tomcat_cmd}.  
+	\item Entrar en el nuestro navegador en la direccion \textbf{localhost:8080}.
+	\item Pulsar en la opción Manage App \ref{fig:Manage_App}.
+	\item Iniciamos sesión como manager-gui.(Indicado en el archivo /conf/tomcat-users.xml).
+	\item Llegaremos a la pantalla \ref{fig:Desplegar_war} y seleccionaremos el archivo .war que hemos creado al compilar nuestro proyecto con \textbf{``mvn package -Pproduction''}.
+	
+	\imagenflotante{tomcat_cmd}{Consola con Tomcat ejecutado}{0.9}
+	
+	\imagenflotante{Manage_App}{Gestor de Aplicaciones de Tomcat}{0.9}
+	
+	\imagenflotante{Desplegar_war}{Desplegar el archivo .war}{0.9}
+	
+\end{itemize}
+
+\subsection{Ejecución del proyecto desde Eclipse IDE}
+
+Para la ejecución del proyecto en local desde Eclipse primero debemos importar como proyecto Maven, con el pom.xml. Utilizaremos también un servidor local de de \href{https://tomcat.apache.org/i}{Apache Tomcat}, en concreto, la versión 9. Se puede descargar en \href{https://tomcat.apache.org/download-90.cgi}{la página oficial de Apache Tomcat}.
+
+
+Una vez descargado y descomprimido, se creará un servicio de Tomcat \ref{fig:añadirTomcat} con la ruta donde se tiene descargado Tomcat y se le dará un nombre \ref{fig:nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'' \ref{fig:tomcatAñadirProyecto}.
+
+\imagenflotante{añadirTomcat}{Añadir servidor de Tomcat a Eclipse}{0.9}
+\imagenflotante{nombreServerTomcat}{Seleccionar carpeta contenedora de Tomcat}{0.9}
+\imagenflotante{tomcatAñadirProyecto}{Añadir proyectos a servidor}{0.9}
+
+Para ejecutarlo desde eclipse debemos también seguir todos los pasos de compilación anteriormente mencionados.
+
+Una vez tengamos compilado nuestro código debemos ejecutarlo (click derecho en el proyecto>``Run As''>``Run on Server'').
+
+Si no aparece la vista de los servicios se puede añadir desde la barra de herramientas>``Window''>``Show View''. Para configurar la ruta donde se ejecuta la aplicación, por defecto en \href{http://localhost:8080/}{localhost:8080/} o en ciertos casos \href{http://localhost:8080/sistinf}{localhost:8080/sistinf}.
+
+\subsection{Problemas a la hora de ejecutar el proyecto}
+
+A la hora de ejecutar el proyecto anterior surgieron una serie de problemas tanto para la ejecución por terminal como desde Eclipse.
+
+Cuando quise ejecutarlo mediante la terminal desplegando el archivo .war generado tras compilar me surgía el siguiente error \ref{fig:Error_war}
+
+\imagenflotante{Error_war}{Error tras deplegar el .war en el Gestor de Aplicaciones de Tomcat}{0.9}
+
+Tras buscar información sobre el posible error, se descubre en los logs que proporciona tomcat lo siguiente \ref{fig:error_size}. En el que se informa que se intenta ejecutar un proyecto con un tamaño mayor al que tenemos configurado en tomcat.
+
+\imagenflotante{error_size}{Logs proporcionados por Tomcat}{0.9}
+
+Para solucionar este problema se accede al archivo \emph{apache-tomcat-9.0.68-webapps-manager-WEB-INF} y se modifican las siguientes lineas \ref{fig:size_tomcat} aumentando el número que se indica.
+
+\imagenflotante{size_tomcat}{Logs proporcionados por Tomcat}{0.9}
+
+Cuando quise ejecutarlo mediante Eclipse no me dejaba añadir el proyecto al servidor de \emph{tomcat}, indicando que las versiones no eran compatibles. Por ello se ha entrado en las propiedades del proyecto y se ha cambiado la versión del parametro \emph{Dynamic Web Module} a la 3.1 en el apartado \emph{Project Facets} como se aprecia en \ref{fig:Dynamic} .
+
+\imagenflotante{Dynamic}{Cambio de versión Dynamic Web Module}{0.9}
 
 \section{Pruebas del sistema}
