@@ -297,33 +297,34 @@ public class ActiveProjectsView extends VerticalLayout{
 	private void applyFilter(String column, String valueChange) {
 		dataFilteredGrid = new ArrayList<ActiveProject>();
 		Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
+		String lowercase=valueChange.toLowerCase();
 		if(!valueChange.equals(" ")) {
 			while (iterator.hasNext()) {
 				ActiveProject activeproject = iterator.next();
 				
 				switch(column) {
 					case "title":
-						if(activeproject.getTitle().contains(valueChange)) {
+						if(activeproject.getTitle().toLowerCase().contains(lowercase)) {
 							dataFilteredGrid.add(activeproject);
 						}
 						break;
 					case "description":
-						if(activeproject.getDescription().contains(valueChange)) {
+						if(activeproject.getDescription().toLowerCase().contains(lowercase)) {
 							dataFilteredGrid.add(activeproject);
 						}
 						break;
 					case "tutor":
-						if(activeproject.getTutors().contains(valueChange)) {
+						if(activeproject.getTutors().toLowerCase().contains(lowercase)) {
 							dataFilteredGrid.add(activeproject);
 						}
 						break;
 					case "student":
-						if(activeproject.getStudents().contains(valueChange)) {
+						if(activeproject.getStudents().toLowerCase().contains(lowercase)) {
 							dataFilteredGrid.add(activeproject);
 						}
 						break;
 					case "course":
-						if(activeproject.getCourseAssignment().contains(valueChange)) {
+						if(activeproject.getCourseAssignment().toLowerCase().contains(lowercase)) {
 						dataFilteredGrid.add(activeproject);
 						}
 						break;
