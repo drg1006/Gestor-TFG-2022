@@ -106,8 +106,13 @@ public class Footer extends VerticalLayout {
 		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link3));
 		information.add(version3);
 		
-		Text tutor1 = new Text("Tutorizado por Carlos López Nozal");
-		Anchor linkT1 = new Anchor("mailto:clopezno@alu.ubu.es","clopezno@ubu.es");
+		Text version4 = new Text("Versión 4.0 creada por David Renedo Gil");
+        Anchor link4 = new Anchor("mailto:drg1006@alu.ubu.es","drg1006@alu.ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link4));
+        information.add(version4);
+		
+		Text tutor1 = new Text("Tutorizado por Ana Serrano Mamolar");
+		Anchor linkT1 = new Anchor("mailto:asmamolar@ubu.es","asmamolar@ubu.es");
 		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),linkT1));
 		information.add(tutor1);
 		
