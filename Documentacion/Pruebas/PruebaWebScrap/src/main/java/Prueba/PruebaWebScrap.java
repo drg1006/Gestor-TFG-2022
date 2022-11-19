@@ -45,7 +45,7 @@ public class PruebaWebScrap{
 
 	    Document doc = null;
 		try {
-		    doc = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).get();
+		    doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36").timeout(100000).get();
 		    } catch (IOException ex) {
 			System.out.println("Excepción al obtener el HTML de la página" + ex.getMessage());
 		    }
