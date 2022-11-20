@@ -20,6 +20,7 @@ public class HTMLUnitUbu {
       
       HtmlPage page = webClient.getPage("https://investigacion.ubu.es/");
       System.out.println(page.getTitleText());
+      webClient.close();      
       /*
       List<HtmlAnchor> anchors = page.getAnchors();
       for (HtmlAnchor anchor : anchors) {

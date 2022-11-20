@@ -22,7 +22,7 @@ public class HTMLUnit {
       for (DomElement element : nodeList){
          System.out.println(element.getTextContent()+ " -> " +element.getAttribute("href"));
       }
-
+      
    }
 
 }
