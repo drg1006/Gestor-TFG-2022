@@ -12,7 +12,16 @@
 
 package Prueba;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -20,10 +29,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+
+import com.opencsv.CSVWriter;
+
 public class PruebaWebScrap2{
 
     public static void main (String args[]) {
-    	
+    	List<String[]> profesores = new ArrayList<String[]>();
+    	Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
     	Response response = null;
 		try {
 			//Realizamos la petición de la url
@@ -51,6 +71,7 @@ public class PruebaWebScrap2{
             Elements entradas = doc.select("div.c-persona-card__detalles");
             System.out.println("Número de profesores de la EPS : "+entradas.size()+"\n");
             // Paseo cada una de las entradas
+            int i=1;
             for (Element elem : entradas) {
             	
             	/*Referencia de estas dos lineas de código:
@@ -99,7 +120,94 @@ public class PruebaWebScrap2{
 
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
+        		//https://commons.apache.org/proper/commons-lang//apidocs/org/apache/commons/lang3/StringUtils.html#stripAccents-java.lang.String-
+        		nombre = StringUtils.stripAccents(nombre);
+            	apellidos =StringUtils.stripAccents(apellidos);
+            	area =StringUtils.stripAccents(area);
+            	departamento =StringUtils.stripAccents(departamento);
+        		String [] profesor= {nombre, apellidos, area, departamento};
+            	
+            	profesores.add(profesor);
+            	i++;
+            	if(i==2) {
+            		dataTFG.put("1", new Object[] {"Nombre", "Apellidos", "Area","Departamento"});
+            		dataTFG.put("2",profesor);
+            	}else {
+            		String id=Integer.toString(i);
+            		dataTFG.put(id,profesor);
+            	}
+            	
+            	
+            	
             }
-
+            
+        	try {
+				guardarDatosXLS(dataTFG);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            try {
+				guardarDatosCSV(profesores);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+    }
+    
+    public static void guardarDatosCSV(List<String[]> profesores) throws IOException {
+    	//https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx 
+    	String excelFilePath = "src/main/resources/data/N4_Profesores.csv";
+    	File file = new File(excelFilePath);
+        String absPath = file.getAbsolutePath();
+    	CSVWriter writer = new CSVWriter(new FileWriter(absPath));   	
+    	writer.writeAll(profesores);
+    	writer.close();
+    }
+    
+    public static void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
+    	//https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+    	
+    	String excelFilePath = "src/main/resources/data/BaseDeDatosTFGTFM.xls";
+    	File file = new File(excelFilePath);
+        String absPath = file.getAbsolutePath();
+        
+        try {
+            FileInputStream inputStream = new FileInputStream(new File(absPath));
+            Workbook workbook = WorkbookFactory.create(inputStream);
+ 
+            Sheet hoja= workbook.getSheet("N4_Profesores");
+      
+            Row rowCount;
+              
+            Set<String> keyid = dataTFG.keySet();
+            
+            int rowid = 0;
+            
+            //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
+            // writing the data into the sheets...
+      
+            for (String key : keyid) {
+      
+                rowCount = hoja.createRow(rowid++);
+                Object[] objectArr = dataTFG.get(key);
+                int cellid = 0;
+      
+                for (Object obj : objectArr) {
+                    Cell cell = rowCount.createCell(cellid++);
+                    cell.setCellValue((String)obj);
+                }
+            }
+ 
+            FileOutputStream outputStream = new FileOutputStream(absPath);
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+             
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
