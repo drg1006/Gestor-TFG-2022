@@ -7,6 +7,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
+import ubu.digit.ui.views.ProfesoresView;
+import ubu.digit.ui.views.ReportView;
+
 import static ubu.digit.util.Constants.*;
 
 /**
@@ -43,6 +46,16 @@ public class NavigationBar extends HorizontalLayout{
 	private Button buttonMetrics;
 
 	/**
+     * Botón de la vista de profesores.
+     */
+    private Button buttonProfessor;
+    
+    /**
+     * Botón de la vista de informes.
+     */
+    private Button buttonReport;
+    
+	/**
 	 * Constructor.
 	 */
 	public NavigationBar() {
@@ -70,16 +83,26 @@ public class NavigationBar extends HorizontalLayout{
 		buttonMetrics = new Button(METRICAS);
 		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/organizations/dbo1001/projects/\", \"_blank\");"));
 		
+		buttonProfessor = new Button(PROFESORES);
+        buttonProfessor.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
+        
+        buttonReport = new Button(INFORME);
+        buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
+        
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
 		buttonMetrics.setHeight(BUTTON_HEIGHT);
-
+		buttonProfessor.setHeight(BUTTON_HEIGHT);
+        buttonReport.setHeight(BUTTON_HEIGHT);
+        
 		buttonInfo.setWidth("100%");
 		buttonActive.setWidth("100%");
 		buttonHistory.setWidth("100%");
 		buttonMetrics.setWidth("100%");
-		
-		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
+		buttonProfessor.setWidth("100%");
+        buttonReport.setWidth("100%");
+        
+		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor,buttonReport);
 	}
 }

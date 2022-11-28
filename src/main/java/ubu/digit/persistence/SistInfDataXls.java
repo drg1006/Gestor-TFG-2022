@@ -987,4 +987,22 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}
 		return rankingTotalList;
 	}
+	
+	@Override
+    public List<String> getAreas() {
+
+        List<String> listaAreas = new ArrayList<String>();
+        String sql = SELECT_DISTINCT + AREA + FROM + PROFESOR;
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                listaAreas.add(result.getField(AREA));
+                
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener las areas", ex);
+        }
+        return listaAreas.stream().distinct().collect(Collectors.toList());
+    }
+    
 }

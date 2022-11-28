@@ -39,6 +39,11 @@ public final class Constants {
 	public static final String ALUMNO = "N2_Alumno";
 
 	/**
+     * Profesores
+     */
+    public static final String PROFESOR = "N4_Profesores";
+    
+	/**
 	 * Cargo 
 	 */
 	public static final String CARGO = "Cargo";
@@ -63,6 +68,11 @@ public final class Constants {
 	 */
 	public static final String DESCRIPCION = "descripcion";
 
+	/**
+     * Area
+     */
+    public static final String AREA = "Area";
+    
 	/**
 	 * Primer alumno
 	 */
@@ -248,6 +258,16 @@ public final class Constants {
 	 */
 	public static final String METRICAS = "Métricas";
 
+	/**
+     * Proyectos de profesores (botón).
+     */
+    public static final String PROFESORES = "Profesores";
+    
+    /**
+     * Gerenacion de informes (botón).
+     */
+    public static final String INFORME = "Informes";
+    
 	/**
 	 * Información estadística (etiqueta título).
 	 */

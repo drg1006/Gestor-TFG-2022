@@ -185,4 +185,7 @@ public abstract class SistInfDataAbstract implements Serializable {
 	public abstract Number getStdvColumn(String columnName, String tableName);
 
 	protected abstract List<Double> getListNumber(String columnName, String sql);
+
+	 //Nueva implementacion
+    public abstract List<String> getAreas();
 }

@@ -986,4 +986,22 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}
 		return listaDataModel;
 	}
+	
+	@Override
+    public List<String> getAreas() {
+        return null;
+        /*
+        List<String> listaAreas = new ArrayList<String>();
+        String sql = SELECT_DISTINCT + AREA + FROM + PROFESOR;
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                listaAreas.add(result.getField(AREA));
+                
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+        }
+        return listaAreas.stream().distinct().collect(Collectors.toList());*/
+    }
 }
