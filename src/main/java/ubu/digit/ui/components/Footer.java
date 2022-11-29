@@ -132,7 +132,7 @@ public class Footer extends VerticalLayout {
 	 *            nombre del fichero
 	 * @return fecha de última modificación del fichero
 	 */
-	private String getLastModified(String fileName) {
+	public String getLastModified(String fileName) {
 		String path = this.getClass().getClassLoader().getResource("").getPath();
   		String serverPath = path.substring(0, path.length()-17);
   		
