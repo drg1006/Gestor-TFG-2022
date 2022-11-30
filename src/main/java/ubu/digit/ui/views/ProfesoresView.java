@@ -36,6 +36,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import com.vaadin.flow.router.PageTitle;
@@ -46,13 +47,12 @@ import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
-//import ubu.digit.ui.entity.Profesores;
+
 
 /**
- * Vista de proyectos históricos.
- * 
- * @author Javier de la Fuente Barrios.
- * @author Diana Bringas Ochoa
+ * Vista del histórico de profesores.
+ *
+ * @author David Renedo Gil
  */
 @Route(value = "Profesores")
 @PageTitle("Histórico de los profesores")
@@ -112,15 +112,6 @@ public class ProfesoresView extends VerticalLayout {
 
 		NavigationBar bat = new NavigationBar();
 		add(bat);
-		/*
-		String path = this.getClass().getClassLoader().getResource("").getPath();
-		
-        String serverPath = path.substring(0, path.length()-17);
-        String dir = config.getSetting("dataIn");
-        String completeDir = serverPath + dir + "/";
-        File file = new File(completeDir + "BaseDeDatosTFGTFG.xls");
-        System.out.println("PATH:" + file.getAbsoluteFile());
-        */
 		
 		preguntarSiActualizar();
 		createMetrics();
@@ -168,7 +159,11 @@ public class ProfesoresView extends VerticalLayout {
         Label AVISO= new Label("Este proceso puede llevar un tiempo");
         add(ultimaAct,AVISO,actualizar);
         actualizar.addClickListener(event -> {
+            long startTime = System.nanoTime();
            actualizarDatos();
+           long estimatedTime = System.nanoTime() - startTime;
+           double seconds =   (double)estimatedTime/1000000000.0;
+           Notification notification = Notification.show("Se han actualizado los archivos, el proceso ha tardado: "+seconds + " segundos");
             
         });
         
@@ -247,11 +242,6 @@ public class ProfesoresView extends VerticalLayout {
                 //Cogemos el primer link de tipo "a"(href) que tiene la información sobre el departamento y sacamos su texto
                 Element link2= entrada.select("a").first();
                 String departamento = link2.text(); 
-                //Imprimimos por pantalla
-                //System.out.println("Nombre: "+nombre);
-                //System.out.println("Apellidos: " +apellidos);
-                //System.out.println("Area: "+area);
-                //System.out.println("Departamento: "+ departamento + "\n");
 
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
@@ -270,9 +260,7 @@ public class ProfesoresView extends VerticalLayout {
                 }else {
                     String id=Integer.toString(i);
                     dataTFG.put(id,profesor);
-                }
-                
-                
+                }  
                 
             }
             
@@ -294,8 +282,15 @@ public class ProfesoresView extends VerticalLayout {
     
     public  void guardarDatosCSV(List<String[]> profesores) throws IOException {
         //https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx 
-        String excelFilePath = "src/main/resources/data/N4_Profesores.csv";
-        File file = new File(excelFilePath);
+ 
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);
+        
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = "N4_Profesores.csv";
+        File file = new File(completeDir + fileName);
         String absPath = file.getAbsolutePath();
         CSVWriter writer = new CSVWriter(new FileWriter(absPath));      
         writer.writeAll(profesores);
@@ -304,11 +299,17 @@ public class ProfesoresView extends VerticalLayout {
     
     public  void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
         //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);
         
-        String excelFilePath = "src/main/resources/data/BaseDeDatosTFGTFM.xls";
-        File file = new File(excelFilePath);
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = "BaseDeDatosTFGTFM.xls";
+        File file = new File(completeDir + fileName);
+ 
         String absPath = file.getAbsolutePath();
-        
+        System.out.println("PATH:"+ absPath);        
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
