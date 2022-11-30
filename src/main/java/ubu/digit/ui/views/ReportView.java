@@ -170,10 +170,6 @@ public class ReportView extends VerticalLayout {
 	       //String absPath=archivo.getAbsolutePath();
 	       Workbook workbook = new HSSFWorkbook();
 	       
-	        
-	       //int tamano =listaAreas.size();
-	      
-	       
 	       try {
 	            //FileInputStream inputStream = new FileInputStream(new File(absPath));
 	            //Workbook workbook = WorkbookFactory.create(inputStream);

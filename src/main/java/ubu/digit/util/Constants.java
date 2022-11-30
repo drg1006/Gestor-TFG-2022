@@ -77,6 +77,16 @@ public final class Constants {
      */
     public static final String DEPARTAMENTO = "Departamento";
     
+    /**
+     * Nombre de profesor
+     */
+    public static final String NOMBRE = "Nombre";
+    
+    /**
+     * Nombre de profesor
+     */
+    public static final String APELLIDOS = "Apellidos";
+    
 	/**
 	 * Primer alumno
 	 */

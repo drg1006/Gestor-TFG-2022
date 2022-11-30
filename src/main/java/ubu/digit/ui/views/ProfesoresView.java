@@ -38,7 +38,9 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -135,14 +137,15 @@ public class ProfesoresView extends VerticalLayout {
 
         try {
             //Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
-            Label totalProfessors = new Label("- Número total de profesores: " );
-
-            //Number totalFreeProjectNumber = fachadaDatos.getTotalFreeProject();
-            Label totalAreas = new Label("- Número total de areas: " );
+            Number numProfes= fachadaDatos.getNumProfesores();
+            Label totalProfessors = new Label("- Número total de profesores: " +numProfes.intValue());
+            
+            Number numAreas= fachadaDatos.getNumAreas();
+            Label totalAreas = new Label("- Número total de areas: "+numAreas.intValue() );
             //Label aalumnos = new Label("Buscar la cadena 'Aalumnos sin asignar' en columna Alumnos.");
             
-            //Number totalStudentNumber = fachadaDatos.getTotalNumber(APELLIDOS_NOMBRE, ALUMNO);
-            Label totalDepartments = new Label("- Número total de departamentos: ");
+            Number numDepartamentos= fachadaDatos.getNumDepartamentos();
+            Label totalDepartments = new Label("- Número total de departamentos: "+ numDepartamentos.intValue());
 
             //String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
             //Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
@@ -353,6 +356,9 @@ public class ProfesoresView extends VerticalLayout {
     }
 
     public void graficas(){
+        H2 metricsTitle = new H2("GRÁFICA");
+        metricsTitle.addClassName("lbl-title");
+        add(metricsTitle);
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
         CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
@@ -404,7 +410,11 @@ public class ProfesoresView extends VerticalLayout {
          
 
         });
-            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD);   
+            ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
+            List<String> profesores = fachadaDatos.getProfesores();
+            filtroProfesores.setItems(profesores);
+            filtroProfesores.setWidth("20%");
+            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores);
     } 
         
 

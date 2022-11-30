@@ -1005,7 +1005,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return listaAreas.stream().distinct().collect(Collectors.toList());
     }
 
-    @Override
+	@Override
     public List<String> getDepartamentos() {
         List<String> listaDepartamentos = new ArrayList<String>();
         String sql = SELECT_DISTINCT + DEPARTAMENTO + FROM + PROFESOR;
@@ -1023,8 +1023,41 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 
     @Override
     public List<String> getProfesores() {
+        
+        List<String> listaProfesores = new ArrayList<String>();
+        String sql = SELECT + NOMBRE + ","+ APELLIDOS + FROM + PROFESOR;
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                listaProfesores.add(result.getField(NOMBRE).toString()+" "+result.getField(APELLIDOS).toString());
+                
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+        }
+        return listaProfesores;
+    }
+
+    @Override
+    public Number getNumProfesores() {
+        return getProfesores().size();
+    }
+
+    @Override
+    public Number getNumAreas() {
+        return getAreas().size();
+    }
+
+    @Override
+    public Number getNumDepartamentos() {
+        return getDepartamentos().size();
+    }
+
+    @Override
+    public List<String> getProfesoresDeArea(String area) {
         // TODO Auto-generated method stub
         return null;
     }
+    
     
 }
