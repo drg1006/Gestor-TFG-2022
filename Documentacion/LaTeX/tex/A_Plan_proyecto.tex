@@ -59,7 +59,7 @@ A continuación se detallarán las tareas que se realizaron durante este primer 
 
 \subsection{Sprint 2 - Comienzo de la programación (10/11/22 - 23/11/22)}
 
-En este spring se comienza a programar y añadir código principalmente arreglando bugs que existían en la versión anterior. También se investiga sobre una alternativa al uso de Heroku que ahora es de pago.
+En este sprint se comienza a programar y añadir código principalmente arreglando bugs que existían en la versión anterior. También se investiga sobre una alternativa al uso de Heroku que ahora es de pago.
 
 A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
 
@@ -73,7 +73,7 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 	\item Investigar sobre el webscrapping. En un futuro se deberá realizar un webscrapping con la página de investigación de la ubu, por lo que se ha estudiado en qué consiste y posibles implementaciones.
 	
-	\item Investigación estadística errónea. La información sobre las columnas \emph{Nota, TotalDias y Repositorio} estaba mal implementada en el archivo \emph{BaseDeDatosTFGTFM.xls} y se ha cambiado a un formato adecuado.
+	\item Investigación estadística errónea. La información sobre las columnas \emph{Nota, TotalDias y Repositorio} estaba mal implementada en el archivo \texttt{BaseDeDatosTFGTFM.xls} y se ha cambiado a un formato adecuado.
 	
 	\item Se actualiza la memoria y el anexo correspondiente al anterior Sprint.
 	
@@ -85,6 +85,30 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 	\item Pruebas de webscraping en un entorno local para determinar cual utilizar. Se realizan una serie de pruebas(que encontramos en el apartado de Pruebas de la Documentación) y finalmente se consigue obtener el resultado que queremos mediante JSoup, por lo que será nuestra elección.
 	
+	
+\end{itemize}
+
+\subsection{Sprint 3 - Implementación nuevas pantallas (23/11/22 - 14/12/22)}
+En este sprint se implementará  al proyecto el proceso de \emph{webscraping} llevado a cabo en el sprint anterior, también se crearán dos nuevas pantallas.
+
+A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
+
+
+\begin{itemize}
+	
+	\item Guardar los datos del \emph{webscraping} en un archivo csv/xls. Se programa un código que permite guardar los resultados sacados mediante el \emph{webscraping} a los ficheros \texttt{BaseDeDatosTFGTFM.xls} y \texttt{N4 Profesores.csv}.
+	
+	\item Creación del \emph{mock-up} pantalla de creación de informe. Mediante \href{https://pencil.evolus.vn/}{Pencil} crearemos una vista inicial de lo que queremos que sea nuestra pantalla. Esta pantalla se utilizará para crear un informe de un determinado área a elegir por el usuario y guardará los datos en un archivo \emph{.xls}.
+	
+	\item Creación del \emph{mock-up} pantalla de estadísticas del profesorad. Creada también mediante \href{https://pencil.evolus.vn/}{Pencil}. Esta pantalla se utilizará para visualizar los históricos de los profesores que queramos de la \emph{EPS}, dependiendo de los departamentos y áreas que se indiquen.
+	
+	\item Implementación \emph{webscrap} en nuestro proyecto. Se ha introducido esta función en nuestro proyecto.
+	
+	\item Implemtación de la pantalla Generar Informes. Se comienza a programar esta nueva pantalla.
+	
+	\item Implemtación de la pantalla Estadísticas del Profesorado. Se comienza a programar esta nueva pantalla.
+	
+	\item Corrección de la memoria y anexos. Se corrige los fallos expuestos tras el \emph{feedback} del tutor Álvar Arnaiz de los ficheros latex de memoria y anexo.
 	
 \end{itemize}
 

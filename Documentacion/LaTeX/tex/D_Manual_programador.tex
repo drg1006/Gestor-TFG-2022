@@ -7,13 +7,13 @@ En esta sección se van a detallarlos diferentes procesos de instalación de las
 Se enumerarán y describirán brevemente los directorios del proyecto. Se puede encontrar el código fuente en el repositorio de Github denominado \href{https://github.com/drg1006/gestor-tfg-2022}{``Gestor-TFG-2022''}.
 
 \begin{itemize}
-	\item \textbf{/:} directorio raíz donde se ubican el README, Maven. 
-	\item \textbf{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub como para el análisis de la calidad del código en \href{https://sonarcloud.io/}{SonarCloud}.
-	\item \textbf{/Documentacion} material de documentación del proyecto y prueba empleadas.
+	\item \texttt{/:} directorio raíz donde se ubican el README, Maven. 
+	\item \texttt{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub como para el análisis de la calidad del código en \href{https://sonarcloud.io/}{SonarCloud}.
+	\item \texttt{/Documentacion} material de documentación del proyecto y prueba empleadas.
 	\begin{itemize}
 		\tightlist
-		\item \textbf{/Documentacion/LaTeX} ficheros para generar la memoria y los anexos en \emph{TexStudio}.
-		\item \textbf{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con \href{https://vaadin.com/}{Vaadin} y pruebas realizadas con diferentes librerías durante el webscraping.
+		\item \texttt{/Documentacion/LaTeX} ficheros para generar la memoria y los anexos realizados en \emph{TexStudio}.
+		\item \texttt{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con \href{https://vaadin.com/}{Vaadin} y pruebas realizadas con diferentes librerías durante el webscraping.
 	\end{itemize}
 \end{itemize}
 			
@@ -28,7 +28,7 @@ Actualmente se sigue ejecutando con la versión de Java 11. A pesar de que se ne
 
 Para ello se debe descargar la \href{https://www.oracle.com/es/java/technologies/javase/jdk11-archive-downloads.html}{página de descargas de Oracle Java SE 11.0} y descargar la versión de JDK 11, correspondiente con el sistema operativo que se posea y su arquitectura, ya sea de 64 o 32 bits. Ver imagen \ref{fig:Descarga_JDK_11}.
 
-Tras escoger la versión según el SO, se leerán y aceptarán las licencias de uso de Oracle \ref{fig:Descarga_JDK11_Licencia}, y se dará a descargar.
+Tras escoger la versión según el SO, se leerán y aceptarán las licencias de uso de Oracle \ref{fig:Descarga_JDK11_Licencia}, y se hará \emph{click} en descargar.
 
 \imagenflotante{Descarga_JDK_11}{Descarga de JDK 11}{0.9}
 
@@ -40,9 +40,7 @@ También se deberá cambiar la variable de entorno de Java del sistema.
 \subsection{Instalación de Eclipse}
 A continuación se instalará un entorno de desarrollo integrado(IDE) para Java, en este caso se ha utilizado \textbf{Eclipse IDE for Enterprise Java Developers} en la versión 2021-12. 
 
-Para descargar el IDE se accederá a la \href{https://www.eclipse.org/downloads/packages/release/2021-12/r}{página de descargas de Eclipse} y descargar la opción correspondiente a nuestro sistema operativo del \textbf{Eclipse Installer 2021-12 R}. Ver imagen \ref{fig:Descargar_IDE}.
-
-\imagenflotante{Descargar_IDE}{Descargar IDE Eclipse}{0.9}
+Para descargar el IDE se accederá a la \href{https://www.eclipse.org/downloads/packages/release/2021-12/r}{página de descargas de Eclipse} y descargar la opción correspondiente a nuestro sistema operativo del \textbf{Eclipse Installer 2021-12 R}. 
 
 En el caso de los sistemas operativos Windows se descargará un archivo ejecutable que se deberá ejecutar como administrador. Una vez ejecutado se deberá seleccionar la opción ``\textbf{\textit{Eclipse IDE for Enterprise Java Developers}}'' \ref{fig:Eclipse_Installer}. 
 
@@ -70,16 +68,16 @@ El código fuente se encuentra en el \href{https://github.com/drg1006/Gestor-TFG
 
 \imagenflotante{GitHub_Code}{Copiar URL repositorio}{0.9}
 
-Si se desea tener código en local se deberá descargar el zip ``\textbf{\textit{Download ZIP}}'' en la opción ``\textbf{\textit{Code}}'' anteriormente mencionada. Una vez descargado el zip se descomprimirá y abrirá con Eclipse. 
+Si se desea tener código en local se deberá descargar el zip ``\textbf{\textit{Download ZIP}}'' en la opción ``\textbf{\textit{Code}}'' anteriormente mencionada. Una vez descargado el fichero se descomprimirá y abrirá con Eclipse. 
 
 \subsection{Compilación del proyecto}
 
 Para compilar el proyecto en local desde terminal se usará:
 \begin{itemize}
-	\item Limpiar las dependencias: \textbf{``mvn clean''}.
-	\item Instalar dependencias y compilar: \textbf{``mvn install''}.
-	\item Instalar en modo producción (para desplegar): \textbf{``mvn package -Pproduction''}.  
-	\item Ejecutar test: \textbf{``mvn test''}.	
+	\item Limpiar las dependencias: \texttt{mvn clean}.
+	\item Instalar dependencias y compilar: \texttt{mvn install}.
+	\item Instalar en modo producción (para desplegar): \texttt{mvn package -Pproduction}.  
+	\item Ejecutar test: \texttt{mvn test}.	
 \end{itemize}
 
 \subsection{Ejecución del proyecto desde local}
@@ -104,20 +102,20 @@ Para la ejecución del proyecto en local desde terminal se usará:
 
 \subsection{Ejecución del proyecto desde Eclipse IDE}
 
-Para la ejecución del proyecto en local desde Eclipse primero debemos importar como proyecto Maven, con el pom.xml. Utilizaremos también un servidor local de de \href{https://tomcat.apache.org/i}{Apache Tomcat}, en concreto, la versión 9. Se puede descargar en \href{https://tomcat.apache.org/download-90.cgi}{la página oficial de Apache Tomcat}.
+Para la ejecución del proyecto en local desde Eclipse primero debemos importar como proyecto Maven, con el \textbf{pom.xml}. Utilizaremos también un servidor local de de \href{https://tomcat.apache.org/i}{Apache Tomcat}, en concreto, la versión 9. Se puede descargar en \href{https://tomcat.apache.org/download-90.cgi}{la página oficial de Apache Tomcat}.
 
 
-Una vez descargado y descomprimido, se creará un servicio de Tomcat \ref{fig:añadirTomcat} con la ruta donde se tiene descargado Tomcat y se le dará un nombre \ref{fig:nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'' \ref{fig:tomcatAñadirProyecto}.
+Una vez descargado y descomprimido, se creará un servicio de Tomcat, ver imagen \ref{fig:añadirTomcat}, con la ruta donde se tiene descargado Tomcat y se le dará un nombre, ver imagen \ref{fig:nombreServerTomcat}. Por último, se añadirá el proyecto principal ``sistinf'', ver imagen \ref{fig:tomcatAñadirProyecto}.
 
 \imagenflotante{añadirTomcat}{Añadir servidor de Tomcat a Eclipse}{0.9}
 \imagenflotante{nombreServerTomcat}{Seleccionar carpeta contenedora de Tomcat}{0.9}
 \imagenflotante{tomcatAñadirProyecto}{Añadir proyectos a servidor}{0.9}
 
-Para ejecutarlo desde eclipse debemos también seguir todos los pasos de compilación anteriormente mencionados.
+Para ejecutarlo desde Eclipse debemos también seguir todos los pasos de compilación anteriormente mencionados.
 
-Una vez tengamos compilado nuestro código debemos ejecutarlo (click derecho en el proyecto>``Run As''>``Run on Server'').
+Una vez tengamos compilado nuestro código debemos ejecutarlo (click derecho en el proyecto $\rightarrow$ \texttt{Run As} $\rightarrow$ \texttt{Run on Server}).
 
-Si no aparece la vista de los servicios se puede añadir desde la barra de herramientas>``Window''>``Show View''. Para configurar la ruta donde se ejecuta la aplicación, por defecto en \href{http://localhost:8080/}{localhost:8080/} o en ciertos casos \href{http://localhost:8080/sistinf}{localhost:8080/sistinf}.
+Si no aparece la vista de los servicios se puede añadir desde la barra de herramientas$\rightarrow$ \texttt{Window} $\rightarrow$ \texttt{Show View}. Para configurar la ruta donde se ejecuta la aplicación, por defecto en \href{http://localhost:8080/}{localhost:8080/} o en ciertos casos \href{http://localhost:8080/sistinf}{localhost:8080/sistinf}.
 
 \subsection{Problemas a la hora de ejecutar el proyecto}
 
@@ -148,9 +146,10 @@ Por ello mismo migraremos nuestro proyecto a esa versión de Heroku ya que GitHu
 
 Los pasos a seguir son los siguientes:
 \begin{itemize}
-	\item Obtener la verificación GitHub para estudiantes en \href{https://education.github.com/students}{https://education.github.com/students}  \ref{fig:GitHub_stu}.
+	\item Obtener la verificación GitHub para estudiantes en
+	 \href{https://education.github.com/students}{https://education.github.com/students}, ver imagen\ref{fig:GitHub_stu}.
 	\item Seguir las instrucciones tras entrar en \emph{Sign up for Global Campus} como se indica en \ref{fig:verify_GH}.
-	\item Indicar la escuela/universidad a la que pertenecemos y el uso que le vamos a dar a la cuenta \ref{fig:parametros_GH}.
+	\item Indicar la escuela/universidad a la que pertenecemos y el uso que le vamos a dar a la cuenta, ver imagen \ref{fig:parametros_GH}.
 \end{itemize}
 
 \imagenflotante{GitHub_stu}{Página de acceso a GitHub estudiantes}{0.9}
@@ -166,12 +165,11 @@ Los pasos a seguir son los siguientes:
 	\item Conectar nuestra cuenta de Heroku con la cuenta de GitHub para estudiantes.
 	\item Debemos añadir una tarjeta bancaria, ya que vamos a utilizar un servicio de pago pero de forma gratuita, por lo que se solicitan esos datos (que se podrán retirar en un futuro sin ningún tipo de pago realizado).
 	\item Esperar a que se confirme la solicitud realizada.
-	\item Podemos comprobar si hemos sido verificados si tenemos los créditos añadidos en nuestra pestaña de \emph{Account Settings} \ref{fig:Settings} en \emph{Billing} \ref{fig:Billing}.
+	\item Podemos comprobar si hemos sido verificados si tenemos los créditos añadidos en nuestra pestaña de \emph{Account Settings} en \emph{Billing} \ref{fig:Billing}.
 \end{itemize}
 El resultado final debería ser el siguiente \ref{fig:final_HGH}
 \imagenflotante{final_HGH}{Pestaña final tras aplicar a la oferta}{0.9}
 
-\imagenflotante{Settings}{Ajustes de nuestra cuenta de Heroku}{0.9}
 
 \imagenflotante{Billing}{Créditos de nuestra cuenta}{0.9}
 
