@@ -72,6 +72,10 @@ public final class Constants {
      * Area
      */
     public static final String AREA = "Area";
+    /**
+     * Area
+     */
+    public static final String DEPARTAMENTO = "Departamento";
     
 	/**
 	 * Primer alumno

@@ -188,4 +188,9 @@ public abstract class SistInfDataAbstract implements Serializable {
 
 	 //Nueva implementacion
     public abstract List<String> getAreas();
+    
+    public abstract List<String> getDepartamentos();
+    
+    public abstract List<String> getProfesores();
+    
 }

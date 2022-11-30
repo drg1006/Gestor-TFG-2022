@@ -1004,4 +1004,16 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         }
         return listaAreas.stream().distinct().collect(Collectors.toList());*/
     }
+
+    @Override
+    public List<String> getDepartamentos() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> getProfesores() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

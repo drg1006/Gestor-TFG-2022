@@ -1004,5 +1004,27 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return listaAreas.stream().distinct().collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getDepartamentos() {
+        List<String> listaDepartamentos = new ArrayList<String>();
+        String sql = SELECT_DISTINCT + DEPARTAMENTO + FROM + PROFESOR;
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                listaDepartamentos.add(result.getField(DEPARTAMENTO));
+                
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+        }
+        return listaDepartamentos.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getProfesores() {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

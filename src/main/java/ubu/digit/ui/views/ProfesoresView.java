@@ -12,6 +12,7 @@ import java.text.NumberFormat;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,9 @@ import org.slf4j.LoggerFactory;
 import com.opencsv.CSVWriter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -114,7 +118,8 @@ public class ProfesoresView extends VerticalLayout {
 		add(bat);
 		
 		preguntarSiActualizar();
-		createMetrics();
+		crearEstadisticas();
+		graficas();
 
 		Footer footer = new Footer("N4_Profesores.csv");
 		add(footer);
@@ -123,7 +128,7 @@ public class ProfesoresView extends VerticalLayout {
 	/**
      * Crea las métricas de los proyectos activos.
      */
-    private void createMetrics() {
+    private void crearEstadisticas() {
         H1 metricsTitle = new H1(INFO_ESTADISTICA);
         metricsTitle.addClassName("lbl-title");
         add(metricsTitle);
@@ -170,7 +175,7 @@ public class ProfesoresView extends VerticalLayout {
     }
     
     
-    public  void actualizarDatos() {
+    public void actualizarDatos() {
         List<String[]> profesores = new ArrayList<String[]>();
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
         Response response = null;
@@ -280,7 +285,7 @@ public class ProfesoresView extends VerticalLayout {
             
     }
     
-    public  void guardarDatosCSV(List<String[]> profesores) throws IOException {
+    public void guardarDatosCSV(List<String[]> profesores) throws IOException {
         //https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx 
  
         String path = this.getClass().getClassLoader().getResource("").getPath();
@@ -297,7 +302,7 @@ public class ProfesoresView extends VerticalLayout {
         writer.close();
     }
     
-    public  void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
+    public void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
         //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String serverPath = path.substring(0, path.length()-17);
@@ -346,4 +351,61 @@ public class ProfesoresView extends VerticalLayout {
             ex.printStackTrace();
         }
     }
+
+    public void graficas(){
+        Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
+        List<String> areas= fachadaDatos.getAreas();
+        CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
+        checkboxGroupA.setLabel("Areas:");
+        checkboxGroupA.setItems(areas);
+        
+        checkboxGroupA.addValueChangeListener(event -> {
+            if (event.getValue().size() == areas.size()) {
+                checkboxA.setValue(true);
+                checkboxA.setIndeterminate(false);
+            } else if (event.getValue().size() == 0) {
+                checkboxA.setValue(false);
+                checkboxA.setIndeterminate(false);
+            } else {
+                checkboxA.setIndeterminate(true);
+            }
+        });
+        checkboxA.addValueChangeListener(event -> {
+            if (checkboxA.getValue()) {
+                checkboxGroupA.setValue(new HashSet<>(areas));
+            } else {
+                checkboxGroupA.deselectAll();
+            }
+        });
+        
+        Checkbox checkboxD = new Checkbox("Seleccionar todos los departamentos");
+        List<String> departamentos= fachadaDatos.getDepartamentos();
+        CheckboxGroup<String> checkboxGroupD = new CheckboxGroup<>();
+        checkboxGroupD.setLabel("Departamentos:");
+        checkboxGroupD.setItems(departamentos);
+           
+        checkboxGroupD.addValueChangeListener(event -> {
+            if (event.getValue().size() == departamentos.size()) {
+                checkboxD.setValue(true);
+                checkboxD.setIndeterminate(false);
+            } else if (event.getValue().size() == 0) {
+                checkboxD.setValue(false);
+                checkboxD.setIndeterminate(false);
+            } else {
+                checkboxD.setIndeterminate(true);
+            }
+            });
+            checkboxD.addValueChangeListener(event -> {
+                if (checkboxD.getValue()) {
+                    checkboxGroupD.setValue(new HashSet<>(departamentos));
+                } else {
+                    checkboxGroupD.deselectAll();
+                }
+         
+
+        });
+            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD);   
+    } 
+        
+
 }

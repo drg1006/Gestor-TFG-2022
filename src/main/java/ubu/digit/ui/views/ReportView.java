@@ -117,8 +117,7 @@ public class ReportView extends VerticalLayout {
 	    //checkboxGroup.setItemLabelGenerator(
 	            //person -> person.getFirstName() + " " + person.getLastName());
 	    checkboxGroup.setItems(areas);
-	    
-	    checkboxGroup.addThemeVariants(CheckboxGroupVariant.MATERIAL_VERTICAL);
+	   
 	    checkboxGroup.addValueChangeListener(event -> {
 	        if (event.getValue().size() == areas.size()) {
 	            checkbox.setValue(true);
