@@ -37,7 +37,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
-import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
@@ -136,22 +135,17 @@ public class ProfesoresView extends VerticalLayout {
         add(metricsTitle);
 
         try {
-            //Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
+            
             Number numProfes= fachadaDatos.getNumProfesores();
             Label totalProfessors = new Label("- Número total de profesores: " +numProfes.intValue());
             
             Number numAreas= fachadaDatos.getNumAreas();
             Label totalAreas = new Label("- Número total de areas: "+numAreas.intValue() );
-            //Label aalumnos = new Label("Buscar la cadena 'Aalumnos sin asignar' en columna Alumnos.");
-            
+           
             Number numDepartamentos= fachadaDatos.getNumDepartamentos();
             Label totalDepartments = new Label("- Número total de departamentos: "+ numDepartamentos.intValue());
-
-            //String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
-            //Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
-            Label totalTFGs = new Label("- TFGs asignados por Curso: ");
-
-            add(totalProfessors, totalAreas, totalDepartments, totalTFGs);
+            
+            add(totalProfessors, totalAreas, totalDepartments);
         } catch (Exception e) {
             LOGGER.error("Error en estadísticas", e);
         }
@@ -206,7 +200,7 @@ public class ProfesoresView extends VerticalLayout {
             
             // Busco todas las entradas que estan dentro de: 
             Elements entradas = doc.select("div.c-persona-card__detalles");
-            System.out.println("Número de profesores de la EPS : "+entradas.size()+"\n");
+            //System.out.println("Número de profesores de la EPS : "+entradas.size()+"\n");
             // Paseo cada una de las entradas
             int i=1;
             for (Element elem : entradas) {
@@ -258,12 +252,12 @@ public class ProfesoresView extends VerticalLayout {
                 apellidos =StringUtils.stripAccents(apellidos);
                 area =StringUtils.stripAccents(area);
                 departamento =StringUtils.stripAccents(departamento);
-                String [] profesor= {nombre, apellidos, area, departamento};
+                String [] profesor= {nombre +" "+ apellidos, area, departamento};
                 
                 profesores.add(profesor);
                 i++;
                 if(i==2) {
-                    dataTFG.put("1", new Object[] {"Nombre", "Apellidos", "Area","Departamento"});
+                    dataTFG.put("1", new Object[] {"NombreApellidos", "Area","Departamento"});
                     dataTFG.put("2",profesor);
                 }else {
                     String id=Integer.toString(i);
@@ -317,7 +311,7 @@ public class ProfesoresView extends VerticalLayout {
         File file = new File(completeDir + fileName);
  
         String absPath = file.getAbsolutePath();
-        System.out.println("PATH:"+ absPath);        
+        //System.out.println("PATH:"+ absPath);        
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -410,11 +404,11 @@ public class ProfesoresView extends VerticalLayout {
          
 
         });
+            
             ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
-            filtroProfesores.setWidth("20%");
-            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores);
+            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores);   
     } 
         
 

@@ -1025,11 +1025,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     public List<String> getProfesores() {
         
         List<String> listaProfesores = new ArrayList<String>();
-        String sql = SELECT + NOMBRE + ","+ APELLIDOS + FROM + PROFESOR;
+        String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR;
         try {
             Recordset result = connection.executeQuery(sql);
             while (result.next()) {
-                listaProfesores.add(result.getField(NOMBRE).toString()+" "+result.getField(APELLIDOS).toString());
+                listaProfesores.add(result.getField(NOMBRE_APELLIDOS).toString());
                 
             }
         }catch(FilloException ex) { 

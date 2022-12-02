@@ -9,37 +9,37 @@ package ubu.digit.util;
 public final class Constants {
 
 	/**
-	 * Tribunal
+	 * Pestaña de Tribunal del excel 
 	 */
 	public static final String TRIBUNAL = "N1_Tribunal";
 
 	/**
-	 * Norma 
+	 * Pestaña de Norma del excel  
 	 */
 	public static final String NORMA = "N1_Norma";
 
 	/**
-	 * Documento
+	 * Pestaña de pDocumento del excel 
 	 */
 	public static final String DOCUMENTO = "N1_Documento";
 
 	/**
-	 * Proyecto 
+	 * Pestaña de Proyecto del excel  
 	 */
 	public static final String PROYECTO = "N2_Proyecto";
 
 	/**
-	 * Histórico 
+	 * Pestaña de Histórico  del excel 
 	 */
 	public static final String HISTORICO = "N3_Historico";
 	
 	/**
-	 * Alumno 
+	 * Pestaña de Alumno  del excel
 	 */
 	public static final String ALUMNO = "N2_Alumno";
 
 	/**
-     * Profesores
+     * Pestaña de profesores del excel
      */
     public static final String PROFESOR = "N4_Profesores";
     
@@ -76,16 +76,6 @@ public final class Constants {
      * Area
      */
     public static final String DEPARTAMENTO = "Departamento";
-    
-    /**
-     * Nombre de profesor
-     */
-    public static final String NOMBRE = "Nombre";
-    
-    /**
-     * Nombre de profesor
-     */
-    public static final String APELLIDOS = "Apellidos";
     
 	/**
 	 * Primer alumno

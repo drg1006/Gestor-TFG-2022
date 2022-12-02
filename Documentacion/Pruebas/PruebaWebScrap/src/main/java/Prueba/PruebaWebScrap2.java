@@ -42,6 +42,7 @@ import com.opencsv.CSVWriter;
 public class PruebaWebScrap2{
 
     public static void main (String args[]) {
+    	
     	List<String[]> profesores = new ArrayList<String[]>();
     	Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
     	Response response = null;
@@ -86,9 +87,9 @@ public class PruebaWebScrap2{
                 String apellidos = elem.getElementsByClass("c-persona-card__apellidos").text();
                 String area = elem.getElementsByClass("c-persona-card__area").text();
 				//Imprimimos por pantalla
-                System.out.println("Nombre: "+nombre);
-                System.out.println("Apellidos: " +apellidos);
-                System.out.println("Area: "+area);
+               //System.out.println("Nombre: "+nombre);
+                //System.out.println("Apellidos: " +apellidos);
+                //System.out.println("Area: "+area);
 
                 //Para sacar el Departamento debemos ir a otra url 
                 try {
@@ -116,7 +117,7 @@ public class PruebaWebScrap2{
         		//Cogemos el primer link de tipo "a"(href) que tiene la información sobre el departamento y sacamos su texto
         		Element link2= entrada.select("a").first();
         		String departamento = link2.text();	
-        		System.out.println("Departamento: "+ departamento + "\n");
+        		//System.out.println("Departamento: "+ departamento + "\n");
 
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
@@ -125,12 +126,12 @@ public class PruebaWebScrap2{
             	apellidos =StringUtils.stripAccents(apellidos);
             	area =StringUtils.stripAccents(area);
             	departamento =StringUtils.stripAccents(departamento);
-        		String [] profesor= {nombre, apellidos, area, departamento};
+        		String [] profesor= {nombre +" "+ apellidos, area, departamento};
             	
             	profesores.add(profesor);
             	i++;
             	if(i==2) {
-            		dataTFG.put("1", new Object[] {"Nombre", "Apellidos", "Area","Departamento"});
+            		dataTFG.put("1", new Object[] {"NombreApellidos", "Area","Departamento"});
             		dataTFG.put("2",profesor);
             	}else {
             		String id=Integer.toString(i);
