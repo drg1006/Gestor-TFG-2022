@@ -35,6 +35,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(SistInfDataXls.class.getName());
 
+
 	/**
 	 * Conexión que se produce entre la base de datos(xls) y la aplicación.
 	 */
@@ -722,8 +723,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		int rankingTotal=0;
 		int rankingCurse=0;
 		List<String> rankingsPercentile = getRankingPercentile();
+		
 		List<Integer> rankingsTotal = getRankingTotal();
+		
 		List<Integer> rankingsCurse = getRankingCurses();
+		
 		ArrayList listaDataModel=new ArrayList();
 		try{ 
 			Recordset result = getResultSet(HISTORICO, TITULO);
@@ -768,8 +772,12 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				} else {
 					numStudents++;
 				}
+				
 				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
+				
 				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
+				//String assignmentDate = result.getField(FECHA_ASIGNACION);
+				//String presentationDate = result.getField(FECHA_PRESENTACION);
 				rankingPercentile = rankingsPercentile.get(contador);
 				rankingTotal = rankingsTotal.get(contador);
 				rankingCurse = rankingsCurse.get(contador);
@@ -818,8 +826,9 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		List<Integer> percentileList = new ArrayList<Integer>();
 		List<String> rankingList = new ArrayList<String>();
 		int i, count;
-
+		
 		String sql = SELECT + NOTA + FROM + HISTORICO + WHERE + NOTA + DISTINTO_DE_VACIO;
+		
 		try {
 			Recordset result = connection.executeQuery(sql);
 			addNumbersToList(NOTA, scoreList, result);
@@ -917,7 +926,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				dates.add(result.getField(columnName));
 			}
 		}catch(FilloException ex) { 
-			LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+			LOGGER.error("Error al obtener las fechas", ex);
 		}
 		return dates;
 	}
@@ -938,7 +947,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 			while (result_Curse.next()) {
 				dateIni = result_Curse.getField(FECHA_ASIGNACION);
 				dateEnd = result_Curse.getField(FECHA_PRESENTACION);
-				curses.add(dateIni.toString().substring(6) + dateEnd.toString().substring(5));
+				//curses.add(dateIni.toString().substring(6) + dateEnd.toString().substring(5));
+				curses.add(dateIni.toString() + dateEnd.toString());
 			}
 		}catch(FilloException ex) { 
 			LOGGER.error("Error al obtener las fechas de presentación y de asignación", ex);
@@ -987,8 +997,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}
 		return rankingTotalList;
 	}
-	
-	@Override
+
+    @Override
     public List<String> getAreas() {
 
         List<String> listaAreas = new ArrayList<String>();
@@ -1005,7 +1015,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return listaAreas.stream().distinct().collect(Collectors.toList());
     }
 
-	@Override
+
+    @Override
     public List<String> getDepartamentos() {
         List<String> listaDepartamentos = new ArrayList<String>();
         String sql = SELECT_DISTINCT + DEPARTAMENTO + FROM + PROFESOR;
@@ -1016,7 +1027,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
                 
             }
         }catch(FilloException ex) { 
-            LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+            LOGGER.error("Error al obtener los departamentos", ex);
         }
         return listaDepartamentos.stream().distinct().collect(Collectors.toList());
     }
@@ -1033,7 +1044,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
                 
             }
         }catch(FilloException ex) { 
-            LOGGER.error("Error al obtener el ranking de notas por cursos", ex);
+            LOGGER.error("Error al obtener los profesores", ex);
         }
         return listaProfesores;
     }
@@ -1054,10 +1065,54 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     }
 
     @Override
-    public List<String> getProfesoresDeArea(String area) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<String> getAreasConTFGAsignados() {
+     
+        List<String> listaAreasConTFGs = new ArrayList<String>();
+
+        String sql = SELECT + PROFESOR+"."+AREA + 
+                FROM + PROFESOR+ " LEFT JOIN " +HISTORICO +
+                " ON " + PROFESOR+"."+NOMBRE_APELLIDOS+" = " + HISTORICO +"."+TUTOR1
+                + ORDER_BY+PROFESOR+"."+AREA;
+        
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                    listaAreasConTFGs.add(result.getField(AREA).toString());
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener las areas con TFGs asignados", ex);
+        }
+        return listaAreasConTFGs;
     }
     
+    public List<String> getProfesoresDeArea(String area){
+        List<String> profesoresDeArea= new ArrayList<String>();
+        String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR + WHERE+ AREA + " = "+"'"+area+"'";
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                profesoresDeArea.add(result.getField(NOMBRE_APELLIDOS).toString());
+            }
+        }catch(FilloException ex) { 
+            LOGGER.error("Error al obtener los profesores del area "+area, ex);
+        }
+        return profesoresDeArea;       
+        
+    }
     
+    public Number getNumTFGsProfesor(String tutor){
+        System.out.println("TUTOR:" + tutor);
+        String sql = SELECT + "("+TUTOR1+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
+        return getResultSetNumber(sql);
+       
+    }
+
+    @Override
+    public Number getNumTFGsCOProfesor(String tutor) {
+        System.out.println("TUTOR:" + tutor);
+        String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
+        return getResultSetNumber(sql);
+    }
+	
+	
 }

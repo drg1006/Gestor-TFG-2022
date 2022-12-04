@@ -9,9 +9,13 @@ import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +24,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -114,10 +119,9 @@ public class ReportView extends VerticalLayout {
 	    List<String> areas= fachadaDatos.getAreas();
 	    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
 	    checkboxGroup.setLabel("Areas");
-	    //checkboxGroup.setItemLabelGenerator(
-	            //person -> person.getFirstName() + " " + person.getLastName());
 	    checkboxGroup.setItems(areas);
-	   
+	    
+	    //checkboxGroup.addThemeVariants(CheckboxGroupVariant.MATERIAL_VERTICAL);
 	    checkboxGroup.addValueChangeListener(event -> {
 	        if (event.getValue().size() == areas.size()) {
 	            checkbox.setValue(true);
@@ -155,6 +159,10 @@ public class ReportView extends VerticalLayout {
 	    //BOTON PARA CREAR EL INFORME 
 	    Button crearInforme = new Button("Crear Informe");
 	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+	    
+	    ComboBox<String> años = new ComboBox<String>("Seleccione un curso");
+	    //List<String> curso = fachadaDatos.get;
+       // años.setItems(curso);
 	    add(checkbox, checkboxGroup,nombreInforme,crearInforme);
 	    
 	    crearInforme.addClickListener(event -> {
@@ -167,14 +175,33 @@ public class ReportView extends VerticalLayout {
 	   public void creacionInforme(Set<String> listaAreas, String nombreInforme) {
 	       
 	       File archivo = new File(nombreInforme+".xls");
-	       //String absPath=archivo.getAbsolutePath();
+	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 	       Workbook workbook = new HSSFWorkbook();
-	       
 	       try {
-	            //FileInputStream inputStream = new FileInputStream(new File(absPath));
-	            //Workbook workbook = WorkbookFactory.create(inputStream);
+
 	            for(String area: listaAreas) {
 	                workbook.createSheet(area);
+	                dataTFG = obtencionDatos(area);
+	                Row rowCount;
+	                
+	                Set<String> keyid = dataTFG.keySet();
+	                System.out.println("keyset: " +keyid);
+	                int rowid = 0;
+	                
+	                //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
+	                // writing the data into the sheets...
+	                System.out.println("dataTFg"+ dataTFG);
+	                for (String key : keyid) {
+	                    rowCount = workbook.getSheet(area).createRow(rowid++);
+	                    System.out.println("KEY:"+ dataTFG.get(key));
+	                    Object[] objectArr = dataTFG.get(key);
+	                    
+	                    int cellid = 0;
+	                    for (Object obj : objectArr) {
+	                        Cell cell = rowCount.createCell(cellid++);
+	                        cell.setCellValue((String)obj);
+	                    }
+	                }
 	            }
 	            //Se genera el documento
 	            FileOutputStream out = new FileOutputStream(archivo);
@@ -186,5 +213,32 @@ public class ReportView extends VerticalLayout {
 	            e.printStackTrace();
 	        }
 	   }
+
+
+
+    private Map<String, Object[]> obtencionDatos(String area) {
+        Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
+        List<String> profes =fachadaDatos.getProfesoresDeArea(area);
+        int i=1;
+        for(String prof:profes) {
+            i++;
+            //TFGs dirigidos
+            Number tfgs = fachadaDatos.getNumTFGsProfesor(prof);
+            //TFGs codirigidos
+            Number tfgs2 = fachadaDatos.getNumTFGsCOProfesor(prof);
+            System.out.println("TFGs de"+ prof + " tiene"+tfgs);
+            String [] profesor= {prof,tfgs.toString(),tfgs2.toString()};
+            System.out.println("profesor"+profesor);
+            if(i==2) {
+                dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos"});
+                dataTFG.put("2",profesor);
+            }else {
+                String id=Integer.toString(i);
+                dataTFG.put(id,profesor);
+            } 
+        }   
+
+        return dataTFG;
+    }
 	   
 }

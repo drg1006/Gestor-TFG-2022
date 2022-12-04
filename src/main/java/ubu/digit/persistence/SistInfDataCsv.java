@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Recordset;
+
 import static ubu.digit.util.Constants.*;
 
 
@@ -986,11 +989,11 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		}
 		return listaDataModel;
 	}
-	
+
 	@Override
     public List<String> getAreas() {
         return null;
-        /*
+	    /*
         List<String> listaAreas = new ArrayList<String>();
         String sql = SELECT_DISTINCT + AREA + FROM + PROFESOR;
         try {
@@ -1005,11 +1008,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         return listaAreas.stream().distinct().collect(Collectors.toList());*/
     }
 
-	@Override
-    public List<String> getProfesoresDeArea(String area) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public List<String> getDepartamentos() {
@@ -1039,5 +1037,30 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
     public Number getNumDepartamentos() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+
+    @Override
+    public List<String> getAreasConTFGAsignados() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> getProfesoresDeArea(String area) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Number getNumTFGsProfesor(String tutor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Number getNumTFGsCOProfesor(String prof) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

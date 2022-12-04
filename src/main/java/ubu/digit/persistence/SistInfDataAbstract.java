@@ -72,6 +72,11 @@ public abstract class SistInfDataAbstract implements Serializable {
 	protected static final String ORDER_BY = " order by ";
 	
 	/**
+     * Order by.
+     */
+    protected static final String JOIN = " join ";
+	
+	/**
 	 * Dirección de los ficheros en la aplicación del servidor.
 	 */
 	protected String serverPath = "";
@@ -132,6 +137,8 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	public abstract List<Integer> getRankingCurses();
 	
+	
+	
 	public abstract Number getTotalNumber(String columnName, String tableName);
 
 	protected abstract Number getTotalNumber(String columnName, String tableName, String whereCondition);
@@ -167,8 +174,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 	
 	public abstract List<String> getTribunal();
 	
-	public abstract List<String> getNormas();
-	
 	public abstract List<String> getDocumentos();
 	
 	@SuppressWarnings("rawtypes")
@@ -185,8 +190,10 @@ public abstract class SistInfDataAbstract implements Serializable {
 	public abstract Number getStdvColumn(String columnName, String tableName);
 
 	protected abstract List<Double> getListNumber(String columnName, String sql);
-
-	 //Nueva implementacion
+	
+    public abstract List<String> getNormas();
+    
+    //prueba david
     public abstract List<String> getAreas();
     
     public abstract List<String> getDepartamentos();
@@ -196,6 +203,11 @@ public abstract class SistInfDataAbstract implements Serializable {
     public abstract Number getNumProfesores();
     public abstract Number getNumAreas();
     public abstract Number getNumDepartamentos();
+    public abstract List<String> getAreasConTFGAsignados();
     public abstract List<String> getProfesoresDeArea(String area);
+    public abstract Number getNumTFGsProfesor(String tutor);
+
+    public abstract Number getNumTFGsCOProfesor(String prof);
+    
     
 }
