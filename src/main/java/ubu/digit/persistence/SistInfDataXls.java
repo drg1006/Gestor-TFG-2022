@@ -1101,7 +1101,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     }
     
     public Number getNumTFGsProfesor(String tutor){
-        System.out.println("TUTOR:" + tutor);
         String sql = SELECT + "("+TUTOR1+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
         return getResultSetNumber(sql);
        
@@ -1109,8 +1108,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 
     @Override
     public Number getNumTFGsCOProfesor(String tutor) {
-        System.out.println("TUTOR:" + tutor);
-        String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
+        String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR2+ " ='"+ tutor+"'";
         return getResultSetNumber(sql);
     }
 	

@@ -3,6 +3,7 @@ package ubu.digit.ui.views;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLConnection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 
@@ -16,6 +17,7 @@ import java.util.TreeMap;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -32,7 +35,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
+import com.vaadin.server.StreamResource;
 
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
@@ -153,7 +156,6 @@ public class ReportView extends VerticalLayout {
 
 	    nombreInforme.addValueChangeListener(event ->{
 	       nombreInforme.setValue(event.getValue());
-	       System.out.println(nombreInforme.getValue());
 	    });
 	    
 	    //BOTON PARA CREAR EL INFORME 
@@ -164,15 +166,26 @@ public class ReportView extends VerticalLayout {
 	    //List<String> curso = fachadaDatos.get;
        // años.setItems(curso);
 	    add(checkbox, checkboxGroup,nombreInforme,crearInforme);
-	    
+	    //Anchor anchor = new Anchor(getStreamResource("default.txt", "default content"), "click me to download");
+        //anchor.getElement().setAttribute("download",true);
+        
 	    crearInforme.addClickListener(event -> {
-	        creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue());
+	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue());
+	       // descargarInforme(file);
+	       // anchor.setHref(file.getValue(), file.getValue());
 	        
 	    });
+	    
 
 	}
-	
-	   public void creacionInforme(Set<String> listaAreas, String nombreInforme) {
+	/*
+	public StreamResource getStreamResource(String filename, String content) {
+        return new StreamResource(filename,
+                () -> new ByteArrayInputStream(content.getBytes()));
+    }
+*/
+
+    public File creacionInforme(Set<String> listaAreas, String nombreInforme) {
 	       
 	       File archivo = new File(nombreInforme+".xls");
 	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
@@ -180,20 +193,18 @@ public class ReportView extends VerticalLayout {
 	       try {
 
 	            for(String area: listaAreas) {
-	                workbook.createSheet(area);
+	                Sheet hoja=workbook.createSheet(area);
 	                dataTFG = obtencionDatos(area);
-	                Row rowCount;
+	                Row rowCount=null;
 	                
 	                Set<String> keyid = dataTFG.keySet();
-	                System.out.println("keyset: " +keyid);
 	                int rowid = 0;
 	                
 	                //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
 	                // writing the data into the sheets...
-	                System.out.println("dataTFg"+ dataTFG);
 	                for (String key : keyid) {
-	                    rowCount = workbook.getSheet(area).createRow(rowid++);
-	                    System.out.println("KEY:"+ dataTFG.get(key));
+
+	                    rowCount = workbook.getSheet(hoja.getSheetName()).createRow(rowid++);
 	                    Object[] objectArr = dataTFG.get(key);
 	                    
 	                    int cellid = 0;
@@ -212,6 +223,7 @@ public class ReportView extends VerticalLayout {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
+        return archivo;
 	   }
 
 
@@ -226,9 +238,7 @@ public class ReportView extends VerticalLayout {
             Number tfgs = fachadaDatos.getNumTFGsProfesor(prof);
             //TFGs codirigidos
             Number tfgs2 = fachadaDatos.getNumTFGsCOProfesor(prof);
-            System.out.println("TFGs de"+ prof + " tiene"+tfgs);
             String [] profesor= {prof,tfgs.toString(),tfgs2.toString()};
-            System.out.println("profesor"+profesor);
             if(i==2) {
                 dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos"});
                 dataTFG.put("2",profesor);
@@ -241,4 +251,13 @@ public class ReportView extends VerticalLayout {
         return dataTFG;
     }
 	   
+    
+    private void descargarInforme(File file) {
+      //Directorio destino para las descargas
+       
+    }
+    
 }
+
+
+
