@@ -37,7 +37,12 @@ public enum WSFunctionEnum {
 	 * user search, use core_user_get_users().
 	 */
 	CORE_USER_GET_USERS_BY_FIELD("core_user_get_users_by_field", 2.5),
-
+	
+    /**
+     * Get enrolled users by course id
+     */
+    
+    CORE_ENROL_GET_ENROLLED_USERS("core_enrol_get_enrolled_users",2.2),
 	/**
 	 * Return the user token.
 	 */

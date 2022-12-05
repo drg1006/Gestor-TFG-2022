@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ubu.digit.security.*;
 import ubu.digit.util.Constants;
 import ubu.digit.util.UtilMethods;
+import ubu.digit.webService.CoreCourseGetCoursesByField;
 import ubu.digit.webService.CoreCourseGetUserAdministrationOptions;
+import ubu.digit.webService.CoreGetEnrolledUsers;
 import ubu.digit.webService.CoreWebserviceGetSiteInfo;
 import ubu.digit.ui.entity.Course;
 import ubu.digit.ui.entity.MoodleUser;
@@ -182,7 +185,9 @@ public class LoginView extends VerticalLayout{
 				}
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
-			
+			//2203 2204 8633 8574 12231
+			JSONArray jsonArray2 = UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(), new CoreGetEnrolledUsers("2204"));
+			LOGGER.info("users--> " + jsonArray2);
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
 			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
@@ -202,7 +207,7 @@ public class LoginView extends VerticalLayout{
 	    final LoginI18n i18n = LoginI18n.createDefault();
 
 	    i18n.setHeader(new LoginI18n.Header());
-	    i18n.getHeader().setTitle("Gestor-TFG-2021");
+	    i18n.getHeader().setTitle("Gestor-TFG-2022");
 	    i18n.getHeader().setDescription("Gestor TFG");
 	    i18n.getForm().setUsername("Usuario");
 	    i18n.getForm().setTitle("Iniciar Sesión");
