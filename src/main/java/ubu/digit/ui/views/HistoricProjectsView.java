@@ -66,12 +66,12 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Serial Version UID.
 	 */
-	private static final long serialVersionUID = 8431807779365780674L;
+	public static final long serialVersionUID = 8431807779365780674L;
 
 	/**
 	 * Logger de la clase.
 	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(HistoricProjectsView.class.getName());
+	public static final Logger LOGGER = LoggerFactory.getLogger(HistoricProjectsView.class.getName());
 
 	/**
 	 * Nombre de la vista.
@@ -81,93 +81,93 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Lista con los proyectos históricos.
 	 */
-	private List<HistoricProject> dataHistoric;
+	public List<HistoricProject> dataHistoric;
 	
 	/**
 	 * Lista con los proyectos históricos que se usará 
 	 * en el grid descripción de proyectos. 
 	 */
-	private List<HistoricProject> dataHistoricGrid;
+	public List<HistoricProject> dataHistoricGrid;
 	
 	/**
 	 * Lista con los proyectos históricos filtrados
 	 */
-	private List<HistoricProject>  dataFilteredGrid;
+	public List<HistoricProject>  dataFilteredGrid;
 
 	/**
 	 * Fichero de configuración.
 	 */
-	private ExternalProperties config;
+	public ExternalProperties config;
 
 	/**
 	 * Tabla de proyectos históricos.
 	 */
-	 private Grid<HistoricProject> gridHistoric;
+	 public Grid<HistoricProject> gridHistoric;
 	 
 	/**
 	 * Formateador de números.
 	 */
-	private NumberFormat numberFormatter;
+	public NumberFormat numberFormatter;
 	
 	/**
 	 * Formateador de fechas.
 	 */
-	private transient DateTimeFormatter dateTimeFormatter;
+	public transient DateTimeFormatter dateTimeFormatter;
 	
 	/**
 	 * Mapa auxiliar con los diferentes cursos.
 	 */
-	private transient Map<Integer, List<HistoricProject>> yearOfProjects;
+	public transient Map<Integer, List<HistoricProject>> yearOfProjects;
 	
 	/**
 	 * Mapa con los cursos que tienen proyectos de nueva asignación.
 	 */
-	private transient Map<Integer, List<HistoricProject>> newProjects;
+	public transient Map<Integer, List<HistoricProject>> newProjects;
 
 	/**
 	 * Mapa con los cursos que tienen proyectos ya asignados.
 	 */
-	private transient Map<Integer, List<HistoricProject>> oldProjects;
+	public transient Map<Integer, List<HistoricProject>> oldProjects;
 
 	/**
 	 * Mapa con los cursos que tienen proyectos presentados.
 	 */
-	private transient Map<Integer, List<HistoricProject>> presentedProjects;
+	public transient Map<Integer, List<HistoricProject>> presentedProjects;
 
 	/**
 	 * Menor curso total (más antiguo).
 	 */
-	private int minCourse;
+	public int minCourse;
 
 	/**
 	 * Mayor curso total (más actual).
 	 */
-	private int maxCourse;
+	public int maxCourse;
 
 	/**
 	 * Campo de texto para filtrar por proyecto.
 	 */
-	private TextField projectFilter;
+	public TextField projectFilter;
 	
 	/**
 	 * Campo de texto para filtrar por tutores.
 	 */
-	private TextField tutorsFilter;
+	public TextField tutorsFilter;
 	
 	/**
 	 * Campo de texto para filtrar por fecha de asignación.
 	 */
-	private TextField assignmentDateFilter;
+	public TextField assignmentDateFilter;
 
 	/**
 	 * Campo de texto para filtrar por fecha de presentación.
 	 */
-	private TextField presentationDateFilter;
+	public TextField presentationDateFilter;
 	
 	/**
 	 *  Fachada para obtener los datos
 	 */
-	private SistInfDataAbstract fachadaDatos;
+	public SistInfDataAbstract fachadaDatos;
 
 	/**
 	 * Constructor.
@@ -179,6 +179,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		config = ExternalProperties.getInstance("/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
+		
 		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
 		setMargin(true);
@@ -203,12 +204,12 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * Crea el modelo de datos de los proyectos históricos.
 	 * @throws SQLException 
 	 */
-	private void createDataModel(){ 	
+	public void createDataModel(){ 	
 		//Se obtienen los datos del modelo
 		dataHistoric = new ArrayList<HistoricProject>();
+		
 		@SuppressWarnings("rawtypes")
 		ArrayList listaDataModel = fachadaDatos.getDataModelHistoric(dateTimeFormatter);
-		
 		for(int i=0;i<listaDataModel.size();i++) {
 			HistoricProject historic = new HistoricProject((String)listaDataModel.get(i),(String)listaDataModel.get(++i), 
 					(String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
@@ -222,7 +223,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Crea las métricas globales de los proyectos históricos.
 	 */
-	private void createGlobalMetrics() {
+	public void createGlobalMetrics() {
 		H1 metricsTitle = new H1(INFO_ESTADISTICA);
 		metricsTitle.addClassName(TITLE_STYLE);
 		add(metricsTitle);
@@ -265,7 +266,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Crea las métricas anuales de los proyectos históricos.
 	 */
-	private void createYearlyMetrics() {
+	public void createYearlyMetrics() {
 		initProjectsStructures();
 		createYearlyAverageStats();
 		createYearlyTotalStats();
@@ -274,7 +275,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Inicializa los mapas.
 	 */
-	private void initProjectsStructures() {
+	public void initProjectsStructures() {
 		if(getCourse(true) != null && getCourse(false) != null) {
 			minCourse = getCourse(true).getYear();
 			maxCourse = getCourse(false).getYear();
@@ -303,7 +304,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Organiza los proyectos (nueva o vieja asignación, y presentados).
 	 */
-	private void organizeProjects() {
+	public void organizeProjects() {
 		Iterator<Integer> iterator = yearOfProjects.keySet().iterator();
 		while (iterator.hasNext()) {
 			Integer year = iterator.next();
@@ -340,7 +341,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @param isCurrentCourse
 	 *            si el proyecto se corresponde con el curso actual
 	 */
-	private void assignProjectCourses(int year, HistoricProject project, int totalYears, boolean isCurrentCourse) {
+	public void assignProjectCourses(int year, HistoricProject project, int totalYears, boolean isCurrentCourse) {
 		for (int yearCount = 0; yearCount <= totalYears; yearCount++) {
 			assignProject(year, yearCount, project, isCurrentCourse);
 		}
@@ -358,7 +359,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @param isCurrentCourse
 	 *            si el proyecto se corresponde con el curso actual
 	 */
-	private void assignProject(int year, int yearCount, HistoricProject project, boolean isCurrentCourse) {
+	public void assignProject(int year, int yearCount, HistoricProject project, boolean isCurrentCourse) {
 		int before = 0;
 		if (!isCurrentCourse) {
 			before = 1;
@@ -388,7 +389,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @param project
 	 *            proyecto actual
 	 */
-	private void buildPresentedProjects(HistoricProject project) {
+	public void buildPresentedProjects(HistoricProject project) {
 		LocalDate presentedDate = project.getPresentationDate();
 		LocalDate startDate = LocalDate.of(presentedDate.getYear(), Integer.parseInt(config.getSetting("finPresentaciones.mes")),
 				Integer.parseInt(config.getSetting("finPresentaciones.dia")));
@@ -410,7 +411,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @return número de alumnos con proyectos de nueva asignación en cada
 	 *         curso.
 	 */
-	private Map<Integer, Number> getStudentsCount() {
+	public Map<Integer, Number> getStudentsCount() {
 		Map<Integer, Number> studentsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			HistoricProject project;
@@ -433,7 +434,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @return número de tutores con proyectos de nueva asignación en cada
 	 *         curso.
 	 */
-	private Map<Integer, Number> getTutorsCount() {
+	public Map<Integer, Number> getTutorsCount() {
 		Map<Integer, Number> tutorsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			HistoricProject current;
@@ -455,7 +456,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * y meses por curso academico.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void createYearlyAverageStats() {
+	public void createYearlyAverageStats() {
 		Map<Integer, Number> averageScores = getAverageScores();
 		Map<Integer, Number> averageTotalDays = getAverageTotalDays();
 		Map<Integer, Number> averageMonths = new HashMap<>();
@@ -489,7 +490,6 @@ public class HistoricProjectsView extends VerticalLayout {
 		add(new Label("Media de notas por curso: " + scores));
 		add(new Label("Media de dias por curso: " + days));
 		add(new Label("Media de meses por curso: " + months));
-		
 		 ApexCharts lineChart = ApexChartsBuilder.get()
 	                .withChart(ChartBuilder.get()
 	                        .withType(Type.line)
@@ -525,7 +525,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * 
 	 * @return media aritmética de las notas de cada curso.
 	 */
-	private Map<Integer, Number> getAverageScores() {
+	public Map<Integer, Number> getAverageScores() {
 		Map<Integer, Number> averageScores = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			HistoricProject project;
@@ -547,7 +547,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * 
 	 * @return media del número de días que duran los proyectos cada curso.
 	 */
-	private Map<Integer, Number> getAverageTotalDays() {
+	public Map<Integer, Number> getAverageTotalDays() {
 		Map<Integer, Number> averageTotalDays = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			HistoricProject project;
@@ -570,7 +570,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * estudiantes, tutores asignados por cursos.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void createYearlyTotalStats() {
+	public void createYearlyTotalStats() {
 		List<String> courses = new ArrayList<>();
 		List<Number> yearlyAssignedProjects = new ArrayList<>();
 		List<Number> yearlyOldProjects = new ArrayList<>();
@@ -637,7 +637,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 *            projectos agrupados por curso
 	 * @return número de proyectos de cada curso.
 	 */
-	private Map<Integer, Number> getProjectsCount(Map<Integer, List<HistoricProject>> projects) {
+	public Map<Integer, Number> getProjectsCount(Map<Integer, List<HistoricProject>> projects) {
 		Map<Integer, Number> projectsCount = new HashMap<>();
 		for (int year = minCourse; year <= maxCourse; year++) {
 			int totalProjects = 0;
@@ -655,7 +655,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 *            si se quiere obtener el curso mínimo o máximo
 	 * @return curso mínimo o máximo
 	 */
-	private LocalDate getCourse(Boolean isMinimum) {
+	public LocalDate getCourse(Boolean isMinimum) {
 		LocalDate dateTime = null;
 		try {
 			dateTime = fachadaDatos.getYear(FECHA_PRESENTACION, HISTORICO, isMinimum);
@@ -668,7 +668,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Crea los filtros de la tabla de proyectos históricos.
 	 */
-	private void createFilters() {
+	public void createFilters() {
 		H1 filtersTitle = new H1(FILTROS);
 		filtersTitle.addClassName(TITLE_STYLE);
 		add(filtersTitle);
@@ -724,7 +724,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Crea la tabla de proyectos históricos.
 	 */
-	private void createHistoricProjectsTable() {
+	public void createHistoricProjectsTable() {
 		H1 projectsTitle = new H1(DESCRIPCION_PROYECTOS);
 		projectsTitle.addClassName(TITLE_STYLE);
 		add(projectsTitle);
@@ -792,7 +792,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	 * @param column
 	 * @param valueChange
 	 */
-	private void applyFilter(String column, String valueChange) {
+	public void applyFilter(String column, String valueChange) {
 		LocalDate dateChange = null;
 		dataFilteredGrid = new ArrayList<HistoricProject>();
 		Iterator<HistoricProject> iterator = dataHistoricGrid.iterator();
@@ -833,7 +833,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	/**
 	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.
 	 */
-	private void CreateDataModelToGrid() {
+	public void CreateDataModelToGrid() {
 		String tutors = "";
 		dataHistoricGrid = new ArrayList<HistoricProject>();
 		Iterator<HistoricProject> iterator = dataHistoric.iterator();

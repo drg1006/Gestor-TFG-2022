@@ -1,5 +1,7 @@
 package ubu.digit.ui.views;
 
+import static ubu.digit.util.Constants.FECHA_PRESENTACION;
+import static ubu.digit.util.Constants.HISTORICO;
 import static ubu.digit.util.Constants.INFO_ESTADISTICA;
 
 import java.io.File;
@@ -9,10 +11,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +38,19 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.appreciated.apexcharts.ApexCharts;
+import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
+import com.github.appreciated.apexcharts.config.builder.GridBuilder;
+import com.github.appreciated.apexcharts.config.builder.StrokeBuilder;
+import com.github.appreciated.apexcharts.config.builder.TitleSubtitleBuilder;
+import com.github.appreciated.apexcharts.config.builder.XAxisBuilder;
+import com.github.appreciated.apexcharts.config.chart.Type;
+import com.github.appreciated.apexcharts.config.chart.builder.ZoomBuilder;
+import com.github.appreciated.apexcharts.config.grid.builder.RowBuilder;
+import com.github.appreciated.apexcharts.config.stroke.Curve;
+import com.github.appreciated.apexcharts.config.subtitle.Align;
+import com.github.appreciated.apexcharts.helper.Series;
 import com.opencsv.CSVWriter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -51,6 +70,7 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 
 
@@ -93,6 +113,15 @@ public class ProfesoresView extends VerticalLayout {
 	 */
 	private transient DateTimeFormatter dateTimeFormatter;
 
+	/**
+     * Menor curso total (más antiguo).
+     */
+    private int minCourse;
+
+    /**
+     * Mayor curso total (más actual).
+     */
+    private int maxCourse;
 
 	
 	/**
@@ -120,7 +149,7 @@ public class ProfesoresView extends VerticalLayout {
 		
 		preguntarSiActualizar();
 		crearEstadisticas();
-		graficas();
+		datosGraficas();
 
 		Footer footer = new Footer("N4_Profesores.csv");
 		add(footer);
@@ -310,8 +339,7 @@ public class ProfesoresView extends VerticalLayout {
         String fileName = "BaseDeDatosTFGTFM.xls";
         File file = new File(completeDir + fileName);
  
-        String absPath = file.getAbsolutePath();
-        //System.out.println("PATH:"+ absPath);        
+        String absPath = file.getAbsolutePath();       
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -349,12 +377,13 @@ public class ProfesoresView extends VerticalLayout {
         }
     }
 
-    public void graficas(){
+    public void datosGraficas(){
         H2 metricsTitle = new H2("GRÁFICA");
         metricsTitle.addClassName("lbl-title");
         add(metricsTitle);
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
+        //List<String> areas= fachadaDatos.getAreasConTFGAsignados();
         CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
         checkboxGroupA.setLabel("Areas:");
         checkboxGroupA.setItems(areas);
@@ -408,8 +437,134 @@ public class ProfesoresView extends VerticalLayout {
             ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
-            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores);   
+            
+            Button actualizar= new Button("Actualizar gráfica");
+            actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            actualizar.addClickListener(event -> {
+                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),filtroProfesores.getValue());
+            });
+            
+            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar);  
+            
+            
+            
     } 
         
+    public void pintarGrafica(Set<String> areas, Set<String> departamentos, String profesor) {
+        
+        List<String> courses = new ArrayList<>();
+        //REUTILZAMOS PARTES DEL CODIGO DE OTRAS CLASES
+        HistoricProjectsView vista= new  HistoricProjectsView();
+        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
+            courses.add(year - 1 + "/" + year);
+        }
+        List<Integer> tfgpro=obtenerTFGSañoProfesor(profesor);
+        List<Integer> tfgarea=new ArrayList<>();
+        List<Integer> tfgdepa=new ArrayList<>();
+       for(String area: areas) {
+           tfgarea= obtenerTFGSañoArea(area);
+       }
+       for(String depa:departamentos) {
+           tfgdepa= obtenerTFGSañoDepartamento(depa);
+       }
+      
+        ApexCharts lineChart = ApexChartsBuilder.get()
+                .withChart(ChartBuilder.get()
+                        .withType(Type.line)
+                        .withZoom(ZoomBuilder.get()
+                                .withEnabled(false)
+                                .build())
+                        .build())
+                .withStroke(StrokeBuilder.get()
+                        .withColors("#E91E63","#4682B4")
+                        .withCurve(Curve.straight)
+                        .build())
+                .withTitle(TitleSubtitleBuilder.get()
+                        .withText("Número de TFGs asignados por curso")
+                        .withAlign(Align.center)
+                        .build())
+                .withGrid(GridBuilder.get()
+                        .withRow(RowBuilder.get()
+                                .withColors("#f3f3f3", "transparent")
+                                .withOpacity(0.5).build()
+                        ).build())
+                .withXaxis(XAxisBuilder.get()
+                        .withCategories(courses)
+                        .build())
+                .withSeries(new Series("Profe", tfgpro.toArray()),new Series("Areas",tfgarea.toArray()),new Series("Depas",tfgdepa.toArray()))
+                .withColors("#E91E63","#4682B4")
+                .build();
+        lineChart.setWidth("800px");
+        add(lineChart);
+    }
 
+    private List<Integer> obtenerTFGSañoProfesor(String profesor) {
+        List<Integer> TFGs = new ArrayList<>();
+        HistoricProjectsView vista= new  HistoricProjectsView();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        
+        for(int año=vista.minCourse-1;año<vista.maxCourse;año++) {
+            int num1=0;
+            String fechaIni=año+"-10-01";
+            String fechaFin=(año+1)+"-10-01";
+            LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
+            LocalDate fechaFIN = LocalDate.parse(fechaFin,formato);
+            for(int i=0;i<vista.dataHistoric.size();i++) {
+                if(vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
+                    && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
+                    && vista.dataHistoric.get(i).getTutor1()==profesor) {
+                    num1++;
+                     
+                }
+           }
+           TFGs.add(num1); 
+        }
+        return TFGs;   
+        
+    }
+
+    private List<Integer> obtenerTFGSañoDepartamento(String departamento) {
+        // TODO Auto-generated method stub
+        List<Integer> TFGs = new ArrayList<>();
+        List<String> profes = new ArrayList<>();
+        profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
+        int n=0;
+            for(String profe: profes) {
+                List<Integer> tfgprofes=obtenerTFGSañoProfesor(profe);
+                if(n==0) {
+                    n++;
+                    TFGs.addAll(tfgprofes); 
+                }else {
+                    for(int i=0;i<TFGs.size();i++) {
+                        TFGs.set(i, TFGs.get(i)+tfgprofes.get(i));
+                    }
+                }          
+        }
+        return TFGs;
+        
+    }
+
+    private List<Integer> obtenerTFGSañoArea(String area) {
+     // TODO Auto-generated method stub
+        List<Integer> TFGs = new ArrayList<>();
+        List<String> profes = new ArrayList<>();
+        profes.addAll(fachadaDatos.getProfesoresDeArea(area));
+        int n=0;
+            for(String profe: profes) {
+                List<Integer> tfgprofes=obtenerTFGSañoProfesor(profe);
+                if(n==0) {
+                    n++;
+                    TFGs.addAll(tfgprofes); 
+                }else {
+                    for(int i=0;i<TFGs.size();i++) {
+                        TFGs.set(i, TFGs.get(i)+tfgprofes.get(i));
+                    }
+                }          
+        }
+        return TFGs;
+    }
+    
+    
 }
