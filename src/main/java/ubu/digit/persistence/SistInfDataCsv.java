@@ -1065,12 +1065,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
     }
 
     @Override
-    public Number getNumTFGsAÑOProfesor(String tutor, String date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<String> getProfesoresDeDepartamento(String departamento) {
         // TODO Auto-generated method stub
         return null;

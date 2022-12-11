@@ -1,7 +1,5 @@
 package ubu.digit.ui.views;
 
-import static ubu.digit.util.Constants.FECHA_PRESENTACION;
-import static ubu.digit.util.Constants.HISTORICO;
 import static ubu.digit.util.Constants.INFO_ESTADISTICA;
 
 import java.io.File;
@@ -11,14 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +64,6 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
-import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 
 
@@ -112,18 +105,6 @@ public class ProfesoresView extends VerticalLayout {
 	 * Formateador de fechas.
 	 */
 	private transient DateTimeFormatter dateTimeFormatter;
-
-	/**
-     * Menor curso total (más antiguo).
-     */
-    private int minCourse;
-
-    /**
-     * Mayor curso total (más actual).
-     */
-    private int maxCourse;
-
-	
 	/**
 	 *  Fachada para obtener los datos
 	 */
@@ -500,13 +481,16 @@ public class ProfesoresView extends VerticalLayout {
 
     private List<Integer> obtenerTFGSañoProfesor(String profesor) {
         List<Integer> TFGs = new ArrayList<>();
+        //Datos ya obtenidos en historicos
         HistoricProjectsView vista= new  HistoricProjectsView();
-
+           //Formato de la fecha
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
-        
+        //Bucle para sacar los TFGs que tiene asignado un profesor por cada año, siendo el año de presentacion del tfg el curso en el que se incluye
+        //Ejemplo: Fecha de presentacion 10-01-2021: (Curso 2020-2021)
+
         for(int año=vista.minCourse-1;año<vista.maxCourse;año++) {
             int num1=0;
+            //El curso va del 1 de octubre de un año al siguiente
             String fechaIni=año+"-10-01";
             String fechaFin=(año+1)+"-10-01";
             LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
@@ -526,7 +510,7 @@ public class ProfesoresView extends VerticalLayout {
     }
 
     private List<Integer> obtenerTFGSañoDepartamento(String departamento) {
-        // TODO Auto-generated method stub
+        // Sacamos los profesores que pertenecen a ese departamento y sumamos sus TFGs
         List<Integer> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
@@ -547,7 +531,7 @@ public class ProfesoresView extends VerticalLayout {
     }
 
     private List<Integer> obtenerTFGSañoArea(String area) {
-     // TODO Auto-generated method stub
+     // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
         List<Integer> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeArea(area));

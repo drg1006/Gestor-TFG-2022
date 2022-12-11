@@ -1111,31 +1111,20 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
         return getResultSetNumber(sql);
     }
-	
-    public Number getNumTFGPorCurso(String curso) {
-        return null;
-        
-    }
-
-    @Override
-    public Number getNumTFGsAÑOProfesor(String tutor, String date) {
-        String sql = SELECT + "("+TUTOR1+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'" + AND + FECHA_ASIGNACION;
-        return getResultSetNumber(sql);
-    }
 
     @Override
     public List<String> getProfesoresDeDepartamento(String departamento) {
-        List<String> profesoresDeArea= new ArrayList<String>();
+        List<String> profesoresDeDepartamento= new ArrayList<String>();
         String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR + WHERE+ DEPARTAMENTO + " = "+"'"+departamento+"'";
         try {
             Recordset result = connection.executeQuery(sql);
             while (result.next()) {
-                profesoresDeArea.add(result.getField(NOMBRE_APELLIDOS).toString());
+                profesoresDeDepartamento.add(result.getField(NOMBRE_APELLIDOS).toString());
             }
         }catch(FilloException ex) { 
             LOGGER.error("Error al obtener los profesores del area "+departamento, ex);
         }
-        return profesoresDeArea;
+        return profesoresDeDepartamento;
     }
 	
 }
