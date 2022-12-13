@@ -166,7 +166,9 @@ public class ProfesoresView extends VerticalLayout {
             LOGGER.error("Error en estadísticas", e);
         }
     }
-   
+   /**
+    * Metodo para preguntar al usuario si quiere actualizar los datos de los archivos.
+    */
     private void preguntarSiActualizar() {
         Button actualizar = new Button("Si");
         actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -186,7 +188,9 @@ public class ProfesoresView extends VerticalLayout {
         });
         
     }
-       
+    /**
+     * Metodo que actualiza los datos realizando el webscraping a la web de investigadores dela ubu.
+     */
     public void actualizarDatos() {
         List<String[]> profesores = new ArrayList<String[]>();
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
@@ -263,10 +267,6 @@ public class ProfesoresView extends VerticalLayout {
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
                 //https://commons.apache.org/proper/commons-lang//apidocs/org/apache/commons/lang3/StringUtils.html#stripAccents-java.lang.String-
-                nombre = StringUtils.stripAccents(nombre);
-                apellidos =StringUtils.stripAccents(apellidos);
-                area =StringUtils.stripAccents(area);
-                departamento =StringUtils.stripAccents(departamento);
                 String [] profesor= {nombre +" "+ apellidos, area, departamento};
                 
                 profesores.add(profesor);
@@ -283,20 +283,18 @@ public class ProfesoresView extends VerticalLayout {
             
             try {
                 guardarDatosXLS(dataTFG);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
-            try {
                 guardarDatosCSV(profesores);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
     }
-    
+    /**
+     * Metodo paara escribir los datos en el archivo csv.
+     * @param profesores
+     * @throws IOException
+     */
     public void guardarDatosCSV(List<String[]> profesores) throws IOException {
         //https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx 
  
@@ -313,7 +311,11 @@ public class ProfesoresView extends VerticalLayout {
         writer.writeAll(profesores);
         writer.close();
     }
-    
+    /**
+     * Metodo para escribir los datos en el archivo XLS.
+     * @param dataTFG
+     * @throws IOException
+     */
     public void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
         //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
         String path = this.getClass().getClassLoader().getResource("").getPath();
@@ -362,11 +364,14 @@ public class ProfesoresView extends VerticalLayout {
             ex.printStackTrace();
         }
     }
-
+    /**
+     * Metodo que despliega los datos de departamentos,areas y profesores para seleccionarlos.
+     */
     public void datosGraficas(){
         H2 metricsTitle = new H2("GRÁFICA");
         metricsTitle.addClassName("lbl-title");
         add(metricsTitle);
+        //Checkbox de areas
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
         CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
@@ -391,7 +396,7 @@ public class ProfesoresView extends VerticalLayout {
                 checkboxGroupA.deselectAll();
             }
         });
-        
+      //Checkbox de departamentos
         Checkbox checkboxD = new Checkbox("Seleccionar todos los departamentos");
         List<String> departamentos= fachadaDatos.getDepartamentos();
         CheckboxGroup<String> checkboxGroupD = new CheckboxGroup<>();
@@ -418,7 +423,7 @@ public class ProfesoresView extends VerticalLayout {
          
 
         });
-            
+          //ComboBox con los profesores
             ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
@@ -431,6 +436,7 @@ public class ProfesoresView extends VerticalLayout {
                 courses.add(year - 1 + "/" + year);
             }
             String[] colors =getRandomColors();
+            //Grafico
             ApexCharts lineChart = ApexChartsBuilder.get()
                     .withChart(ChartBuilder.get()
                             .withType(Type.line)
@@ -458,6 +464,8 @@ public class ProfesoresView extends VerticalLayout {
                     .withColors(colors)
                     .build();
             lineChart.setWidth("800px");
+            
+            //Boton para actualizar los datos de las graficas
             Button actualizar= new Button("Actualizar gráfica");
             actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             actualizar.addClickListener(event -> {
@@ -466,6 +474,11 @@ public class ProfesoresView extends VerticalLayout {
             
             add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
     } 
+    
+    /**
+     * Metodo para obtener el array de colores aleatorios.
+     * @return String[] colores
+     */
     private String[] getRandomColors() {
         Random rand = new Random();
         String[] colors = new String[10];
@@ -478,6 +491,13 @@ public class ProfesoresView extends VerticalLayout {
         return colors;
     }
  
+    /**
+     * Metodo para actualizar y pintar la grafica cuando el usuario ha elegido los parametros.
+     * @param areas
+     * @param departamentos
+     * @param profesor
+     * @param lineChart grafico
+     */
     public void pintarGrafica(Set<String> areas, Set<String> departamentos, String profesor, ApexCharts lineChart) {
         //Creamos el array de series
         Series[] series = new Series[departamentos.size()+areas.size()+1];
@@ -508,7 +528,11 @@ public class ProfesoresView extends VerticalLayout {
              lineChart.updateSeries(series);
          }         
     }
-
+    /**
+     * Metodo que obtiene el array con los TFGs del profesor que se le pasa por parametro.
+     * @param profesor
+     * @return list<Integer> de tfgs por curso
+     */
     private List<Integer> obtenerTFGSañoProfesor(String profesor) {
         List<Integer> TFGs = new ArrayList<>();
         //Datos ya obtenidos en historicos
@@ -529,8 +553,7 @@ public class ProfesoresView extends VerticalLayout {
                 if(vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
                     && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
                     && vista.dataHistoric.get(i).getTutor1()==profesor) {
-                    num1++;
-                     
+                    num1++; 
                 }
            }
            TFGs.add(num1); 
@@ -538,7 +561,11 @@ public class ProfesoresView extends VerticalLayout {
         return TFGs;   
         
     }
-
+    /**
+     * Metodo que obtiene el array con los TFGs por curso del departamento que se le pasa por parametro.
+     * @param departamento
+     * @return list<Integer> de tfgs por curso
+     */
     private List<Integer> obtenerTFGSañoDepartamento(String departamento) {
         // Sacamos los profesores que pertenecen a ese departamento y sumamos sus TFGs
         List<Integer> TFGs = new ArrayList<>();
@@ -546,11 +573,14 @@ public class ProfesoresView extends VerticalLayout {
         profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
         int n=0;
             for(String profe: profes) {
+                //Obtenemos los tfgs de los profesores que pertenecen al departamento
                 List<Integer> tfgprofes=obtenerTFGSañoProfesor(profe);
                 if(n==0) {
+                    //Si es el primer profesor se añade al array
                     n++;
                     TFGs.addAll(tfgprofes); 
                 }else {
+                    //Si no es el primero se suma al anterior
                     for(int i=0;i<TFGs.size();i++) {
                         TFGs.set(i, TFGs.get(i)+tfgprofes.get(i));
                     }
@@ -559,7 +589,11 @@ public class ProfesoresView extends VerticalLayout {
         return TFGs;
         
     }
-
+    /**
+     * Metodo que obtiene el array con los TFGs por curso del area que se le pasa por parametro.
+     * @param area 
+     * @return list<Integer> de tfgs por curso
+     */
     private List<Integer> obtenerTFGSañoArea(String area) {
      // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
         List<Integer> TFGs = new ArrayList<>();

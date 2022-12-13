@@ -116,7 +116,9 @@ public class ReportView extends VerticalLayout {
 	}
 	
 
-
+	/**
+	 * Metodo para seleccionar las areas.
+	 */
 	public void opciones() {
 	    Checkbox checkbox = new Checkbox("Seleccionar Todas");
 	    List<String> areas= fachadaDatos.getAreas();
@@ -178,13 +180,13 @@ public class ReportView extends VerticalLayout {
 	    
 
 	}
-	/*
-	public StreamResource getStreamResource(String filename, String content) {
-        return new StreamResource(filename,
-                () -> new ByteArrayInputStream(content.getBytes()));
-    }
-*/
-
+	
+	/**
+	 * Metodo que crea el archivo xls y escribe los datos.
+	 * @param listaAreas
+	 * @param nombreInforme
+	 * @return File
+	 */
     public File creacionInforme(Set<String> listaAreas, String nombreInforme) {
 	       
 	       File archivo = new File(nombreInforme+".xls");
@@ -227,7 +229,11 @@ public class ReportView extends VerticalLayout {
 	   }
 
 
-
+    /**
+     * Metodo que obtiene los datos del area seleccionada.
+     * @param area
+     * @return mapa con los datos.
+     */
     private Map<String, Object[]> obtencionDatos(String area) {
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
         List<String> profes =fachadaDatos.getProfesoresDeArea(area);

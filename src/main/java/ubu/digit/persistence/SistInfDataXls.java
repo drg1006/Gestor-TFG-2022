@@ -776,8 +776,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				LocalDate assignmentDate = LocalDate.parse(result.getField(FECHA_ASIGNACION), dateTimeFormatter);
 				
 				LocalDate presentationDate = LocalDate.parse(result.getField(FECHA_PRESENTACION), dateTimeFormatter);
-				//String assignmentDate = result.getField(FECHA_ASIGNACION);
-				//String presentationDate = result.getField(FECHA_PRESENTACION);
 				rankingPercentile = rankingsPercentile.get(contador);
 				rankingTotal = rankingsTotal.get(contador);
 				rankingCurse = rankingsCurse.get(contador);
@@ -997,7 +995,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}
 		return rankingTotalList;
 	}
-
+	
+	/**
+	 * Obtiene todas las areas.
+	 * @return lista<String> con las areas
+	 */
     @Override
     public List<String> getAreas() {
 
@@ -1015,7 +1017,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return listaAreas.stream().distinct().collect(Collectors.toList());
     }
 
-
+    /**
+     * Obtiene todos los departamentos.
+     * @return lista<String> con los departamentos
+     */
     @Override
     public List<String> getDepartamentos() {
         List<String> listaDepartamentos = new ArrayList<String>();
@@ -1032,6 +1037,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return listaDepartamentos.stream().distinct().collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene todos los profesores.
+     * @return lista<String> con los profesores
+     */
     @Override
     public List<String> getProfesores() {
         
@@ -1048,17 +1057,29 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return listaProfesores;
     }
-
+    
+    /**
+     * Metodo que devuelve el numero de profesores total.
+     * @return Number
+     */
     @Override
     public Number getNumProfesores() {
         return getProfesores().size();
     }
 
+    /**
+     * Metodo que devuelve el numero de areas total.
+     * @return Number
+     */
     @Override
     public Number getNumAreas() {
         return getAreas().size();
     }
 
+    /**
+     * Metodo que devuelve el numero de departamentos total.
+     * @return Number
+     */
     @Override
     public Number getNumDepartamentos() {
         return getDepartamentos().size();
@@ -1085,6 +1106,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return listaAreasConTFGs;
     }
     
+    /**
+     * Metodo que devuelve los profesores del area pasada por parametro.
+     * @param area
+     * @return lista de profesores
+     */
     public List<String> getProfesoresDeArea(String area){
         List<String> profesoresDeArea= new ArrayList<String>();
         String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR + WHERE+ AREA + " = "+"'"+area+"'";
@@ -1100,18 +1126,33 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         
     }
     
+    /**
+     * Metodo que devuelve el numero de tfgs dirigidos por un tutor.
+     * @param tutor
+     * @return number
+     */
     public Number getNumTFGsProfesor(String tutor){
         String sql = SELECT + "("+TUTOR1+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
         return getResultSetNumber(sql);
        
     }
-
+    
+    /**
+     * Metodo que devuelve el numero de tfgs codirigidos por un tutor.
+     * @param tutor
+     * @return number
+     */
     @Override
     public Number getNumTFGsCOProfesor(String tutor) {
         String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
         return getResultSetNumber(sql);
     }
 
+    /**
+     * Metodo que devuelve los profesores del departamento pasada por parametro.
+     * @param departamento
+     * @return lista de profesores
+     */
     @Override
     public List<String> getProfesoresDeDepartamento(String departamento) {
         List<String> profesoresDeDepartamento= new ArrayList<String>();
