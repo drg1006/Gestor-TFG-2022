@@ -1,5 +1,6 @@
 package ubu.digit.ui.views;
 
+import static org.mockito.ArgumentMatchers.nullable;
 import static ubu.digit.util.Constants.INFO_ESTADISTICA;
 
 import java.io.File;
@@ -12,9 +13,11 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -34,6 +37,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.config.Chart;
+import com.github.appreciated.apexcharts.config.PlotOptions;
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
 import com.github.appreciated.apexcharts.config.builder.GridBuilder;
 import com.github.appreciated.apexcharts.config.builder.StrokeBuilder;
@@ -59,6 +64,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.internal.AbstractRouteRegistry.Configuration;
 
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
@@ -180,8 +186,7 @@ public class ProfesoresView extends VerticalLayout {
         });
         
     }
-    
-    
+       
     public void actualizarDatos() {
         List<String[]> profesores = new ArrayList<String[]>();
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
@@ -364,7 +369,6 @@ public class ProfesoresView extends VerticalLayout {
         add(metricsTitle);
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
-        //List<String> areas= fachadaDatos.getAreasConTFGAsignados();
         CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
         checkboxGroupA.setLabel("Areas:");
         checkboxGroupA.setItems(areas);
@@ -419,64 +423,90 @@ public class ProfesoresView extends VerticalLayout {
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
             
+           
+            List<String> courses = new ArrayList<>();
+            //REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
+            HistoricProjectsView vista= new  HistoricProjectsView();
+            for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
+                courses.add(year - 1 + "/" + year);
+            }
+            String[] colors =getRandomColors();
+            ApexCharts lineChart = ApexChartsBuilder.get()
+                    .withChart(ChartBuilder.get()
+                            .withType(Type.line)
+                            .withZoom(ZoomBuilder.get()
+                                    .withEnabled(false)
+                                    .build())
+                            .build())
+                    .withStroke(StrokeBuilder.get()
+                            .withColors(colors)
+                            .withCurve(Curve.straight)
+                            .build())
+                    .withTitle(TitleSubtitleBuilder.get()
+                            .withText("Número de TFGs asignados por curso")
+                            .withAlign(Align.center)
+                            .build())
+                    .withGrid(GridBuilder.get()
+                            .withRow(RowBuilder.get()
+                                    .withColors("#f3f3f3", "transparent")
+                                    .withOpacity(0.5).build()
+                            ).build())
+                    .withXaxis(XAxisBuilder.get()
+                            .withCategories(courses)
+                            .build())
+                    .withSeries(new Series())
+                    .withColors(colors)
+                    .build();
+            lineChart.setWidth("800px");
             Button actualizar= new Button("Actualizar gráfica");
             actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             actualizar.addClickListener(event -> {
-                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),filtroProfesores.getValue());
+                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),filtroProfesores.getValue(),lineChart);
             });
             
-            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar);  
-            
-            
-            
+            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
     } 
-        
-    public void pintarGrafica(Set<String> areas, Set<String> departamentos, String profesor) {
-        
-        List<String> courses = new ArrayList<>();
-        //REUTILZAMOS PARTES DEL CODIGO DE OTRAS CLASES
-        HistoricProjectsView vista= new  HistoricProjectsView();
-        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
-            courses.add(year - 1 + "/" + year);
+    private String[] getRandomColors() {
+        Random rand = new Random();
+        String[] colors = new String[10];
+        for (int i = 0; i < 10; i++) {
+            int r = rand.nextInt(256);
+            int g = rand.nextInt(256);
+            int b = rand.nextInt(256);
+            colors[i] = String.format("#%02x%02x%02x", r, g, b);
         }
-        List<Integer> tfgpro=obtenerTFGSañoProfesor(profesor);
-        List<Integer> tfgarea=new ArrayList<>();
-        List<Integer> tfgdepa=new ArrayList<>();
-       for(String area: areas) {
-           tfgarea= obtenerTFGSañoArea(area);
-       }
-       for(String depa:departamentos) {
-           tfgdepa= obtenerTFGSañoDepartamento(depa);
-       }
-      
-        ApexCharts lineChart = ApexChartsBuilder.get()
-                .withChart(ChartBuilder.get()
-                        .withType(Type.line)
-                        .withZoom(ZoomBuilder.get()
-                                .withEnabled(false)
-                                .build())
-                        .build())
-                .withStroke(StrokeBuilder.get()
-                        .withColors("#E91E63","#4682B4")
-                        .withCurve(Curve.straight)
-                        .build())
-                .withTitle(TitleSubtitleBuilder.get()
-                        .withText("Número de TFGs asignados por curso")
-                        .withAlign(Align.center)
-                        .build())
-                .withGrid(GridBuilder.get()
-                        .withRow(RowBuilder.get()
-                                .withColors("#f3f3f3", "transparent")
-                                .withOpacity(0.5).build()
-                        ).build())
-                .withXaxis(XAxisBuilder.get()
-                        .withCategories(courses)
-                        .build())
-                .withSeries(new Series("Profe", tfgpro.toArray()),new Series("Areas",tfgarea.toArray()),new Series("Depas",tfgdepa.toArray()))
-                .withColors("#E91E63","#4682B4")
-                .build();
-        lineChart.setWidth("800px");
-        add(lineChart);
+        return colors;
+    }
+ 
+    public void pintarGrafica(Set<String> areas, Set<String> departamentos, String profesor, ApexCharts lineChart) {
+        //Creamos el array de series
+        Series[] series = new Series[departamentos.size()+areas.size()+1];
+        
+        //Si no se ha pasado un profesor quitamos uno de tamaño
+        if(profesor=="null") {
+            series = new Series[departamentos.size()+areas.size()];
+            }
+        
+        
+        //variable para indicar el index del array
+        int n=0;
+        //Cogemos los tfgs de los departamentos
+        for(String dep:departamentos) { 
+            series[n]=new Series(dep,obtenerTFGSañoDepartamento(dep).toArray());      
+            n++;
+         }
+      //Cogemos los tfgs de las areas
+         for(String area:areas) {
+             series[n]=new Series(area,obtenerTFGSañoArea(area).toArray());
+             n++;
+         }
+         
+         if(profesor=="null") {
+             lineChart.updateSeries(series);
+         }else {
+             series[n]=new Series(profesor,obtenerTFGSañoProfesor(profesor).toArray());
+             lineChart.updateSeries(series);
+         }         
     }
 
     private List<Integer> obtenerTFGSañoProfesor(String profesor) {
