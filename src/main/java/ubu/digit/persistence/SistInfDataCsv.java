@@ -1068,28 +1068,6 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
     }
 
     /**
-     * Metodo que devuelve el numero de tfgs dirigidos por un tutor.
-     * @param tutor
-     * @return number
-     */
-    @Override
-    public Number getNumTFGsProfesor(String tutor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * Metodo que devuelve el numero de tfgs codirigidos por un tutor.
-     * @param tutor
-     * @return number
-     */
-    @Override
-    public Number getNumTFGsCOProfesor(String prof) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
      * Metodo que devuelve los profesores del departamento pasada por parametro.
      * @param departamento
      * @return lista de profesores

@@ -1127,28 +1127,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     }
     
     /**
-     * Metodo que devuelve el numero de tfgs dirigidos por un tutor.
-     * @param tutor
-     * @return number
-     */
-    public Number getNumTFGsProfesor(String tutor){
-        String sql = SELECT + "("+TUTOR1+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
-        return getResultSetNumber(sql);
-       
-    }
-    
-    /**
-     * Metodo que devuelve el numero de tfgs codirigidos por un tutor.
-     * @param tutor
-     * @return number
-     */
-    @Override
-    public Number getNumTFGsCOProfesor(String tutor) {
-        String sql = SELECT + "("+TUTOR2+")" + FROM + HISTORICO+ WHERE+ TUTOR1+ " ='"+ tutor+"'";
-        return getResultSetNumber(sql);
-    }
-
-    /**
      * Metodo que devuelve los profesores del departamento pasada por parametro.
      * @param departamento
      * @return lista de profesores

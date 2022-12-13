@@ -206,7 +206,5 @@ public abstract class SistInfDataAbstract implements Serializable {
     public abstract List<String> getAreasConTFGAsignados();
     public abstract List<String> getProfesoresDeArea(String area);
     public abstract List<String> getProfesoresDeDepartamento(String departamento);
-    public abstract Number getNumTFGsProfesor(String tutor);
-    public abstract Number getNumTFGsCOProfesor(String prof);
     
 }

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.NumberFormat;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -165,14 +166,23 @@ public class ReportView extends VerticalLayout {
 	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 	    
 	    ComboBox<String> años = new ComboBox<String>("Seleccione un curso");
-	    //List<String> curso = fachadaDatos.get;
-       // años.setItems(curso);
-	    add(checkbox, checkboxGroup,nombreInforme,crearInforme);
+	    HistoricProjectsView vista= new  HistoricProjectsView();
+	    
+	    List<String> courses = new ArrayList<>();
+        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
+            courses.add(year - 1 + "/" + year);
+        }
+        
+        años.setItems(courses);
+        años.addValueChangeListener(event ->{
+           años.setValue(event.getValue()); 
+        });
+	    add(checkbox, checkboxGroup,años,nombreInforme,crearInforme);
 	    //Anchor anchor = new Anchor(getStreamResource("default.txt", "default content"), "click me to download");
         //anchor.getElement().setAttribute("download",true);
         
 	    crearInforme.addClickListener(event -> {
-	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue());
+	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),años.getValue());
 	       // descargarInforme(file);
 	       // anchor.setHref(file.getValue(), file.getValue());
 	        
@@ -185,9 +195,10 @@ public class ReportView extends VerticalLayout {
 	 * Metodo que crea el archivo xls y escribe los datos.
 	 * @param listaAreas
 	 * @param nombreInforme
+	 * @param años 
 	 * @return File
 	 */
-    public File creacionInforme(Set<String> listaAreas, String nombreInforme) {
+    public File creacionInforme(Set<String> listaAreas, String nombreInforme, String curso) {
 	       
 	       File archivo = new File(nombreInforme+".xls");
 	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
@@ -196,7 +207,7 @@ public class ReportView extends VerticalLayout {
 
 	            for(String area: listaAreas) {
 	                Sheet hoja=workbook.createSheet(area);
-	                dataTFG = obtencionDatos(area);
+	                dataTFG = obtencionDatos(area,curso);
 	                Row rowCount=null;
 	                
 	                Set<String> keyid = dataTFG.keySet();
@@ -234,17 +245,33 @@ public class ReportView extends VerticalLayout {
      * @param area
      * @return mapa con los datos.
      */
-    private Map<String, Object[]> obtencionDatos(String area) {
+    private Map<String, Object[]> obtencionDatos(String area,String curso) {
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
+        HistoricProjectsView vista= new  HistoricProjectsView();
+        //Cogemos el año
+        String subAño= curso.substring(5,9);
+        int año= Integer.parseInt(subAño);
         List<String> profes =fachadaDatos.getProfesoresDeArea(area);
         int i=1;
         for(String prof:profes) {
             i++;
-            //TFGs dirigidos
-            Number tfgs = fachadaDatos.getNumTFGsProfesor(prof);
-            //TFGs codirigidos
-            Number tfgs2 = fachadaDatos.getNumTFGsCOProfesor(prof);
-            String [] profesor= {prof,tfgs.toString(),tfgs2.toString()};
+            int tfgs=0;
+            int tfgs2=0;
+            //Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
+            for(int n=0;n<vista.dataHistoric.size();n++) {
+                if(vista.dataHistoric.get(n).getPresentationDate().getYear()==año
+                        && vista.dataHistoric.get(n).getTutor1()==prof
+                    ) {
+                    tfgs++; 
+                }
+           }
+            for(int n=0;n<vista.dataHistoric.size();n++) {
+                if(vista.dataHistoric.get(n).getPresentationDate().getYear()==año
+                    && vista.dataHistoric.get(n).getTutor2()==prof) {
+                    tfgs2++; 
+                }
+           }
+            String [] profesor= {prof,String.valueOf(tfgs),String.valueOf(tfgs2)};
             if(i==2) {
                 dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos"});
                 dataTFG.put("2",profesor);
