@@ -1,11 +1,45 @@
 \apendice{Documentación de usuario}
 
 \section{Introducción}
+A continuación se describirán los requisitos mínimos a cumplir para que el usuario pueda entrar en la aplicación y usarla.
 
 \section{Requisitos de usuarios}
-
+ Al estar la aplicación desplegada en \href{https://gestor-tfg-2022.herokuapp.com/}{https://gestor-tfg-2022.herokuapp.com/} por lo que solamente hará falta disponer de Internet.
 \section{Instalación}
-
+Para utilizar la aplicación no será necesario instalar ningún componente en nuestro ordenador, a excepción de un navegador web.
 \section{Manual del usuario}
+A continuación se detallará el uso de la web, exclusivamente de las nuevas pantallas implantadas.
+\subsection{Histórico profesorado}
+En esta nueva pantalla implantada se expone información histórica sobre el profesorado.
 
+En la parte superior de la pantalla tenemos una opción para actualizar la base datos utilizada. Se informa de la última modificación de la base de datos actual y se le advierte al usuario que esta actualización es un proceso lento que puede tardar al rededor de un minuto. Ver imagen \ref{fig:ActualizarDatos}.
+
+\imagenflotante{ActualizarDatos}{Preguntar al usuario si quiere actualizar la base de datos}{0.9}
+
+Si se ha optado por actualizar, se mostrará al final un aviso al usuario con el tiempo transcurrido durante la operación. %Ver imagen \ref{Notifiacion}
+
+%\imagenflotante{Notificacion}{Notificación al usuario sobre la actualización}{0.9}
+
+Posteriormente tenemos un pequeño apartado de información sobre el número de áreas, departamentos y profesores de la EPS. Ver imagen \ref{infor_profes}.
+
+\imagenflotante{infor_profes}{Información sobre la EPS}{0.9}
+
+A continuación debemos escoger las áreas, departamentos y profesores que deseemos visualizar en la gráfica. Una vez seleccionados \emph{clickaremos} en actualizar gráfica.
+Si queremos seleccionar varios profesores debemos introducir primero uno y posteriormente el siguiente, para eliminarlos de la selección pulsaremos en la \emph{x} del nuevo botón que se añade tras indicar un tutor. Ver imagen \ref{fig:parametros}.
+
+\imagenflotante{parametros}{Selección de parámetros}{0.9}
+
+La gráfica muestra el número de TFGs por curso asignado a ese parámetro. %Ver imagen \ref{fig:grafica_anexo}
+
+\imagenflotante{grafica_anexo}{Gráfica final tras seleccionar los parámetros}{0.9}
+
+\subsection{Creación de informes}
+En esta pantalla se le da al usuario la opción de añadir un área sobre el que se quiere hacer un informe, y el nombre que se le quiere dar. Ver imagen \ref{fig:pantalla_informe}.
+
+\imagenflotante{grafica_anexo}{Gráfica final tras seleccionar los parámetros}{0.9}
+
+Este informe contendrá el número total de TFGs dirigidos, codirigidos y el número de créditos asignados a cada uno de los profesores del área seleccionado en el último curso académico. Si se seleccionan varias áreas se crearán varias hojas en el documento \emph{excel} generado, con la información pertinente.
+
+\subsection{Oferta de TFG}
+\subsection{Aceptación TFG}
 

@@ -54,7 +54,7 @@ A continuación se detallarán las tareas que se realizaron durante este primer 
 	
 	Se puede ver el trascurso de estas tareas en la ilustración \ref{fig:Sprint1_CONTROL}.
 	
-	\imagenflotante{Sprint1_CONTROL}{Gráfica Control chart- Sprint 0}{0.9}
+	\imagenflotante{Sprint1_CONTROL}{Gráfica Control chart- Sprint 1}{0.9}
 \end{itemize}
 
 \subsection{Sprint 2 - Comienzo de la programación (10/11/22 - 23/11/22)}
@@ -85,14 +85,15 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 	\item Pruebas de webscraping en un entorno local para determinar cual utilizar. Se realizan una serie de pruebas(que encontramos en el apartado de Pruebas de la Documentación) y finalmente se consigue obtener el resultado que queremos mediante JSoup, por lo que será nuestra elección.
 	
+	Se puede ver el trascurso de estas tareas en la ilustración \ref{fig:Sprint2_CONTROL}.
 	
+	\imagenflotante{Sprint2_CONTROL}{Gráfica Control chart- Sprint 2}{0.9}
 \end{itemize}
 
 \subsection{Sprint 3 - Implementación nuevas pantallas (23/11/22 - 14/12/22)}
 En este sprint se implementará  al proyecto el proceso de \emph{webscraping} llevado a cabo en el sprint anterior, también se crearán dos nuevas pantallas.
 
 A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
-
 
 \begin{itemize}
 	
@@ -104,21 +105,67 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 	\item Implementación \emph{webscrap} en nuestro proyecto. Se ha introducido esta función en nuestro proyecto.
 	
-	\item Implemtación de la pantalla Generar Informes.Se comienza y se termina de programar esta nueva pantalla.
+	\item Implementación de la pantalla Generar Informes. Se comienza y se termina de programar esta nueva pantalla. No se han creado más \emph{issues} si no que se iba comentando en esta \emph{issue} los problemas y el continuo desarrollo de la pantalla, así como las dudas planteadas.
 	
-	\item Implemtación de la pantalla Estadísticas del Profesorado. Se comienza y se termina de programar esta nueva pantalla.
+	\item Implementación de la pantalla Estadísticas del Profesorado. Se comienza y se termina de programar esta nueva pantalla.
 	
 	\item Corrección de la memoria y anexos. Se corrige los fallos expuestos tras el \emph{feedback} del tutor Álvar Arnaiz de los ficheros latex de memoria y anexo.
 	
 \end{itemize}
 
+\subsection{Sprint 4 - }
+
 \section{Estudio de viabilidad}
 En este apartado se detallan los costes que llevaría realizar este proyecto de forma real. Se considerarán los costes de recursos humanos, el material empleado y el \emph{Software} usado. 
 
 \subsection{Viabilidad económica}
-
-\subsection{Viabilidad técnica}
+Los recursos utilizados para la realización de este proyecto son los siguientes:
+\begin{itemize}
+	\item  \textbf{Lenovo Legion Y540} Coste aproximado: 1200€.
+	\item  \textbf{Eclipse IDE} como entorno de desarrollo del código. Coste: gratuito.
+	\item  \textbf{TexStudio} para realizar la documentación. Coste: grautito.
+	\item  \textbf{Github Desktop:} como herramienta para actualizar el directorio de github. Coste: grautito.
+	\item \textbf{Heroku:} como herramienta de despliegue del proyecto en la nube. Coste: 5 €/mes aproximado.
+	\item \textbf{Maven:}. Coste: gratuito.
+	\item \textbf{Tomcat:}. Coste: gratuito.
+	\item \textbf{Tiempo empleado:} aproximadamente 250 horas, que con el salario medio español de un programador (14,43 €/hora) es 3607,50 €. Fuente \href{https://es.talent.com/salary?job=programador#:~:text=%C2%BFCu%C3%A1nto%20gana%20un%20Programador%20en,hasta%20%E2%82%AC%2037.500%20al%20a%C3%B1o.}{Talent.com}
+\end{itemize}
 
 \subsection{Viabilidad legal}
+Se detallaran las licencias \emph{Software} de cada dependencia que se ha utilizado en el proyecto.En el proyecto se ha usado la licencia MIT que permite la libre distribución del \emph{software}.
 
+\begin{table}[]
+	\label{Dependencias del proyecto}
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Software}}     & \textbf{Licencia} \\ \hline
+		Vaadin & Apache License 2.0 \\ \hline
+		Spring Boot Maven Plugin & Apache License 2.0 \\ \hline
+		JUnit & Eclipse Public License 1.0 \\	\hline
+		CsvJdbc & LGPLv2 \\ \hline
+		Codoid Fillo & Apache License, Version 2.0 \\ \hline
+	\end{tabular}
+	\caption{Licencias de las herramientas Software.}
+\end{table}
 
+También existe una cuestión de legalidad a la hora de hacer \emph{webscraping}, ya que no siempre es legal realizar este tipo de acciones sobre algunas páginas web, sobretodo si no tenemos los permisos necesarios. En nuestro caso no aplica ya que lo realizamos sobre una \emph{web} interna, por lo que no existe ningún conflicto a la hora de obtener la información.
+
+\subsection{Planificación temporal}
+
+En esta sección se mostrará una ideal inicial de como iba a ser el reparto de horas de las diferentes tareas durante el desarrollo del TFG. La tabla \ref{horas} muestra una predicción de la división del proyecto.
+
+\begin{table}[]
+	\label{horas}
+	\centering
+	\begin{tabular}{|l|c|}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{TAREA}}     & \textbf{TIEMPO} \\ \hline
+		Instalación y configuración de software y hardware & 6 h  \\ \hline
+		Programación                            & 140 h         \\ \hline
+		Documentación memoria y anexos          & 60 h          \\ \hline
+		Estudio de las herramientas utilizadas y alternativas & 10 h \\ \hline
+			Preparación de la presentación		    & 5 h           \\ \hline
+	\end{tabular}
+	\caption{Planteamiento de horas iniciales.}
+\end{table}
