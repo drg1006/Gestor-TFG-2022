@@ -560,9 +560,9 @@ public class ProfesoresView extends VerticalLayout {
 
         for(int año=vista.minCourse-1;año<vista.maxCourse;año++) {
             int num1=0;
-            //El curso va del 1 de octubre de un año al siguiente
-            String fechaIni=año+"-10-01";
-            String fechaFin=(año+1)+"-10-01";
+            //El curso va del 1 de septiembre de un año al siguiente
+            String fechaIni=año+"-09-01";
+            String fechaFin=(año+1)+"-09-01";
             LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
             LocalDate fechaFIN = LocalDate.parse(fechaFin,formato);
             for(int i=0;i<vista.dataHistoric.size();i++) {
