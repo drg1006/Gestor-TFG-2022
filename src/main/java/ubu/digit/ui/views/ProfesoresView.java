@@ -59,6 +59,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -116,6 +118,8 @@ public class ProfesoresView extends VerticalLayout {
 	 */
 	private SistInfDataAbstract fachadaDatos;
 
+	 List<String> profSelect = new ArrayList<>();
+	 
 	/**
 	 * Constructor.
 	 * @throws SQLException 
@@ -371,6 +375,43 @@ public class ProfesoresView extends VerticalLayout {
         H2 metricsTitle = new H2("GRÁFICA");
         metricsTitle.addClassName("lbl-title");
         add(metricsTitle);
+        
+        List<String> courses = new ArrayList<>();
+        //REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
+        HistoricProjectsView vista= new  HistoricProjectsView();
+        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
+            courses.add(year - 1 + "/" + year);
+        }
+        String[] colors =getRandomColors();
+        //Grafico
+        ApexCharts lineChart = ApexChartsBuilder.get()
+                .withChart(ChartBuilder.get()
+                        .withType(Type.line)
+                        .withZoom(ZoomBuilder.get()
+                                .withEnabled(false)
+                                .build())
+                        .build())
+                .withStroke(StrokeBuilder.get()
+                        .withColors(colors)
+                        .withCurve(Curve.straight)
+                        .build())
+                .withTitle(TitleSubtitleBuilder.get()
+                        .withText("Número de TFGs asignados por curso")
+                        .withAlign(Align.center)
+                        .build())
+                .withGrid(GridBuilder.get()
+                        .withRow(RowBuilder.get()
+                                .withColors("#f3f3f3", "transparent")
+                                .withOpacity(0.5).build()
+                        ).build())
+                .withXaxis(XAxisBuilder.get()
+                        .withCategories(courses)
+                        .build())
+                .withSeries(new Series())
+                .withColors(colors)
+                .build();
+        lineChart.setWidth("800px");
+        
         //Checkbox de areas
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
@@ -428,48 +469,26 @@ public class ProfesoresView extends VerticalLayout {
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
             
-           
-            List<String> courses = new ArrayList<>();
-            //REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
-            HistoricProjectsView vista= new  HistoricProjectsView();
-            for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
-                courses.add(year - 1 + "/" + year);
-            }
-            String[] colors =getRandomColors();
-            //Grafico
-            ApexCharts lineChart = ApexChartsBuilder.get()
-                    .withChart(ChartBuilder.get()
-                            .withType(Type.line)
-                            .withZoom(ZoomBuilder.get()
-                                    .withEnabled(false)
-                                    .build())
-                            .build())
-                    .withStroke(StrokeBuilder.get()
-                            .withColors(colors)
-                            .withCurve(Curve.straight)
-                            .build())
-                    .withTitle(TitleSubtitleBuilder.get()
-                            .withText("Número de TFGs asignados por curso")
-                            .withAlign(Align.center)
-                            .build())
-                    .withGrid(GridBuilder.get()
-                            .withRow(RowBuilder.get()
-                                    .withColors("#f3f3f3", "transparent")
-                                    .withOpacity(0.5).build()
-                            ).build())
-                    .withXaxis(XAxisBuilder.get()
-                            .withCategories(courses)
-                            .build())
-                    .withSeries(new Series())
-                    .withColors(colors)
-                    .build();
-            lineChart.setWidth("800px");
-            
+            filtroProfesores.addValueChangeListener(event -> {
+                profSelect.add(event.getValue());
+                
+                Button buton = new Button(event.getValue(),new Icon(VaadinIcon.CLOSE_SMALL));
+                buton.getElement().setAttribute("aria-label", "Close");
+                buton.addClickListener(event2 ->{
+                    profSelect.remove(event.getValue());
+                    remove(buton);
+                    pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
+                });
+                add(buton);
+                
+                
+        });
+                       
             //Boton para actualizar los datos de las graficas
             Button actualizar= new Button("Actualizar gráfica");
             actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             actualizar.addClickListener(event -> {
-                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),filtroProfesores.getValue(),lineChart);
+                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
             });
             
             add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
@@ -495,19 +514,16 @@ public class ProfesoresView extends VerticalLayout {
      * Metodo para actualizar y pintar la grafica cuando el usuario ha elegido los parametros.
      * @param areas
      * @param departamentos
-     * @param profesor
+     * @param profSelect
      * @param lineChart grafico
      */
-    public void pintarGrafica(Set<String> areas, Set<String> departamentos, String profesor, ApexCharts lineChart) {
+    public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect, ApexCharts lineChart) {
         //Creamos el array de series
-        Series[] series = new Series[departamentos.size()+areas.size()+1];
-        
-        //Si no se ha pasado un profesor quitamos uno de tamaño
-        if(profesor=="null") {
-            series = new Series[departamentos.size()+areas.size()];
-            }
-        
-        
+        Series[] series = new Series[departamentos.size()+areas.size()+profSelect.size()];
+        for(String prof: profSelect) {
+            System.out.println("profe "+ prof + " " + profSelect.size());
+            
+        }
         //variable para indicar el index del array
         int n=0;
         //Cogemos los tfgs de los departamentos
@@ -521,12 +537,12 @@ public class ProfesoresView extends VerticalLayout {
              n++;
          }
          
-         if(profesor=="null") {
-             lineChart.updateSeries(series);
-         }else {
-             series[n]=new Series(profesor,obtenerTFGSañoProfesor(profesor).toArray());
-             lineChart.updateSeries(series);
-         }         
+         for (String profe: profSelect) {
+             series[n]=new Series(profe,obtenerTFGSañoProfesor(profe).toArray());
+             n++;
+             
+         }  
+         lineChart.updateSeries(series);
     }
     /**
      * Metodo que obtiene el array con los TFGs del profesor que se le pasa por parametro.
