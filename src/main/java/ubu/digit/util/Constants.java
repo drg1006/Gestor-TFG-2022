@@ -263,6 +263,16 @@ public final class Constants {
 	public static final String METRICAS = "Métricas";
 
 	/**
+     * Subir TFGs(botón).
+     */
+    public static final String UPLOAD = "Subir TFG";
+    
+    /**
+     * Subir TFGs(botón).
+     */
+    public static final String ACEPT = "ACEPTAR TFG";
+    
+	/**
      * Proyectos de profesores (botón).
      */
     public static final String PROFESORES = "Profesores";

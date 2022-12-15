@@ -9,6 +9,8 @@ import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
 import ubu.digit.ui.views.ProfesoresView;
 import ubu.digit.ui.views.ReportView;
+import ubu.digit.ui.views.UploadView;
+import ubu.digit.ui.views.newProjectView;
 
 import static ubu.digit.util.Constants.*;
 
@@ -55,6 +57,16 @@ public class NavigationBar extends HorizontalLayout{
      */
     private Button buttonReport;
     
+    /**
+     * Botón de la vista de subir TFGs.
+     */
+    private Button buttonUpload;
+    
+    /**
+     * Botón de la vista de aceptar TFGs.
+     */
+    private Button buttonAcept;
+    
 	/**
 	 * Constructor.
 	 */
@@ -89,12 +101,20 @@ public class NavigationBar extends HorizontalLayout{
         buttonReport = new Button(INFORME);
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
+        buttonUpload = new Button(UPLOAD);
+        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
+        
+        buttonAcept = new Button(ACEPT);
+        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(UploadView.class));
+        
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
 		buttonMetrics.setHeight(BUTTON_HEIGHT);
 		buttonProfessor.setHeight(BUTTON_HEIGHT);
         buttonReport.setHeight(BUTTON_HEIGHT);
+        buttonUpload.setHeight(BUTTON_HEIGHT);
+        buttonAcept.setHeight(BUTTON_HEIGHT);
         
 		buttonInfo.setWidth("100%");
 		buttonActive.setWidth("100%");
@@ -102,7 +122,9 @@ public class NavigationBar extends HorizontalLayout{
 		buttonMetrics.setWidth("100%");
 		buttonProfessor.setWidth("100%");
         buttonReport.setWidth("100%");
+        buttonUpload.setWidth("100%");
+        buttonAcept.setWidth("100%");
         
-		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor,buttonReport);
+		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor,buttonReport,buttonUpload,buttonAcept);
 	}
 }
