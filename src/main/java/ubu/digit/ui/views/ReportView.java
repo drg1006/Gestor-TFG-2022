@@ -1,12 +1,15 @@
 package ubu.digit.ui.views;
 
 
+import static ubu.digit.util.Constants.PROYECTO;
+import static ubu.digit.util.Constants.TITULO;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLConnection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,8 +34,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -42,6 +44,7 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -84,7 +87,8 @@ public class ReportView extends VerticalLayout {
 	 */
 	private transient DateTimeFormatter dateTimeFormatter;
 
-
+	HistoricProjectsView vista= new  HistoricProjectsView();
+    ActiveProjectsView activos= new ActiveProjectsView();
 	
 	/**
 	 *  Fachada para obtener los datos
@@ -121,13 +125,18 @@ public class ReportView extends VerticalLayout {
 	 * Metodo para seleccionar las areas.
 	 */
 	public void opciones() {
+        //obtendriamos el total de alumnos matriculados en el curso
+        NumberField nAlum= new NumberField("Indique el número de alumnos matriculados");
+        nAlum.setWidth("20%");
+        nAlum.addValueChangeListener(event ->{
+            nAlum.setValue(event.getValue());
+        });
+        
 	    Checkbox checkbox = new Checkbox("Seleccionar Todas");
 	    List<String> areas= fachadaDatos.getAreas();
 	    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
 	    checkboxGroup.setLabel("Areas");
 	    checkboxGroup.setItems(areas);
-	    
-	    //checkboxGroup.addThemeVariants(CheckboxGroupVariant.MATERIAL_VERTICAL);
 	    checkboxGroup.addValueChangeListener(event -> {
 	        if (event.getValue().size() == areas.size()) {
 	            checkbox.setValue(true);
@@ -164,25 +173,12 @@ public class ReportView extends VerticalLayout {
 	    //BOTON PARA CREAR EL INFORME 
 	    Button crearInforme = new Button("Crear Informe");
 	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-	    
-	    ComboBox<String> años = new ComboBox<String>("Seleccione un curso");
-	    HistoricProjectsView vista= new  HistoricProjectsView();
-	    
-	    List<String> courses = new ArrayList<>();
-        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
-            courses.add(year - 1 + "/" + year);
-        }
-        
-        años.setItems(courses);
-        años.addValueChangeListener(event ->{
-           años.setValue(event.getValue()); 
-        });
-	    add(checkbox, checkboxGroup,años,nombreInforme,crearInforme);
+	    add(nAlum,checkbox, checkboxGroup,nombreInforme,crearInforme);
 	    //Anchor anchor = new Anchor(getStreamResource("default.txt", "default content"), "click me to download");
         //anchor.getElement().setAttribute("download",true);
         
 	    crearInforme.addClickListener(event -> {
-	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),años.getValue());
+	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue());
 	       // descargarInforme(file);
 	       // anchor.setHref(file.getValue(), file.getValue());
 	        
@@ -195,10 +191,11 @@ public class ReportView extends VerticalLayout {
 	 * Metodo que crea el archivo xls y escribe los datos.
 	 * @param listaAreas
 	 * @param nombreInforme
+	 * @param string 
 	 * @param años 
 	 * @return File
 	 */
-    public File creacionInforme(Set<String> listaAreas, String nombreInforme, String curso) {
+    public File creacionInforme(Set<String> listaAreas, String nombreInforme, Double nAlumn) {
 	       
 	       File archivo = new File(nombreInforme+".xls");
 	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
@@ -207,7 +204,7 @@ public class ReportView extends VerticalLayout {
 
 	            for(String area: listaAreas) {
 	                Sheet hoja=workbook.createSheet(area);
-	                dataTFG = obtencionDatos(area,curso);
+	                dataTFG = obtencionDatos(area,nAlumn);
 	                Row rowCount=null;
 	                
 	                Set<String> keyid = dataTFG.keySet();
@@ -241,39 +238,44 @@ public class ReportView extends VerticalLayout {
 
 
     /**
-     * Metodo que obtiene los datos del area seleccionada.
+     * Metodo que obtiene los datos del area seleccionada sobre el ultimo curso academico.
      * @param area
+     * @param nAlumn 
      * @return mapa con los datos.
      */
-    private Map<String, Object[]> obtencionDatos(String area,String curso) {
+    private Map<String, Object[]> obtencionDatos(String area, Double nAlumn) {
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
-        HistoricProjectsView vista= new  HistoricProjectsView();
+        
         //Cogemos el año
-        String subAño= curso.substring(5,9);
-        int año= Integer.parseInt(subAño);
+        int ultimoAño =vista.maxCourse;
         List<String> profes =fachadaDatos.getProfesoresDeArea(area);
         int i=1;
+
         for(String prof:profes) {
+            
             i++;
             int tfgs=0;
             int tfgs2=0;
+            //obtenemos los creditos
+            float creditos=obtenerCreditos(prof, ultimoAño,nAlumn);
             //Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
-            for(int n=0;n<vista.dataHistoric.size();n++) {
-                if(vista.dataHistoric.get(n).getPresentationDate().getYear()==año
-                        && vista.dataHistoric.get(n).getTutor1()==prof
+            for(int n=0;n<activos.dataActiveProjects.size();n++) {
+                if(activos.dataActiveProjects.get(n).getTutor1()==prof && 
+                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")
                     ) {
                     tfgs++; 
                 }
            }
-            for(int n=0;n<vista.dataHistoric.size();n++) {
-                if(vista.dataHistoric.get(n).getPresentationDate().getYear()==año
-                    && vista.dataHistoric.get(n).getTutor2()==prof) {
+            for(int n=0;n<activos.dataActiveProjects.size();n++) {
+                if(activos.dataActiveProjects.get(n).getTutor2()==prof && 
+                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
                     tfgs2++; 
                 }
            }
-            String [] profesor= {prof,String.valueOf(tfgs),String.valueOf(tfgs2)};
+
+            String [] profesor= {prof,String.valueOf(tfgs),String.valueOf(tfgs2),String.valueOf(creditos)};
             if(i==2) {
-                dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos"});
+                dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos","ETCS"});
                 dataTFG.put("2",profesor);
             }else {
                 String id=Integer.toString(i);
@@ -285,6 +287,52 @@ public class ReportView extends VerticalLayout {
     }
 	   
     
+    private float obtenerCreditos(String profesor,int ultimoAño,Double nAlumn) {
+        
+        //creditos del tutor
+        float nCreditosTutor=0;
+        //TOTAL de creditos a repartir
+        float valorCred = Float.parseFloat(config.getSetting("ECTS"));
+        float total=(float) (nAlumn*valorCred);
+        
+        //Obtenemos  todos los TFGs activos de este año 
+        Number tfgsActivos=fachadaDatos.getTotalNumber(TITULO, PROYECTO);
+        
+        //Total de creditos a asignar entre todos los directores
+        float crDir=(float) ((total*0.6)/tfgsActivos.intValue());
+        //Total de creditos a asignar para tribunal (a dividir entre 6 porque hay 6 miembros en el tribunal)
+        float crTri= (float) (total  *0.4/6);
+        //float crePorTFG=crDir/;
+        
+        //Recorremos todos los tfgs activos y con alumno asignado y buscamos si es tutor1 o tutor2
+        //y comprobamos si es codirigido por otro tutor de la EPS
+        for(int n=0;n<activos.dataActiveProjects.size();n++) {
+            //RECORREMOS SOLO LOS TFGS ASIGNADOS
+            if(!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
+                //SI ES EL TUTOR 1
+                if(activos.dataActiveProjects.get(n).getTutor1().equals(profesor)) {
+                    //SI EL TUTOR 2 ESTA O NO EN LA EPS
+                    if(fachadaDatos.getProfesores().contains(activos.dataActiveProjects.get(n).getTutor2())) {
+                        //Se reparten los creditos para este profesor en este tfg
+                        nCreditosTutor+=crDir*0.3;
+                    }else{
+                        //Se queda todo el porcentaje de los creditos
+                        nCreditosTutor+=crDir*0.6;
+                    }
+                //SI ES EL TUTOR 2
+                }else if(activos.dataActiveProjects.get(n).getTutor2().equals(profesor) ){
+                    nCreditosTutor+=crDir*0.3;
+                }
+            }
+        }
+
+        if(fachadaDatos.getNombresTribunal().contains(profesor)) {
+            nCreditosTutor+=crTri;
+        }
+        return nCreditosTutor;   
+    }
+
+
     private void descargarInforme(File file) {
       //Directorio destino para las descargas
        

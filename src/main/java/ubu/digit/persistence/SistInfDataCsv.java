@@ -1077,4 +1077,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public List<String> getNombresTribunal() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

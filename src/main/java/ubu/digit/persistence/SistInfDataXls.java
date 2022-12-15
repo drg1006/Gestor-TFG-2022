@@ -1145,5 +1145,20 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return profesoresDeDepartamento;
     }
+
+    @Override
+    public List<String> getNombresTribunal() {
+        List<String> listaTribunal = new ArrayList<String>();
+        try {
+            Recordset result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS);
+            while (result.next()) {
+                String nombre = result.getField(NOMBRE_APELLIDOS);
+                listaTribunal.add(nombre);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error al obtener los datos del tribunal", e);
+        }
+        return listaTribunal;
+    }
 	
 }
