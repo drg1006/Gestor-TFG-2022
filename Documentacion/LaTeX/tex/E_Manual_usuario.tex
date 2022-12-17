@@ -16,11 +16,11 @@ En la parte superior de la pantalla tenemos una opción para actualizar la base 
 
 \imagenflotante{ActualizarDatos}{Preguntar al usuario si quiere actualizar la base de datos}{0.9}
 
-Si se ha optado por actualizar, se mostrará al final un aviso al usuario con el tiempo transcurrido durante la operación. %Ver imagen \ref{Notifiacion}
+Si se ha optado por actualizar, se mostrará al final un aviso al usuario con el tiempo transcurrido durante la operación. Ver imagen \ref{fig:Notifiacion}
 
-%\imagenflotante{Notificacion}{Notificación al usuario sobre la actualización}{0.9}
+\imagenflotante{Notificacion}{Notificación al usuario sobre la actualización}{0.9}
 
-Posteriormente tenemos un pequeño apartado de información sobre el número de áreas, departamentos y profesores de la EPS. Ver imagen \ref{infor_profes}.
+Posteriormente tenemos un pequeño apartado de información sobre el número de áreas, departamentos y profesores de la EPS. Ver imagen \ref{fig:infor_profes}.
 
 \imagenflotante{infor_profes}{Información sobre la EPS}{0.9}
 
@@ -29,17 +29,41 @@ Si queremos seleccionar varios profesores debemos introducir primero uno y poste
 
 \imagenflotante{parametros}{Selección de parámetros}{0.9}
 
-La gráfica muestra el número de TFGs por curso asignado a ese parámetro. %Ver imagen \ref{fig:grafica_anexo}
+La gráfica muestra el número de TFGs por curso asignado a ese parámetro. Ver imagen \ref{fig:graficaAnexo}
 
-\imagenflotante{grafica_anexo}{Gráfica final tras seleccionar los parámetros}{0.9}
+\imagenflotante{graficaAnexo}{Gráfica final tras seleccionar los parámetros}{0.9}
 
 \subsection{Creación de informes}
-En esta pantalla se le da al usuario la opción de añadir un área sobre el que se quiere hacer un informe, y el nombre que se le quiere dar. Ver imagen \ref{fig:pantalla_informe}.
+En esta pantalla se le da al usuario la opción de añadir el número de alumnos matriculados en la asignatura \emph{Trabajos de Fin De Grado} y un área sobre el que se quiere hacer un informe, y el nombre que se le quiere dar. 
+Ver imagen \ref{fig:pantalla_informes}.
 
-\imagenflotante{grafica_anexo}{Gráfica final tras seleccionar los parámetros}{0.9}
+\imagenflotante{pantalla_informes}{Gráfica final tras seleccionar los parámetros}{0.9}
 
-Este informe contendrá el número total de TFGs dirigidos, codirigidos y el número de créditos asignados a cada uno de los profesores del área seleccionado en el último curso académico. Si se seleccionan varias áreas se crearán varias hojas en el documento \emph{excel} generado, con la información pertinente.
+Este informe contendrá el número total de TFGs dirigidos, codirigidos y el número de créditos asignados a cada uno de los profesores del área seleccionado en el último curso académico. Si se seleccionan varias áreas se crearán varias hojas en el documento \emph{excel} generado, con la información pertinente. 
+Pestaña 1: ver imagen \ref{fig:informe_excel}
+\imagenflotante{informe_excel}{Informe generado}{0.9}
+
+Pestaña 2: ver imagen \ref{fig:informe_excel2}
+\imagenflotante{informe_excel2}{Informe generado}{0.9}
 
 \subsection{Oferta de TFG}
+
+A esta nueva opción solo podrán acceder los usuarios de \emph{Moodle} que sea profesores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
+
+En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesarios para crear un nuevo TFG:
+
+\begin{itemize}
+	\item Titulo.
+	\item Descripción.
+	\item Tutor1, por defecto se indica el nombre del tutor que se ha \emph{loggeado}.
+	\item Tutor2.
+	\item Alumno1, por defecto se indica \emph{'Alumnos sin asignar'}.
+	\item Alumno2.
+	\item CursoAsignación, por defecto se indicará el curso actual.
+\end{itemize}
+
+Todos estos parámetros son modificables. Una vez se seleccionen, el usuario \emph{clickará} en \emph{Subir TFG} y se añadirá a la base de datos, en la pestaña de \emph{N2 Proyectos}, es decir, en los proyectos activos.
+También se añadirá una nueva columna que indica si el TFG ha sido aceptado o si la petición está aún pendiente. En esta pestaña siempre se añadirán como \emph{pendientes} ya que en la siguiente será un administrador el que modifique su estado.
+
 \subsection{Aceptación TFG}
 

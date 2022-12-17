@@ -170,8 +170,8 @@ public class newProjectView extends VerticalLayout {
         
         Button crear= new Button("Crear TFG");
         crear.addClickListener(event ->{
-           // escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
-                  //  alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
+            escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
+                    alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
         });
         add(titulo,descripcion,tutor1,tutor2,alumno1,alumno2,cursoAsignacion,crear);
        
@@ -181,12 +181,11 @@ public class newProjectView extends VerticalLayout {
     private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String alumno1, String alumno2,
             String cursoAsignacion) {
         // TODO Auto-generated method stub
-        Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 
-        String [] TFG= {descripcion,titulo,tutor1,tutor2," ",alumno1,alumno2," ",cursoAsignacion};
-        dataTFG.put("1", TFG);
+
+        String [] TFG= {descripcion,titulo,tutor1,tutor2," ",alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
         try {
-            guardarDatosXLS(dataTFG);
+            guardarDatosXLS(TFG);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -196,10 +195,10 @@ public class newProjectView extends VerticalLayout {
     
     /**
      * Metodo para escribir los datos en el archivo XLS.
-     * @param dataTFG
+     * @param tFG
      * @throws IOException
      */
-    public void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
+    public void guardarDatosXLS(String[] TFG) throws IOException {
         //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String serverPath = path.substring(0, path.length()-17);
@@ -209,33 +208,32 @@ public class newProjectView extends VerticalLayout {
         String completeDir = serverPath + dir + "/";
         String fileName = "BaseDeDatosTFGTFM.xls";
         File file = new File(completeDir + fileName);
- 
+        
         String absPath = file.getAbsolutePath();       
+        System.out.println("absPath "+absPath);
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
- 
-            Sheet hoja= workbook.getSheet("N2_PROYECTOS");
-      
-            Row rowCount;
-              
-            Set<String> keyid = dataTFG.keySet();
             
-            int rowid = 0;
+            int rowid = fachadaDatos.getTotalNumber(TITULO, PROYECTO).intValue()+1;
             
-            //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
-            // writing the data into the sheets...
+            Sheet hoja= workbook.getSheet(PROYECTO);
+
+            
+            
+            Row fila = hoja.createRow(rowid++);
+            Object[] objectArr = TFG;
+            
+            //Creamos la columna de Estado, fila 1, columna 9
+            Row fila1 = hoja.getRow(0);
+            Cell estado=fila1.createCell(9);
+            estado.setCellValue("Estado");
+            
+            int cellid = 0;
       
-            for (String key : keyid) {
-      
-                rowCount = hoja.createRow(rowid++);
-                Object[] objectArr = dataTFG.get(key);
-                int cellid = 0;
-      
-                for (Object obj : objectArr) {
-                    Cell cell = rowCount.createCell(cellid++);
-                    cell.setCellValue((String)obj);
-                }
+            for (Object obj : objectArr) {
+                Cell cell = fila.createCell(cellid++);
+                cell.setCellValue((String)obj);
             }
  
             FileOutputStream outputStream = new FileOutputStream(absPath);
