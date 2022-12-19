@@ -27,7 +27,7 @@ import ubu.digit.util.Constants;
 import ubu.digit.util.UtilMethods;
 import ubu.digit.webService.CoreCourseGetCoursesByField;
 import ubu.digit.webService.CoreCourseGetUserAdministrationOptions;
-import ubu.digit.webService.CoreGetEnrolledUsers;
+import ubu.digit.webService.CoreUserGetCourseUserProfiles;
 import ubu.digit.webService.CoreWebserviceGetSiteInfo;
 import ubu.digit.ui.entity.Course;
 import ubu.digit.ui.entity.MoodleUser;
@@ -186,8 +186,9 @@ public class LoginView extends VerticalLayout{
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
 			//2203 2204 8633 8574 12231
-			JSONArray jsonArray2 = UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(), new CoreGetEnrolledUsers("2204"));
-			LOGGER.info("users--> " + jsonArray2);
+			JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles(2204));
+            System.out.println("Array "+profiles);
+            
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
 			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
