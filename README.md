@@ -17,7 +17,7 @@ El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin 
 El proyecto está migrado a Vaadin 14 en la rama **master** y en Vaadin 7 en la rama **Sistinf-V7**.
 
 ### Página web
-El proyecto está desplegado en https://gestor-tfg-2021.herokuapp.com/ .
+El proyecto está desplegado en https://gestor-tfg-2022.herokuapp.com/ .
 
 ### Instalación
 * JDK --> https://www.oracle.com/es/java/technologies/javase-jdk11-downloads.html
