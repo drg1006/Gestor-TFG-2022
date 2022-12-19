@@ -91,8 +91,7 @@ public class newProjectView extends VerticalLayout {
 	 * @throws SQLException 
 	 */
 	public newProjectView(){
-		
-		fachadaDatos = SistInfDataFactory.getInstanceData();
+
 		config = ExternalProperties.getInstance("/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
@@ -130,10 +129,16 @@ public class newProjectView extends VerticalLayout {
         tutor2.addValueChangeListener(event->{
             tutor2.setValue(event.getValue()); 
         });
+        TextArea tutor3 =new TextArea("Indique el tutor 3 del TFG");
+        tutor3.setWidth("20%");
+        tutor3.addValueChangeListener(event->{
+            tutor3.setValue(event.getValue()); 
+        });
+        
         TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
         alumno1.setWidth("20%");
         //Por defecto
-        alumno1.setValue("Alumnos sin asignar");
+        alumno1.setValue("Aalumnos sin asignar");
         alumno1.addValueChangeListener(event->{
             alumno1.setValue(event.getValue()); 
         });
@@ -170,20 +175,17 @@ public class newProjectView extends VerticalLayout {
         
         Button crear= new Button("Crear TFG");
         crear.addClickListener(event ->{
-            escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
+            escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
                     alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
         });
-        add(titulo,descripcion,tutor1,tutor2,alumno1,alumno2,cursoAsignacion,crear);
+        add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,cursoAsignacion,crear);
        
         
     }
 
-    private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String alumno1, String alumno2,
+    private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
             String cursoAsignacion) {
-        // TODO Auto-generated method stub
-
-
-        String [] TFG= {descripcion,titulo,tutor1,tutor2," ",alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
+        String [] TFG= {descripcion,titulo,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
         try {
             guardarDatosXLS(TFG);
         } catch (IOException e) {
@@ -214,16 +216,13 @@ public class newProjectView extends VerticalLayout {
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
-            
-            int rowid = fachadaDatos.getTotalNumber(TITULO, PROYECTO).intValue()+1;
+            fachadaDatos = SistInfDataFactory.getInstanceData();
             
             Sheet hoja= workbook.getSheet(PROYECTO);
+            int rowid = hoja.getLastRowNum();
 
-            
-            
             Row fila = hoja.createRow(rowid++);
             Object[] objectArr = TFG;
-            
             //Creamos la columna de Estado, fila 1, columna 9
             Row fila1 = hoja.getRow(0);
             Cell estado=fila1.createCell(9);
