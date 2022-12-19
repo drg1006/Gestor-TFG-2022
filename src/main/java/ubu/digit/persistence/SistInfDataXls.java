@@ -74,10 +74,10 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	}
 	
 	/**
-	 * Inicializa la conexión odbc al almacen de datos en formato .xsl
+	 * Inicializa la conexión odbc al almacen de datos en formato .xls
 	 * 
 	 * @return con
-	 * 				conexión con el fichero .xsl 
+	 * 				conexión con el fichero .xls
 	 */
 	private com.codoid.products.fillo.Connection getConection() {
 		com.codoid.products.fillo.Connection conn = null;
@@ -97,6 +97,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	}catch (FilloException e) {
       		LOGGER.error("Error al al establecer la conexión con el fichero XLS : " + e.getMessage());
       	} 	  
+        System.out.println("En XLS "+serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
 		return conn;
 	}
 	
@@ -653,9 +654,53 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 		}
 		return listaDataModel;
 	}
-	
 	/**
-	 * Obtener nombre y apellidos del tribunal
+     * Obtener los datos del modelo de datos de los proyectos activos con estado pendiente.
+     */
+    @Override
+    public List<String> getDataModelPending() { 
+        List<String> listaDataModelPending = new ArrayList<String>();
+        String sql = SELECT + TITULO + "," + DESCRIPCION + "," + TUTOR1 + "," + TUTOR2 + ", " 
+                + ALUMNO1 + ", " + ALUMNO2 + ", " 
+                + TUTOR1 + ", " + TUTOR2 + ", " + TUTOR3 + ", " + ESTADO + FROM +PROYECTO
+                + WHERE + ESTADO + " = "+"'PENDIENTE'";
+        try{
+            
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                String title = result.getField(TITULO);
+                String description = result.getField(DESCRIPCION);
+                String tutor1 = result.getField(TUTOR1);
+                String tutor2 = result.getField(TUTOR2);
+                if (tutor2 == null) {
+                    tutor2 = "";
+                }
+                String tutor3 = result.getField(TUTOR3);
+                if (tutor3 == null) {
+                    tutor3 = "";
+                }
+                String student1 = result.getField(ALUMNO1);
+                String student2 = result.getField(ALUMNO2);
+                if (student2 == null) {
+                    student2 = "";
+                }
+                String status = result.getField(ESTADO);
+                listaDataModelPending.add(title);
+                listaDataModelPending.add(description);
+                listaDataModelPending.add(tutor1);
+                listaDataModelPending.add(tutor2);
+                listaDataModelPending.add(tutor3);
+                listaDataModelPending.add(student1);
+                listaDataModelPending.add(student2);
+                listaDataModelPending.add(status);      
+            }
+        } catch (FilloException e) {
+            LOGGER.error("Error al obtener los datos del actuales", e);
+        }
+        return  listaDataModelPending;
+    }
+	/**
+	 * Obtener nombre, apellidos y cargo del tribunal
 	 */
 	@Override
 	public List<String> getTribunal(){
@@ -1125,7 +1170,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return profesoresDeArea;       
         
     }
-    
+
     /**
      * Metodo que devuelve los profesores del departamento pasada por parametro.
      * @param departamento
@@ -1145,9 +1190,12 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return profesoresDeDepartamento;
     }
-
+	
+    /**
+     * Obtener nombre y apellidos del tribunal
+     */
     @Override
-    public List<String> getNombresTribunal() {
+    public List<String> getNombresTribunal(){
         List<String> listaTribunal = new ArrayList<String>();
         try {
             Recordset result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS);
@@ -1160,5 +1208,5 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return listaTribunal;
     }
-	
+    
 }

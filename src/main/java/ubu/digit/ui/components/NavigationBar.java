@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+import ubu.digit.ui.views.AceptView;
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
@@ -105,7 +106,7 @@ public class NavigationBar extends HorizontalLayout{
         buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
         
         buttonAcept = new Button(ACEPT);
-        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(UploadView.class));
+        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
         
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
