@@ -5,17 +5,45 @@ En esta sección se van a detallarlos diferentes procesos de instalación de las
 Algunos detalles son similares a los utilizados en el anterior proyecto de \textbf{\textit{Diana,Gestor-TFG-2021}}~\cite{Gestor-TFG-2021}.
 
 \section{Estructura de directorios}
-Se enumerarán y describirán brevemente los directorios del proyecto. Se puede encontrar el código fuente en el repositorio de Github denominado \href{https://github.com/drg1006/gestor-tfg-2022}{``Gestor-TFG-2022''}.
+Se enumerarán y describirán brevemente los directorios del proyecto. Se puede encontrar el código fuente en el repositorio de Github denominado \href{https://github.com/drg1006/gestor-tfg-2022}{``Gestor-TFG-2022''}. También se indicarán los nuevos archivos añadidos en esta versión.
 
 \begin{itemize}
 	\item \texttt{/:} directorio raíz donde se ubican el README, Maven. 
-	\item \texttt{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub como para el análisis de la calidad del código en \href{https://sonarcloud.io/}{SonarCloud}.
+	\item \texttt{/.github/workflows} los archivos de \textit{workflow} o flujo de trabajo, tanto para la Integración continua del proyecto en GitHub.
 	\item \texttt{/Documentacion} material de documentación del proyecto y prueba empleadas.
 	\begin{itemize}
 		\tightlist
 		\item \texttt{/Documentacion/LaTeX} ficheros para generar la memoria y los anexos realizados en \emph{TexStudio}.
 		\item \texttt{/Documentacion/Pruebas} aplicaciones prototipo para comenzar el aprendizaje con \href{https://vaadin.com/}{Vaadin} y pruebas realizadas con diferentes librerías durante el webscraping.
 	\end{itemize}
+	\item \texttt{/frontend} código encargado del diseño gráfico de la aplicación por el lado del cliente.
+	\item \texttt{/src}, estructura de directorios \emph{backend} de la aplicación. Ya explicada en la versión anterior del proyecto:
+		\begin{itemize}
+			\item \texttt{/src/main/java/ubu/digit/persistence} código fuente encargado de la conexión y lectura de los ficheros de datos (fachada de datos).		
+			\item \texttt{/src/main/java/ubu/digit/security} código fuente de conexión y consulta con el moodle de UbuVirtual.
+			\item \textbf{/src/main/java/ubu/digit/ui} código en relación a las ventanas y vistas de la aplicación.
+			\begin{itemize}
+				\item \texttt{/src/main/java/ubu/digit/ui/entity} código con las entidades de los proyectos, cursos y usuarios de la aplicación.
+					\begin{itemize}
+						\item \texttt{/src/main/java/ubu/digit/ui/entity/PendingProject.java}, nueva entidad de proyecto con estado \emph{Pendiente}.
+					\end{itemize}
+				\item \texttt{/src/main/java/ubu/digit/ui/components} código con la interfaz gráfica de la barra de navegación y la de pie de página.
+				\item \texttt{/src/main/java/ubu/digit/ui/views} código con las vistas de la aplicación.
+					\begin{itemize}
+						\item \texttt{/src/main/java/ubu/digit/ui/views/ProfesoresView.java}, nueva vista con la información histórica de los profesores.
+						\item \texttt{/src/main/java/ubu/digit/ui/views/ReportView.java}, nueva vista con el código para la realización de reportes.
+						\item \texttt{/src/main/java/ubu/digit/ui/views/newProjectView.java}, nueva vista con el código que permite subir propuestas de TFGs al servidor.
+						\item \texttt{/src/main/java/ubu/digit/ui/views/AceptView.java}, nueva vista con el código que permite aceptar o denegar las propuesta de TFGs con estado \emph{Pendiente}.
+					\end{itemize}
+				\item \texttt{/src/main/java/ubu/digit/util} incluye los métodos empleados de utilidad empleados en toda la app. 
+				\item \texttt{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en moodle.
+			\end{itemize}
+			
+			\item \texttt{/src/test} tests unitarios sobre las clases fachada “SistInfDataCsv” y “SistInfDataXls”.
+			
+			\item \texttt{/src/main/resources} carpeta con los datos que se van a cargar en el servidor para obtener toda la información necesaria.
+		\end{itemize}
+	
 \end{itemize}
 			
 \section{Manual del programador}
@@ -25,7 +53,7 @@ necesarios para el desarrollo de la aplicación.
 
 \subsection{Instalación de Java}
 
-Actualmente se sigue ejecutando con la versión de Java 11. A pesar de que se necesitará actualizar cuando migremos a la versión 23 de vaadin.
+Actualmente se sigue ejecutando con la versión de Java 11.
 
 Para ello se debe descargar la \href{https://www.oracle.com/es/java/technologies/javase/jdk11-archive-downloads.html}{página de descargas de Oracle Java SE 11.0} y descargar la versión de JDK 11, correspondiente con el sistema operativo que se posea y su arquitectura, ya sea de 64 o 32 bits. Ver imagen \ref{fig:Descarga_JDK_11}.
 
@@ -46,7 +74,6 @@ Para descargar el IDE se accederá a la \href{https://www.eclipse.org/downloads/
 En el caso de los sistemas operativos Windows se descargará un archivo ejecutable que se deberá ejecutar como administrador. Una vez ejecutado se deberá seleccionar la opción ``\textbf{\textit{Eclipse IDE for Enterprise Java Developers}}'' \ref{fig:Eclipse_Installer}. 
 
 \imagenflotante{Eclipse_Installer}{Seleccionar Eclipse}{0.9}
-
 
 Por último seleccionaremos el JDK (11) que vayamos a utilizar y la carpeta donde queremos instalar nuestro IDE.
 
