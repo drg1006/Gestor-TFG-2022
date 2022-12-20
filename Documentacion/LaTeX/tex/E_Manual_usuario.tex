@@ -48,7 +48,7 @@ Pestaña 2: ver imagen \ref{fig:informe_excel2}
 
 \subsection{Oferta de TFG}
 
-A esta nueva opción solo podrán acceder los usuarios de \emph{Moodle} que sea profesores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
+A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean profesores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
 
 En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesarios para crear un nuevo TFG:
 
@@ -63,7 +63,35 @@ En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesa
 \end{itemize}
 
 Todos estos parámetros son modificables. Una vez se seleccionen, el usuario \emph{clickará} en \emph{Subir TFG} y se añadirá a la base de datos, en la pestaña de \emph{N2 Proyectos}, es decir, en los proyectos activos.
-También se añadirá una nueva columna que indica si el TFG ha sido aceptado o si la petición está aún pendiente. En esta pestaña siempre se añadirán como \emph{pendientes} ya que en la siguiente será un administrador el que modifique su estado.
+También se añadirá una nueva columna que indica si el TFG ha sido aceptado o si la petición está aún pendiente. En esta pestaña siempre se añadirán como \emph{pendientes} ya que en la siguiente será un administrador el que modifique su estado. Ver imagen \ref{fig:subirTFG}
+
+\imagenflotante{subirTFG}{Pantalla para indicar la información del TFG}{0.9}
 
 \subsection{Aceptación TFG}
+
+A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean administradores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
+
+Aquí aparecerán una tabla con la lista de TFGs con estado \emph{Pendiente}, en una tabla con filtros. Ver imagen \ref{fig:tablaPendientes}
+
+\imagenflotante{tablaPendientes}{Tabla con los TFGs con estado Pendiente}{0.9}
+
+En la parte inferior aparecerán una serie de componentes de \emph{Vaadin} para actualizar el estado del TFG que se desee.
+
+\begin{itemize}
+	\item \emph{ComboBox} con los títulos del los \emph{TFGs} de la tabla superior para indicar uno. Ver imagen \ref{fig:titulosTFG}
+	\item \emph{ComboBox} con las opciones de \emph{Estado} del TFG. Ver imagen \ref{fig:estadosTFG}
+	\item Botón para confirmar la modificación del TFG.
+\end{itemize}
+
+\imagenflotante{titulosTFG}{Desplegable con los títulos de los TFGs}{0.9}
+
+\imagenflotante{estadosTFG}{Desplegable con los estados del TFG}{0.9}
+
+El \emph{ComboBox} con los estados y el botón para confirmar la modificación no están activados desde el principio, como se puede ver en la figura \ref{fig:desactivados}.
+
+\imagenflotante{desactivados}{Componentes desactivados}{0.9}
+
+Estos componentes se activarán a medida que seleccionemos los datos, es decir, una vez se indique el título se activará la opción de indicar el estado al que se quiere cambiar y una vez indiquemos el estado se activará el botón de actualizar la base de datos.
+
+
 

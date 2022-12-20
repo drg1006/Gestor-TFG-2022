@@ -4,6 +4,7 @@ package ubu.digit.ui.views;
 import static ubu.digit.util.Constants.PROYECTO;
 import static ubu.digit.util.Constants.TITULO;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLConnection;
@@ -25,6 +26,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -32,13 +35,18 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.server.StreamResource;
+import com.vaadin.flow.server.StreamResource;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Resource;
+import com.vaadin.ui.AbstractComponent;
 
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
@@ -81,6 +89,8 @@ public class ReportView extends VerticalLayout {
 	 * Formateador de números.
 	 */
 	private NumberFormat numberFormatter;
+	
+	private File informe;
 	
 	/**
 	 * Formateador de fechas.
@@ -156,10 +166,6 @@ public class ReportView extends VerticalLayout {
 	        }
 
 	    });
-	    //SELECCIONAR POR DEFECTO
-	        //checkboxGroup.select(areas.get(0), areas.get(2));
-	    //ARRAY CON LA LISTA DE AREAS SELECCIONADAS
-            //System.out.println("Value changed:"+ checkboxGroup.getValue());
 	    
 	    //TEXTO PARA AÑADIR NOMBRE AL INFORME
 	    TextField nombreInforme = new TextField();
@@ -173,17 +179,23 @@ public class ReportView extends VerticalLayout {
 	    //BOTON PARA CREAR EL INFORME 
 	    Button crearInforme = new Button("Crear Informe");
 	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-	    add(nAlum,checkbox, checkboxGroup,nombreInforme,crearInforme);
-	    //Anchor anchor = new Anchor(getStreamResource("default.txt", "default content"), "click me to download");
-        //anchor.getElement().setAttribute("download",true);
+	    crearInforme.setIcon(VaadinIcon.DOWNLOAD.create());
+	    Button button = new Button("Download File");
+        crearInforme.addClickListener(event -> {
+            File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue()); 
+            /*
+            FileDownloader fileDownloader = new FileDownloader(new FileResource(file));
+            Anchor anchor = new Anchor(getStreamResource(file.getName(), file), file.getName());
+            anchor.getElement().setAttribute("download", true);
+            anchor.setHref(getStreamResource(file.getName(), file));
+            add(anchor);
+            //fileDownloader.extend(button);
+            
+            StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));*/
+            
+         });
         
-	    crearInforme.addClickListener(event -> {
-	       File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue());
-	       // descargarInforme(file);
-	       // anchor.setHref(file.getValue(), file.getValue());
-	        
-	    });
-	    
+	    add(nAlum,checkbox, checkboxGroup,nombreInforme,crearInforme);
 
 	}
 	
@@ -227,8 +239,9 @@ public class ReportView extends VerticalLayout {
 	            //Se genera el documento
 	            FileOutputStream out = new FileOutputStream(archivo);
 	            workbook.write(out);
-	            workbook.close();
+	            workbook.close(); 
 	            out.close();
+	            
 	            Notification notification = Notification.show("Se ha generado el fichero en " + archivo);
 	        } catch (Exception e) {
 	            e.printStackTrace();
