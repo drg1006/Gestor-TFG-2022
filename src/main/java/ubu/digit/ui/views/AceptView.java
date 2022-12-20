@@ -1,12 +1,24 @@
 package ubu.digit.ui.views;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -24,6 +36,7 @@ import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.PendingProject;
+import ubu.digit.util.ExternalProperties;
 
 import static ubu.digit.util.Constants.*;
 
@@ -118,11 +131,13 @@ public class AceptView extends VerticalLayout{
 		createCurrentProjectsTable();
 		add(table);
 		
+		seleccionarTFG();
 		Footer footer = new Footer("N2_Proyecto.csv");
 		add(footer);
 	}
 
-	/**
+	
+    /**
 	 * Crea los filtros de la tabla.
 	 */
 	public void createFilters() {
@@ -326,4 +341,94 @@ public class AceptView extends VerticalLayout{
 			dataPendingProjectsGrid.add(actives);
 		}	
 	}
+	
+	
+
+    private void seleccionarTFG() {
+
+        ComboBox<String> estado= new ComboBox<>("Indique el nuevo estado del TFG");
+        Button actualizar= new Button("Actualizar estado");
+        ComboBox<String> tfgAModificar=new ComboBox<>("Indique que TFG desea modificar");
+        //Opciones del estado del tfg
+        estado.setEnabled(false);
+        estado.setItems("Aceptar","Denegar");
+        estado.addValueChangeListener(event->{
+            estado.setValue(event.getValue());
+            actualizar.setEnabled(true);
+        });
+        
+        //Titulos de los TFGs
+        List<String> titulos=new ArrayList<>();
+        
+        //Opciones de los titulos
+        tfgAModificar.setWidth("30%");
+        for(PendingProject pending: dataPendingProjects) {
+           titulos.add(pending.getTitle());
+        }
+        tfgAModificar.setItems(titulos);
+        tfgAModificar.addValueChangeListener(event -> {
+            tfgAModificar.setValue(event.getValue());
+            estado.setEnabled(true);
+        });
+        
+        
+        //Opciones del boton de actualizar
+        actualizar.setEnabled(false);
+        actualizar.addClickListener(event ->{
+                modificar(tfgAModificar.getValue(),estado.getValue());}
+        );
+        
+        add(tfgAModificar,estado,actualizar);        
+        
+    }
+
+    private void modificar(String titulo, String estado) {
+        // TODO Auto-generated method stub
+        System.out.println("titulo"+titulo+"estado"+estado);
+        //Obtener la linea del titulo que hemos escogido para modificar y cambiar el estado
+        
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);
+        
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = "BaseDeDatosTFGTFM.xls";
+        File file = new File(completeDir + fileName);
+        
+        String absPath = file.getAbsolutePath();       
+        try {
+            FileInputStream inputStream = new FileInputStream(new File(absPath));
+            Workbook workbook = WorkbookFactory.create(inputStream);
+       
+            
+            Sheet hoja= workbook.getSheet(PROYECTO);
+            int rowid = 0;
+            for (Row row : hoja) {
+                for (Cell cell : row) {
+                    if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
+                        rowid = row.getRowNum(); // This is the row index of the cell with the value you're looking for
+                        break;
+                    }
+                }
+            }
+            
+
+            //Creamos la columna de Estado, fila 1, columna 9
+            Row fila1 = hoja.getRow(rowid);
+            Cell estadoNuevo=fila1.getCell(9);
+            estadoNuevo.setCellValue(estado);
+
+            FileOutputStream outputStream = new FileOutputStream(absPath);
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+            SistInfDataFactory.setInstanceData("XLS");
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    
 }
