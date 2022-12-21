@@ -127,7 +127,7 @@ public class ReportView extends VerticalLayout {
 		opciones();
 		
 		Footer footer = new Footer("");
-		//
+		
 		add(footer);
 	}
 	
@@ -142,7 +142,7 @@ public class ReportView extends VerticalLayout {
         nAlum.addValueChangeListener(event ->{
             nAlum.setValue(event.getValue());
         });
-        
+        //Checkbox con todas las areas
 	    Checkbox checkbox = new Checkbox("Seleccionar Todas");
 	    List<String> areas= fachadaDatos.getAreas();
 	    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
@@ -188,6 +188,8 @@ public class ReportView extends VerticalLayout {
 	    download.setVisible(false);
 	    //Cuando pulsamos en crear informe
         crearInforme.addClickListener(event -> {
+            
+            //Creamos el informe
             File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue()); 
             
             //Generamos el recurso descargable            
@@ -220,12 +222,13 @@ public class ReportView extends VerticalLayout {
 	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 	       Workbook workbook = new HSSFWorkbook();
 	       try {
-
+	            //Recorremos el listado de areas pasados
 	            for(String area: listaAreas) {
+	                //Creamos la hoja con el nombre del area
 	                Sheet hoja=workbook.createSheet(area);
 	                dataTFG = obtencionDatos(area,nAlumn);
 	                Row rowCount=null;
-	                
+	                //Cogemos los ids
 	                Set<String> keyid = dataTFG.keySet();
 	                int rowid = 0;
 	                
@@ -290,8 +293,10 @@ public class ReportView extends VerticalLayout {
                     tfgs2++; 
                 }
            }
-
+            
+            //Array con toda la informacion
             String [] profesor= {prof,String.valueOf(tfgs),String.valueOf(tfgs2),String.valueOf(creditos)};
+            //Si esla primera linea se añaden los titulos y el primer profesor
             if(i==2) {
                 dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos","ETCS"});
                 dataTFG.put("2",profesor);
@@ -350,17 +355,18 @@ public class ReportView extends VerticalLayout {
             }
         }
 
+        //Si el tutor pertenece al tribunal
         if(fachadaDatos.getNombresTribunal().contains(profesor)) {
             nCreditosTutor+=crTri;
         }
         return nCreditosTutor;   
     }
 
-
-    private void descargarInforme(File file) {
-      //Directorio destino para las descargas
-       
-    }
+    /**
+     * Metodo para transformar un archivo en InputStream.
+     * @param file
+     * @return InputStream 
+     */
     private InputStream getStream(File file) {
         FileInputStream stream = null;
         try {
