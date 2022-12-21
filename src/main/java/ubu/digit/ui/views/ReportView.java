@@ -96,8 +96,13 @@ public class ReportView extends VerticalLayout {
 	 * Formateador de fechas.
 	 */
 	private transient DateTimeFormatter dateTimeFormatter;
-
+	/**
+	 * Vista de historicos.
+	 */
 	HistoricProjectsView vista= new  HistoricProjectsView();
+	/**
+	 * Vista de activos.
+	 */
     ActiveProjectsView activos= new ActiveProjectsView();
 	
 	/**
@@ -299,7 +304,13 @@ public class ReportView extends VerticalLayout {
         return dataTFG;
     }
 	   
-    
+    /**
+     * Metodo que obtiene el numero de creditos de un tutor
+     * @param profesor profesor a buscar
+     * @param ultimoAño el año que se busca
+     * @param nAlumn nAlumnos matriculados en TFG
+     * @return
+     */
     private float obtenerCreditos(String profesor,int ultimoAño,Double nAlumn) {
         
         //creditos del tutor

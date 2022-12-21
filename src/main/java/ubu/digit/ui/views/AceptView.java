@@ -306,7 +306,7 @@ public class AceptView extends VerticalLayout{
 	}
 	
 	/**
-	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.
+	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos pendientes.
 	 */
 	public void CreateDataModelToGrid() {
 		String tutors = "";
@@ -343,7 +343,9 @@ public class AceptView extends VerticalLayout{
 	}
 	
 	
-
+	/**
+	 * Metodo que nos permite seleccionar los parametros del TFG a modificar y el nuevo estado.
+	 */
     private void seleccionarTFG() {
 
         ComboBox<String> estado= new ComboBox<>("Indique el nuevo estado del TFG");
@@ -381,9 +383,19 @@ public class AceptView extends VerticalLayout{
         add(tfgAModificar,estado,actualizar);        
         
     }
-
+    /**
+     * Método que modifica la base de datos.
+     * @param titulo titulo del tfg a modificar
+     * @param estado nuevo estado que se introducira
+     */
     private void modificar(String titulo, String estado) {
 
+        String newEstado;
+        if(estado.equals("Aceptar")) {
+            newEstado="Aceptado";
+        }else
+            newEstado="Denegado";
+        
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String serverPath = path.substring(0, path.length()-17);
         
@@ -423,7 +435,7 @@ public class AceptView extends VerticalLayout{
             //Cambiamos la celda de:  la fila rowid y columna column
             Row fila1 = hoja.getRow(rowid);
             Cell estadoNuevo=fila1.getCell(column);
-            estadoNuevo.setCellValue(estado);
+            estadoNuevo.setCellValue(newEstado);
 
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);

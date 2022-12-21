@@ -109,6 +109,9 @@ public class newProjectView extends VerticalLayout {
 		add(footer);
 	}
 
+	/**
+	 * Metodo que permite la introducción de todos los datos del TFG y los guarda.
+	 */
     private void introducirDatos() {
         TextArea titulo =new TextArea("Indique un nombre para el TFG");
         titulo.setWidth("20%");
@@ -179,7 +182,17 @@ public class newProjectView extends VerticalLayout {
        
         
     }
-
+    /**
+     * Metodo que guarda los datos en un Array [].
+     * @param titulo titulo del tfg
+     * @param descripcion descripcion del tfg
+     * @param tutor1 tutor1
+     * @param tutor2 tutor2
+     * @param tutor3 tutor3
+     * @param alumno1 alumno1
+     * @param alumno2 alumno2
+     * @param cursoAsignacion curso
+     */
     private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
             String cursoAsignacion) {
         String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};

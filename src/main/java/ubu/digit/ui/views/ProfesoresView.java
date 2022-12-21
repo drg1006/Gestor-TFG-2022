@@ -314,6 +314,7 @@ public class ProfesoresView extends VerticalLayout {
         CSVWriter writer = new CSVWriter(new FileWriter(absPath));      
         writer.writeAll(profesores);
         writer.close();
+        SistInfDataFactory.setInstanceData("CSV");
     }
     /**
      * Metodo para escribir los datos en el archivo XLS.
@@ -363,7 +364,7 @@ public class ProfesoresView extends VerticalLayout {
             workbook.write(outputStream);
             workbook.close();
             outputStream.close();
-             
+            SistInfDataFactory.setInstanceData("XLS");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -520,10 +521,6 @@ public class ProfesoresView extends VerticalLayout {
     public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect, ApexCharts lineChart) {
         //Creamos el array de series
         Series[] series = new Series[departamentos.size()+areas.size()+profSelect.size()];
-        for(String prof: profSelect) {
-            System.out.println("profe "+ prof + " " + profSelect.size());
-            
-        }
         //variable para indicar el index del array
         int n=0;
         //Cogemos los tfgs de los departamentos
