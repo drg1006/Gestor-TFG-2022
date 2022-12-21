@@ -1,9 +1,7 @@
 package ubu.digit.ui.views;
 
 
-import static ubu.digit.util.Constants.PROYECTO;
-import static ubu.digit.util.Constants.TITULO;
-
+import static ubu.digit.util.Constants.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -158,7 +156,6 @@ public class newProjectView extends VerticalLayout {
 
         Calendar c2 = new GregorianCalendar();
         Date hoy = new Date();
-
         int annio = c2.get(Calendar.YEAR);
         Date comienzoCurso= new Date(annio);
         // Compare the two dates using the compareTo() method
@@ -218,7 +215,7 @@ public class newProjectView extends VerticalLayout {
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
-        String fileName = "BaseDeDatosTFGTFM.xls";
+        String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       

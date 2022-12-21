@@ -402,7 +402,7 @@ public class AceptView extends VerticalLayout{
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
-        String fileName = "BaseDeDatosTFGTFM.xls";
+        String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       

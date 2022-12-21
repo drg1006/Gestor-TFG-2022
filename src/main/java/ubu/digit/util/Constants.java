@@ -324,6 +324,10 @@ public final class Constants {
      * Documentos (etiqueta título).
      */
     public static final String DOCUMENTOS = "Documentos";
+    /**
+     * Documentos (etiqueta título).
+     */
+    public static final String NOMBRE_BASES = "BaseDeDatosTFGTFM.xls";
     
     /**
      * Constantes empleadas en la obtención de información del Moodle de UbuVirtual

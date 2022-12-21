@@ -1,7 +1,7 @@
 package ubu.digit.ui.views;
 
 import static org.mockito.ArgumentMatchers.nullable;
-import static ubu.digit.util.Constants.INFO_ESTADISTICA;
+import static ubu.digit.util.Constants.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -177,7 +177,7 @@ public class ProfesoresView extends VerticalLayout {
         Button actualizar = new Button("Si");
         actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Footer footer= new Footer("");
-        String lastModifiedXls = footer.getLastModified("BaseDeDatosTFGTFM.xls");
+        String lastModifiedXls = footer.getLastModified(NOMBRE_BASES);
         
         Label ultimaAct= new Label("La última actualización de los datos fue el: " + lastModifiedXls+" ¿Quiere actualizar los datos? ");
         Label AVISO= new Label("Este proceso puede llevar un tiempo");
@@ -329,7 +329,7 @@ public class ProfesoresView extends VerticalLayout {
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
-        String fileName = "BaseDeDatosTFGTFM.xls";
+        String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
  
         String absPath = file.getAbsolutePath();       
@@ -337,7 +337,7 @@ public class ProfesoresView extends VerticalLayout {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
  
-            Sheet hoja= workbook.getSheet("N4_Profesores");
+            Sheet hoja= workbook.getSheet(PROFESOR);
       
             Row rowCount;
               
