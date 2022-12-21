@@ -383,10 +383,7 @@ public class AceptView extends VerticalLayout{
     }
 
     private void modificar(String titulo, String estado) {
-        // TODO Auto-generated method stub
-        System.out.println("titulo"+titulo+"estado"+estado);
-        //Obtener la linea del titulo que hemos escogido para modificar y cambiar el estado
-        
+
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String serverPath = path.substring(0, path.length()-17);
         
@@ -400,23 +397,32 @@ public class AceptView extends VerticalLayout{
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
-       
-            
+
             Sheet hoja= workbook.getSheet(PROYECTO);
             int rowid = 0;
+            //Recorremos la hoja para obtener el numero de fila de la celda que tiene el titulo que se ha pasado por parametro
             for (Row row : hoja) {
                 for (Cell cell : row) {
                     if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
-                        rowid = row.getRowNum(); // This is the row index of the cell with the value you're looking for
+                        rowid = row.getRowNum(); 
+                        break;
+                    }
+                }
+            }
+            //Buscamos el numero de la columna con el titulo Estado
+            int column=0;
+            for (Row row : hoja) {
+                for (Cell cell : row) {
+                    if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals("Estado")) {
+                       column = cell.getColumnIndex(); 
                         break;
                     }
                 }
             }
             
-
-            //Creamos la columna de Estado, fila 1, columna 9
+            //Cambiamos la celda de:  la fila rowid y columna column
             Row fila1 = hoja.getRow(rowid);
-            Cell estadoNuevo=fila1.getCell(9);
+            Cell estadoNuevo=fila1.getCell(column);
             estadoNuevo.setCellValue(estado);
 
             FileOutputStream outputStream = new FileOutputStream(absPath);

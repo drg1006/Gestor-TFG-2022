@@ -97,7 +97,6 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
       	}catch (FilloException e) {
       		LOGGER.error("Error al al establecer la conexión con el fichero XLS : " + e.getMessage());
       	} 	  
-        System.out.println("En XLS "+serverPath + DIRCSV + "/BaseDeDatosTFGTFM.xls");
 		return conn;
 	}
 	

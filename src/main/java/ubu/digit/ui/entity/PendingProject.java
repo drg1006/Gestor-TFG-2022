@@ -36,8 +36,8 @@ public class PendingProject extends Projects implements Serializable {
 	 *            Tutores del proyecto.
 	 * @param students
 	 *            Alumnos del proyecto.
-	 * @param courseAssignment
-	 *            Curso de asignación del proyecto.
+	 * @param status
+	 *            Estado del proyecto.
 	 */
 	public PendingProject(String title, String description, String tutors,String students,String status) {
 		this.title = title;
@@ -66,8 +66,8 @@ public class PendingProject extends Projects implements Serializable {
 	 *            Alumno nº 2 del proyecto.
 	 * @param student3
 	 *            Alumno nº 3 del proyecto.
-	 * @param courseAssignment
-	 *            Curso de asignación del proyecto.
+	 * @param status
+	 *           Estado del proyecto.
 	 */
 	public PendingProject(String title, String description, String tutor1, String tutor2, String tutor3,
 			String student1, String student2, String status) {

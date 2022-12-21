@@ -91,7 +91,8 @@ public class newProjectView extends VerticalLayout {
 	 * @throws SQLException 
 	 */
 	public newProjectView(){
-
+	    
+        fachadaDatos = SistInfDataFactory.getInstanceData();
 		config = ExternalProperties.getInstance("/config.properties", false);
 		numberFormatter = NumberFormat.getInstance();
 		numberFormatter.setMaximumFractionDigits(2);
@@ -152,20 +153,16 @@ public class newProjectView extends VerticalLayout {
         TextArea cursoAsignacion=new TextArea("Indique el curso de asigancion del TFG");
         cursoAsignacion.setWidth("20%");
 
-        Calendar c1 = Calendar.getInstance();
         Calendar c2 = new GregorianCalendar();
         Date hoy = new Date();
 
         int annio = c2.get(Calendar.YEAR);
         Date comienzoCurso= new Date(annio);
-        System.out.println("hoy "+hoy);
-        System.out.println("comienzo "+comienzoCurso);
-        System.out.println("annio "+ annio);
         // Compare the two dates using the compareTo() method
         if(hoy.after(comienzoCurso)) {
-           cursoAsignacion.setValue(String.valueOf(annio)+"/"+String.valueOf(annio+1));
+           cursoAsignacion.setValue(String.valueOf(annio)+"-"+String.valueOf(annio+1));
         }else {
-            cursoAsignacion.setValue(String.valueOf(annio-1)+"/"+String.valueOf(annio));
+            cursoAsignacion.setValue(String.valueOf(annio-1)+"-"+String.valueOf(annio));
         }
         
         
@@ -185,7 +182,7 @@ public class newProjectView extends VerticalLayout {
 
     private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
             String cursoAsignacion) {
-        String [] TFG= {descripcion,titulo,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
+        String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
         try {
             guardarDatosXLS(TFG);
         } catch (IOException e) {
@@ -216,12 +213,12 @@ public class newProjectView extends VerticalLayout {
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
-            fachadaDatos = SistInfDataFactory.getInstanceData();
+       
             
             Sheet hoja= workbook.getSheet(PROYECTO);
             int rowid = hoja.getLastRowNum();
 
-            Row fila = hoja.createRow(rowid++);
+            Row fila = hoja.createRow(++rowid);
             Object[] objectArr = TFG;
             //Creamos la columna de Estado, fila 1, columna 9
             Row fila1 = hoja.getRow(0);
@@ -239,7 +236,7 @@ public class newProjectView extends VerticalLayout {
             workbook.write(outputStream);
             workbook.close();
             outputStream.close();
-             
+            SistInfDataFactory.setInstanceData("XLS");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
