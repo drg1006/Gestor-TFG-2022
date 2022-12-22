@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -21,6 +22,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
@@ -110,7 +112,7 @@ public class AceptView extends VerticalLayout{
 	 *  Fachada para obtener los datos
 	 */
 	public SistInfDataAbstract fachadaDatos;
-
+    
 	/**
 	 * Constructor.
 	 */
@@ -129,9 +131,10 @@ public class AceptView extends VerticalLayout{
 		CreateDataModelToGrid();
 		createFilters();
 		createCurrentProjectsTable();
-		add(table);
 		
-		seleccionarTFG();
+		
+
+		
 		Footer footer = new Footer("N2_Proyecto.csv");
 		add(footer);
 	}
@@ -219,8 +222,9 @@ public class AceptView extends VerticalLayout{
 		
 		try {
 			table = new Grid<>();
-			table.addClassName("active-projects-grid");
+			table.addClassName("pending-projects-grid");
 			table.setWidthFull();
+			table.setSelectionMode(SelectionMode.MULTI);
 			
 			table.setItems(dataPendingProjectsGrid);
 			
@@ -229,7 +233,7 @@ public class AceptView extends VerticalLayout{
 			table.addColumn(PendingProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
 			table.addColumn(PendingProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
 			table.addColumn(PendingProject::getStatus).setHeader("Estado").setFlexGrow(6);
-			
+
 			table.getColumns().forEach(columna -> columna.setResizable(true));
 			table.getColumns().forEach(columna -> columna.setSortable(true));
 			table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
@@ -251,11 +255,27 @@ public class AceptView extends VerticalLayout{
 				        return layout;
 				}));
 			table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+
+			//Creamos todos los botones que queremos que aparezcan
+			Button seleccionar= new Button("Actualizar los TFGs seleccionados");
+			ComboBox<String> estado= new ComboBox<>("Indique el nuevo estado de los TFGs");
+			Button actualizar= new Button("Actualizar estado");
+			//Hacemos que no sean interactuables
+			estado.setEnabled(false);
+            actualizar.setEnabled(false);
+            //Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la pasamos a seleccionarTFG
+			seleccionar.addClickListener(event ->{
+			    estado.setEnabled(true);
+	            seleccionarTFG(table.getSelectedItems(),estado,actualizar);
+	        });
 			
+			add(table,seleccionar,estado,actualizar);
 		}catch(Exception e) {
 			LOGGER.error(e.getMessage());
 			throw e;
 		}
+		
+		
 	}
 
 	/**
@@ -345,54 +365,39 @@ public class AceptView extends VerticalLayout{
 	
 	/**
 	 * Metodo que nos permite seleccionar los parametros del TFG a modificar y el nuevo estado.
+	 * @param actualizar 
+	 * @param estado 
 	 */
-    private void seleccionarTFG() {
-
-        ComboBox<String> estado= new ComboBox<>("Indique el nuevo estado del TFG");
-        Button actualizar= new Button("Actualizar estado");
-        ComboBox<String> tfgAModificar=new ComboBox<>("Indique que TFG desea modificar");
-        //Opciones del estado del tfg
-        estado.setEnabled(false);
-        estado.setItems("Aceptar","Denegar");
-        estado.addValueChangeListener(event->{
-            estado.setValue(event.getValue());
-            actualizar.setEnabled(true);
-        });
-        
-        //Titulos de los TFGs
-        List<String> titulos=new ArrayList<>();
-        
-        //Opciones de los titulos
-        tfgAModificar.setWidth("30%");
-        for(PendingProject pending: dataPendingProjects) {
-           titulos.add(pending.getTitle());
+    private void seleccionarTFG(Set<PendingProject> seleccionados, ComboBox<String> estado, Button actualizar) {
+        List<String> titulos= new ArrayList<>();
+        for(PendingProject tfg:seleccionados) {
+            titulos.add(tfg.getTitle());
         }
-        tfgAModificar.setItems(titulos);
-        tfgAModificar.addValueChangeListener(event -> {
-            tfgAModificar.setValue(event.getValue());
-            estado.setEnabled(true);
-        });
-        
-        
-        //Opciones del boton de actualizar
-        actualizar.setEnabled(false);
-        actualizar.addClickListener(event ->{
-                modificar(tfgAModificar.getValue(),estado.getValue());}
-        );
-        
-        add(tfgAModificar,estado,actualizar);        
+          //Opciones del estado del tfg
+        //Permitimos interactuar con esta boton
+          estado.setEnabled(true);
+          estado.setItems("Aceptar","Denegar");
+          estado.addValueChangeListener(event->{
+              estado.setValue(event.getValue());
+              actualizar.setEnabled(true);
+          });
+
+          //Opciones del boton de actualizar
+          actualizar.addClickListener(event ->{
+                  modificar(titulos,estado.getValue());}
+          );  
         
     }
     /**
      * Método que modifica la base de datos.
-     * @param titulo titulo del tfg a modificar
+     * @param seleccionados titulo del tfg a modificar
      * @param estado nuevo estado que se introducira
      */
-    private void modificar(String titulo, String estado) {
-
+    private void modificar(List<String> titulos, String estado) {
+        System.out.println(titulos);
         String newEstado;
         if(estado.equals("Aceptar")) {
-            newEstado="Aceptado";
+            newEstado="";
         }else
             newEstado="Denegado";
         
@@ -412,16 +417,7 @@ public class AceptView extends VerticalLayout{
 
             Sheet hoja= workbook.getSheet(PROYECTO);
             int rowid = 0;
-            //Recorremos la hoja para obtener el numero de fila de la celda que tiene el titulo que se ha pasado por parametro
-            for (Row row : hoja) {
-                for (Cell cell : row) {
-                    if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
-                        rowid = row.getRowNum(); 
-                        break;
-                    }
-                }
-            }
-            //Buscamos el numero de la columna con el titulo Estado
+          //Buscamos el numero de la columna con el titulo Estado
             int column=0;
             for (Row row : hoja) {
                 for (Cell cell : row) {
@@ -431,12 +427,21 @@ public class AceptView extends VerticalLayout{
                     }
                 }
             }
-            
+            for(String titulo:titulos) {
+            //Recorremos la hoja para obtener el numero de fila de la celda que tiene el titulo que se ha pasado por parametro
+                for (Row row : hoja) {
+                    for (Cell cell : row) {
+                        if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
+                            rowid = row.getRowNum(); 
+                            break;
+                        }
+                    }
+                }          
             //Cambiamos la celda de:  la fila rowid y columna column
             Row fila1 = hoja.getRow(rowid);
             Cell estadoNuevo=fila1.getCell(column);
             estadoNuevo.setCellValue(newEstado);
-
+            }
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);
             workbook.close();
