@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +31,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -37,6 +39,7 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.entity.FormularioTFG;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -111,48 +114,49 @@ public class newProjectView extends VerticalLayout {
 	 * Metodo que permite la introducción de todos los datos del TFG y los guarda.
 	 */
     private void introducirDatos() {
+        
         TextArea titulo =new TextArea("Indique un nombre para el TFG");
-        titulo.setWidth("20%");
+        titulo.setWidth("40%");
         titulo.addValueChangeListener(event->{
            titulo.setValue(event.getValue()); 
         });
         TextArea descripcion =new TextArea("Indique una descripción para el TFG");
-        descripcion.setWidth("20%");
+        descripcion.setWidth("40%");
+        descripcion.setHeight("30%");
         descripcion.addValueChangeListener(event->{
             descripcion.setValue(event.getValue()); 
         });
         TextArea tutor1 =new TextArea("Indique el tutor 1 del TFG");
-        tutor1.setWidth("20%");
+        tutor1.setWidth("40%");
         tutor1.addValueChangeListener(event->{
             tutor1.setValue(event.getValue()); 
         });
         TextArea tutor2 =new TextArea("Indique el tutor 2 del TFG");
-        tutor2.setWidth("20%");
+        tutor2.setWidth("40%");
         tutor2.addValueChangeListener(event->{
             tutor2.setValue(event.getValue()); 
         });
         TextArea tutor3 =new TextArea("Indique el tutor 3 del TFG");
-        tutor3.setWidth("20%");
+        tutor3.setWidth("40%");
         tutor3.addValueChangeListener(event->{
             tutor3.setValue(event.getValue()); 
         });
         
         TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
-        alumno1.setWidth("20%");
-        //Por defecto
+        alumno1.setWidth("40%");
         alumno1.setValue("Aalumnos sin asignar");
         alumno1.addValueChangeListener(event->{
             alumno1.setValue(event.getValue()); 
         });
         TextArea alumno2 =new TextArea("Indique el alumno 2 del TFG");
-        alumno2.setWidth("20%");
+        alumno2.setWidth("40%");
         alumno2.addValueChangeListener(event->{
             alumno2.setValue(event.getValue()); 
         });
         
 
         TextArea cursoAsignacion=new TextArea("Indique el curso de asigancion del TFG");
-        cursoAsignacion.setWidth("20%");
+        cursoAsignacion.setWidth("40%");
 
         Calendar c2 = new GregorianCalendar();
         Date hoy = new Date();
@@ -169,11 +173,21 @@ public class newProjectView extends VerticalLayout {
         cursoAsignacion.addValueChangeListener(event->{
             cursoAsignacion.setValue(event.getValue()); 
         });
+        //Indicando que los campos son obligatorios
+        Binder<FormularioTFG> binder= new Binder<>(FormularioTFG.class);
+        binder.forField(titulo).asRequired("Debes indicar un titulo").bind("titulo");
+        binder.forField(descripcion).asRequired("Debes indicar una descripción").bind("descripcion");
+        binder.forField(tutor1).asRequired("Debes indicar un tutor1").bind("tutor1");
+        binder.forField(alumno1).asRequired("Debes indicar un alumno").bind("alumno1");
         
         Button crear= new Button("Crear TFG");
         crear.addClickListener(event ->{
+            if(binder.validate().isOk()) {
             escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
                     alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
+            }else {
+                LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
+            }
         });
         add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,cursoAsignacion,crear);
        
