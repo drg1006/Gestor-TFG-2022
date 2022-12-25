@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
@@ -32,7 +32,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
@@ -43,415 +42,459 @@ import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 /**
- * Vista de proyectos activos.
+ * Vista de los proyectos pendientes.
  * 
- * @author Javier de la Fuente Barrios
- * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 @Route(value = "Acept")
 @PageTitle("Proyectos pendientes")
-public class AceptView extends VerticalLayout{
+public class AceptView extends VerticalLayout {
 
-	/**
-	 * Serial Version UID.
-	 */
-	public static final long serialVersionUID = 8857805864102975132L;
-
-	/**
-	 * Logger de la clase.
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(AceptView.class.getName());
-
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "proyectos-pendientes";
-
-	/**
-	 * Tabla de proyectos.
-	 */
-	public Grid<PendingProject> table;
-	
-	/**
-	 * Lista con los proyectos pendientes
-	 */
-	List<PendingProject> dataPendingProjects;
-	
-	/**
-	 * Lista con los proyectos activos que se usarán el el grid
-	 * En este los tutores y alumnos se incluyen juntos en una columna.
-	 */
-	List<PendingProject> dataPendingProjectsGrid;
-	
-	/**
-	 * Lista con los proyectos activos filtrados 
-	 */
-	List<PendingProject> dataFilteredGrid;
-
-	/**
-	 * Campo de texto para filtrar por proyecto.
-	 */
-	public TextField projectFilter;
-
-	/**
-	 * Campo de texto para filtrar por descripción.
-	 */
-	public TextField descriptionFilter;
-
-	/**
-	 * Campo de texto para filtrar por tutor.
-	 */
-	public TextField tutorsFilter;
-
-	/**
-	 * Campo de texto para filtrar por alumno.
-	 */
-	public TextField studentsFilter;
-	
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	public SistInfDataAbstract fachadaDatos;
-    
-	/**
-	 * Constructor.
-	 */
-	public AceptView() {
-		
-		fachadaDatos = SistInfDataFactory.getInstanceData();
-		
-		addClassName("active-projects-view");
-		setMargin(true);
-		setSpacing(true);
-		
-		NavigationBar bat = new NavigationBar();
-		add(bat);
-
-		createDataModel();
-		CreateDataModelToGrid();
-		createFilters();
-		createCurrentProjectsTable();
-		
-		
-
-		
-		Footer footer = new Footer("N2_Proyecto.csv");
-		add(footer);
-	}
-
-	
     /**
-	 * Crea los filtros de la tabla.
-	 */
-	public void createFilters() {
-		H1 filtersTitle = new H1(FILTROS);
-		filtersTitle.addClassName(TITLE_STYLE);
-		add(filtersTitle);
+     * Serial Version UID.
+     */
+    public static final long serialVersionUID = 8857805864102975132L;
 
-		HorizontalLayout filters = new HorizontalLayout();
-		filters.setSpacing(true);
-		filters.setMargin(false);
-		
-		projectFilter = new TextField("Filtrar por proyectos:");
-		projectFilter.setWidth("300px");
-		projectFilter.addValueChangeListener(event -> {
-			if(!projectFilter.isEmpty()) {
-				applyFilter("title", event.getValue());
-			}else {
-				table.setItems(dataPendingProjectsGrid);
-			}
-		});
+    /**
+     * Logger de la clase.
+     */
+    public static final Logger LOGGER = LoggerFactory.getLogger(AceptView.class.getName());
 
-		descriptionFilter = new TextField("Filtrar por descripción:");
-		descriptionFilter.setWidth("300px");
-		descriptionFilter.addValueChangeListener(event -> {
-			if(!descriptionFilter.isEmpty()) {
-				applyFilter("description", event.getValue());
-			}else {
-				table.setItems(dataPendingProjectsGrid);
-			}
-		});
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "proyectos-pendientes";
 
-		tutorsFilter = new TextField("Filtrar por tutores:");
-		tutorsFilter.setWidth("300px");
-		tutorsFilter.addValueChangeListener(event -> {
-			if(!tutorsFilter.isEmpty()) {
-				applyFilter("tutor", event.getValue());
-			}else {
-				table.setItems(dataPendingProjectsGrid);
-			}
-		});
+    /**
+     * Tabla de proyectos.
+     */
+    public Grid<PendingProject> table;
 
-		studentsFilter = new TextField("Filtrar por alumnos:");
-		studentsFilter.setWidth("300px");
-		studentsFilter.addValueChangeListener(event -> {
-			if(!studentsFilter.isEmpty()) {
-				applyFilter("student", event.getValue());
-			}else {
-				table.setItems(dataPendingProjectsGrid);
-			}
-		});
-		
-		filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter);
-		add(filters);
-	}
+    /**
+     * Lista con los proyectos pendientes
+     */
+    List<PendingProject> dataPendingProjects;
 
-	/**
-	 * Crea el modelo de datos de los proyectos pendientes.
-	 */
-	public void createDataModel() { 
-		//Se obtienen los datos del modelo
-		List<String> listaDataModel = fachadaDatos.getDataModelPending();
-		dataPendingProjects = new ArrayList<PendingProject>();
-		
-		for(int i=0;i<listaDataModel.size();i++) {
-			PendingProject pending = new PendingProject(listaDataModel.get(i), listaDataModel.get(++i), 
-					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-					listaDataModel.get(++i), listaDataModel.get(++i));
-			dataPendingProjects.add(pending);
-		}
-	}
-	
-	/**
-	 * Crea la tabla de proyectos pendientes.
-	 */
-	public void createCurrentProjectsTable() {
-		H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
-		proyectosTitle.addClassName(TITLE_STYLE);
-		add(proyectosTitle);
-		
-		try {
-			table = new Grid<>();
-			table.addClassName("pending-projects-grid");
-			table.setWidthFull();
-			table.setSelectionMode(SelectionMode.MULTI);
-			
-			table.setItems(dataPendingProjectsGrid);
-			
-			table.addColumn(PendingProject::getTitle).setHeader("Título").setFlexGrow(10);
-			table.addColumn(PendingProject::getDescription).setHeader("Descripción").setFlexGrow(25);
-			table.addColumn(PendingProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
-			table.addColumn(PendingProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
-			table.addColumn(PendingProject::getStatus).setHeader("Estado").setFlexGrow(6);
+    /**
+     * Lista con los proyectos activos que se usarán el el grid
+     * En este los tutores y alumnos se incluyen juntos en una columna.
+     */
+    List<PendingProject> dataPendingProjectsGrid;
 
-			table.getColumns().forEach(columna -> columna.setResizable(true));
-			table.getColumns().forEach(columna -> columna.setSortable(true));
-			table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
-			table.getColumns().subList(1, table.getColumns().size()).forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
-			
-			table.setItemDetailsRenderer(
-				    new ComponentRenderer<>(PendingProject -> {
-				        VerticalLayout layout = new VerticalLayout();
-				        layout.add(new Label("Título: " +
-				        		PendingProject.getTitle()));
-				        layout.add(new Label("Descripción: " +
-				        		PendingProject.getDescription()));
-				        layout.add(new Label("Tutor/es: " +
-				        		PendingProject.getTutors()));
-				        layout.add(new Label("Alumno/s: " +
-				        		PendingProject.getStudents()));
-				        layout.add(new Label("Estado: " +
+    /**
+     * Lista con los proyectos activos filtrados
+     */
+    List<PendingProject> dataFilteredGrid;
+
+    /**
+     * Campo de texto para filtrar por proyecto.
+     */
+    public TextField projectFilter;
+
+    /**
+     * Campo de texto para filtrar por descripción.
+     */
+    public TextField descriptionFilter;
+
+    /**
+     * Campo de texto para filtrar por tutor.
+     */
+    public TextField tutorsFilter;
+
+    /**
+     * Campo de texto para filtrar por alumno.
+     */
+    public TextField studentsFilter;
+
+    /**
+     * Fachada para obtener los datos
+     */
+    public SistInfDataAbstract fachadaDatos;
+
+    /**
+     * Constructor.
+     */
+    public AceptView() {
+
+        fachadaDatos = SistInfDataFactory.getInstanceData();
+
+        addClassName("active-projects-view");
+        setMargin(true);
+        setSpacing(true);
+
+        NavigationBar bat = new NavigationBar();
+        add(bat);
+
+        createDataModel();
+        CreateDataModelToGrid();
+        createFilters();
+        createCurrentProjectsTable();
+
+        Footer footer = new Footer("N2_Proyecto.csv");
+        add(footer);
+    }
+
+    /**
+     * Crea los filtros de la tabla.
+     */
+    public void createFilters() {
+        H1 filtersTitle = new H1(FILTROS);
+        filtersTitle.addClassName(TITLE_STYLE);
+        add(filtersTitle);
+
+        HorizontalLayout filters = new HorizontalLayout();
+        filters.setSpacing(true);
+        filters.setMargin(false);
+
+        projectFilter = new TextField("Filtrar por proyectos:");
+        projectFilter.setWidth("300px");
+        projectFilter.addValueChangeListener(event -> {
+            if (!projectFilter.isEmpty()) {
+                applyFilter("title", event.getValue());
+            } else {
+                table.setItems(dataPendingProjectsGrid);
+            }
+        });
+
+        descriptionFilter = new TextField("Filtrar por descripción:");
+        descriptionFilter.setWidth("300px");
+        descriptionFilter.addValueChangeListener(event -> {
+            if (!descriptionFilter.isEmpty()) {
+                applyFilter("description", event.getValue());
+            } else {
+                table.setItems(dataPendingProjectsGrid);
+            }
+        });
+
+        tutorsFilter = new TextField("Filtrar por tutores:");
+        tutorsFilter.setWidth("300px");
+        tutorsFilter.addValueChangeListener(event -> {
+            if (!tutorsFilter.isEmpty()) {
+                applyFilter("tutor", event.getValue());
+            } else {
+                table.setItems(dataPendingProjectsGrid);
+            }
+        });
+
+        studentsFilter = new TextField("Filtrar por alumnos:");
+        studentsFilter.setWidth("300px");
+        studentsFilter.addValueChangeListener(event -> {
+            if (!studentsFilter.isEmpty()) {
+                applyFilter("student", event.getValue());
+            } else {
+                table.setItems(dataPendingProjectsGrid);
+            }
+        });
+
+        filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter);
+        add(filters);
+    }
+
+    /**
+     * Crea el modelo de datos de los proyectos pendientes.
+     */
+    public void createDataModel() {
+        // Se obtienen los datos del modelo
+        List<String> listaDataModel = fachadaDatos.getDataModelPending();
+        dataPendingProjects = new ArrayList<PendingProject>();
+
+        for (int i = 0; i < listaDataModel.size(); i++) {
+            PendingProject pending = new PendingProject(listaDataModel.get(i), listaDataModel.get(++i),
+                    listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
+                    listaDataModel.get(++i), listaDataModel.get(++i));
+            dataPendingProjects.add(pending);
+        }
+    }
+
+    /**
+     * Crea la tabla de proyectos pendientes.
+     */
+    public void createCurrentProjectsTable() {
+        H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
+        proyectosTitle.addClassName(TITLE_STYLE);
+        add(proyectosTitle);
+
+        try {
+            table = new Grid<>();
+            table.addClassName("pending-projects-grid");
+            table.setWidthFull();
+            table.setSelectionMode(SelectionMode.MULTI);
+
+            table.setItems(dataPendingProjectsGrid);
+
+            table.addColumn(PendingProject::getTitle).setHeader("Título").setFlexGrow(10);
+            table.addColumn(PendingProject::getDescription).setHeader("Descripción").setFlexGrow(25);
+            table.addColumn(PendingProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
+            table.addColumn(PendingProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
+            table.addColumn(PendingProject::getStatus).setHeader("Estado").setFlexGrow(6);
+
+            table.getColumns().forEach(columna -> columna.setResizable(true));
+            table.getColumns().forEach(columna -> columna.setSortable(true));
+            table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
+            table.getColumns().subList(1, table.getColumns().size())
+                    .forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
+
+            table.setItemDetailsRenderer(
+                    new ComponentRenderer<>(PendingProject -> {
+                        VerticalLayout layout = new VerticalLayout();
+                        layout.add(new Label("Título: " +
+                                PendingProject.getTitle()));
+                        layout.add(new Label("Descripción: " +
+                                PendingProject.getDescription()));
+                        layout.add(new Label("Tutor/es: " +
+                                PendingProject.getTutors()));
+                        layout.add(new Label("Alumno/s: " +
+                                PendingProject.getStudents()));
+                        layout.add(new Label("Estado: " +
                                 PendingProject.getStatus()));
-				        return layout;
-				}));
-			table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+                        return layout;
+                    }));
+            table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
-			//Creamos todos los botones que queremos que aparezcan
-			Button seleccionar= new Button("Actualizar los TFGs seleccionados");
-			ComboBox<String> estado= new ComboBox<>("Indique el nuevo estado de los TFGs");
-			Button actualizar= new Button("Actualizar estado");
-			//Hacemos que no sean interactuables
-			estado.setEnabled(false);
-            actualizar.setEnabled(false);
-            //Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la pasamos a seleccionarTFG
-			seleccionar.addClickListener(event ->{
-			    estado.setEnabled(true);
-	            seleccionarTFG(table.getSelectedItems(),estado,actualizar);
-	        });
-			
-			add(table,seleccionar,estado,actualizar);
-		}catch(Exception e) {
-			LOGGER.error(e.getMessage());
-			throw e;
-		}
-		
-		
-	}
+            // Boton con la opcion de aceptar tfgs
+            Button aceptar = new Button("ACEPTAR");
+            // boton con la opcion de denegar tfgs
+            Button denegar = new Button("DENEGAR");
 
-	/**
-	 * Crea una nueva lista con los valores filtrados
-	 * 
-	 * @param column
-	 * @param valueChange
-	 */
-	public void applyFilter(String column, String valueChange) {
-		dataFilteredGrid = new ArrayList<PendingProject>();
-		Iterator<PendingProject> iterator = dataPendingProjectsGrid.iterator();
-		String lowercase=valueChange.toLowerCase();
-		if(!valueChange.equals(" ")) {
-			while (iterator.hasNext()) {
-				PendingProject PendingProject = iterator.next();
-				
-				switch(column) {
-					case "title":
-						if(PendingProject.getTitle().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(PendingProject);
-						}
-						break;
-					case "description":
-						if(PendingProject.getDescription().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(PendingProject);
-						}
-						break;
-					case "tutor":
-						if(PendingProject.getTutors().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(PendingProject);
-						}
-						break;
-					case "student":
-						if(PendingProject.getStudents().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(PendingProject);
-						}
-						break;
-					case "status":
-						if(PendingProject.getStatus().toLowerCase().contains(lowercase)) {
-						dataFilteredGrid.add(PendingProject);
-						}
-						break;
-				}
-			}
-			//Se establece los nuevos valores del grid
-			table.setItems(dataFilteredGrid);
-		}
-	}
-	
-	/**
-	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos pendientes.
-	 */
-	public void CreateDataModelToGrid() {
-		String tutors = "";
-		String students = "";
-		dataPendingProjectsGrid = new ArrayList<PendingProject>();
-		Iterator<PendingProject> iterator = dataPendingProjects.iterator();
-		while (iterator.hasNext()) {
-			PendingProject PendingProject = iterator.next();
-			
-			tutors = PendingProject.getTutor1();	
-			if(!tutors.equals("")) {
-				if(!PendingProject.getTutor2().equals("")) {
-					tutors +=  ", " + PendingProject.getTutor2();
-					if(!PendingProject.getTutor3().equals("")) {
-						tutors +=  ", " + PendingProject.getTutor3();
-					}
-				}
-			}
-			
-			students = PendingProject.getStudent1();
-			if(!students.equals("")) {
-				if(!PendingProject.getStudent2().equals("")) {
-					students +=  ", " + PendingProject.getStudent2();
-					if(!PendingProject.getStudent3().equals("")) {
-						students +=  ", " + PendingProject.getStudent3();
-					}
-				}
-			}
+            // Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la
+            // pasamos a seleccionarTFG
+            aceptar.addClickListener(event -> {
+                aceptarTFG(table.getSelectedItems());
+            });
 
-			PendingProject actives = new PendingProject(PendingProject.getTitle(), PendingProject.getDescription(),
-					tutors, students, PendingProject.getStatus());
-			dataPendingProjectsGrid.add(actives);
-		}	
-	}
-	
-	
-	/**
-	 * Metodo que nos permite seleccionar los parametros del TFG a modificar y el nuevo estado.
-	 * @param actualizar 
-	 * @param estado 
-	 */
-    private void seleccionarTFG(Set<PendingProject> seleccionados, ComboBox<String> estado, Button actualizar) {
-        List<String> titulos= new ArrayList<>();
-        for(PendingProject tfg:seleccionados) {
+            denegar.addClickListener(event -> {
+                denegarTFG(table.getSelectedItems());
+
+            });
+
+            HorizontalLayout layout = new HorizontalLayout();
+            layout.setSpacing(true);
+            add(table);
+            layout.add(aceptar, denegar);
+            add(layout);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw e;
+        }
+
+    }
+
+    /**
+     * Método que crea el dialogo de aceptar TFGs.
+     * 
+     * @param selectedItems listaTFGs
+     */
+    private void aceptarTFG(Set<PendingProject> selectedItems) {
+        // Cogemos los titulos seleccionados
+        List<String> titulos = new ArrayList<>();
+        for (PendingProject tfg : selectedItems) {
             titulos.add(tfg.getTitle());
         }
-          //Opciones del estado del tfg
-        //Permitimos interactuar con esta boton
-          estado.setEnabled(true);
-          estado.setItems("Aceptar","Denegar");
-          estado.addValueChangeListener(event->{
-              estado.setValue(event.getValue());
-              actualizar.setEnabled(true);
-          });
 
-          //Opciones del boton de actualizar
-          actualizar.addClickListener(event ->{
-                  modificar(titulos,estado.getValue());}
-          );  
-        
+        // Boton que confirma la modificacion (se introduce en ambos pop-ups)
+        Button aceptarBtn = new Button("Sí");
+        // Boton que deniega la modificacion (se introduce en ambos pop-ups)
+        Button cancelBtn = new Button("No");
+        // Dialog (pop-up) para aceptar TFGs (se crea aqui para que el texto no se añada
+        // dos veces)
+        Dialog confirmacion = new Dialog();
+        // Añadidmos un texto
+        confirmacion.add("¿Seguro que desea aceptar los TFGs seleccionados? ");
+
+        // Los añadimos al pop-up
+        confirmacion.add(cancelBtn, aceptarBtn);
+        // Abrimos el dialogo
+        confirmacion.open();
+
+        // Si se desea confirmar la operacion se modificar el excel
+        aceptarBtn.addClickListener(ev -> {
+            modificar(titulos, "Aceptar");
+            confirmacion.close();
+        });
+        // El boton cancelar que cierrra el pop-up
+        cancelBtn.addClickListener(ev -> {
+            confirmacion.close();
+        });
+
     }
+
+    /**
+     * Método que crea el dialogo de denegar TFGs.
+     * 
+     * @param selectedItems listaTFGs
+     */
+    private void denegarTFG(Set<PendingProject> selectedItems) {
+        // Mismo funcionamiento que aceptarTFGs
+        List<String> titulos = new ArrayList<>();
+        for (PendingProject tfg : selectedItems) {
+            titulos.add(tfg.getTitle());
+        }
+        Button aceptarBtn = new Button("Sí");
+        Button cancelBtn = new Button("No");
+        Dialog confirmacion = new Dialog();
+        confirmacion.add("¿Seguro que desea denegar los TFGs seleccionados? ");
+        confirmacion.add(cancelBtn, aceptarBtn);
+        confirmacion.open();
+        aceptarBtn.addClickListener(ev -> {
+            modificar(titulos, "Denegar");
+            confirmacion.close();
+        });
+
+        cancelBtn.addClickListener(ev -> {
+            confirmacion.close();
+        });
+
+    }
+
+    /**
+     * Crea una nueva lista con los valores filtrados
+     * 
+     * @param column
+     * @param valueChange
+     */
+    public void applyFilter(String column, String valueChange) {
+        dataFilteredGrid = new ArrayList<PendingProject>();
+        Iterator<PendingProject> iterator = dataPendingProjectsGrid.iterator();
+        String lowercase = valueChange.toLowerCase();
+        if (!valueChange.equals(" ")) {
+            while (iterator.hasNext()) {
+                PendingProject PendingProject = iterator.next();
+
+                switch (column) {
+                    case "title":
+                        if (PendingProject.getTitle().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(PendingProject);
+                        }
+                        break;
+                    case "description":
+                        if (PendingProject.getDescription().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(PendingProject);
+                        }
+                        break;
+                    case "tutor":
+                        if (PendingProject.getTutors().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(PendingProject);
+                        }
+                        break;
+                    case "student":
+                        if (PendingProject.getStudents().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(PendingProject);
+                        }
+                        break;
+                    case "status":
+                        if (PendingProject.getStatus().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(PendingProject);
+                        }
+                        break;
+                }
+            }
+            // Se establece los nuevos valores del grid
+            table.setItems(dataFilteredGrid);
+        }
+    }
+
+    /**
+     * Se crea una nueva lista con los datos que se usarán en la tabla de
+     * descripción de proyectos pendientes.
+     */
+    public void CreateDataModelToGrid() {
+        String tutors = "";
+        String students = "";
+        dataPendingProjectsGrid = new ArrayList<PendingProject>();
+        Iterator<PendingProject> iterator = dataPendingProjects.iterator();
+        while (iterator.hasNext()) {
+            PendingProject PendingProject = iterator.next();
+
+            tutors = PendingProject.getTutor1();
+            if (!tutors.equals("")) {
+                if (!PendingProject.getTutor2().equals("")) {
+                    tutors += ", " + PendingProject.getTutor2();
+                    if (!PendingProject.getTutor3().equals("")) {
+                        tutors += ", " + PendingProject.getTutor3();
+                    }
+                }
+            }
+
+            students = PendingProject.getStudent1();
+            if (!students.equals("")) {
+                if (!PendingProject.getStudent2().equals("")) {
+                    students += ", " + PendingProject.getStudent2();
+                    if (!PendingProject.getStudent3().equals("")) {
+                        students += ", " + PendingProject.getStudent3();
+                    }
+                }
+            }
+
+            PendingProject actives = new PendingProject(PendingProject.getTitle(), PendingProject.getDescription(),
+                    tutors, students, PendingProject.getStatus());
+            dataPendingProjectsGrid.add(actives);
+        }
+    }
+
     /**
      * Método que modifica la base de datos.
+     * 
      * @param seleccionados titulo del tfg a modificar
-     * @param estado nuevo estado que se introducira
+     * @param estado        nuevo estado que se introducira
      */
     private void modificar(List<String> titulos, String estado) {
         System.out.println(titulos);
         String newEstado;
-        if(estado.equals("Aceptar")) {
-            newEstado="";
-        }else
-            newEstado="Denegado";
-        
+        if (estado.equals("Aceptar")) {
+            newEstado = "";
+        } else
+            newEstado = "Denegado";
+
         String path = this.getClass().getClassLoader().getResource("").getPath();
-        String serverPath = path.substring(0, path.length()-17);
-        
+        String serverPath = path.substring(0, path.length() - 17);
+
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
         String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
-        
-        String absPath = file.getAbsolutePath();       
+
+        String absPath = file.getAbsolutePath();
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
 
-            Sheet hoja= workbook.getSheet(PROYECTO);
+            Sheet hoja = workbook.getSheet(PROYECTO);
             int rowid = 0;
-          //Buscamos el numero de la columna con el titulo Estado
-            int column=0;
+            // Buscamos el numero de la columna con el titulo Estado
+            int column = 0;
             for (Row row : hoja) {
                 for (Cell cell : row) {
                     if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals("Estado")) {
-                       column = cell.getColumnIndex(); 
+                        column = cell.getColumnIndex();
                         break;
                     }
                 }
             }
-            for(String titulo:titulos) {
-            //Recorremos la hoja para obtener el numero de fila de la celda que tiene el titulo que se ha pasado por parametro
+            for (String titulo : titulos) {
+                // Recorremos la hoja para obtener el numero de fila de la celda que tiene el
+                // titulo que se ha pasado por parametro
                 for (Row row : hoja) {
                     for (Cell cell : row) {
                         if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
-                            rowid = row.getRowNum(); 
+                            rowid = row.getRowNum();
                             break;
                         }
                     }
-                }          
-            //Cambiamos la celda de:  la fila rowid y columna column
-            Row fila1 = hoja.getRow(rowid);
-            Cell estadoNuevo=fila1.getCell(column);
-            estadoNuevo.setCellValue(newEstado);
+                }
+                // Cambiamos la celda de: la fila rowid y columna column
+                Row fila1 = hoja.getRow(rowid);
+                Cell estadoNuevo = fila1.getCell(column);
+                estadoNuevo.setCellValue(newEstado);
             }
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
-            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    
 }
