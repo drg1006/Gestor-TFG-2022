@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
@@ -73,6 +74,7 @@ public class InformationView extends VerticalLayout {
 		setSpacing(true);
 		
 		NavigationBar bat = new NavigationBar();
+		bat.buttonInfo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		
 		createTribunal();

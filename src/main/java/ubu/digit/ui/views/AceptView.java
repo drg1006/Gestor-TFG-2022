@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -123,6 +124,7 @@ public class AceptView extends VerticalLayout {
         setSpacing(true);
 
         NavigationBar bat = new NavigationBar();
+        bat.buttonAcept.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
 
         createDataModel();

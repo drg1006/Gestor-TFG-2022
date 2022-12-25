@@ -2,6 +2,7 @@ package ubu.digit.ui.components;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import ubu.digit.ui.views.AceptView;
@@ -20,6 +21,7 @@ import static ubu.digit.util.Constants.*;
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 public class NavigationBar extends HorizontalLayout{
 	
@@ -31,42 +33,42 @@ public class NavigationBar extends HorizontalLayout{
 	/**
 	 * Botón de la vista de información.
 	 */
-	private Button buttonInfo;
+	public Button buttonInfo;
 	
 	/**
 	 * Botón de la vista de proyectos activos.
 	 */
-	private Button buttonActive;
+	public Button buttonActive;
 
 	/**
 	 * Botón de la vista de proyectos históricos.
 	 */
-	private Button buttonHistory;
+	public Button buttonHistory;
 	
 	/**
 	 * Botón de la vista de métricas.
 	 */
-	private Button buttonMetrics;
+	public Button buttonMetrics;
 
 	/**
      * Botón de la vista de profesores.
      */
-    private Button buttonProfessor;
+	public Button buttonProfessor;
     
     /**
      * Botón de la vista de informes.
      */
-    private Button buttonReport;
+	public Button buttonReport;
     
     /**
      * Botón de la vista de subir TFGs.
      */
-    private Button buttonUpload;
+	public Button buttonUpload;
     
     /**
      * Botón de la vista de aceptar TFGs.
      */
-    private Button buttonAcept;
+	public Button buttonAcept;
     
 	/**
 	 * Constructor.
@@ -108,6 +110,9 @@ public class NavigationBar extends HorizontalLayout{
         buttonAcept = new Button(ACEPT);
         buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
         
+        if(UI.getCurrent().equals(AceptView.class)) {
+            buttonAcept.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        }
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);

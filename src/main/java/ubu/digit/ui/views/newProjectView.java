@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -103,6 +104,7 @@ public class newProjectView extends VerticalLayout {
 		setSpacing(true);
 
 		NavigationBar bat = new NavigationBar();
+		bat.buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		introducirDatos();
 		Footer footer = new Footer("");

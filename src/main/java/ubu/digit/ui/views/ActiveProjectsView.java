@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -115,6 +116,7 @@ public class ActiveProjectsView extends VerticalLayout{
 		setSpacing(true);
 		
 		NavigationBar bat = new NavigationBar();
+		bat.buttonActive.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 
 		createDataModel();

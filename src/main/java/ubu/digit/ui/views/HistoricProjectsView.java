@@ -29,6 +29,7 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -186,6 +187,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		setSpacing(true);
 
 		NavigationBar bat = new NavigationBar();
+		bat.buttonHistory.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		
 		createDataModel();

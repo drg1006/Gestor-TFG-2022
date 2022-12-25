@@ -121,6 +121,7 @@ public class ReportView extends VerticalLayout {
 		setSpacing(true);
 
 		NavigationBar bat = new NavigationBar();
+		bat.buttonReport.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		
 		opciones();

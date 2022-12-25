@@ -136,6 +136,7 @@ public class ProfesoresView extends VerticalLayout {
 		setSpacing(true);
 
 		NavigationBar bat = new NavigationBar();
+		bat.buttonProfessor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		
 		preguntarSiActualizar();
