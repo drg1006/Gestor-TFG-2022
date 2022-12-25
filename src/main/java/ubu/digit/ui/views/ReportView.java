@@ -54,10 +54,9 @@ import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Vista de proyectos históricos.
+ * Vista de la creación de los informes.
  * 
- * @author Javier de la Fuente Barrios.
- * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 @Route(value = "Informe")
 @PageTitle("Generar Informe")

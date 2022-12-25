@@ -3,9 +3,9 @@ package ubu.digit.ui.entity;
 import java.io.Serializable;
 
 /**
- * Clase para almacenar los proyectos activos.
+ * Clase para almacenar los proyectos pendientes.
  * 
- * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 public class PendingProject extends Projects implements Serializable {
 

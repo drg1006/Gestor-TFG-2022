@@ -29,6 +29,7 @@ import static ubu.digit.util.Constants.*;
  * @author Beatriz Zurera Martínez-Acitores
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  * @since 0.5
  */
 public class SistInfDataCsv extends SistInfDataAbstract implements Serializable {

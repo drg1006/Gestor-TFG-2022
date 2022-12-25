@@ -22,6 +22,8 @@ import static ubu.digit.util.Constants.*;
  * Fachada Singleton de acceso a datos a través de fillo
  * 
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
+ * @since 0.7
  */
 public class SistInfDataXls extends SistInfDataAbstract implements Serializable {
 

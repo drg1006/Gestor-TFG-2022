@@ -13,6 +13,8 @@ import ubu.digit.util.ExternalProperties;
  * Clase abstracta de la cual heredan las fachadas Singleton de acceso a datos.
  * 
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
+ * @since 0.7
  */
 public abstract class SistInfDataAbstract implements Serializable { 
 
