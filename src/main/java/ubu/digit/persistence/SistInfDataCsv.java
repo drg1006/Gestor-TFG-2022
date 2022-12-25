@@ -1090,4 +1090,11 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getUltimoTFG() {
+        return null;
+        // TODO Auto-generated method stub
+        
+    }
 }

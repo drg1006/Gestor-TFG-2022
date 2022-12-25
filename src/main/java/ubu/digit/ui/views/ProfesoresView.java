@@ -210,7 +210,6 @@ public class ProfesoresView extends VerticalLayout {
                    .followRedirects(true)
                    .execute();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -218,7 +217,6 @@ public class ProfesoresView extends VerticalLayout {
         try {
             doc = response.parse();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
             

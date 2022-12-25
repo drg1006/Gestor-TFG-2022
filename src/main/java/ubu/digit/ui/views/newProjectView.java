@@ -108,7 +108,6 @@ public class newProjectView extends VerticalLayout {
 		add(bat);
 		introducirDatos();
 		Footer footer = new Footer("");
-		//
 		add(footer);
 	}
 
@@ -117,8 +116,10 @@ public class newProjectView extends VerticalLayout {
 	 */
     private void introducirDatos() {
         
+        
         TextArea titulo =new TextArea("Indique un nombre para el TFG");
         titulo.setWidth("40%");
+        
         titulo.addValueChangeListener(event->{
            titulo.setValue(event.getValue()); 
         });
@@ -159,19 +160,35 @@ public class newProjectView extends VerticalLayout {
 
         TextArea cursoAsignacion=new TextArea("Indique el curso de asigancion del TFG");
         cursoAsignacion.setWidth("40%");
+        
+        //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
+        //Indicarlo por defecto 
+      //Fecha de hoy
+        LocalDate today=LocalDate.now();
+        
+        String fechaIni=today.now().getYear()+"-09-01";
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
 
-        Calendar c2 = new GregorianCalendar();
-        Date hoy = new Date();
-        int annio = c2.get(Calendar.YEAR);
-        Date comienzoCurso= new Date(annio);
-        // Compare the two dates using the compareTo() method
-        if(hoy.after(comienzoCurso)) {
-           cursoAsignacion.setValue(String.valueOf(annio)+"-"+String.valueOf(annio+1));
+        //Si lo esta se pone ese año y el siguiente
+        if(today.now().isAfter(fechaINI)) {
+           cursoAsignacion.setValue(today.now().getYear()+"-"+(today.now().getYear()+1));
+           
+           //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
+           // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
+           String año=String.valueOf(today.getYear()) ;
+           titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
         }else {
-            cursoAsignacion.setValue(String.valueOf(annio-1)+"-"+String.valueOf(annio));
+        //Si no lo esta pertenece al curso anterior
+            cursoAsignacion.setValue((today.now().getYear()-1)+"-"+today.now().getYear());
+            
+            String año=String.valueOf(today.getYear()-1) ;
+            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
         }
+        //Ejemplo: fecha de hoy : 25/12/2022, fecha inicio del curso de ese año es 01/09/2022
+        //Por lo que "hoy" es posterior a la fecha de inicio de curso y sería el curso 2022-2023
         
-        
+        //Si se desea modificar el curso
         cursoAsignacion.addValueChangeListener(event->{
             cursoAsignacion.setValue(event.getValue()); 
         });
@@ -195,6 +212,26 @@ public class newProjectView extends VerticalLayout {
        
         
     }
+    /**
+     * Obtiene el número que le corresponde al siguiente TFG.
+     * @return
+     */
+    private int obtenerNumeroTFG(String año) {
+        int numeroTFG=0;
+        String titulo=fachadaDatos.getUltimoTFG();
+        //Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de GII 22.XX y ahora estamos en el curso 2023
+        //El nuevo numero sería el 0
+
+        //Si es un año distino se inicia en 0
+        if(Integer.parseInt("20"+titulo.substring(4,6))!=Integer.parseInt(año)) {
+            numeroTFG=0;
+        }else
+            //Mismo año, se suma uno
+            numeroTFG=(Integer.parseInt(titulo.substring(7,9))+1);
+
+        return numeroTFG;
+    }
+
     /**
      * Metodo que guarda los datos en un Array [].
      * @param titulo titulo del tfg

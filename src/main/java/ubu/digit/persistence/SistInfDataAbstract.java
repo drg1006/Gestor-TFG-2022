@@ -74,7 +74,7 @@ public abstract class SistInfDataAbstract implements Serializable {
     protected static final String ORDER_BY = " order by ";
     
     /**
-     * Order by.
+     * JOIN.
      */
     protected static final String JOIN = " join ";
     
@@ -211,5 +211,7 @@ public abstract class SistInfDataAbstract implements Serializable {
     public abstract List<String> getNombresTribunal();
 
     public abstract List<String> getDataModelPending();
+
+    public abstract String getUltimoTFG();
     
 }

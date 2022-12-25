@@ -1209,5 +1209,25 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         }
         return listaTribunal;
     }
+
+    /**
+     * Obtiene el titulo del último TFG de la base de datos.
+     * @return titulo titulo del ultimo tfg
+     */
+    @Override
+    public String getUltimoTFG() {
+       List<String> titulos=new ArrayList<>();
+        String sql = SELECT + TITULO + FROM + PROYECTO ;
+        try {
+            Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                titulos.add(result.getField(TITULO).toString());
+                
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error al obtener los datos del tribunal", e);
+        }
+        return titulos.get(titulos.size()-1);
+    }
     
 }

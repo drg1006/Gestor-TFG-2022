@@ -325,7 +325,7 @@ public final class Constants {
      */
     public static final String DOCUMENTOS = "Documentos";
     /**
-     * Documentos (etiqueta título).
+     * Nombre del archivo de la base de datos.
      */
     public static final String NOMBRE_BASES = "BaseDeDatosTFGTFM.xls";
     
