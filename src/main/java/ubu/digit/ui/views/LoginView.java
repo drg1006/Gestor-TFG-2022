@@ -99,6 +99,7 @@ public class LoginView extends VerticalLayout{
 		login.addLoginListener(e -> {
 			login.setEnabled(false);
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
+
 			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
 			if(!isAutentificarte) {
 				LOGGER.info("Usuario no validado ");
@@ -186,7 +187,7 @@ public class LoginView extends VerticalLayout{
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
 			//2203 2204 8633 8574 12231
-			JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles(2204));
+			JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles("2204"));
             System.out.println("Array "+profiles);
             
 			JSONArray jsonArray;

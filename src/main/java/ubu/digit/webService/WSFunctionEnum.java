@@ -42,7 +42,8 @@ public enum WSFunctionEnum {
      * Get course user profiles by id
      */
     
-    CORE_USER_GET_COURSE_USER_PROFILES(" core_user_get_course_user_profiles",2.2),
+    CORE_USER_GET_COURSE_USER_PROFILES("core_user_get_course_user_profiles",2.1),
+
 	/**
 	 * Return the user token.
 	 */

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  */
 public class CoreUserGetCourseUserProfiles extends WSFunctionAbstract {
 
-    public CoreUserGetCourseUserProfiles(int id) {
+    public CoreUserGetCourseUserProfiles(String id) {
 		super(WSFunctionEnum.CORE_USER_GET_COURSE_USER_PROFILES);
 		setId(id);
 	}
@@ -24,7 +24,7 @@ public class CoreUserGetCourseUserProfiles extends WSFunctionAbstract {
 	 * 
 	 * @param id
 	 */
-	public void setId(int id) {
+	public void setId(String id) {
 		put("id", id);
 	}
 
