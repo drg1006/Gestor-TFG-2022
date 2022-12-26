@@ -26,6 +26,7 @@ Se enumerarán y describirán brevemente los directorios del proyecto. Se puede 
 				\item \texttt{/src/main/java/ubu/digit/ui/entity} código con las entidades de los proyectos, cursos y usuarios de la aplicación.
 					\begin{itemize}
 						\item \texttt{/src/main/java/ubu/digit/ui/entity/PendingProject.java}, nueva entidad de proyecto con estado \emph{Pendiente}.
+						\item \texttt{/src/main/java/ubu/digit/ui/entity/FormularioTFG.java}, nueva entidad con los campos del formulario del TFG.
 					\end{itemize}
 				\item \texttt{/src/main/java/ubu/digit/ui/components} código con la interfaz gráfica de la barra de navegación y la de pie de página.
 				\item \texttt{/src/main/java/ubu/digit/ui/views} código con las vistas de la aplicación.
@@ -167,7 +168,7 @@ Cuando quise ejecutarlo mediante Eclipse no me dejaba añadir el proyecto al ser
  
 \subsection{Alternativa a Heroku}
 
-A partir del dia 28 de noviembre Heroku dejará de ser gratuito, pero ofrecen una alternativa para estudiantes. Esta opción es un acuerdo entre el \href{https://education.github.com}{programa de estudiantes de GitHub} y Heroku. 
+A partir del día 28 de noviembre Heroku dejará de ser gratuito, pero ofrecen una alternativa para estudiantes. Esta opción es un acuerdo entre el \href{https://education.github.com}{programa de estudiantes de GitHub} y Heroku. 
 Esta colaboración viene explicada en la plataforma de \href{https://blog.heroku.com/github-student-developer-program}{Heroku}.
 
 Por ello mismo migraremos nuestro proyecto a esa versión de Heroku ya que GitHub estudiantes nos proporciona una serie de créditos mensuales durante un año para desplegar nuestra aplicación.
@@ -198,7 +199,10 @@ Los pasos a seguir son los siguientes:
 El resultado final debería ser el siguiente \ref{fig:final_HGH}
 \imagenflotante{final_HGH}{Pestaña final tras aplicar a la oferta}{0.9}
 
-
 \imagenflotante{Billing}{Créditos de nuestra cuenta}{0.9}
+
+Una vez hemos obtenido los créditos modificamos el plan de nuestra aplicación y cambiamos al plan \emph{Basic} con un precio de 7 dólares al mes. Ver imagen \ref{fig:Basic}
+
+\imagenflotante{Basic}{Modificar el plan de despliegue.}{0.9}
 
 \section{Pruebas del sistema}
