@@ -53,7 +53,10 @@ A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sea
 En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesarios para crear un nuevo TFG:
 
 \begin{itemize}
-	\item Titulo.
+	\item Titulo, por defecto se indicará :
+	\begin{itemize}
+		\item \emph{GII YY.XX} siendo YY el curso en el que se esta proponiendo el TFG, es decir el curso al que pertenece el día de subida del TFG, y siendo YY el número correspondiente al siguiente TFG, se tomará el número del último TFG de la base de datos y se le sumará uno.
+	\end{itemize}
 	\item Descripción.
 	\item Tutor1, por defecto se indica el nombre del tutor que se ha \emph{loggeado}.
 	\item Tutor2.
@@ -67,6 +70,11 @@ También se añadirá una nueva columna que indica si el TFG ha sido aceptado o 
 
 \imagenflotante{subirTFG}{Pantalla para indicar la información del TFG}{0.9}
 
+Los parámetros \emph{Título, descripción, tutor1, alumno1} son obligatorios, si intentamos agregar un TFG sin indicar alguno de estos datos se le avisará al usuario. Ver imagen \ref{fig:obligatorio}.
+
+\imagenflotante{obligatorio}{Aviso sobre los parámetros obligatorios.}{0.9}
+
+
 \subsection{Aceptación TFG}
 
 A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean administradores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
@@ -75,23 +83,22 @@ Aquí aparecerán una tabla con la lista de TFGs con estado \emph{Pendiente}, en
 
 \imagenflotante{tablaPendientes}{Tabla con los TFGs con estado Pendiente}{0.9}
 
-En la parte inferior aparecerán una serie de componentes de \emph{Vaadin} para actualizar el estado del TFG que se desee.
+Esta tabla contiene unos \emph{Checkboxes} para seleccionar los TFGs que queramos modificar.
 
+El funcionamiento es el siguiente:
 \begin{itemize}
-	\item \emph{ComboBox} con los títulos del los \emph{TFGs} de la tabla superior para indicar uno. Ver imagen \ref{fig:titulosTFG}
-	\item \emph{ComboBox} con las opciones de \emph{Estado} del TFG. Ver imagen \ref{fig:estadosTFG}
-	\item Botón para confirmar la modificación del TFG.
+	\item Seleccionar los TFGs que queramos en la propia tabla.
+	\item Una vez los tengamos, pulsaremos en el botón \emph{Aceptar} o \emph{Denegar} según el estado que queramos indicar.
+	\item Confirmar esta operación. 
+	\begin{itemize}
+		\item \emph{Pop-up} con la opción de aceptar TFGs. Si pulsamos en \emph{No}} se cancelará la operación y se cerrará la pestaña, si pulsamos en \emph{Sí} se realizará el cambio de estado. Ver imagen\ref{fig:aceptarTFG}.
+		\item \emph{Pop-up} con la opción de denegar TFGs. Ver imagen\ref{fig:denegarTFG}.
+	\end{itemize}
+	\item Si se ha aceptado el TFG el nuevo estado será \emph{" "}, si se ha denegado se indica como \emph{denegado}.
 \end{itemize}
 
-\imagenflotante{titulosTFG}{Desplegable con los títulos de los TFGs}{0.9}
-
-\imagenflotante{estadosTFG}{Desplegable con los estados del TFG}{0.9}
-
-El \emph{ComboBox} con los estados y el botón para confirmar la modificación no están activados desde el principio, como se puede ver en la figura \ref{fig:desactivados}.
-
-\imagenflotante{desactivados}{Componentes desactivados}{0.9}
-
-Estos componentes se activarán a medida que seleccionemos los datos, es decir, una vez se indique el título se activará la opción de indicar el estado al que se quiere cambiar y una vez indiquemos el estado se activará el botón de actualizar la base de datos.
+\imagenflotante{aceptarTFG}{Pop-up con la opción de aceptar TFG}{0.9}
+\imagenflotante{denegarTFG}{Pop-up con la opción de denegar TFG}{0.9}
 
 
 
