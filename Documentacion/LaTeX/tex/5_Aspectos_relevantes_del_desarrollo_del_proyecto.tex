@@ -8,31 +8,30 @@ Uno de los objetivos que teníamos era la obtención de datos sobre los profesor
 Con ella hemos sacado los datos: nombre, apellidos, área y departamento de cada uno de los profesores. Una vez obtenemos esta información la utilizamos para actualizar a la última versión las bases de datos que utilizamos durante todo el proyecto.
 También se ha utilizado la librería \href{https://opencsv.sourceforge.net/apidocs/com/opencsv/CSVWriter.html}{CSVWriter} y la \emph{API}: \href{https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/WorkbookFactory.html}{WorkbookFactory} para escribir los datos en los ficheros correspondientes, ya definidas en el Anexo.
 
+Este recurso es muy utilizado para obtener información de \emph{páginas webs} externas, sin embargo, hay que tener cuidado con las páginas de las que se obtienen los datos. Por ejemplo, los datos que requieren un registro del usuario no pueden ser obtenidos a través del \emph{web scraping}.
+
+Tampoco es legal el uso de esta técnica de rastreo para ocultar publicidad, descargas de responsabilidad o términos y condiciones.~\cite{webScrap}
 
 \section{Trabajo con vaadin}
 
+Este proyecto se ha tenido que llevar a cabo con \emph{Vaadin}, es la primera vez que se utiliza este \emph{framework}, por lo que se ha tenido que estudiar todo su funcionamiento, y como implantarlo durante el desarrollo.
 
-\section{Implementación de la pantalla de histórico del profesorado}
-Otro objetivo que teníamos era presentar una pantalla con los datos del profesorado durante los últimos cursos. 
-Para ello primero hemos recolectado toda la información sobre los tutores y le hemos dado al usuario la opción de seleccionar los parámetros (areas, departamentos y profesores) que quiera añadir en la gráfica en la que se muestra el número de TFGs realizados durante los últimos cursos.
-Para ello hemos utilizado el \emph{framework} de \href{https://vaadin.com/}{Vaadin} que nos permite mostrar de una forma más interactiva los datos que hemos obtenido al realizar el \emph{webscraping}.
+Se han tenido que utilizar muchos componentes nuevos que no estaban en la versión anterior como pueden ser:
 
-Primero le damos la opción de actualizar a la última versión los datos que vamos a utilizar para representar la gráfica, informándole de la última versión de los datos y advirtiendo de que el proceso puede llevar un tiempo (aproximadamente un minuto). Ver imagen \ref{fig:ActualizarDatos}
+\begin{itemize}
+	\item \emph{TextArea}: componente para guardar texto introducido por teclado por parte del usuario.
+	\item \emph{Checkbox}: componente que permite realizar una selección múltiple de elementos.
+	\item \emph{Binder}: componente para conectar la clase del formulario con la información requerida.
+	\item \emph{ComboBox}: componente desplegable con diferentes datos.
+	\item \emph{Anchor}: componente utilizado para realizar el documento descargable.
+	\item \emph{Dialog}: componente estilo \emph{pop-up} para realizar confirmaciones.
 
-\imagenflotante{ActualizarDatos}{Preguntar al usuario si quiere actualizar la base de datos}{0.9}
-Mostramos también información sobre el número total de profesores, áreas y departamentos encontrados realizados mediante consultas \emph{SQL}.
+\end{itemize}
 
-Posteriormente tenemos dos \emph{CheckBoxes} donde le hemos dado al usuario la capacidad de seleccionar tantas áreas como departamentos desee mostrar en el gráfico y un \emph{ComboBox} con los nombres de los profesores, donde podremos introducir uno a uno los tutores que queremos que se muestren. Finalmente tras pulsar en el boton \emph{Actualizar gráfica} se nos mostrarán los TFGs dirigidos por area, departamento o profesor seleccionados y con unos colores aleatorios también implantados.Ver imagen \ref{fig:Grafica}
+Toda la información sobre el uso de \emph{Vaadin} \url{https://vaadin.com/} se ha obtenido de su página atendiendo ala versión que se utiliza.
 
-\imagenflotante{Grafica}{Gráfica con el número de TFGs por curso seleccionados}{0.9}
+\section{Actualización de ficheros}
 
-\section{Implementación de la pantalla de generación de informes}
+Se ha tenido que incorporar en varias ocasiones la creación de archivos \emph{.xls o .csv}, así como la actualización en tiempo real de la información de la base de datos, ya sea al introducir un TFG, al modificar su estado, o cuando queremos actualizar la información del \emph{web scraping} sobre los tutores.
 
-En esta pantalla lo que se trata de crear es un informe en el que se muestren el número de TFGs dirigidos, codirigidos y el número de créditos asignados a los profesores durante el último curso académico de un área determinado por el usuario.
-Para ello le damos al usuario la opción de indicar las áreas que desea analizar y le pedimos que indique un nombre para el mismo. Ver imagen \ref{fig:informe}.
-
-\imagenflotante{informe}{Opciones de los informes}{0.9}
-
-\section{Asignación de TFGs}
-
-Se añadirá a medida que se vaya implementando.
+Para ello se ha empleado las librearías \emph{CSVWriter o WorkBook}, estudiando su funcionamiento.
