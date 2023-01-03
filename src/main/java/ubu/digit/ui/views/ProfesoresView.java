@@ -1,6 +1,5 @@
 package ubu.digit.ui.views;
 
-import static org.mockito.ArgumentMatchers.nullable;
 import static ubu.digit.util.Constants.*;
 
 import java.io.File;
@@ -13,7 +12,6 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +19,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -37,8 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.Chart;
-import com.github.appreciated.apexcharts.config.PlotOptions;
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
 import com.github.appreciated.apexcharts.config.builder.GridBuilder;
 import com.github.appreciated.apexcharts.config.builder.StrokeBuilder;
@@ -62,11 +57,11 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.internal.AbstractRouteRegistry.Configuration;
 
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
@@ -84,77 +79,79 @@ import ubu.digit.util.ExternalProperties;
 @PageTitle("Histórico de los profesores")
 
 public class ProfesoresView extends VerticalLayout {
+    VerticalLayout layout = new VerticalLayout();
+    
+    
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 8431807779365780674L;
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 8431807779365780674L;
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfesoresView.class.getName());
 
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProfesoresView.class.getName());
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "professor";
+    /**
+     * Fichero de configuración.
+     */
+    private ExternalProperties config;
 
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "professor";
-	/**
-	 * Fichero de configuración.
-	 */
-	private ExternalProperties config;
+    /**
+     * Formateador de números.
+     */
+    private NumberFormat numberFormatter;
+    
+    /**
+     * Formateador de fechas.
+     */
+    private transient DateTimeFormatter dateTimeFormatter;
+    /**
+     *  Fachada para obtener los datos
+     */
+    private SistInfDataAbstract fachadaDatos;
 
-	/**
-	 * Formateador de números.
-	 */
-	private NumberFormat numberFormatter;
-	
-	/**
-	 * Formateador de fechas.
-	 */
-	private transient DateTimeFormatter dateTimeFormatter;
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	private SistInfDataAbstract fachadaDatos;
+     List<String> profSelect = new ArrayList<>();
+     
+    /**
+     * Constructor.
+     * @throws SQLException 
+     */
+    public ProfesoresView(){
+        layout.setSpacing(true);
+        fachadaDatos = SistInfDataFactory.getInstanceData();
+        config = ExternalProperties.getInstance("/config.properties", false);
+        numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(2);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        setMargin(true);
+        setSpacing(true);
 
-	 List<String> profSelect = new ArrayList<>();
-	 
-	/**
-	 * Constructor.
-	 * @throws SQLException 
-	 */
-	public ProfesoresView(){
-	    
-		fachadaDatos = SistInfDataFactory.getInstanceData();
-		config = ExternalProperties.getInstance("/config.properties", false);
-		numberFormatter = NumberFormat.getInstance();
-		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
-		setMargin(true);
-		setSpacing(true);
-
-		NavigationBar bat = new NavigationBar();
-		bat.buttonProfessor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		add(bat);
-		
-		preguntarSiActualizar();
-		crearEstadisticas();
-		datosGraficas();
-
-		Footer footer = new Footer("N4_Profesores.csv");
-		add(footer);
-	}
-	
-	/**
+        NavigationBar bat = new NavigationBar();
+        bat.buttonProfessor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        add(bat);
+        
+        preguntarSiActualizar();
+        crearEstadisticas();
+        datosGraficas();
+        add(layout);
+        Footer footer = new Footer("N4_Profesores.csv");
+        add(footer);
+    }
+    
+    /**
      * Crea las métricas de los proyectos activos.
      */
     private void crearEstadisticas() {
         H1 metricsTitle = new H1(INFO_ESTADISTICA);
         metricsTitle.addClassName("lbl-title");
-        add(metricsTitle);
-
+        layout.add(metricsTitle);
+       
         try {
             
             Number numProfes= fachadaDatos.getNumProfesores();
@@ -165,8 +162,7 @@ public class ProfesoresView extends VerticalLayout {
            
             Number numDepartamentos= fachadaDatos.getNumDepartamentos();
             Label totalDepartments = new Label("- Número total de departamentos: "+ numDepartamentos.intValue());
-            
-            add(totalProfessors, totalAreas, totalDepartments);
+            layout.add(totalProfessors, totalAreas, totalDepartments);
         } catch (Exception e) {
             LOGGER.error("Error en estadísticas", e);
         }
@@ -182,7 +178,7 @@ public class ProfesoresView extends VerticalLayout {
         
         Label ultimaAct= new Label("La última actualización de los datos fue el: " + lastModifiedXls+" ¿Quiere actualizar los datos? ");
         Label AVISO= new Label("Este proceso puede llevar un tiempo");
-        add(ultimaAct,AVISO,actualizar);
+        layout.add(ultimaAct,AVISO,actualizar);   
         actualizar.addClickListener(event -> {
             long startTime = System.nanoTime();
            actualizarDatos();
@@ -374,8 +370,7 @@ public class ProfesoresView extends VerticalLayout {
     public void datosGraficas(){
         H2 metricsTitle = new H2("GRÁFICA");
         metricsTitle.addClassName("lbl-title");
-        add(metricsTitle);
-        
+        layout.add(metricsTitle);
         List<String> courses = new ArrayList<>();
         //REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
         HistoricProjectsView vista= new  HistoricProjectsView();
@@ -468,7 +463,8 @@ public class ProfesoresView extends VerticalLayout {
             ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
             List<String> profesores = fachadaDatos.getProfesores();
             filtroProfesores.setItems(profesores);
-            
+            HorizontalLayout profes= new HorizontalLayout();
+
             filtroProfesores.addValueChangeListener(event -> {
                 profSelect.add(event.getValue());
                 
@@ -476,13 +472,12 @@ public class ProfesoresView extends VerticalLayout {
                 buton.getElement().setAttribute("aria-label", "Close");
                 buton.addClickListener(event2 ->{
                     profSelect.remove(event.getValue());
-                    remove(buton);
+                    profes.remove(buton);
                     pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
                 });
-                add(buton);
-                
-                
-        });
+                profes.add(buton);
+                layout.addComponentAtIndex(14, profes);
+            });
                        
             //Boton para actualizar los datos de las graficas
             Button actualizar= new Button("Actualizar gráfica");
@@ -490,8 +485,8 @@ public class ProfesoresView extends VerticalLayout {
             actualizar.addClickListener(event -> {
                 pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
             });
-            
-            add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
+           
+           layout.add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
     } 
     
     /**
