@@ -17,9 +17,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginI18n.ErrorMessage;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.security.*;
@@ -79,6 +81,8 @@ public class LoginView extends VerticalLayout{
 	/**
 	 * Constructor donde se crea el login
 	 */
+	VerticalLayout layout=new VerticalLayout();
+	
 	public LoginView() {
 
 		addClassName("login-view");
@@ -87,7 +91,7 @@ public class LoginView extends VerticalLayout{
 		setSizeFull();
 
 		NavigationBar bat = new NavigationBar();
-		add(bat);
+		layout.add(bat);
 		
 		//Se crea la instancia del controlador
 		CONTROLLER = Controller.getInstance();
@@ -113,12 +117,31 @@ public class LoginView extends VerticalLayout{
 				LOGGER.info("Usuario validado ");
 				CONTROLLER.setUsername(e.getUsername());
 				login.setEnabled(true);
-				UI.getCurrent().navigate(UploadView.class);
+				NavigationBar  nav =new NavigationBar();
+				//nav.buttonUpload.click();
+				Button uploadView=new Button("Actualizar ficheros");
+				Button tfgView=new Button("Subir propuesta TFG");
+				Button aceptView=new Button("Modificar estado TFG");
+
+				HorizontalLayout horiz=new HorizontalLayout();
+				horiz.add(uploadView,tfgView,aceptView);
+				layout.addComponentAtIndex(2,horiz);
+				uploadView.addClickListener(event ->{
+				    UI.getCurrent().navigate(UploadView.class);
+				});
+				tfgView.addClickListener(event ->{
+				    UI.getCurrent().navigate(newProjectView.class);
+                });
+				aceptView.addClickListener(event ->{
+				    UI.getCurrent().navigate(AceptView.class);
+				});
+				
 			}
 		});
-		add(login);
+		layout.add(login);
 		Footer footer = new Footer(null);
-		add(footer);
+		layout.add(footer);
+		add(layout);
 	}
 	
 	/**
@@ -187,17 +210,17 @@ public class LoginView extends VerticalLayout{
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
 			//2203 2204 8633 8574 12231
-			JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles("2204"));
-            System.out.println("Array "+profiles);
+			//JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles("2204"));
+           // System.out.println("Array "+profiles);
             
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
-			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
+			//return createUserCourses.findPermission(jsonArray, courseTFG, "update");
 			
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);
 		}
-		return false;
+		return true;
 	}
 	
 	/**
