@@ -475,7 +475,7 @@ public class AceptView extends VerticalLayout {
             }
             for (String titulo : titulos) {
                 // Recorremos la hoja para obtener el numero de fila de la celda que tiene el
-                // titulo que se ha pasado por parametro
+                // titulo que se ha pasado por parametro, para no hardcodearlo si se cambia de columna
                 for (Row row : hoja) {
                     for (Cell cell : row) {
                         if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
