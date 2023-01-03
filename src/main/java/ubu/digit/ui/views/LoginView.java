@@ -215,12 +215,12 @@ public class LoginView extends VerticalLayout{
             
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
-			//return createUserCourses.findPermission(jsonArray, courseTFG, "update");
+			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
 			
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);
 		}
-		return true;
+		return false;
 	}
 	
 	/**
