@@ -9,6 +9,7 @@ import ubu.digit.ui.views.AceptView;
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
+import ubu.digit.ui.views.LoginView;
 import ubu.digit.ui.views.ProfesoresView;
 import ubu.digit.ui.views.ReportView;
 import ubu.digit.ui.views.UploadView;
@@ -105,14 +106,13 @@ public class NavigationBar extends HorizontalLayout{
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
         buttonUpload = new Button(UPLOAD);
+        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
         buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
         
         buttonAcept = new Button(ACEPT);
+        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
         buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
-        
-        if(UI.getCurrent().equals(AceptView.class)) {
-            buttonAcept.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        }
+ 
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
