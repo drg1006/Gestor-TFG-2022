@@ -11,6 +11,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -29,6 +30,9 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -129,15 +133,28 @@ public class newProjectView extends VerticalLayout {
         descripcion.addValueChangeListener(event->{
             descripcion.setValue(event.getValue()); 
         });
-        TextArea tutor1 =new TextArea("Indique el tutor 1 del TFG");
+        
+        List<String> profesores = fachadaDatos.getProfesores();
+        
+        ComboBox<String> tutor1=new ComboBox<>("Indique el tutor 1 del TFG");
+        tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");
-        tutor1.addValueChangeListener(event->{
-            tutor1.setValue(event.getValue()); 
+        tutor1.setItems(profesores);
+        tutor1.addValueChangeListener(event -> {
+            tutor1.setValue(event.getValue());
         });
-        TextArea tutor2 =new TextArea("Indique el tutor 2 del TFG");
+        tutor1.addCustomValueSetListener(event -> {
+            tutor1.setValue(event.getDetail());
+        });
+        ComboBox<String> tutor2=new ComboBox<>("Indique el tutor 2 del TFG");
+        tutor2.setAllowCustomValue(true);
         tutor2.setWidth("40%");
-        tutor2.addValueChangeListener(event->{
-            tutor2.setValue(event.getValue()); 
+        tutor2.setItems(profesores);
+        tutor2.addValueChangeListener(event -> {
+            tutor2.setValue(event.getValue());          
+        });
+        tutor2.addCustomValueSetListener(event -> {
+            tutor2.setValue(event.getDetail());
         });
         TextArea tutor3 =new TextArea("Indique el tutor 3 del TFG");
         tutor3.setWidth("40%");
@@ -202,8 +219,14 @@ public class newProjectView extends VerticalLayout {
         Button crear= new Button("Crear TFG");
         crear.addClickListener(event ->{
             if(binder.validate().isOk()) {
-            escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
+                if(tutor1.getValue().equals(tutor2.getValue())) {
+                    LOGGER.info("Tutor1 y tutor2 no pueden tener el mismo valor");
+                    Notification notif2 = Notification.show("Tutor1 y tutor2 no pueden tener el mismo valor");
+                   notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                }else {        
+                    escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
                     alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
+                }
             }else {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
             }
@@ -300,6 +323,7 @@ public class newProjectView extends VerticalLayout {
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
+            Notification notification = Notification.show("Se ha añadido correctamente el TFG propuesto");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
