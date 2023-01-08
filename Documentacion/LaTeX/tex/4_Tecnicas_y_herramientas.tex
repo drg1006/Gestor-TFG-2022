@@ -6,25 +6,32 @@ Muchas de las herramientas utilizadas están ya explicadas en la anterior versi�
 \section{Herramientas de Desarrollo}
 
 \subsection{Heroku para estudiantes}
-Heroku~\cite{heroku_students} es una plataforma basada en la nube como servicio ( PaaS ) para construir, ejecutar y administrar aplicaciones. 
+Heroku~\cite{heroku_students} es una plataforma basada en la nube como servicio (PaaS) para construir, ejecutar y administrar aplicaciones. 
 La plataforma Integración de GitHub le permite conectar su aplicación Heroku a su repositorio GitHub e implementar en cada empuje a GitHub.
 Heroku ofrece una gama de servicios de bajo costo para ayudarlo a experimentar, aprender y crear prototipos de nuevas ideas. Para los estudiantes de GitHub, vamos un paso más allá y agregamos aún más recursos a su Paquete de desarrolladores de estudiantes de GitHub. 
-Heroku pasó a ser de pago el 28 de noviembre de 2022,pero al pertenecer al programa de GitHub para estudiantes proporcionado por la UBU, podemos solicitarlo, y que se nos agreguen unos créditos para poder desplegar nuestro proyecto en la nube,por lo que es la herramienta que hemos utilizado para desplegar nuestro proyecto.
+Heroku pasó a ser de pago el 28 de noviembre de 2022, pero al pertenecer al programa de GitHub para estudiantes proporcionado por la UBU, podemos solicitarlo, y que se nos agreguen unos créditos para poder desplegar nuestro proyecto en la nube. Por lo que es la herramienta que hemos utilizado para desplegar nuestro proyecto.
 
-\subsection{Jsoup}
-Jsoup~\cite{jsoup} es una biblioteca Java para trabajar con HTML del mundo real. Proporciona una API muy conveniente para recuperar URL y extraer y manipular datos, utilizando los mejores métodos HTML5 DOM y selectores CSS. 
-Es la herramienta que hemos utilizado para realizar el \emph{webscraping} ya que es la que mejor se ajustaba y con la que mejor resultado hemos obtenido, también resulta la más sencilla de utilizar.
+\subsection{Webscrap}
+Para el desarrollo del \emph{webscraping} se han estudiado diferentes alternativas, entre ellas cabe mencionar:
+\begin{itemize}
+	
+\item Jsoup~\cite{jsoup} es una biblioteca Java para trabajar con HTML del mundo real. Proporciona una API muy conveniente para recuperar URL y extraer y manipular datos, utilizando los mejores métodos HTML5 DOM y selectores CSS. 
+Es la herramienta que hemos utilizado para realizar el \emph{webscraping} ya que es la que mejor se ajustaba y con la que mejor resultado hemos obtenido, también, tras haber intentado utilizar otras alternativas resulta la más sencilla de utilizar.
 
-\subsection{HTMLUnit}
-HtmlUnit~\cite{HTMLUNIT} es un "navegador sin GUI para programas Java". Modela documentos HTML y proporciona una API que le permite invocar páginas, completar formularios, hacer clic en enlaces, etc... tal como lo haces en tu navegador "normal. 
+
+\item HtmlUnit~\cite{HTMLUNIT} es un "navegador sin GUI para programas Java". Modela documentos HTML y proporciona una API que le permite invocar páginas, completar formularios, hacer clic en enlaces, etc... tal como lo haces en tu navegador. 
 Es una de las alternativas planteadas a la hora de utilizar una biblioteca para el \emph{webscrap}.
+
+\end{itemize}
+Este recurso es muy utilizado para obtener información de \emph{páginas webs} externas, sin embargo, hay que tener cuidado con las páginas de las que se obtienen los datos. Por ejemplo, los datos que requieren un registro del usuario no pueden ser obtenidos a través del \emph{web scraping}.
+Tampoco es legal el uso de esta técnica de rastreo para ocultar publicidad, descargas de responsabilidad o términos y condiciones.~\cite{webScrap}
 
 \subsection{Pencil}
 Pencil~\cite{Pencil_project} está construido con el propósito de proporcionar una herramienta de creación de prototipos GUI gratuita y de código abierto que las personas pueden instalar y usar fácilmente para crear maquetas en plataformas de escritorio populares. 
 Se ha utilizado para crear los \emph{mock-ups} de las nuevas pantallas que se han desarrollado.
 
 \subsection{Northflank}
-Northflank~\cite{Northflank} es su sitio web cabe mencionar que los precios escalan junto a como va desarrollándose tu proyecto. Puedes pagar solo por los recursos que consumen tus servicios durante la compilación y el tiempo de ejecución. Puedes escalar tanto horizontal como verticalmente sin gastos inesperados. Al ser un VPS, puedes trabajar con muchos lenguajes y frameworks. Cuentan con una versión para Developers que es gratuita. 
+Northflank~\cite{Northflank} es una plataforma de servicio en la nube (Paas) como Heroku. Es un sitio web que cabe mencionar ya que los precios escalan junto a como va desarrollándose tu proyecto. Puedes pagar solo por los recursos que consumen tus servicios durante la compilación y el tiempo de ejecución. Puedes escalar tanto horizontal como verticalmente sin gastos inesperados. Al ser un VPS, puedes trabajar con muchos lenguajes y frameworks. Cuentan con una versión para Developers que es gratuita. 
 Finalmente se optó por no utilizar este sistema ya que tras intentar importar nuestro proyecto nos indicaba que era de pago por que superaba el límite de peso permitido para un proyecto gratuito.
 
 \subsection{Vaadin}
@@ -34,7 +41,7 @@ Uno de las características diferenciadores de Vaadin es que, contrario a las li
 
 \subsection{LucidChart}
 
-LucidChart ~\cite{LucidChart} es una aplicación de diagramación inteligente que reúne a los equipos para que tomen mejores decisiones y construyan el futuro. Ha sido utilizada para realizar los diagramas de flujo del Anexo.
+LucidChart ~\cite{LucidChart} es una aplicación de diagramación inteligente que reúne a los equipos para que tomen mejores decisiones y construyan el futuro. Ha sido utilizada para realizar los diagramas de flujo de los anexos.
 
 \section{Herramientas de Documentación}
 
@@ -45,11 +52,12 @@ LucidChart ~\cite{LucidChart} es una aplicación de diagramación inteligente qu
 TexStudio~\cite{TexStudio} es un entorno de escritura integrado para crear documentos LaTeX. Su principal objetivo es hacer que escribir LaTeX sea lo más fácil y cómodo posible. Por esto, TeXstudio nos ofrece a los usuarios numerosas funciones como el resaltado de sintaxis, un visor integrado, la verificación de referencias y varios asistentes, entre otras. 
 Es el programa de edición que hemos utilizado para realizar la memoria y los anexos.
 
-\subsection{MikTex}
+\subsection{MiKTex}
 MiKTeX~\cite{TexStudio} es una implementación de TeX y programas relacionados para Windows. TeX es un sistema de caracteres de alta calidad para la edición de documentos.
 Es la herramienta que se utiliza para compilar los documentos que se crean en TexStudio.
 
 \subsection{Overleaf}
-Overleaf~\cite{Overleaf}  es una herramienta de publicación y redacción colaborativa en línea que hace que todo el proceso de redacción, edición y publicación de documentos científicos sea mucho más rápido y sencillo. Overleaf brinda la conveniencia de un editor LaTeX fácil de usar con colaboración en tiempo real y la salida totalmente compilada producida automáticamente en segundo plano a medida que escribe.
+Overleaf~\cite{Overleaf}  es una herramienta de publicación y redacción colaborativa en línea que hace que todo el proceso de redacción, edición y publicación de documentos científicos sea mucho más rápido y sencillo. Overleaf frece la conveniencia de un editor LaTeX fácil de usar con colaboración en tiempo real y la salida totalmente compilada producida automáticamente en segundo plano a medida que escribe.
+
 Era la herramienta que se iba a utilizar en un principio pero se deshechó la idea ya que se vió que era más intuitivo de utilizar la aplicación de escritorio TexStudio.
 
