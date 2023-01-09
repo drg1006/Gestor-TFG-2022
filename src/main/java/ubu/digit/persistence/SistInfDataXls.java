@@ -1131,27 +1131,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
         return getDepartamentos().size();
     }
 
-    @Override
-    public List<String> getAreasConTFGAsignados() {
-     
-        List<String> listaAreasConTFGs = new ArrayList<String>();
-
-        String sql = SELECT + PROFESOR+"."+AREA + 
-                FROM + PROFESOR+ " LEFT JOIN " +HISTORICO +
-                " ON " + PROFESOR+"."+NOMBRE_APELLIDOS+" = " + HISTORICO +"."+TUTOR1
-                + ORDER_BY+PROFESOR+"."+AREA;
-        
-        try {
-            Recordset result = connection.executeQuery(sql);
-            while (result.next()) {
-                    listaAreasConTFGs.add(result.getField(AREA).toString());
-            }
-        }catch(FilloException ex) { 
-            LOGGER.error("Error al obtener las areas con TFGs asignados", ex);
-        }
-        return listaAreasConTFGs;
-    }
-    
+       
     /**
      * Metodo que devuelve los profesores del area pasada por parametro.
      * @param area

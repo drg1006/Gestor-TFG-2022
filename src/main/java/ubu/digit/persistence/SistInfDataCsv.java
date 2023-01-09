@@ -991,33 +991,64 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 		return listaDataModel;
 	}
 
-	/**
-     * Obtiene todas las areas.
-     * @return lista<String> con las areas
-     */
-	@Override
-    public List<String> getAreas() {
-        return null;
+	public List<String> getAreas() {
+
+        List<String> listaAreas = new ArrayList<String>();
+        String sql = SELECT_DISTINCT + AREA + FROM + PROFESOR;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+           // Recordset result = connection.executeQuery(sql);
+            while (result.next()) {
+                listaAreas.add(result.getString(AREA));
+                
+            }
+        }catch(SQLException e) { 
+            LOGGER.error("Error al obtener las areas", e);
+        }
+        return listaAreas.stream().distinct().collect(Collectors.toList());
     }
 
-	/**
+    /**
      * Obtiene todos los departamentos.
      * @return lista<String> con los departamentos
      */
     @Override
     public List<String> getDepartamentos() {
-        // TODO Auto-generated method stub
-        return null;
+        List<String> listaDepartamentos = new ArrayList<String>();
+        String sql = SELECT_DISTINCT + DEPARTAMENTO + FROM + PROFESOR;
+        try {Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+         
+            while (result.next()) {
+                listaDepartamentos.add(result.getString(DEPARTAMENTO));
+                
+            }
+        }catch(SQLException e) { 
+            LOGGER.error("Error al obtener los departamentos", e);
+        }
+        return listaDepartamentos.stream().distinct().collect(Collectors.toList());
     }
-    
+
     /**
      * Obtiene todos los profesores.
      * @return lista<String> con los profesores
      */
     @Override
     public List<String> getProfesores() {
-        // TODO Auto-generated method stub
-        return null;
+        
+        List<String> listaProfesores = new ArrayList<String>();
+        String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR;
+        try {Statement statement = connection.createStatement();
+        ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                listaProfesores.add(result.getString(NOMBRE_APELLIDOS).toString());
+                
+            }
+        }catch(SQLException e) { 
+            LOGGER.error("Error al obtener los profesores", e);
+        }
+        return listaProfesores;
     }
     
     /**
@@ -1026,8 +1057,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
      */
     @Override
     public Number getNumProfesores() {
-        // TODO Auto-generated method stub
-        return 0;
+        return getProfesores().size();
     }
 
     /**
@@ -1036,8 +1066,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
      */
     @Override
     public Number getNumAreas() {
-        // TODO Auto-generated method stub
-        return 0;
+        return getAreas().size();
     }
 
     /**
@@ -1046,26 +1075,28 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
      */
     @Override
     public Number getNumDepartamentos() {
-        // TODO Auto-generated method stub
-        return 0;
+        return getDepartamentos().size();
     }
 
-
-    @Override
-    public List<String> getAreasConTFGAsignados() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    
     /**
      * Metodo que devuelve los profesores del area pasada por parametro.
      * @param area
      * @return lista de profesores
      */
-    @Override
-    public List<String> getProfesoresDeArea(String area) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<String> getProfesoresDeArea(String area){
+        List<String> profesoresDeArea= new ArrayList<String>();
+        String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR + WHERE+ AREA + " = "+"'"+area+"'";
+        try {Statement statement = connection.createStatement();
+        ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                profesoresDeArea.add(result.getString(NOMBRE_APELLIDOS).toString());
+            }
+        }catch(SQLException e) { 
+            LOGGER.error("Error al obtener los profesores del area "+area, e);
+        }
+        return profesoresDeArea;       
+        
     }
 
     /**
@@ -1075,26 +1106,103 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
      */
     @Override
     public List<String> getProfesoresDeDepartamento(String departamento) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        List<String> profesoresDeDepartamento= new ArrayList<String>();
+        String sql = SELECT + NOMBRE_APELLIDOS + FROM + PROFESOR + WHERE+ DEPARTAMENTO + " = "+"'"+departamento+"'";
+        try {Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
 
+            while (result.next()) {
+                profesoresDeDepartamento.add(result.getString(NOMBRE_APELLIDOS).toString());
+            }
+        }catch(SQLException e) { 
+            LOGGER.error("Error al obtener los profesores del area "+departamento, e);
+        }
+        return profesoresDeDepartamento;
+    }
+    
+    /**
+     * Obtener nombre y apellidos del tribunal
+     */
     @Override
-    public List<String> getNombresTribunal() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<String> getNombresTribunal(){
+        List<String> listaTribunal = new ArrayList<String>();
+        try {
+            ResultSet result = getResultSet(TRIBUNAL, NOMBRE_APELLIDOS);
+            while (result.next()) {
+                String nombre = result.getString(NOMBRE_APELLIDOS);
+                listaTribunal.add(nombre);
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Error al obtener los datos del tribunal", e);
+        }
+        return listaTribunal;
     }
 
-    @Override
-    public List<String> getDataModelPending() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    /**
+     * Obtiene el titulo del último TFG de la base de datos.
+     * @return titulo titulo del ultimo tfg
+     */
     @Override
     public String getUltimoTFG() {
-        return null;
-        // TODO Auto-generated method stub
-        
+       List<String> titulos=new ArrayList<>();
+        String sql = SELECT + TITULO + FROM + PROYECTO ;
+        try {Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+           
+            while (result.next()) {
+                titulos.add(result.getString(TITULO).toString());
+                
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Error al obtener los datos del tribunal", e);
+        }
+        return titulos.get(titulos.size()-1);
     }
+
+    /**
+     * Obtener los datos del modelo de datos de los proyectos activos con estado pendiente.
+     */
+    @Override
+    public List<String> getDataModelPending() { 
+        List<String> listaDataModelPending = new ArrayList<String>();
+        String sql = SELECT + TITULO + "," + DESCRIPCION + "," + TUTOR1 + "," + TUTOR2 + ", " 
+                + ALUMNO1 + ", " + ALUMNO2 + ", " 
+                + TUTOR1 + ", " + TUTOR2 + ", " + TUTOR3 + ", " + ESTADO + FROM +PROYECTO
+                + WHERE + ESTADO + " = "+"'PENDIENTE'";
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                String title = result.getString(TITULO);
+                String description = result.getString(DESCRIPCION);
+                String tutor1 = result.getString(TUTOR1);
+                String tutor2 = result.getString(TUTOR2);
+                if (tutor2 == null) {
+                    tutor2 = "";
+                }
+                String tutor3 = result.getString(TUTOR3);
+                if (tutor3 == null) {
+                    tutor3 = "";
+                }
+                String student1 = result.getString(ALUMNO1);
+                String student2 = result.getString(ALUMNO2);
+                if (student2 == null) {
+                    student2 = "";
+                }
+                String status = result.getString(ESTADO);
+                listaDataModelPending.add(title);
+                listaDataModelPending.add(description);
+                listaDataModelPending.add(tutor1);
+                listaDataModelPending.add(tutor2);
+                listaDataModelPending.add(tutor3);
+                listaDataModelPending.add(student1);
+                listaDataModelPending.add(student2);
+                listaDataModelPending.add(status);      
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Error al obtener los datos del actuales", e);
+        }
+        return  listaDataModelPending;
+    }
+    
 }
