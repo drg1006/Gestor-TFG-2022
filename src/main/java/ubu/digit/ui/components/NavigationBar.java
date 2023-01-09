@@ -106,12 +106,12 @@ public class NavigationBar extends HorizontalLayout{
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
         buttonUpload = new Button(UPLOAD);
-        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
+        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
         
         buttonAcept = new Button(ACEPT);
-        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
+        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
  
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);

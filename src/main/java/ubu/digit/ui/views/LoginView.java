@@ -41,7 +41,7 @@ import ubu.digit.ui.components.NavigationBar;
  * 
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Login")
+@Route(value = "login")
 @PageTitle("Login ")
 public class LoginView extends VerticalLayout{
 
@@ -83,6 +83,7 @@ public class LoginView extends VerticalLayout{
 	 */
 	VerticalLayout layout=new VerticalLayout();
 	
+	static Boolean isAutentificarte=false;
 	public LoginView() {
 
 		addClassName("login-view");
@@ -97,6 +98,7 @@ public class LoginView extends VerticalLayout{
 		CONTROLLER = Controller.getInstance();
 		
 		login = new LoginForm();
+		
 		final LoginI18n i18n = createSpanishI18n();
 		login.setI18n(i18n);
 		login.setForgotPasswordButtonVisible(false);
@@ -104,7 +106,7 @@ public class LoginView extends VerticalLayout{
 			login.setEnabled(false);
 			LOGGER.info("\nRealizando la autentificación del usuario... ");
 
-			Boolean isAutentificarte= CheckData(e.getUsername(),e.getPassword());
+			isAutentificarte= CheckData(e.getUsername(),e.getPassword());
 			if(!isAutentificarte) {
 				LOGGER.info("Usuario no validado ");
 				CONTROLLER.setUsername("");
@@ -122,7 +124,7 @@ public class LoginView extends VerticalLayout{
 				Button uploadView=new Button("Actualizar ficheros");
 				Button tfgView=new Button("Subir propuesta TFG");
 				Button aceptView=new Button("Modificar estado TFG");
-
+				/*
 				HorizontalLayout horiz=new HorizontalLayout();
 				horiz.add(uploadView,tfgView,aceptView);
 				layout.addComponentAtIndex(2,horiz);
@@ -134,10 +136,11 @@ public class LoginView extends VerticalLayout{
                 });
 				aceptView.addClickListener(event ->{
 				    UI.getCurrent().navigate(AceptView.class);
-				});
+				});*/
 				
 			}
 		});
+		login.setAction("login");
 		layout.add(login);
 		Footer footer = new Footer(null);
 		layout.add(footer);
@@ -215,8 +218,8 @@ public class LoginView extends VerticalLayout{
             
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
-			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
-			
+			//return createUserCourses.findPermission(jsonArray, courseTFG, "update");
+			return createUserCourses.findPermission(jsonArray, courseTFG, "badges");
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);
 		}
@@ -253,5 +256,15 @@ public class LoginView extends VerticalLayout{
 		errorMessage.setTitle(titleError);
 		errorMessage.setMessage(notification);
 		return errorMessage;
+	}
+	public static boolean validado() {
+        try {
+            return isAutentificarte;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+	    
 	}
 }

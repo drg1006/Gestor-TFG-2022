@@ -18,9 +18,20 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 	}
 
 	private void authenticateNavigation(BeforeEnterEvent event) { 
-		if (!LoginView.class.equals(event.getNavigationTarget())
-		    && !SecurityUtils.isUserLoggedIn()) {
-			event.rerouteTo(LoginView.class);
-		}
+/*
+	    if ((UploadView.class.equals(event.getNavigationTarget()) 
+	            || AceptView.class.equals(event.getNavigationTarget()) 
+	            || newProjectView.class.equals(event.getNavigationTarget()))
+	            && !SecurityUtils.isUserLoggedIn()) {
+	            event.rerouteTo(LoginView22.class);
+	        }*/
+	    System.out.println("estado "+LoginView.validado());
+	    System.out.println("event "+event.getNavigationTarget());
+	    if ((UploadView.class.equals(event.getNavigationTarget()) 
+                || AceptView.class.equals(event.getNavigationTarget()) 
+                || newProjectView.class.equals(event.getNavigationTarget()))
+                && !LoginView.validado()) {
+                event.rerouteTo(LoginView.class);
+            }
 	}
 }
