@@ -83,7 +83,10 @@ public class LoginView extends VerticalLayout{
 	 */
 	VerticalLayout layout=new VerticalLayout();
 	
-	public static Boolean permiso=false;
+	/**
+	 * Lista con los permisos update y reports (true o false).
+	 */
+	public static List<String> permiso=new ArrayList<>();
 	
 	public LoginView() {
 
@@ -91,9 +94,6 @@ public class LoginView extends VerticalLayout{
 		setMargin(true);
 		setSpacing(true);
 		setSizeFull();
-
-		//NavigationBar bat = new NavigationBar();
-		//layout.add(bat);
 		
 		//Se crea la instancia del controlador
 		CONTROLLER = Controller.getInstance();
@@ -120,24 +120,6 @@ public class LoginView extends VerticalLayout{
 				CONTROLLER.setUsername(e.getUsername());
 				login.setEnabled(true);
 				UI.getCurrent().navigate(InformationView.class);
-				/*
-				Button uploadView=new Button("Actualizar ficheros");
-				Button tfgView=new Button("Subir propuesta TFG");
-				Button aceptView=new Button("Modificar estado TFG");
-
-				HorizontalLayout horiz=new HorizontalLayout();
-				horiz.add(uploadView,tfgView,aceptView);
-				layout.addComponentAtIndex(2,horiz);
-				uploadView.addClickListener(event ->{
-				    UI.getCurrent().navigate(UploadView.class);
-				});
-				tfgView.addClickListener(event ->{
-				    UI.getCurrent().navigate(newProjectView.class);
-                });
-				aceptView.addClickListener(event ->{
-				    UI.getCurrent().navigate(AceptView.class);
-				});
-				*/
 			}
 		});
 		layout.add(login);
@@ -211,13 +193,15 @@ public class LoginView extends VerticalLayout{
 				}
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
-			//2203 2204 8633 8574 12231
-			//JSONArray profiles= UtilMethods.getJSONArrayResponse(CONTROLLER.getWebService(),new CoreUserGetCourseUserProfiles("2204"));
-           // System.out.println("Array "+profiles);
             
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
-			permiso =createUserCourses.findPermission(jsonArray, courseTFG, "update");
+			if(createUserCourses.findPermission(jsonArray, courseTFG, "update")) {
+			    permiso.add("update");
+			};
+			if(createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
+			    permiso.add("reports");
+			};
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);

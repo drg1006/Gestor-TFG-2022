@@ -180,7 +180,7 @@ public class Footer extends VerticalLayout {
 			license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
 			license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
 		}
-		if(LoginView.permiso) {
+		if(LoginView.permiso.contains("update")) {
 		Button actu= new Button("Actualizar");
 		actu.addClickListener(e -> {	
 			UI.getCurrent().navigate(UploadView.class);

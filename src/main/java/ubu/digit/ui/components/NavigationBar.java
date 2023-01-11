@@ -3,6 +3,12 @@ package ubu.digit.ui.components;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import ubu.digit.ui.views.AceptView;
@@ -70,7 +76,11 @@ public class NavigationBar extends HorizontalLayout{
      * Botón de la vista de aceptar TFGs.
      */
 	public Button buttonAcept;
-    
+	
+	/**
+	 * Boton historico para profesores y administradores.
+	 */
+	ComboBox<String> comboHistory;
 	/**
 	 * Constructor.
 	 */
@@ -87,6 +97,8 @@ public class NavigationBar extends HorizontalLayout{
 	 */
 	@SuppressWarnings("deprecation")
 	private void initComponents() {
+	    //MenuBar menuBar = new MenuBar();
+	    
 		buttonInfo = new Button(INFORMACION);
 		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
 		
@@ -94,50 +106,79 @@ public class NavigationBar extends HorizontalLayout{
 		buttonActive.addClickListener(e -> UI.getCurrent().navigate(ActiveProjectsView.class));
 		
 		buttonHistory = new Button(PROYECTOS_HISTORICOS);
-		buttonHistory.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
-
+        buttonHistory.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
+        
+        comboHistory= new ComboBox<>(PROYECTOS_HISTORICOS);
+        comboHistory.setItems("De Proyectos activos","De Profesores");
+        comboHistory.addValueChangeListener(event ->{
+            if(event.getValue().equals("De Proyectos activos")) {
+                UI.getCurrent().navigate(ActiveProjectsView.class);
+            }else
+                UI.getCurrent().navigate(ProfesoresView.class);
+        });
+        
 		buttonMetrics = new Button(METRICAS);
 		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/organizations/dbo1001/projects/\", \"_blank\");"));
 		
 		buttonProfessor = new Button(PROFESORES);
         buttonProfessor.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
         
+        buttonReport = new Button(INFORME);
+        buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
-            
+        buttonUpload = new Button(UPLOAD);
+        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
+        
+        buttonAcept = new Button(ACEPT);
+        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
+           
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
 		buttonMetrics.setHeight(BUTTON_HEIGHT);
 		buttonProfessor.setHeight(BUTTON_HEIGHT);
+		buttonReport.setHeight(BUTTON_HEIGHT);
+        buttonUpload.setHeight(BUTTON_HEIGHT);
+        buttonAcept.setHeight(BUTTON_HEIGHT);
+        comboHistory.setHeight(BUTTON_HEIGHT);
         
 		buttonInfo.setWidth("100%");
 		buttonActive.setWidth("100%");
 		buttonHistory.setWidth("100%");
 		buttonMetrics.setWidth("100%");
 		buttonProfessor.setWidth("100%");
-         
+		buttonReport.setWidth("100%");
+        buttonUpload.setWidth("100%");
+        buttonAcept.setWidth("100%");
+        comboHistory.setWidth("100%");
         
-		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor);
-		//LoginView.permiso=true;
-		if(LoginView.permiso) {
-		    
-		    buttonReport = new Button(INFORME);
-	        buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
-	        
-	        buttonUpload = new Button(UPLOAD);
-	        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-	        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
-	        
-	        buttonAcept = new Button(ACEPT);
-	        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-	        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
-	        buttonReport.setHeight(BUTTON_HEIGHT);
-	        buttonUpload.setHeight(BUTTON_HEIGHT);
-	        buttonAcept.setHeight(BUTTON_HEIGHT);
-	        buttonReport.setWidth("100%");
-	        buttonUpload.setWidth("100%");
-	        buttonAcept.setWidth("100%");
-	        add(buttonReport,buttonUpload,buttonAcept);
-	   }
+ 
+		//LoginView.permiso.add("reports");
+		//LoginView.permiso.add("update");
+		if(LoginView.permiso.contains("update")) {
+		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
+		    //ROL DE ADMINISTRADOR
+		    add(buttonInfo,comboHistory, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
+		   
+		    /*menuBar.addItem(buttonInfo);
+		    menuBar.addItem("Historico");
+		    MenuItem item = menuBar.addItem(new Icon(VaadinIcon.CHEVRON_DOWN));
+		    SubMenu subItems = item.getSubMenu();
+		    subItems.addItem("De profesores");
+		    subItems.addItem("De proyectos");
+		    menuBar.addItem(buttonMetrics);
+		    menuBar.addItem(buttonReport);
+		    menuBar.addItem(buttonUpload);
+		    menuBar.addItem(buttonAcept);
+		    menuBar.setWidth("200%");
+		    menuBar.setHeight(BUTTON_HEIGHT);
+		    add(menuBar);*/
+		}else if(LoginView.permiso.contains("reports")){
+	     //ROL DE PROFESOR
+           add(buttonInfo, comboHistory, buttonMetrics,buttonReport,buttonUpload);
+		}else {
+	       //ROL ALUMNO
+	       add(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
+		}
 	}
 }

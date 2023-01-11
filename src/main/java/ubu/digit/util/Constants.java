@@ -282,7 +282,7 @@ public final class Constants {
     /**
      * Subir TFGs(botón).
      */
-    public static final String ACEPT = "ACEPTAR TFG";
+    public static final String ACEPT = "Administrar TFGs";
     
     /**
      * Subir TFGs(botón).

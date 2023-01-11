@@ -136,9 +136,12 @@ public class ProfesoresView extends VerticalLayout {
         bat.buttonProfessor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         
-        preguntarSiActualizar();
+        
         crearEstadisticas();
         datosGraficas();
+        //Si tiene permisos de administrador para actualizar archivos
+        if(LoginView.permiso.contains("update")) {
+        preguntarSiActualizar();}
         add(layout);
         Footer footer = new Footer("N4_Profesores.csv");
         add(footer);
@@ -459,6 +462,7 @@ public class ProfesoresView extends VerticalLayout {
          
 
         });
+            
           //ComboBox con los profesores
             ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
             List<String> profesores = fachadaDatos.getProfesores();
@@ -476,7 +480,7 @@ public class ProfesoresView extends VerticalLayout {
                     pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
                 });
                 profes.add(buton);
-                layout.addComponentAtIndex(14, profes);
+                layout.addComponentAtIndex(11, profes);
             });
                        
             //Boton para actualizar los datos de las graficas
