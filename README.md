@@ -1,6 +1,6 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://gestor-tfg-2022.herokuapp.com)
 
-# GII 20.09 Herramienta web repositorios de TFGII - Gestor TFG/TFM 2022
+# GII 22.24 Aplicación de gestión de TFGs
 
 ### Autor
 David Renedo Gil
