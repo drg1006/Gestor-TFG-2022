@@ -14,7 +14,7 @@ Se trata de una aplicación Java, con el uso de componentes gráficos del framew
 
 El desarrollo del proyecto será una nueva distribución (fork) del trabajo fin de grado disponible en https://github.com/mjuez/Gestor-TFG-2021.
 
-El proyecto está migrado a Vaadin 14 en la rama **master** y en Vaadin 7 en la rama **Sistinf-V7**.
+El proyecto esta en Vaadin 14 en la rama **master** y con pruebas a parte realizadas en la rama **tesbranch**.
 
 ### Página web
 El proyecto está desplegado en https://gestor-tfg-2022.herokuapp.com/ .
@@ -23,7 +23,7 @@ El proyecto está desplegado en https://gestor-tfg-2022.herokuapp.com/ .
 * JDK --> https://www.oracle.com/es/java/technologies/javase-jdk11-downloads.html
 * Apache Tomcat 9 --> https://tomcat.apache.org/download-90.cgi
 * Apache Tomcat como Servidor --> https://vaadin.com/docs/v8/framework/installing/installing-server.html
-* IDE Eclipse (Versión 2020-06 R) --> https://vaadin.com/docs/v8/framework/installing/installing-eclipse.html
+* IDE Eclipse (Versión 2021-12 R) --> https://www.eclipse.org/downloads/packages/release/2021-12/r
 * Plugin de Vaddin --> Instalar la extensión llamada "Vaadin Plugin for Eclipse" desde el "Eclipse Marketplace".
 
 ### Ejecución en local
