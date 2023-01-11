@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.ui.views.LoginView;
+import ubu.digit.ui.views.UploadView;
 import ubu.digit.util.ExternalProperties;
 
 import static ubu.digit.util.Constants.*;
@@ -179,11 +180,12 @@ public class Footer extends VerticalLayout {
 			license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
 			license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
 		}
-
-		Button login = new Button("Actualizar");
-		login.addClickListener(e -> {	
-			UI.getCurrent().navigate(LoginView.class);
+		if(LoginView.permiso) {
+		Button actu= new Button("Actualizar");
+		actu.addClickListener(e -> {	
+			UI.getCurrent().navigate(UploadView.class);
 		});
-		license.add(login);
+		license.add(actu);
+		}
 	}
 }

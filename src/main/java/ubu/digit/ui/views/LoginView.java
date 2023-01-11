@@ -41,7 +41,7 @@ import ubu.digit.ui.components.NavigationBar;
  * 
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Login")
+@Route(value = "")
 @PageTitle("Login ")
 public class LoginView extends VerticalLayout{
 
@@ -83,6 +83,8 @@ public class LoginView extends VerticalLayout{
 	 */
 	VerticalLayout layout=new VerticalLayout();
 	
+	public static Boolean permiso=false;
+	
 	public LoginView() {
 
 		addClassName("login-view");
@@ -90,8 +92,8 @@ public class LoginView extends VerticalLayout{
 		setSpacing(true);
 		setSizeFull();
 
-		NavigationBar bat = new NavigationBar();
-		layout.add(bat);
+		//NavigationBar bat = new NavigationBar();
+		//layout.add(bat);
 		
 		//Se crea la instancia del controlador
 		CONTROLLER = Controller.getInstance();
@@ -117,8 +119,8 @@ public class LoginView extends VerticalLayout{
 				LOGGER.info("Usuario validado ");
 				CONTROLLER.setUsername(e.getUsername());
 				login.setEnabled(true);
-				NavigationBar  nav =new NavigationBar();
-				//nav.buttonUpload.click();
+				UI.getCurrent().navigate(InformationView.class);
+				/*
 				Button uploadView=new Button("Actualizar ficheros");
 				Button tfgView=new Button("Subir propuesta TFG");
 				Button aceptView=new Button("Modificar estado TFG");
@@ -135,7 +137,7 @@ public class LoginView extends VerticalLayout{
 				aceptView.addClickListener(event ->{
 				    UI.getCurrent().navigate(AceptView.class);
 				});
-				
+				*/
 			}
 		});
 		layout.add(login);
@@ -215,8 +217,8 @@ public class LoginView extends VerticalLayout{
             
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
-			return createUserCourses.findPermission(jsonArray, courseTFG, "update");
-			
+			permiso =createUserCourses.findPermission(jsonArray, courseTFG, "update");
+			return true;
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);
 		}

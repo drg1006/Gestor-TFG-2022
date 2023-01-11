@@ -8,15 +8,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Stream;
-import java.text.SimpleDateFormat;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -28,6 +27,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -122,11 +122,11 @@ public class newProjectView extends VerticalLayout {
         
         
         TextArea titulo =new TextArea("Indique un nombre para el TFG");
-        titulo.setWidth("40%");
-        
+        titulo.setWidth("40%");       
         titulo.addValueChangeListener(event->{
            titulo.setValue(event.getValue()); 
         });
+        
         TextArea descripcion =new TextArea("Indique una descripción para el TFG");
         descripcion.setWidth("40%");
         descripcion.setHeight("30%");
@@ -187,24 +187,8 @@ public class newProjectView extends VerticalLayout {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
 
-        //Si lo esta se pone ese año y el siguiente
-        if(today.now().isAfter(fechaINI)) {
-           cursoAsignacion.setValue(today.now().getYear()+"-"+(today.now().getYear()+1));
-           
-           //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
-           // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
-           String año=String.valueOf(today.getYear()) ;
-           titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
-        }else {
-        //Si no lo esta pertenece al curso anterior
-            cursoAsignacion.setValue((today.now().getYear()-1)+"-"+today.now().getYear());
-            
-            String año=String.valueOf(today.getYear()-1) ;
-            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
-        }
-        //Ejemplo: fecha de hoy : 25/12/2022, fecha inicio del curso de ese año es 01/09/2022
-        //Por lo que "hoy" es posterior a la fecha de inicio de curso y sería el curso 2022-2023
-        
+        valoresPorDefecto(today,fechaINI,cursoAsignacion,titulo);
+       
         //Si se desea modificar el curso
         cursoAsignacion.addValueChangeListener(event->{
             cursoAsignacion.setValue(event.getValue()); 
@@ -224,9 +208,18 @@ public class newProjectView extends VerticalLayout {
                     Notification notif2 = Notification.show("Tutor1 y tutor2 no pueden tener el mismo valor");
                    notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 }else {        
+                    Notification.show("Se ha añadido correctamente el TFG propuesto");
                     escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
                     alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
+                    try {
+                        Thread.sleep(2000);  // retraso en milisegundos
+                        UI.getCurrent().getPage().reload();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    
                 }
+                
             }else {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
             }
@@ -235,6 +228,27 @@ public class newProjectView extends VerticalLayout {
        
         
     }
+    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea cursoAsignacion, TextArea titulo) {
+        //Si lo esta se pone ese año y el siguiente
+        if(today.now().isAfter(fechaINI)) {
+           cursoAsignacion.setValue(today.now().getYear()+"-"+(today.now().getYear()+1));
+           
+           //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
+           // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
+           String año=String.valueOf(today.getYear()) ;
+           titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
+        }else {
+        //Si no lo esta pertenece al curso anterior
+            cursoAsignacion.setValue((today.now().getYear()-1)+"-"+today.now().getYear());
+            
+            String año=String.valueOf(today.getYear()-1) ;
+            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
+        }
+        //Ejemplo: fecha de hoy : 25/12/2022, fecha inicio del curso de ese año es 01/09/2022
+        //Por lo que "hoy" es posterior a la fecha de inicio de curso y sería el curso 2022-2023
+        
+    }
+
     /**
      * Obtiene el número que le corresponde al siguiente TFG.
      * @return
@@ -323,7 +337,9 @@ public class newProjectView extends VerticalLayout {
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
-            Notification notification = Notification.show("Se ha añadido correctamente el TFG propuesto");
+           
+            
+           
         } catch (IOException ex) {
             ex.printStackTrace();
         }

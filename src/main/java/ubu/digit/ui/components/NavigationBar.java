@@ -102,35 +102,42 @@ public class NavigationBar extends HorizontalLayout{
 		buttonProfessor = new Button(PROFESORES);
         buttonProfessor.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
         
-        buttonReport = new Button(INFORME);
-        buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
-        buttonUpload = new Button(UPLOAD);
-        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
-        
-        buttonAcept = new Button(ACEPT);
-        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
-        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
- 
+            
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
 		buttonHistory.setHeight(BUTTON_HEIGHT);
 		buttonMetrics.setHeight(BUTTON_HEIGHT);
 		buttonProfessor.setHeight(BUTTON_HEIGHT);
-        buttonReport.setHeight(BUTTON_HEIGHT);
-        buttonUpload.setHeight(BUTTON_HEIGHT);
-        buttonAcept.setHeight(BUTTON_HEIGHT);
         
 		buttonInfo.setWidth("100%");
 		buttonActive.setWidth("100%");
 		buttonHistory.setWidth("100%");
 		buttonMetrics.setWidth("100%");
 		buttonProfessor.setWidth("100%");
-        buttonReport.setWidth("100%");
-        buttonUpload.setWidth("100%");
-        buttonAcept.setWidth("100%");
+         
         
-		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor,buttonReport,buttonUpload,buttonAcept);
+		add(buttonInfo, buttonActive, buttonHistory, buttonMetrics,buttonProfessor);
+		//LoginView.permiso=true;
+		if(LoginView.permiso) {
+		    
+		    buttonReport = new Button(INFORME);
+	        buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
+	        
+	        buttonUpload = new Button(UPLOAD);
+	        //buttonUpload.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+	        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
+	        
+	        buttonAcept = new Button(ACEPT);
+	        //buttonAcept.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+	        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
+	        buttonReport.setHeight(BUTTON_HEIGHT);
+	        buttonUpload.setHeight(BUTTON_HEIGHT);
+	        buttonAcept.setHeight(BUTTON_HEIGHT);
+	        buttonReport.setWidth("100%");
+	        buttonUpload.setWidth("100%");
+	        buttonAcept.setWidth("100%");
+	        add(buttonReport,buttonUpload,buttonAcept);
+	   }
 	}
 }
