@@ -53,7 +53,7 @@ import ubu.digit.util.ExternalProperties;
  * @author Javier de la Fuente Barrios.
  * @author Diana Bringas Ochoa
  */
-@Route(value = "Subir Proyecto")
+@Route(value = "SubirProyecto")
 @PageTitle("Proponer TFG")
 
 public class newProjectView extends VerticalLayout {
@@ -145,6 +145,7 @@ public class newProjectView extends VerticalLayout {
         });
         tutor1.addCustomValueSetListener(event -> {
             tutor1.setValue(event.getDetail());
+            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
         ComboBox<String> tutor2=new ComboBox<>("Indique el tutor 2 del TFG");
         tutor2.setAllowCustomValue(true);
@@ -155,11 +156,18 @@ public class newProjectView extends VerticalLayout {
         });
         tutor2.addCustomValueSetListener(event -> {
             tutor2.setValue(event.getDetail());
+            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
-        TextArea tutor3 =new TextArea("Indique el tutor 3 del TFG");
+        ComboBox<String> tutor3=new ComboBox<>("Indique el tutor 3 del TFG");
+        tutor3.setAllowCustomValue(true);
         tutor3.setWidth("40%");
-        tutor3.addValueChangeListener(event->{
-            tutor3.setValue(event.getValue()); 
+        tutor3.setItems(profesores);
+        tutor3.addValueChangeListener(event -> {
+            tutor3.setValue(event.getValue());          
+        });
+        tutor3.addCustomValueSetListener(event -> {
+            tutor3.setValue(event.getDetail());
+            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
         
         TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
