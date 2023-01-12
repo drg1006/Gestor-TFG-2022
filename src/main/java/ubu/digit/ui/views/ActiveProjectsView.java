@@ -236,7 +236,7 @@ public class ActiveProjectsView extends VerticalLayout{
 		for(int i=0;i<listaDataModel.size();i++) {
 			ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
 					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
 			dataActiveProjects.add(actives);
 		}
 	}
@@ -369,7 +369,7 @@ public class ActiveProjectsView extends VerticalLayout{
 			}
 
 			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
-					tutors, students, activeproject.getCourseAssignment());
+					tutors, students, activeproject.getCourseAssignment(),activeproject.getStatus());
 			dataActiveProjectsGrid.add(actives);
 		}	
 	}
