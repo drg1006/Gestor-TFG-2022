@@ -1,5 +1,6 @@
 package ubu.digit.ui.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -10,6 +11,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 
 import ubu.digit.ui.views.AceptView;
 import ubu.digit.ui.views.ActiveProjectsView;
@@ -50,7 +54,11 @@ public class NavigationBar extends HorizontalLayout{
 	/**
 	 * Botón de la vista de proyectos históricos.
 	 */
-	public Button buttonHistory;
+	public Button buttonHistoric;
+	/**
+     * Botón de la vista de históricos.
+     */
+    public Button buttonProjectsHistoric;
 	
 	/**
 	 * Botón de la vista de métricas.
@@ -60,7 +68,7 @@ public class NavigationBar extends HorizontalLayout{
 	/**
      * Botón de la vista de profesores.
      */
-	public Button buttonProfessor;
+	public Button buttonProfessorHistoric;
     
     /**
      * Botón de la vista de informes.
@@ -76,11 +84,7 @@ public class NavigationBar extends HorizontalLayout{
      * Botón de la vista de aceptar TFGs.
      */
 	public Button buttonAcept;
-	
-	/**
-	 * Boton historico para profesores y administradores.
-	 */
-	ComboBox<String> comboHistory;
+
 	/**
 	 * Constructor.
 	 */
@@ -105,23 +109,11 @@ public class NavigationBar extends HorizontalLayout{
 		buttonActive = new Button(PROYECTOS_ACTIVOS);
 		buttonActive.addClickListener(e -> UI.getCurrent().navigate(ActiveProjectsView.class));
 		
-		buttonHistory = new Button(PROYECTOS_HISTORICOS);
-        buttonHistory.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
-        
-        comboHistory= new ComboBox<>(PROYECTOS_HISTORICOS);
-        comboHistory.setItems("De Proyectos activos","De Profesores");
-        comboHistory.addValueChangeListener(event ->{
-            if(event.getValue().equals("De Proyectos activos")) {
-                UI.getCurrent().navigate(ActiveProjectsView.class);
-            }else
-                UI.getCurrent().navigate(ProfesoresView.class);
-        });
-        
+		buttonHistoric = new Button(HISTORICOS);
+        buttonHistoric.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
+      
 		buttonMetrics = new Button(METRICAS);
 		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/organizations/dbo1001/projects/\", \"_blank\");"));
-		
-		buttonProfessor = new Button(PROFESORES);
-        buttonProfessor.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
         
         buttonReport = new Button(INFORME);
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
@@ -131,54 +123,53 @@ public class NavigationBar extends HorizontalLayout{
         
         buttonAcept = new Button(ACEPT);
         buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
-           
+        
+        buttonProfessorHistoric = new Button(PROFESORES);
+        buttonProfessorHistoric.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
+        
+        buttonProjectsHistoric = new Button(PROYECTOS_HISTORICOS);
+        buttonProjectsHistoric.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
+        
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
-		buttonHistory.setHeight(BUTTON_HEIGHT);
+		buttonHistoric.setHeight(BUTTON_HEIGHT);
 		buttonMetrics.setHeight(BUTTON_HEIGHT);
-		buttonProfessor.setHeight(BUTTON_HEIGHT);
 		buttonReport.setHeight(BUTTON_HEIGHT);
         buttonUpload.setHeight(BUTTON_HEIGHT);
         buttonAcept.setHeight(BUTTON_HEIGHT);
-        comboHistory.setHeight(BUTTON_HEIGHT);
         
 		buttonInfo.setWidth("100%");
 		buttonActive.setWidth("100%");
-		buttonHistory.setWidth("100%");
+		buttonHistoric.setWidth("100%");
 		buttonMetrics.setWidth("100%");
-		buttonProfessor.setWidth("100%");
+		
 		buttonReport.setWidth("100%");
         buttonUpload.setWidth("100%");
         buttonAcept.setWidth("100%");
-        comboHistory.setWidth("100%");
-        
  
 		//LoginView.permiso.add("reports");
 		//LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
-		    add(buttonInfo,comboHistory, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
-		   
-		    /*menuBar.addItem(buttonInfo);
-		    menuBar.addItem("Historico");
-		    MenuItem item = menuBar.addItem(new Icon(VaadinIcon.CHEVRON_DOWN));
-		    SubMenu subItems = item.getSubMenu();
-		    subItems.addItem("De profesores");
-		    subItems.addItem("De proyectos");
-		    menuBar.addItem(buttonMetrics);
-		    menuBar.addItem(buttonReport);
-		    menuBar.addItem(buttonUpload);
-		    menuBar.addItem(buttonAcept);
-		    menuBar.setWidth("200%");
-		    menuBar.setHeight(BUTTON_HEIGHT);
-		    add(menuBar);*/
+		    add(buttonInfo,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
 		}else if(LoginView.permiso.contains("reports")){
 	     //ROL DE PROFESOR
-           add(buttonInfo, comboHistory, buttonMetrics,buttonReport,buttonUpload);
+           add(buttonInfo, buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
 		}else {
 	       //ROL ALUMNO
-	       add(buttonInfo, buttonActive, buttonHistory, buttonMetrics);
+	       add(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
 		}
 	}
+	/**
+	 * SubMenu que sale en las pantallas de Historic, de tfgs y de profesores.
+	 * @return horizontallayout con los dos botones
+	 */
+	public Component subMenu() {
+	    HorizontalLayout layout= new HorizontalLayout();
+	    layout.add(  buttonProjectsHistoric,buttonProfessorHistoric);
+	    return layout;
+                
+
+    }
 }

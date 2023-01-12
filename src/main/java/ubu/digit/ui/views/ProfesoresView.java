@@ -133,8 +133,12 @@ public class ProfesoresView extends VerticalLayout {
         setSpacing(true);
 
         NavigationBar bat = new NavigationBar();
-        bat.buttonProfessor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        bat.buttonHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        bat.buttonProfessorHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
+        //Este submenu solo les sale a los profesores/administradores
+        if(LoginView.permiso.contains("update")||LoginView.permiso.contains("reports")){
+           add( bat.subMenu());}
         
         
         crearEstadisticas();

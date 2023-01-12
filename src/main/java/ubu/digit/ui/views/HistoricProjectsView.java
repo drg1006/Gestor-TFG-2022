@@ -29,6 +29,7 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -39,6 +40,8 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
@@ -185,10 +188,17 @@ public class HistoricProjectsView extends VerticalLayout {
 		
 		setMargin(true);
 		setSpacing(true);
-
+		//VerticalLayout layout=new VerticalLayout();
 		NavigationBar bat = new NavigationBar();
-		bat.buttonHistory.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		bat.buttonHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		bat.buttonProjectsHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
+		//Este submenu solo les sale a los profesores/administradores
+		if(LoginView.permiso.contains("update")||LoginView.permiso.contains("reports")){  
+            UI.getCurrent().navigate(HistoricProjectsView.class);
+		    add( bat.subMenu());
+		 
+		}
 		
 		createDataModel();
 		CreateDataModelToGrid();
@@ -202,7 +212,7 @@ public class HistoricProjectsView extends VerticalLayout {
 		add(footer);
 	}
 
-	/**
+    /**
 	 * Crea el modelo de datos de los proyectos históricos.
 	 * @throws SQLException 
 	 */
