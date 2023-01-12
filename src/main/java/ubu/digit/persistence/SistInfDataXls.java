@@ -639,7 +639,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 					student3 = "";
 				}
 				String courseAssignment = result.getField(CURSO_ASIGNACION);
-
+				
+				String status =result.getField(ESTADO);
+				if (status== null) {
+				    status = "";
+				}
 				listaDataModel.add(title);
 				listaDataModel.add(description);
 				listaDataModel.add(tutor1);
@@ -649,6 +653,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				listaDataModel.add(student2);
 				listaDataModel.add(student3);
 				listaDataModel.add(courseAssignment);
+				listaDataModel.add(status);
 			}
 		} catch (FilloException e) {
 			LOGGER.error("Error al obtener los datos del actuales", e);

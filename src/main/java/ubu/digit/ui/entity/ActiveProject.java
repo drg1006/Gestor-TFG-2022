@@ -26,6 +26,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 */
 	private String students;
 
+	private String status;
 	/**
 	 * Constructor.
 	 * 
@@ -40,12 +41,13 @@ public class ActiveProject extends Projects implements Serializable {
 	 * @param courseAssignment
 	 *            Curso de asignación del proyecto.
 	 */
-	public ActiveProject(String title, String description, String tutors,String students, String courseAssignment) {
+	public ActiveProject(String title, String description, String tutors,String students, String courseAssignment, String status) {
 		this.title = title;
 		this.description = description;
 		this.tutors = tutors;
 		this.students = students;
 		this.courseAssignment = courseAssignment;
+		this.status=status;
 	}
 	
 	/**
@@ -71,7 +73,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 *            Curso de asignación del proyecto.
 	 */
 	public ActiveProject(String title, String description, String tutor1, String tutor2, String tutor3,
-			String student1, String student2, String student3, String courseAssignment) {
+			String student1, String student2, String student3, String courseAssignment, String status) {
 		this.title = title;
 		this.description = description;
 		this.tutor1 = tutor1;
@@ -81,6 +83,7 @@ public class ActiveProject extends Projects implements Serializable {
 		this.student2 = student2;
 		this.student3 = student3;
 		this.courseAssignment = courseAssignment;
+		this.status=status;
 	}
 
 	/**
@@ -136,4 +139,23 @@ public class ActiveProject extends Projects implements Serializable {
 	public void setCourseAssignment(String courseAssignment) {
 		this.courseAssignment = courseAssignment;
 	}
+	/**
+     * Obtiene el estado.
+     * 
+     * @return status
+     *          Estado del TFG
+     */
+    public String getStatus() {
+        return this.status;
+    }
+
+    /**
+     * Establece estado del TFG.
+     * 
+     * @param status
+     *            estado del TFG
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
