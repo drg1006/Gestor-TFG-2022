@@ -258,12 +258,17 @@ public final class Constants {
     /**
      * Proyectos históricos (botón).
      */
-    public static final String PROYECTOS_HISTORICOS = "Histórico";
+    public static final String HISTORICOS = "Histórico";
+    
+    /**
+     * Proyectos históricos (botón).
+     */
+    public static final String PROYECTOS_HISTORICOS = "De proyectos";
     
     /**
      * Proyectos de profesores (botón).
      */
-    public static final String PROFESORES = "Profesores";
+    public static final String PROFESORES = "De profesores";
 
     /**
      * Gerenacion de informes (botón).
