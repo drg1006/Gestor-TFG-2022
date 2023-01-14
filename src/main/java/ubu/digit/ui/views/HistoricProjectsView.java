@@ -195,7 +195,6 @@ public class HistoricProjectsView extends VerticalLayout {
 		add(bat);
 		//Este submenu solo les sale a los profesores/administradores
 		if(LoginView.permiso.contains("update")||LoginView.permiso.contains("reports")){  
-            UI.getCurrent().navigate(HistoricProjectsView.class);
 		    add( bat.subMenu());
 		 
 		}

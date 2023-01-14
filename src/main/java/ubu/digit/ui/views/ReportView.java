@@ -58,7 +58,7 @@ import ubu.digit.util.ExternalProperties;
  * 
  * @author David Renedo Gil
  */
-@Route(value = "Informe")
+@Route(value = "Informes")
 @PageTitle("Generar Informe")
 
 public class ReportView extends VerticalLayout {

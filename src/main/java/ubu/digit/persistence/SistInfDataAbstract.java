@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.util.ExternalProperties;
 
 
@@ -209,8 +211,8 @@ public abstract class SistInfDataAbstract implements Serializable {
     public abstract List<String> getProfesoresDeDepartamento(String departamento);
     public abstract List<String> getNombresTribunal();
 
-    public abstract List<String> getDataModelPending();
-
     public abstract String getUltimoTFG();
+
+    public abstract ActiveProject getTFG(String tituloTFG);
     
 }

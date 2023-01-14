@@ -1,9 +1,12 @@
 package ubu.digit.ui.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
+import com.vaadin.flow.component.datepicker.DatePicker;
 
 /**
- * Clase que se utilizará para bindear con el formulario de newProjectView.
+ * Clase que se utilizará para bindear con los formularios de los proyectos.
  * 
  * @author David Renedo Gil
  */
@@ -19,6 +22,11 @@ public class FormularioTFG extends Projects implements Serializable {
     private String alumno1;
     private String alumno2;
     private String cursoAsignacion;
+    private int nota;
+    private LocalDate fechaAsignacion;
+    private LocalDate fechaPresentacion;
+    private String tituloCorto;
+    private String repo;
 
     /**
      * Obtiene el titulo del formulario.
@@ -155,4 +163,86 @@ public class FormularioTFG extends Projects implements Serializable {
     public void setCursoAsignacion(String cursoAsignacion) {
         this.cursoAsignacion = cursoAsignacion;
     }
+    /**
+     * Obtiene la nota del formulario.
+     * 
+     * @return nota
+     */
+    public int getNota() {
+        return this.nota;
+    }
+
+    /**
+     * Escribe la nota del formulario.
+     * 
+     */
+    public void setNota(int nota) {
+        this.nota = nota;
+    }
+    /**
+     * Obtiene la fecha de asignacion del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public LocalDate getFechaAsignacion() {
+        return this.fechaAsignacion;
+    }
+
+    /**
+     * Escribe la fecha de asignacion del formulario.
+     * 
+     */
+    public void setFechaAsignacion(LocalDate fechaAsignacion) {
+        this.fechaAsignacion = fechaAsignacion;
+    }
+    /**
+     * Obtiene la fecha de presentacion  del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public LocalDate getFechaPresentacion() {
+        return this.fechaPresentacion;
+    }
+
+    /**
+     * Escribe la fecha de presentacion del formulario.
+     * 
+     */
+    public void FechaPresentacion(LocalDate fechaPresentacion) {
+        this.fechaPresentacion = fechaPresentacion;
+    }
+    /**
+     * Obtiene el repositorio del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public String getRepo() {
+        return this.repo;
+    }
+
+    /**
+     * Escribe el repositorio del formulario.
+     * 
+     */
+    public void setRepo(String repositorio) {
+        this.repo = repositorio;
+    }
+    /**
+     * Obtiene el titulo corto del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public String getTituloCorto() {
+        return this.tituloCorto;
+    }
+
+    /**
+     * Escribe el titulo corto del formulario.
+     * 
+     */
+    public void setTituloCorto(String tituloCorto) {
+        this.tituloCorto = tituloCorto;
+    }
+    
+    
 }

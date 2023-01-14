@@ -85,8 +85,14 @@ public class ActiveProject extends Projects implements Serializable {
 		this.courseAssignment = courseAssignment;
 		this.status=status;
 	}
-
 	/**
+	 * Constructior vacio, se utiliza para crear un proyecto sin tener asignaciones de manera inicial.
+	 */
+	public ActiveProject() {
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
 	 * Obtiene los estudiantes del proyecto.
 	 * @return students
 	 */
@@ -148,7 +154,7 @@ public class ActiveProject extends Projects implements Serializable {
     public String getStatus() {
         return this.status;
     }
-
+    
     /**
      * Establece estado del TFG.
      * 
@@ -158,4 +164,5 @@ public class ActiveProject extends Projects implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+    
 }

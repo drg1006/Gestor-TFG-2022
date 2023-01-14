@@ -87,6 +87,8 @@ public class LoginView extends VerticalLayout{
 	 * Lista con los permisos update y reports (true o false).
 	 */
 	public static List<String> permiso=new ArrayList<>();
+
+    public static String tutorRegistrado;
 	
 	public LoginView() {
 
@@ -117,7 +119,7 @@ public class LoginView extends VerticalLayout{
 				login.setError(true);
 			}else {
 				LOGGER.info("Usuario validado ");
-				CONTROLLER.setUsername(e.getUsername());
+				CONTROLLER.setUsername(e.getUsername());				
 				login.setEnabled(true);
 				UI.getCurrent().navigate(InformationView.class);
 			}
@@ -165,7 +167,7 @@ public class LoginView extends VerticalLayout{
 			MoodleUser moodleUser = populateMoodleUser.populateMoodleUser(validUsername, CONTROLLER.getUrlHost().toString());
 			
 			LOGGER.info("Obteniendo información del usuario: " + moodleUser.getFullName());
-			
+			tutorRegistrado=moodleUser.getFullName();
 			//Creacion instancia de CreateCourse desde la cual se accedera a los metodos de obtención de los cursos y permisos
 			CreateUserCourses createUserCourses = new CreateUserCourses(CONTROLLER.getWebService());
 			

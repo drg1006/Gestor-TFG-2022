@@ -11,11 +11,6 @@ import java.text.NumberFormat;
 
 import java.util.List;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -31,11 +26,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -44,7 +41,9 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.ui.entity.FormularioTFG;
+import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -53,96 +52,104 @@ import ubu.digit.util.ExternalProperties;
  * @author Javier de la Fuente Barrios.
  * @author Diana Bringas Ochoa
  */
-@Route(value = "SubirProyecto")
-@PageTitle("Proponer TFG")
+@Route(value = "Modify")
+@PageTitle("Modificar TFG")
 
-public class newProjectView extends VerticalLayout {
+public class ModifyView extends VerticalLayout {
+    
+    public static String tituloTFG;
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 8431807779365780674L;
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 8431807779365780674L;
 
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(newProjectView.class.getName());
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModifyView.class.getName());
 
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "Report";
-	/**
-	 * Fichero de configuración.
-	 */
-	private ExternalProperties config;
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "Report";
+    /**
+     * Fichero de configuración.
+     */
+    private ExternalProperties config;
 
-	/**
-	 * Formateador de números.
-	 */
-	private NumberFormat numberFormatter;
-	
-	/**
-	 * Formateador de fechas.
-	 */
-	private transient DateTimeFormatter dateTimeFormatter;
+    /**
+     * Formateador de números.
+     */
+    private NumberFormat numberFormatter;
+    
+    /**
+     * Formateador de fechas.
+     */
+    private transient DateTimeFormatter dateTimeFormatter;
 
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	private SistInfDataAbstract fachadaDatos;
-	
-	public static String tutorRegistrado;
+    /**
+     *  Fachada para obtener los datos
+     */
+    private SistInfDataAbstract fachadaDatos;
 
-	/**
-	 * Constructor.
-	 * @throws SQLException 
-	 */
-	public newProjectView(){
-	    
+    /**
+     * Constructor.
+     * @throws SQLException 
+     */
+    public ModifyView(){
+        
         fachadaDatos = SistInfDataFactory.getInstanceData();
-		config = ExternalProperties.getInstance("/config.properties", false);
-		numberFormatter = NumberFormat.getInstance();
-		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
-		setMargin(true);
-		setSpacing(true);
+        config = ExternalProperties.getInstance("/config.properties", false);
+        numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(2);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        setMargin(true);
+        setSpacing(true);
 
-		NavigationBar bat = new NavigationBar();
-		bat.buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		add(bat);
-		introducirDatos();
-		Footer footer = new Footer("");
-		add(footer);
-	}
+        NavigationBar bat = new NavigationBar();
+        add(bat);
+        introducirDatos();
+        Footer footer = new Footer("");
+        add(footer);
+    }
 
-	/**
-	 * Metodo que permite la introducción de todos los datos del TFG y los guarda.
-	 */
+    /**
+     * Metodo que permite la introducción de todos los datos del TFG y los guarda.
+     */
     private void introducirDatos() {
+        //Obtenemos los datos del TFG seleccionado previamente
+        ActiveProject TFG= fachadaDatos.getTFG(tituloTFG);
         
-        
-        TextArea titulo =new TextArea("Indique un nombre para el TFG");
-        titulo.setWidth("40%");       
+        TextArea titulo =new TextArea("Título del TFG");
+        titulo.setWidth("40%");
         titulo.addValueChangeListener(event->{
            titulo.setValue(event.getValue()); 
         });
         
-        TextArea descripcion =new TextArea("Indique una descripción para el TFG");
+        TextArea tituloCorto =new TextArea("Título corto del TFG");
+        tituloCorto.setWidth("40%");
+        tituloCorto.setValue(TFG.getTitle());
+        tituloCorto.addValueChangeListener(event->{
+            tituloCorto.setValue(event.getValue()); 
+        });
+        
+        TextArea descripcion =new TextArea("Descripción del TFG");
         descripcion.setWidth("40%");
         descripcion.setHeight("30%");
+        descripcion.setValue(TFG.getDescription());
         descripcion.addValueChangeListener(event->{
             descripcion.setValue(event.getValue()); 
         });
         
         List<String> profesores = fachadaDatos.getProfesores();
         
-        ComboBox<String> tutor1=new ComboBox<>("Indique el tutor 1 del TFG");
+        ComboBox<String> tutor1=new ComboBox<>("Tutor 1 del TFG");
         tutor1.setAllowCustomValue(true);
-        tutor1.setWidth("40%");      
+        tutor1.setWidth("40%");
         tutor1.setItems(profesores);
-        tutor1.setValue(tutorRegistrado);
+        tutor1.setValue(TFG.getTutor1());
         tutor1.addValueChangeListener(event -> {
             tutor1.setValue(event.getValue());
         });
@@ -150,10 +157,11 @@ public class newProjectView extends VerticalLayout {
             tutor1.setValue(event.getDetail());
             Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor2=new ComboBox<>("Indique el tutor 2 del TFG");
+        ComboBox<String> tutor2=new ComboBox<>("Tutor 2 del TFG");
         tutor2.setAllowCustomValue(true);
         tutor2.setWidth("40%");
         tutor2.setItems(profesores);
+        tutor2.setValue(TFG.getTutor2());
         tutor2.addValueChangeListener(event -> {
             tutor2.setValue(event.getValue());          
         });
@@ -161,10 +169,11 @@ public class newProjectView extends VerticalLayout {
             tutor2.setValue(event.getDetail());
             Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor3=new ComboBox<>("Indique el tutor 3 del TFG");
+        ComboBox<String> tutor3=new ComboBox<>("Tutor 3 del TFG");
         tutor3.setAllowCustomValue(true);
         tutor3.setWidth("40%");
         tutor3.setItems(profesores);
+        tutor3.setValue(TFG.getTutor3());
         tutor3.addValueChangeListener(event -> {
             tutor3.setValue(event.getValue());          
         });
@@ -173,111 +182,106 @@ public class newProjectView extends VerticalLayout {
             Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
         });
         
-        TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
+        TextArea alumno1 =new TextArea("Alumno 1 del TFG");
         alumno1.setWidth("40%");
-        alumno1.setValue("Aalumnos sin asignar");
+        alumno1.setValue(TFG.getStudent1());
         alumno1.addValueChangeListener(event->{
             alumno1.setValue(event.getValue()); 
         });
-        TextArea alumno2 =new TextArea("Indique el alumno 2 del TFG");
+        TextArea alumno2 =new TextArea("Alumno 2 del TFG");
         alumno2.setWidth("40%");
+        alumno2.setValue(TFG.getStudent2());
         alumno2.addValueChangeListener(event->{
             alumno2.setValue(event.getValue()); 
         });
         
+        TextArea alumno3 =new TextArea("Alumno 3 del TFG");
+        alumno3.setWidth("40%");
+        alumno3.setValue(TFG.getStudent3());
+        alumno3.addValueChangeListener(event->{
+            alumno3.setValue(event.getValue()); 
+        });
 
-        TextArea cursoAsignacion=new TextArea("Indique el curso de asigancion del TFG");
+        TextArea cursoAsignacion=new TextArea("Curso de asignacion del TFG");
         cursoAsignacion.setWidth("40%");
-        
-        //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
-        //Indicarlo por defecto 
-      //Fecha de hoy
-        LocalDate today=LocalDate.now();
-        
-        String fechaIni=today.now().getYear()+"-09-01";
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
-
-        valoresPorDefecto(today,fechaINI,cursoAsignacion,titulo);
-       
+        cursoAsignacion.setValue(TFG.getCourseAssignment());
         //Si se desea modificar el curso
         cursoAsignacion.addValueChangeListener(event->{
             cursoAsignacion.setValue(event.getValue()); 
         });
-        //Indicando que los campos son obligatorios
+        
+        DatePicker fechaAsignacion=new DatePicker("Fecha de asignacion del TFG");
+        fechaAsignacion.setWidth("40%");
+        fechaAsignacion.addValueChangeListener(event->{         
+            fechaAsignacion.setValue(event.getValue()); 
+
+        });
+
+        DatePicker fechaPresentacion=new DatePicker("Fecha de presentacion del TFG");
+        fechaPresentacion.setWidth("40%");
+        fechaPresentacion.addValueChangeListener(event->{
+            fechaPresentacion.setValue(event.getValue()); 
+        });
+        
+        NumberField nota=new NumberField("Indique una nota del TFG");
+        nota.setWidth("40%");
+        nota.addValueChangeListener(event->{
+            nota.setValue(event.getValue()); 
+        });
+        
+        //int TotalDias= fechaAsignacion-fechaPresentacion;
+        
+        TextArea repo=new TextArea("Indique el enlace URL del repositorio");
+        repo.setWidth("40%");
+        repo.addValueChangeListener(event->{
+            repo.setValue(event.getValue()); 
+        });
+        
+        //Indicando que los campos son obligatorios para aceptar y mantener abierto
         Binder<FormularioTFG> binder= new Binder<>(FormularioTFG.class);
-        binder.forField(titulo).asRequired("Debes indicar un titulo").bind("titulo");
+        binder.forField(tituloCorto).asRequired("Debes indicar un titulo").bind("tituloCorto");
         binder.forField(descripcion).asRequired("Debes indicar una descripción").bind("descripcion");
         binder.forField(tutor1).asRequired("Debes indicar un tutor1").bind("tutor1");
         binder.forField(alumno1).asRequired("Debes indicar un alumno").bind("alumno1");
         
-        Button crear= new Button("Crear TFG");
-        crear.addClickListener(event ->{
+        //AÑADIMOS LOS PARAMETROS QUE DEBEN SER OBLIGATORIOS PARA CERRAR UN TFG (los mismos que para dejarlo abierto y alguno más)
+        Binder<FormularioTFG> binder2= binder;
+       /* binder2.forField(fechaAsignacion).asRequired("Debes indicar una fecha de asignacion").bind("fechaAsignacion");
+        binder2.forField(fechaPresentacion).asRequired("Debes indicar una fecha de presentacion").bind("fechaPresentacion");
+        binder2.forField(nota).asRequired("Debes indicar una nota").bind("nota");
+        binder2.forField(repo).asRequired("Debes indicar un repositorio").bind("repo");
+        */
+        
+        Button AceptaryAbierto= new Button("Aceptar cambios y dejar abierto");
+        Button AceptaryCerrado= new Button("Aceptar cambios y mover a histórico");
+        
+        //Cancelamos y volvemos a la pestaña de administrar tfgs
+        Button cancelar= new Button("Cancelar cambios");
+        cancelar.addClickListener(event -> {
+            UI.getCurrent().navigate(ManageView.class);
+        });
+        
+        AceptaryAbierto.addClickListener(event ->{
             if(binder.validate().isOk()) {
-                if(tutor1.getValue().equals(tutor2.getValue())) {
-                    LOGGER.info("Tutor1 y tutor2 no pueden tener el mismo valor");
-                    Notification notif2 = Notification.show("Tutor1 y tutor2 no pueden tener el mismo valor");
-                   notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                }else {        
-                    Notification.show("Se ha añadido correctamente el TFG propuesto");
-                    escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
-                    alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
-                    try {
-                        Thread.sleep(2000);  // retraso en milisegundos
-                        UI.getCurrent().getPage().reload();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    
-                }
-                
+                Notification.show("Se ha modificado correctamente el TFG propuesto"); 
             }else {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
             }
         });
-        add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,cursoAsignacion,crear);
-       
         
-    }
-    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea cursoAsignacion, TextArea titulo) {
-        //Si lo esta se pone ese año y el siguiente
-        if(today.now().isAfter(fechaINI)) {
-           cursoAsignacion.setValue(today.now().getYear()+"-"+(today.now().getYear()+1));
-           
-           //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
-           // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
-           String año=String.valueOf(today.getYear()) ;
-           titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
-        }else {
-        //Si no lo esta pertenece al curso anterior
-            cursoAsignacion.setValue((today.now().getYear()-1)+"-"+today.now().getYear());
-            
-            String año=String.valueOf(today.getYear()-1) ;
-            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
-        }
-        //Ejemplo: fecha de hoy : 25/12/2022, fecha inicio del curso de ese año es 01/09/2022
-        //Por lo que "hoy" es posterior a la fecha de inicio de curso y sería el curso 2022-2023
+        AceptaryCerrado.addClickListener(event ->{
+            if(binder2.validate().isOk()) {
+                Notification.show("Se ha modificado correctamente el TFG propuesto");
+            }else {
+                LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
+            }
+        });
+ 
+        add(titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion,fechaAsignacion,fechaPresentacion,nota,repo);
+       HorizontalLayout layout= new HorizontalLayout();
+       layout.add(AceptaryAbierto,AceptaryCerrado,cancelar);
+       add(layout);
         
-    }
-
-    /**
-     * Obtiene el número que le corresponde al siguiente TFG.
-     * @return
-     */
-    private int obtenerNumeroTFG(String año) {
-        int numeroTFG=0;
-        String titulo=fachadaDatos.getUltimoTFG();
-        //Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de GII 22.XX y ahora estamos en el curso 2023
-        //El nuevo numero sería el 0
-
-        //Si es un año distino se inicia en 0
-        if(Integer.parseInt("20"+titulo.substring(4,6))!=Integer.parseInt(año)) {
-            numeroTFG=0;
-        }else
-            //Mismo año, se suma uno
-            numeroTFG=(Integer.parseInt(titulo.substring(7,9))+1);
-
-        return numeroTFG;
     }
 
     /**
@@ -352,6 +356,11 @@ public class newProjectView extends VerticalLayout {
         }
     }
 
+       public HistoricProject detallesTFG(String TFG){
+        
+        return null;
+           
+       }
     
-	
+    
 }

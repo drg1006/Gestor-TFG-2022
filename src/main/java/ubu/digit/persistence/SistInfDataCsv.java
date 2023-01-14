@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Recordset;
 
+import ubu.digit.ui.entity.ActiveProject;
+
 import static ubu.digit.util.Constants.*;
 
 
@@ -1159,50 +1161,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         return titulos.get(titulos.size()-1);
     }
 
-    /**
-     * Obtener los datos del modelo de datos de los proyectos activos con estado pendiente.
-     */
-    @Override
-    public List<String> getDataModelPending() { 
-        List<String> listaDataModelPending = new ArrayList<String>();
-        String sql = SELECT + TITULO + "," + DESCRIPCION + "," + TUTOR1 + "," + TUTOR2 + ", " 
-                + ALUMNO1 + ", " + ALUMNO2 + ", " 
-                + TUTOR1 + ", " + TUTOR2 + ", " + TUTOR3 + ", " + ESTADO + FROM +PROYECTO
-                + WHERE + ESTADO + " = "+"'PENDIENTE'";
-        try{
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            while (result.next()) {
-                String title = result.getString(TITULO);
-                String description = result.getString(DESCRIPCION);
-                String tutor1 = result.getString(TUTOR1);
-                String tutor2 = result.getString(TUTOR2);
-                if (tutor2 == null) {
-                    tutor2 = "";
-                }
-                String tutor3 = result.getString(TUTOR3);
-                if (tutor3 == null) {
-                    tutor3 = "";
-                }
-                String student1 = result.getString(ALUMNO1);
-                String student2 = result.getString(ALUMNO2);
-                if (student2 == null) {
-                    student2 = "";
-                }
-                String status = result.getString(ESTADO);
-                listaDataModelPending.add(title);
-                listaDataModelPending.add(description);
-                listaDataModelPending.add(tutor1);
-                listaDataModelPending.add(tutor2);
-                listaDataModelPending.add(tutor3);
-                listaDataModelPending.add(student1);
-                listaDataModelPending.add(student2);
-                listaDataModelPending.add(status);      
-            }
-        } catch (SQLException e) {
-            LOGGER.error("Error al obtener los datos del actuales", e);
-        }
-        return  listaDataModelPending;
+        @Override
+    public ActiveProject getTFG(String tituloTFG) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

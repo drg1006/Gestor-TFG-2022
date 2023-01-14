@@ -1,5 +1,11 @@
 package ubu.digit.ui.views;
 
+import static ubu.digit.util.Constants.DESCRIPCION_PROYECTOS;
+import static ubu.digit.util.Constants.FILTROS;
+import static ubu.digit.util.Constants.NOMBRE_BASES;
+import static ubu.digit.util.Constants.PROYECTO;
+import static ubu.digit.util.Constants.TITLE_STYLE;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +24,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -27,29 +34,30 @@ import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
-import ubu.digit.ui.entity.PendingProject;
+import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.util.ExternalProperties;
-
-import static ubu.digit.util.Constants.*;
 
 /**
  * Vista de los proyectos pendientes.
  * 
  * @author David Renedo Gil
  */
-@Route(value = "Acept")
+@Route(value = "Administrar")
 @PageTitle("Proyectos pendientes")
-public class AceptView extends VerticalLayout {
+public class ManageView extends VerticalLayout {
 
     /**
      * Serial Version UID.
@@ -59,7 +67,7 @@ public class AceptView extends VerticalLayout {
     /**
      * Logger de la clase.
      */
-    public static final Logger LOGGER = LoggerFactory.getLogger(AceptView.class.getName());
+    public static final Logger LOGGER = LoggerFactory.getLogger(ManageView.class.getName());
 
     /**
      * Nombre de la vista.
@@ -69,23 +77,23 @@ public class AceptView extends VerticalLayout {
     /**
      * Tabla de proyectos.
      */
-    public Grid<PendingProject> table;
+    public Grid<ActiveProject> table;
 
     /**
      * Lista con los proyectos pendientes
      */
-    List<PendingProject> dataPendingProjects;
+    List<ActiveProject> dataFilteredGrid;
 
     /**
      * Lista con los proyectos activos que se usarán el el grid
      * En este los tutores y alumnos se incluyen juntos en una columna.
      */
-    List<PendingProject> dataPendingProjectsGrid;
+    List<ActiveProject> dataActiveProjects;
 
     /**
      * Lista con los proyectos activos filtrados
      */
-    List<PendingProject> dataFilteredGrid;
+    List<ActiveProject>  dataActiveProjectsGrid;
 
     /**
      * Campo de texto para filtrar por proyecto.
@@ -106,6 +114,11 @@ public class AceptView extends VerticalLayout {
      * Campo de texto para filtrar por alumno.
      */
     public TextField studentsFilter;
+    
+    /**
+     * Campo de texto para filtrar por alumno.
+     */
+    public TextField statusFilter;
 
     /**
      * Fachada para obtener los datos
@@ -115,7 +128,7 @@ public class AceptView extends VerticalLayout {
     /**
      * Constructor.
      */
-    public AceptView() {
+    public ManageView() {
 
         fachadaDatos = SistInfDataFactory.getInstanceData();
 
@@ -124,7 +137,6 @@ public class AceptView extends VerticalLayout {
         setSpacing(true);
 
         NavigationBar bat = new NavigationBar();
-        bat.buttonAcept.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
 
         createDataModel();
@@ -139,7 +151,7 @@ public class AceptView extends VerticalLayout {
     /**
      * Crea los filtros de la tabla.
      */
-    public void createFilters() {
+    private void createFilters() {
         H1 filtersTitle = new H1(FILTROS);
         filtersTitle.addClassName(TITLE_STYLE);
         add(filtersTitle);
@@ -147,69 +159,78 @@ public class AceptView extends VerticalLayout {
         HorizontalLayout filters = new HorizontalLayout();
         filters.setSpacing(true);
         filters.setMargin(false);
-
+        
         projectFilter = new TextField("Filtrar por proyectos:");
         projectFilter.setWidth("300px");
         projectFilter.addValueChangeListener(event -> {
-            if (!projectFilter.isEmpty()) {
+            if(!projectFilter.isEmpty()) {
                 applyFilter("title", event.getValue());
-            } else {
-                table.setItems(dataPendingProjectsGrid);
+            }else {
+                table.setItems(dataActiveProjectsGrid);
             }
         });
 
         descriptionFilter = new TextField("Filtrar por descripción:");
         descriptionFilter.setWidth("300px");
         descriptionFilter.addValueChangeListener(event -> {
-            if (!descriptionFilter.isEmpty()) {
+            if(!descriptionFilter.isEmpty()) {
                 applyFilter("description", event.getValue());
-            } else {
-                table.setItems(dataPendingProjectsGrid);
+            }else {
+                table.setItems(dataActiveProjectsGrid);
             }
         });
 
         tutorsFilter = new TextField("Filtrar por tutores:");
         tutorsFilter.setWidth("300px");
         tutorsFilter.addValueChangeListener(event -> {
-            if (!tutorsFilter.isEmpty()) {
+            if(!tutorsFilter.isEmpty()) {
                 applyFilter("tutor", event.getValue());
-            } else {
-                table.setItems(dataPendingProjectsGrid);
+            }else {
+                table.setItems(dataActiveProjectsGrid);
             }
         });
 
         studentsFilter = new TextField("Filtrar por alumnos:");
         studentsFilter.setWidth("300px");
         studentsFilter.addValueChangeListener(event -> {
-            if (!studentsFilter.isEmpty()) {
+            if(!studentsFilter.isEmpty()) {
                 applyFilter("student", event.getValue());
-            } else {
-                table.setItems(dataPendingProjectsGrid);
+            }else {
+                table.setItems(dataActiveProjectsGrid);
             }
         });
 
-        filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter);
+        statusFilter = new TextField("Filtrar por estado:");
+        statusFilter.setWidth("300px");
+        statusFilter.addValueChangeListener(event -> {
+            if(!statusFilter.isEmpty()) {
+                applyFilter("status", event.getValue());
+            }else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
+        
+        filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter, statusFilter);
         add(filters);
     }
 
     /**
-     * Crea el modelo de datos de los proyectos pendientes.
+     * Crea el modelo de datos de los proyectos activos.
      */
-    public void createDataModel() {
-        // Se obtienen los datos del modelo
-        List<String> listaDataModel = fachadaDatos.getDataModelPending();
-        dataPendingProjects = new ArrayList<PendingProject>();
-
-        for (int i = 0; i < listaDataModel.size(); i++) {
-            PendingProject pending = new PendingProject(listaDataModel.get(i), listaDataModel.get(++i),
-                    listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-                    listaDataModel.get(++i), listaDataModel.get(++i));
-            dataPendingProjects.add(pending);
+    private void createDataModel() { 
+        //Se obtienen los datos del modelo
+        List<String> listaDataModel = fachadaDatos.getDataModel();
+        dataActiveProjects = new ArrayList<ActiveProject>();
+        
+        for(int i=0;i<listaDataModel.size();i++) {
+            ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
+                    listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
+                    listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+            dataActiveProjects.add(actives);
         }
     }
-
     /**
-     * Crea la tabla de proyectos pendientes.
+     * Crea la tabla de proyectos activos.
      */
     public void createCurrentProjectsTable() {
         H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
@@ -222,13 +243,13 @@ public class AceptView extends VerticalLayout {
             table.setWidthFull();
             table.setSelectionMode(SelectionMode.MULTI);
 
-            table.setItems(dataPendingProjectsGrid);
+            table.setItems(dataActiveProjectsGrid);
 
-            table.addColumn(PendingProject::getTitle).setHeader("Título").setFlexGrow(10);
-            table.addColumn(PendingProject::getDescription).setHeader("Descripción").setFlexGrow(25);
-            table.addColumn(PendingProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
-            table.addColumn(PendingProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
-            table.addColumn(PendingProject::getStatus).setHeader("Estado").setFlexGrow(6);
+            table.addColumn(ActiveProject::getTitle).setHeader("Título").setFlexGrow(10);
+            table.addColumn(ActiveProject::getDescription).setHeader("Descripción").setFlexGrow(25);
+            table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
+            table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
+            table.addColumn(ActiveProject::getStatus).setHeader("Estado").setFlexGrow(6);
 
             table.getColumns().forEach(columna -> columna.setResizable(true));
             table.getColumns().forEach(columna -> columna.setSortable(true));
@@ -257,7 +278,10 @@ public class AceptView extends VerticalLayout {
             Button aceptar = new Button("ACEPTAR");
             // boton con la opcion de denegar tfgs
             Button denegar = new Button("DENEGAR");
-
+            
+            // boton con la opcion de denegar tfgs
+            Button modificarTFG = new Button("MODIFICAR");
+            
             // Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la
             // pasamos a seleccionarTFG
             aceptar.addClickListener(event -> {
@@ -269,10 +293,28 @@ public class AceptView extends VerticalLayout {
 
             });
 
+            modificarTFG.addClickListener(event ->{
+                if(table.getSelectedItems().size()==1) {                    
+                    for (ActiveProject tfg : table.getSelectedItems()) {
+                        ModifyView.tituloTFG=tfg.getTitle();
+                    }  
+                    UI.getCurrent().navigate(ModifyView.class);
+                }else {
+                    //Si se han seleccionado varios tfgs y se ha dado a modificar
+                    Dialog aviso = new Dialog();
+                    // Añadidmos un texto
+                   aviso.add("Puedes aceptar/denegar varios TFGs al mismo tiempo, pero para modificar solo puedes seleccionar uno. ");
+                   aviso.open();
+                   Button closeButton = new Button(new Icon("lumo", "cross"),
+                           (e) -> aviso.close());
+                   closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+                  aviso.add(closeButton);
+                }
+            });
             HorizontalLayout layout = new HorizontalLayout();
             layout.setSpacing(true);
             add(table);
-            layout.add(aceptar, denegar);
+            layout.add(aceptar, denegar,modificarTFG);
             add(layout);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -286,13 +328,14 @@ public class AceptView extends VerticalLayout {
      * 
      * @param selectedItems listaTFGs
      */
-    private void aceptarTFG(Set<PendingProject> selectedItems) {
+    private void aceptarTFG(Set<ActiveProject> selectedItems) {
         // Cogemos los titulos seleccionados
         List<String> titulos = new ArrayList<>();
-        for (PendingProject tfg : selectedItems) {
+        for (ActiveProject tfg : selectedItems) {
             titulos.add(tfg.getTitle());
+            
         }
-
+        
         // Boton que confirma la modificacion (se introduce en ambos pop-ups)
         Button aceptarBtn = new Button("Sí");
         // Boton que deniega la modificacion (se introduce en ambos pop-ups)
@@ -325,10 +368,10 @@ public class AceptView extends VerticalLayout {
      * 
      * @param selectedItems listaTFGs
      */
-    private void denegarTFG(Set<PendingProject> selectedItems) {
+    private void denegarTFG(Set<ActiveProject> selectedItems) {
         // Mismo funcionamiento que aceptarTFGs
         List<String> titulos = new ArrayList<>();
-        for (PendingProject tfg : selectedItems) {
+        for (ActiveProject tfg : selectedItems) {
             titulos.add(tfg.getTitle());
         }
         Button aceptarBtn = new Button("Sí");
@@ -355,12 +398,12 @@ public class AceptView extends VerticalLayout {
      * @param valueChange
      */
     public void applyFilter(String column, String valueChange) {
-        dataFilteredGrid = new ArrayList<PendingProject>();
-        Iterator<PendingProject> iterator = dataPendingProjectsGrid.iterator();
+        dataFilteredGrid = new ArrayList<ActiveProject>();
+        Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
         String lowercase = valueChange.toLowerCase();
         if (!valueChange.equals(" ")) {
             while (iterator.hasNext()) {
-                PendingProject PendingProject = iterator.next();
+                ActiveProject PendingProject = iterator.next();
 
                 switch (column) {
                     case "title":
@@ -402,34 +445,34 @@ public class AceptView extends VerticalLayout {
     public void CreateDataModelToGrid() {
         String tutors = "";
         String students = "";
-        dataPendingProjectsGrid = new ArrayList<PendingProject>();
-        Iterator<PendingProject> iterator = dataPendingProjects.iterator();
+        dataActiveProjectsGrid = new ArrayList<ActiveProject>();
+        Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
         while (iterator.hasNext()) {
-            PendingProject PendingProject = iterator.next();
-
-            tutors = PendingProject.getTutor1();
-            if (!tutors.equals("")) {
-                if (!PendingProject.getTutor2().equals("")) {
-                    tutors += ", " + PendingProject.getTutor2();
-                    if (!PendingProject.getTutor3().equals("")) {
-                        tutors += ", " + PendingProject.getTutor3();
+            ActiveProject activeproject = iterator.next();
+            
+            tutors = activeproject.getTutor1(); 
+            if(!tutors.equals("")) {
+                if(!activeproject.getTutor2().equals("")) {
+                    tutors +=  ", " + activeproject.getTutor2();
+                    if(!activeproject.getTutor3().equals("")) {
+                        tutors +=  ", " + activeproject.getTutor3();
+                    }
+                }
+            }
+            
+            students = activeproject.getStudent1();
+            if(!students.equals("")) {
+                if(!activeproject.getStudent2().equals("")) {
+                    students +=  ", " + activeproject.getStudent2();
+                    if(!activeproject.getStudent3().equals("")) {
+                        students +=  ", " + activeproject.getStudent3();
                     }
                 }
             }
 
-            students = PendingProject.getStudent1();
-            if (!students.equals("")) {
-                if (!PendingProject.getStudent2().equals("")) {
-                    students += ", " + PendingProject.getStudent2();
-                    if (!PendingProject.getStudent3().equals("")) {
-                        students += ", " + PendingProject.getStudent3();
-                    }
-                }
-            }
-
-            PendingProject actives = new PendingProject(PendingProject.getTitle(), PendingProject.getDescription(),
-                    tutors, students, PendingProject.getStatus());
-            dataPendingProjectsGrid.add(actives);
+            ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
+                    tutors, students, activeproject.getCourseAssignment(),activeproject.getStatus());
+            dataActiveProjectsGrid.add(actives);
         }
     }
 

@@ -15,7 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 
-import ubu.digit.ui.views.AceptView;
+import ubu.digit.ui.views.ManageView;
 import ubu.digit.ui.views.ActiveProjectsView;
 import ubu.digit.ui.views.HistoricProjectsView;
 import ubu.digit.ui.views.InformationView;
@@ -119,10 +119,13 @@ public class NavigationBar extends HorizontalLayout{
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
         buttonUpload = new Button(UPLOAD);
-        buttonUpload.addClickListener(e -> UI.getCurrent().navigate(newProjectView.class));
+        buttonUpload.addClickListener(e -> {
+            newProjectView.tutorRegistrado=LoginView.tutorRegistrado;
+            UI.getCurrent().navigate(newProjectView.class);
+            });
         
         buttonAcept = new Button(ACEPT);
-        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(AceptView.class));
+        buttonAcept.addClickListener(e -> UI.getCurrent().navigate(ManageView.class));
         
         buttonProfessorHistoric = new Button(PROFESORES);
         buttonProfessorHistoric.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
@@ -142,20 +145,19 @@ public class NavigationBar extends HorizontalLayout{
 		buttonActive.setWidth("100%");
 		buttonHistoric.setWidth("100%");
 		buttonMetrics.setWidth("100%");
-		
 		buttonReport.setWidth("100%");
         buttonUpload.setWidth("100%");
         buttonAcept.setWidth("100%");
  
 		//LoginView.permiso.add("reports");
-		//LoginView.permiso.add("update");
+		LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
-		    add(buttonInfo,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
+		    add(buttonInfo,buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
 		}else if(LoginView.permiso.contains("reports")){
 	     //ROL DE PROFESOR
-           add(buttonInfo, buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
+           add(buttonInfo, buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
 		}else {
 	       //ROL ALUMNO
 	       add(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
