@@ -14,7 +14,8 @@ Nos centraremos en los siguientes puntos:
 	\item Implantar una pantalla con un histórico de los tutores, áreas y departamentos de la universidad, atendiendo al número de TFGs asignados por curso académico. 
 	\item Generar un informe para el usuario con la información de los tutores, \emph{TFGs} dirigidos, codirigidos y créditos, del área o áreas seleccionados.
 	\item Implementar un sistema para que los profesores puedan realizar propuestas de \emph{TFGs} directamente desde la aplicación. Indicando todos los campos que deben tener. 
-	\item Incorporar a su vez una entrada para que los administradores puedan aceptar o denegar los \emph{TFGs} que hayan sido propuestos por los tutores.
+	\item Incorporar a su vez una entrada para que los administradores puedan aceptar o denegar los \emph{TFGs} que hayan sido propuestos por los tutores, además de implementar una pantalla para modificar los datos de los TFGs activos.
+	\item Limitar el acceso a las pantallas dependiendo del rol del usuario que se registra en el sistema.
 \end{itemize}
 
 \section{Catálogo de requisitos}
@@ -37,13 +38,13 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 		\end{itemize}
 		\item \texttt{RF-4 Generar un informe sobre un área}: permitir al usuario seleccionar un área o áreas sobre los que generar un informe con la información  mencionada anteriormente de cada uno de los tutores pertenecientes a ese área. El usuario podrá indicar también el nombre del informe y la hoja de ruta.
 		\item \texttt{RF-5 Proponer un TFG}: permitir subir un \emph{TFG} a la base de datos del sistema, introduciendo toda su información mediante \emph{el framework Vaadin}, y además se indica de forma automática que su estado está es \emph{Pendiente de aprobación}.
-		\item \texttt{RF-6 Aceptar un TFG}: dar la capacidad de visualizar todos los \emph{TFGs} con estado 'Pendiente' para poder aprobarlos o denegarlos.
+		\item \texttt{RF-6 Admimistrar los TFGs}: dar la capacidad de visualizar todos los \emph{TFGs} activos para poder modificarlos, y aprobar o denegar los que esten con estado \emph{Pendiente}.
 		
 \end{itemize}
 
 \subsection{Requisitos no funcionales}
 \begin{itemize}
-	\item \texttt{RNF-1 Seguridad}: la aplicación deberá verificar que la persona accediendo a las nuevas pantallas, mencionadas en los requisitos RF-5 y RF-6, es un usuario con los privilegios requeridos.
+	\item \texttt{RNF-1 Seguridad}: la aplicación deberá verificar que la persona accediendo a las nuevas pantallas, mencionadas en los requisitos RF-4 RF-5 y RF-6, es un usuario con los privilegios requeridos.
 	\item \texttt{RNF-2 Mantenimiento y escalabilidad}: permitir que la aplicación siga ordenada, no sea pesada y permita incorporar más funciones a futuro.
 	\item \texttt{RNF-3 Documentación}: comentar las modificaciones realizadas para que el usuario que maneje la página sepa cómo se han realizado los procesos. 
 	\item\texttt{RNF-3 Mejorar diseño}: se realizarán mejoras gráficas de la aplicación para que resulte más atractiva e informativa. Se optará por opciones intuitivas y sencillas de utilizar, pertenecientes al \emph{framework de Vaadin}.
@@ -52,8 +53,19 @@ Se describirán los requisitos específicos, funcionales y los no funcionales.
 \section{Especificación de requisitos}
 
 \subsection{Diagrama de casos de uso}
-En esta sección se mostrarán los diagramas de casos de uso. En la aplicación hay tres actores: alumno, usuario con permisos de modificación, administrador?
+En esta sección se mostrarán los diagramas de casos de uso. En la aplicación hay tres actores: alumno, profesor y administrador.
+Este rol se le asigna una vez el usuario se registra en la aplicación en la pantalla inicial.
 
+
+\tablaSmallSinColores{Actores de la aplicación}{p{0.3\textwidth} | p{0.7\textwidth}}{Actores_aplicación}
+{\textbf{Usuario} & \textbf{Funcionalidad} \\}{
+	Alumno & Es el usuario que menos permisos posee, solo tiene acceso a las pantallas de información general, proyectos activos, histórico de proyectos y métricas. \\\hline
+	
+	Profesor & Es el usuario con el permiso \emph{reports} para poder generar informes y proponer TFGs, también tendrá acceso a la pantalla de histórico del profesorado, además de tener acceso a todas las mencionadas en el usuario \emph{Alumno}. \\\hline
+	
+	Administrador & Es el usuario que más permisos tiene, con el permiso \emph{update} que le da el acceso a todas las pantallas/botones restringidos. Tiene la capacidad de administrar los TFGs, es decir, modificar su información, aceptarlos, denegarlos, así como actualizar los datos de las bases de datos utilizadas para guardar la información. \\
+}
+Se puede ver un resumen de los casos de uso descritos anteriormente en la imagen:---------
 
 \tablaSmallSinColores{Caso de uso 1:  Realizar WebScraping.}{p{3cm} p{.75cm} p{9cm}}{tablaCU1}{
 	\multicolumn{3}{p{10.25cm}}{Caso de uso 1:  Realizar WebScraping.} \\
@@ -132,24 +144,24 @@ Urgencia                               & Baja \\
 	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguno} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
 	& 1    & Añadir toda la información en los campos que se indican sobre el \emph{TFG} que se quiera subir titulo, descripción, tutor1,cursoAsignación y tutor2, alumno1, alumno2 si procede.\\\cline{2-3}
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ser aprobado por un administrador.} \\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Introducir todos los parámetros que son obligatorios.} \\\hline
 	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
 	Frecuencia                             & Media \\\hline
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
 }
 
-\tablaSmallSinColores{Caso de uso 6: Generar un informe.}{p{3cm} p{.75cm} p{9cm}}{tablaCU6}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 6: Generar un informe.} \\
+\tablaSmallSinColores{Caso de uso 6: Administrar un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU6}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 6: Administrar un TFG.} \\
 }
 {
-	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador modificar el estado de un TFG con estado \emph{Pendiente} } \\\hline
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador modificar los datos de los TFGs activos además de cambiar el estado de los que están en \emph{Pendiente} } \\\hline
 	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ser validado como administrador a través del login} \\\hline
 	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguno} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
 	& 1    & Sustituir el campo estado del \emph{TFG} que se quiera modificar por \emph{Aceptado o Denegado}.\\\cline{2-3}
 
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Comprobar que los datos se han introducido de manera correcta y que no falte ninguno de los parámetros obligatorios.} \\\hline
 	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
 	Frecuencia                             & Media \\\hline
 	Importancia                            & Alta \\\hline

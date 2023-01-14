@@ -24,8 +24,7 @@ Se enumerarán y describirán brevemente los directorios del proyecto. Se puede 
 			\item \texttt{/src/main/java/ubu/digit/ui} código en relación a las ventanas y vistas de la aplicación.
 			\begin{itemize}
 				\item \texttt{/src/main/java/ubu/digit/ui/entity} código con las entidades de los proyectos, cursos y usuarios de la aplicación.
-					\begin{itemize}
-						\item \texttt{PendingProject.java}, nueva entidad de proyecto con estado \emph{Pendiente}.
+					\begin{itemize}		
 						\item \texttt{FormularioTFG.java}, nueva entidad con los campos del formulario del TFG.
 					\end{itemize}
 				\item \texttt{/src/main/java/ubu/digit/ui/components} código con la interfaz gráfica de la barra de navegación y la de pie de página.
@@ -34,7 +33,8 @@ Se enumerarán y describirán brevemente los directorios del proyecto. Se puede 
 						\item \texttt{ProfesoresView.java}, nueva vista con la información histórica de los profesores.
 						\item \texttt{ReportView.java}, nueva vista con el código para la realización de reportes.
 						\item \texttt{newProjectView.java}, nueva vista con el código que permite subir propuestas de TFGs al servidor.
-						\item \texttt{AceptView.java}, nueva vista con el código que permite aceptar o denegar las propuesta de TFGs con estado \emph{Pendiente}.
+						\item \texttt{ManageView.java}, nueva vista con el código que permite aceptar o denegar las propuesta de TFGs con estado \emph{Pendiente}, además de permitir modificar los que están activos.
+						\item \texttt{ModifyView.java}, nueva vista con el código que permite modificar los datos de un TFG seleccionado previamente en la vista de ManageView.
 					\end{itemize}
 				\item \texttt{/src/main/java/ubu/digit/util} incluye los métodos empleados de utilidad empleados en toda la app. 
 				\item \texttt{/src/main/java/ubu/digit/webService} servicios web empleados para la consulta en moodle.

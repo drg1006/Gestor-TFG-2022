@@ -9,18 +9,22 @@ A continuación se describirán los requisitos mínimos a cumplir para que el us
 Para utilizar la aplicación no será necesario instalar ningún componente en nuestro ordenador, a excepción de un navegador web.
 \section{Manual del usuario}
 A continuación se detallará el uso de la web, exclusivamente de las nuevas pantallas implantadas.
+\subsection{Login}
+El sistema de \emph{Login} es el mismo que estaba implementado, pero en esta versión se pedirá acceder una vez se inicie la aplicación, como primera pantalla, y una vez se haya registrado se verán las opciones a las que puede acceder en la barra de navegación. Los actores \emph{profesor y administrador} en la pantalla de histórico tendrán un submenu que les permitirá acceder a ambas pantallas de histórico, tanto de proyectos como de profesores.
+
+Usuario \emph{Alumno}.Ver imagen \ref{fig:userAlumno}.
+\imagenflotante{userAlumno}{Barra de navegación del usuario con permisos de alumno.}{0.9}
+ 
+ Usuario \emph{Profesor}.Ver imagen \ref{fig:userProfesor}. 
+ \imagenflotante{userProfesor}{Barra de navegación del usuario con permisos de profesor.}{0.9}
+ 
+ Usuario \emph{Alumno}.Ver imagen \ref{fig:userAdministrador}.
+ \imagenflotante{userAdministrador}{Barra de navegación del usuario con permisos de administrador.}{0.9}
+ 
 \subsection{Histórico profesorado}
-En esta nueva pantalla implantada se expone información histórica sobre el profesorado.
+En esta nueva pantalla implantada se expone información histórica sobre el profesorado, para acceder a ella será necesario ser \emph{profesor o administrador}.
 
-En la parte superior de la pantalla tenemos una opción para actualizar la base datos utilizada. Se informa de la última modificación de la base de datos actual y se le advierte al usuario que esta actualización es un proceso lento que puede tardar al rededor de un minuto. Ver imagen \ref{fig:ActualizarDatos}.
-
-\imagenflotante{ActualizarDatos}{Preguntar al usuario si quiere actualizar la base de datos}{0.9}
-
-Si se ha optado por actualizar, se mostrará al final un aviso al usuario con el tiempo transcurrido durante la operación. Ver imagen \ref{fig:Notifiacion}
-
-\imagenflotante{Notificacion}{Notificación al usuario sobre la actualización}{0.9}
-
-Posteriormente tenemos un pequeño apartado de información sobre el número de áreas, departamentos y profesores de la EPS. Ver imagen \ref{fig:infor_profes}.
+En la parte superior tenemos un pequeño apartado de información sobre el número de áreas, departamentos y profesores de la EPS. Ver imagen \ref{fig:infor_profes}.
 
 \imagenflotante{infor_profes}{Información sobre la EPS}{0.9}
 
@@ -33,7 +37,15 @@ La gráfica muestra el número de TFGs por curso asignado a ese parámetro. Ver 
 
 \imagenflotante{graficaAnexo}{Gráfica final tras seleccionar los parámetros}{0.9}
 
+Finalmente tenemos una opción para actualizar la base datos utilizada. Se informa de la última modificación de la base de datos actual y se le advierte al usuario que esta actualización es un proceso lento que puede tardar al rededor de un minuto. Ver imagen \ref{fig:ActualizarDatos}. Esta opción solo le aparece a los usuarios administradores.
+
+\imagenflotante{ActualizarDatos}{Preguntar al usuario si quiere actualizar la base de datos}{0.9}
+
+Si se ha optado por actualizar, se mostrará al final un aviso al usuario con el tiempo transcurrido durante la operación. Ver imagen \ref{fig:Notifiacion}
+
+\imagenflotante{Notificacion}{Notificación al usuario sobre la actualización}{0.9}
 \subsection{Creación de informes}
+Esta pantalla está restringida para los actores \emph{profesor y administrador}.
 En esta pantalla se le da al usuario la opción de añadir el número de alumnos matriculados en la asignatura \emph{Trabajos de Fin De Grado} y un área sobre el que se quiere hacer un informe, y el nombre que se le quiere dar. 
 Ver imagen \ref{fig:pantalla_informes}.
 
@@ -52,8 +64,7 @@ Pestaña 2: ver imagen \ref{fig:informe_excel2}
 
 \subsection{Oferta de TFG}
 
-A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean profesores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
-
+A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean profesores y/o administradores.
 En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesarios para crear un nuevo TFG:
 
 \begin{itemize}
@@ -64,6 +75,7 @@ En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesa
 	\item Descripción.
 	\item Tutor1, por defecto se indica el nombre del tutor que se ha \emph{loggeado}.
 	\item Tutor2.
+	\item Tutor3.
 	\item Alumno1, por defecto se indica \emph{'Alumnos sin asignar'}.
 	\item Alumno2.
 	\item CursoAsignación, por defecto se indicará el curso actual.
@@ -78,17 +90,16 @@ Los parámetros \emph{Título, descripción, tutor1, alumno1} son obligatorios, 
 
 \imagenflotante{obligatorio}{Aviso sobre los parámetros obligatorios.}{0.9}
 
-\subsection{Aceptación TFG}
+\subsection{Administrar TFGs}
 
-A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean administradores, es decir se pedirá al usuario que se identifique con su \emph{email y contraseña}. Si no tienen los permisos necesarios se les negará el acceso.
+A esta nueva pantalla solo podrán acceder los usuarios de \emph{Moodle} que sean administradores.
+Aquí aparecerán una tabla con la lista de TFGs de la pestaña de activos, en una tabla con filtros. Ver imagen \ref{fig:tablaPendientes}
 
-Aquí aparecerán una tabla con la lista de TFGs con estado \emph{Pendiente}, en una tabla con filtros. Ver imagen \ref{fig:tablaPendientes}
-
-\imagenflotante{tablaPendientes}{Tabla con los TFGs con estado Pendiente}{0.9}
+\imagenflotante{tablaPendientes}{Tabla con los TFGs activos}{0.9}
 
 Esta tabla contiene unos \emph{Checkboxes} para seleccionar los TFGs que queramos modificar.
 
-El funcionamiento es el siguiente:
+El funcionamiento de aceptar/denegar los TFGs es el siguiente:
 \begin{itemize}
 	\item Seleccionar los TFGs que queramos en la propia tabla.
 	\item Una vez los tengamos, pulsaremos en el botón \emph{Aceptar} o \emph{Denegar} según el estado que queramos indicar.
@@ -103,5 +114,17 @@ El funcionamiento es el siguiente:
 \imagenflotante{aceptarTFG}{Pop-up con la opción de aceptar TFG}{0.9}
 \imagenflotante{denegarTFG}{Pop-up con la opción de denegar TFG}{0.9}
 
-
+El funcionamiento para modificar los TFGs es el siguiente:
+\begin{itemize}
+	\item Seleccionar el TFG que se quiere modificar.
+	\item Si se selecciona más de un TFG se avisará al usuario, ya que no es posible modificar varios TFGs a la vez. Ver imagen \ref{fig:avisoModif}
+	\item Una vez se pulse en modificar se nos redirigirá a otra pantalla en la que tendremos todos los datos del TFG que queremos modificar por defecto y los datos nuevos a introducir. Tendremos tres opciones. Ver imagen \ref{fig:pantallaModif}
+	\begin{itemize}
+		\item Actualizar los datos del TFG y mantenerlo abierto, en la pestaña de proyectos activos.
+		\item Actualizar los datos del TFG y cerrarlo, cambiarlo a la pestaña de históricos.
+		\item Cancelar la operación.
+	\end{itemize}
+\end{itemize}
+\imagenflotante{avisoModif}{Pop-up con el aviso}{0.9}
+\imagenflotante{pantallaModif}{Pantalla con los datos del TFG seleccionado y los datos a introducir}{0.9}
 
