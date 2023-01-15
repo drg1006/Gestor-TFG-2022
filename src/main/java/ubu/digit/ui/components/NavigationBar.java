@@ -113,7 +113,7 @@ public class NavigationBar extends HorizontalLayout{
         buttonHistoric.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
       
 		buttonMetrics = new Button(METRICAS);
-		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/organizations/dbo1001/projects/\", \"_blank\");"));
+		buttonMetrics.addClickListener(e -> UI.getCurrent().getPage().executeJavaScript("window.open(\"https://sonarcloud.io/organizations/drg1006/projects/\", \"_blank\");"));
         
         buttonReport = new Button(INFORME);
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
