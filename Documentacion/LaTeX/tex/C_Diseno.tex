@@ -30,22 +30,23 @@ También se ha creado en una de las nuevas pantallas (generar informe) añadidas
 De forma general la estructura de paquetes y fichero es la misma que en el proyecto anterior \textbf{\textit{Gestor-TFG-2021}}~\cite{Gestor-TFG-2021}. Por lo que en este apartado solo se enseñará la estructura de los nuevos ficheros añadidos para las funcionalidades creadas.
 
 \begin{itemize}
-	\item En la carpeta \texttt{ubu.digit.ui.view} se han añadido cuatro nuevas clases pertenecientes a las funcionalidades añadidas. Ver imagen \ref{fig:views}
+	\item En la carpeta \texttt{ubu.digit.ui.view} se han añadido cinco nuevas clases pertenecientes a las funcionalidades añadidas. Ver imagen \ref{fig:views}
 	
 	\imagenflotante{views}{Diagrama de clases - Vistas}{0.9}
 	
-	\item En la carpeta \texttt{ubu.digit.ui.entity} se han otros dos archivos para representar los proyectos con estado \emph{Pendientes} y el formulario de propuesta de TFG. Ver imagen \ref{fig:entity}
+	\item En la carpeta \texttt{ubu.digit.ui.entity} se ha añadido otro archivo para representar el formulario de propuesta de TFG. Ver imagen \ref{fig:entity}
 	
 	\imagenflotante{entity}{Diagrama de clases - Entidades}{0.9}
 	
 \end{itemize}
 
 \section{Diseño procedimental}
-En esta versión se han añadido dos nuevas pantallas que requieren de una restricción de usuario para ser utilizadas.
+En esta versión se ha añadido un sistema de identificación del usuario al comienzo de la aplicación, este registro le dará por lo tanto un rol al usuario. Una vez tenga asignado un rol podrá acceder a las diferentes pantallas y funcionalidades asociadas a ese actor.
 El sistema sigue la siguiente lógica. Ver imagen \ref{fig:diagramaFlujo}
 
 \imagenflotante{diagramaFlujo}{Diagrama de Flujo - Login}{0.9}
 
 \section{Diseño arquitectónico}
 
-
+El diseño arquitectónico sigue la misma estructura que encontrábamos en la versión anterior del proyecto. Con una clara distinción entre los ficheros \emph{frontend} y los ficheros \emph{backend}.
+A su vez seguimos el patrón de diseño \emph{Singleton}, que es un patrón creacional que nos permite asegurarnos de que una clase tenga una única instancia, a la vez que proporciona un punto de acceso global a dicha instancia. ~\cite{Singleton}.
