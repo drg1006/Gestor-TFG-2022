@@ -8,13 +8,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-
+import java.util.Date;
 import java.util.List;
-
+import java.util.concurrent.TimeUnit;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -27,13 +29,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -42,8 +44,6 @@ import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.ui.entity.ActiveProject;
-import ubu.digit.ui.entity.FormularioTFG;
-import ubu.digit.ui.entity.HistoricProject;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -224,6 +224,10 @@ public class ModifyView extends VerticalLayout {
         });
         
         NumberField nota=new NumberField("Indique una nota del TFG");
+        
+        nota.setMax(10);
+        nota.setMin(0);
+        nota.setErrorMessage("El valor debe estar entre 0 y 10");
         nota.setWidth("40%");
         nota.addValueChangeListener(event->{
             nota.setValue(event.getValue()); 
@@ -236,21 +240,7 @@ public class ModifyView extends VerticalLayout {
         repo.addValueChangeListener(event->{
             repo.setValue(event.getValue()); 
         });
-        
-        //Indicando que los campos son obligatorios para aceptar y mantener abierto
-        Binder<FormularioTFG> binder= new Binder<>(FormularioTFG.class);
-        binder.forField(tituloCorto).asRequired("Debes indicar un titulo").bind("tituloCorto");
-        binder.forField(descripcion).asRequired("Debes indicar una descripción").bind("descripcion");
-        binder.forField(tutor1).asRequired("Debes indicar un tutor1").bind("tutor1");
-        binder.forField(alumno1).asRequired("Debes indicar un alumno").bind("alumno1");
-        
-        //AÑADIMOS LOS PARAMETROS QUE DEBEN SER OBLIGATORIOS PARA CERRAR UN TFG (los mismos que para dejarlo abierto y alguno más)
-        Binder<FormularioTFG> binder2= binder;
-       /* binder2.forField(fechaAsignacion).asRequired("Debes indicar una fecha de asignacion").bind("fechaAsignacion");
-        binder2.forField(fechaPresentacion).asRequired("Debes indicar una fecha de presentacion").bind("fechaPresentacion");
-        binder2.forField(nota).asRequired("Debes indicar una nota").bind("nota");
-        binder2.forField(repo).asRequired("Debes indicar un repositorio").bind("repo");
-        */
+                
         
         Button AceptaryAbierto= new Button("Aceptar cambios y dejar abierto");
         Button AceptaryCerrado= new Button("Aceptar cambios y mover a histórico");
@@ -262,49 +252,114 @@ public class ModifyView extends VerticalLayout {
         });
         
         AceptaryAbierto.addClickListener(event ->{
-            if(binder.validate().isOk()) {
-                Notification.show("Se ha modificado correctamente el TFG propuesto"); 
-            }else {
+            if(vacios1(tutor1,alumno1,descripcion,tituloCorto)) {
+               Dialog aviso1 = new Dialog();
+                // Añadidmos un texto
+               aviso1.add("Los parámetros tutor1, alumno1, tituloCorto y descripción son obligatorios para modificar y mantener activo un proyecto.");
+               aviso1.open();
+               Button closeButton = new Button(new Icon("lumo", "cross"),
+                       (e) -> aviso1.close());
+               closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+              aviso1.add(closeButton);
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
+              
+            }else {
+               
+               stringAbierto(tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
+                        tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),cursoAsignacion.getValue());
+                Notification.show("Se ha modificado correctamente el TFG propuesto en la pestaña de activos."); 
             }
         });
         
-        AceptaryCerrado.addClickListener(event ->{
-            if(binder2.validate().isOk()) {
-                Notification.show("Se ha modificado correctamente el TFG propuesto");
-            }else {
-                LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
-            }
+        AceptaryCerrado.addClickListener(event ->{     
+            if(vacios1(tutor1,alumno1,descripcion,tituloCorto) || 
+                    vacios2(fechaAsignacion,fechaPresentacion,nota,repo)) {
+                Dialog aviso2 = new Dialog();
+                 // Añadidmos un texto
+                aviso2.add("Los parámetros tutor1, alumno1, tituloCorto, descripción, curso de asignación, fecha de asignación, "
+                        + "fecha de presentación, nota y enlace URL son obligatorios para modificar y cerrar un proyecto.");
+                aviso2.open();
+                Button closeButton = new Button(new Icon("lumo", "cross"),
+                        (e) -> aviso2.close());
+                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+               aviso2.add(closeButton);
+                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
+               
+             }else {
+                 long dias =obtenerDiasTotales(fechaAsignacion,fechaPresentacion);
+                 stringCerrado(titulo.getValue(),tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
+                         tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsignacion.getValue(),fechaPresentacion.getValue(),nota.getValue(),dias,repo.getValue());
+                 Notification.show("Se ha eliminado el TFGde activos y se ha añadido en historicos correctamente."); 
+             }
         });
  
-        add(titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion,fechaAsignacion,fechaPresentacion,nota,repo);
+       add(titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion,fechaAsignacion,fechaPresentacion,nota,repo);
        HorizontalLayout layout= new HorizontalLayout();
        layout.add(AceptaryAbierto,AceptaryCerrado,cancelar);
        add(layout);
         
     }
+ 
 
     /**
-     * Metodo que guarda los datos en un Array [].
-     * @param titulo titulo del tfg
-     * @param descripcion descripcion del tfg
-     * @param tutor1 tutor1
-     * @param tutor2 tutor2
-     * @param tutor3 tutor3
-     * @param alumno1 alumno1
-     * @param alumno2 alumno2
-     * @param cursoAsignacion curso
+     * Método para obtener el número de días que ha estado asignado el proyecto al alumno.
+     * Diferencia entre fecha de asignacion y de presentacion.
+     * @param fechaAsignacion asignacion del proyecto
+     * @param fechaPresentacion presentacion del trabajo
+     * @return dias de diferencia
      */
-    private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
-            String cursoAsignacion) {
-        String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
-        try {
-            guardarDatosXLS(TFG);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    private long obtenerDiasTotales(DatePicker fechaAsignacion, DatePicker fechaPresentacion) {
+        // Obtener las fechas seleccionadas en los DatePickers
+        //default time zone
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+            
+        //creating the instance of LocalDate 
+        LocalDate fechaPre = fechaPresentacion.getValue();
+        LocalDate fechaAsig =  fechaAsignacion.getValue();
+        //local date + atStartOfDay() + default time zone + toInstant() = Date
+        Date date1 = Date.from(fechaPre.atStartOfDay(defaultZoneId).toInstant());
+        Date date2 = Date.from(fechaAsig.atStartOfDay(defaultZoneId).toInstant());
+
+        // Calcular la diferencia entre las dos fechas en días en milisegundos
+        long daysBetween = date1.getTime()-date2.getTime();
+
+        TimeUnit unidad= TimeUnit.DAYS;
+        long dias=unidad.convert(daysBetween,TimeUnit.MILLISECONDS);
+        return dias;
         
+    }
+
+    /**
+     * Método para comprobar si están vacíos los parametros pasados por argumentos, utilizado en ambas opciones de modificacion.
+     * Para reutilizar codigo.
+     * @param tutor1
+     * @param alumno1
+     * @param descripcion
+     * @param tituloCorto
+     * @return true or false
+     */
+    private boolean vacios1(ComboBox<String> tutor1, TextArea alumno1, TextArea descripcion, TextArea tituloCorto) {
+        return tutor1.getValue().isBlank()||
+                tituloCorto.getValue().isBlank()|| 
+                descripcion.getValue().isBlank()|| 
+                alumno1.getValue().isBlank() ;
+    }
+
+    /**
+     * Método para comprobar si están vacíos los parametros pasados por argumentos, utilizado en la opcion de cerrar tfg.
+     * @param cursoAsignacion
+     * @param fechaAsignacion
+     * @param fechaPresentacion
+     * @param nota
+     * @param repo
+     * @return true or false
+     */
+    private boolean vacios2( DatePicker fechaAsignacion, DatePicker fechaPresentacion, NumberField nota, TextArea repo) {
+        return  fechaAsignacion.getValue()==null ||
+                fechaPresentacion.getValue()==null|| 
+                nota.getValue()==null ||
+                repo.getValue().isBlank(); 
+
     }
     
     /**
@@ -348,19 +403,177 @@ public class ModifyView extends VerticalLayout {
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+       /**
+        * Guardamos en un array toda la información si es un tfg para mantener abierto, para que funcione como una fila.
+        * @param tituloCorto titulo del tfg
+        * @param descripcion 
+        * @param tutor1
+        * @param tutor2
+        * @param tutor3
+        * @param alumno1
+        * @param alumno2
+        * @param alumno3
+        * @param cursoAsignacion
+        */
+       private void stringAbierto(String tituloCorto, String descripcion, String tutor1, String tutor2, String tutor3,
+               String alumno1, String alumno2, String alumno3, String cursoAsignacion) {
+
+           String [] TFG= {tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion};     
+           //Esta variable se va a utilizar para saber si lo que se tiene que hacer es actualizar la fila o si se tiene que borrar
+           //Es decir, si se llama desde cerrar un fichero
+           int estado=0;
+           try {
+               actFicheroActivos(TFG,tituloTFG,estado);
+           } catch (IOException e) {
+            // TODO Auto-generated catch block
+               e.printStackTrace();
+           }
+           //Actualizamos en titulo del tfg ya que si modificamos un titulo 
+           //tenemos que buscar el titulo anterior a ese para cambiar la fila deseada
+           tituloTFG=tituloCorto;
+       }
+       
+    /**
+     * Guardamos en un array toda la información si es un tfg que queremos cerrar, para que funcione como una fila.
+     * @param titulo
+     * @param tituloCorto
+     * @param descripcion
+     * @param tutor1
+     * @param tutor2
+     * @param tutor3
+     * @param alumno1
+     * @param alumno2
+     * @param alumno3
+     * @param fechaAsignacion
+     * @param fechaPresentacion
+     * @param nota
+     * @param dias
+     * @param repo
+     */
+    private void stringCerrado(String titulo, String tituloCorto, String descripcion, String tutor1, String tutor2,
+               String tutor3, String alumno1, String alumno2, String alumno3, LocalDate fechaAsignacion,
+               LocalDate fechaPresentacion, Double nota, long dias, String repo) {
+
+           String [] TFG= {titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsignacion.toString(),
+                   fechaPresentacion.toString(),nota.toString(),String.valueOf(dias),repo};
+           int estado=1;
+           //Borramos el TFG del listado de activos;
+           try {
+            actFicheroActivos(TFG,tituloTFG,estado);
+            actFicheroHistoricos(TFG);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
            
+       }
+    
+    /**
+     * Metodo que actualiza la información del tfg pasado por parametro en la pestaña de proyectos activos.
+     * @param TFG informacion del tfg
+     * @param titulo titulo del tfg para actualizar
+     * @param estado 0 o 1 si hay que borrar el tfg o solo actualizar
+     * @throws IOException
+     */
+    private void actFicheroActivos(String[] TFG,String titulo, int estado) throws IOException{
+      //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);
+        
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = NOMBRE_BASES;
+        File file = new File(completeDir + fileName);
+        
+        String absPath = file.getAbsolutePath();       
+        System.out.println("absPath "+absPath);
+        try {
+            FileInputStream inputStream = new FileInputStream(new File(absPath));
+            Workbook workbook = WorkbookFactory.create(inputStream);      
+            Sheet hoja= workbook.getSheet(PROYECTO);
+            int rowid=0;
+               for (Row row : hoja) {
+                    for (Cell cell : row) {
+                        if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
+                            rowid = row.getRowNum();
+                            break;
+                        }
+                    }
+                }
+            Object[] objectArr = TFG;            
+            int cellid = 0;
+            Row fila1 = hoja.getRow(rowid);
+            //Comprobamos si tenemos que actualizar la fila o borrarla
+            for (Object obj : objectArr) {
+                    if(estado==0) {
+                        Cell cell = fila1.createCell(cellid++);
+                        cell.setCellValue((String)obj);
+                    }else {
+                        Cell cell = fila1.createCell(cellid++);
+                        cell.setCellValue("");
+                    }
+             }
+
+            FileOutputStream outputStream = new FileOutputStream(absPath);
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+            SistInfDataFactory.setInstanceData("XLS");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    /**
+     * Metodo que añade la información del tfg pasado por parametro en la pestaña de proyectos historicos.
+     * @param TFG informacion del tfg
+     * @throws IOException
+     */
+    private void actFicheroHistoricos(String[] TFG) throws IOException{
+      //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);
+        
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = NOMBRE_BASES;
+        File file = new File(completeDir + fileName);
+        
+        String absPath = file.getAbsolutePath();       
+        System.out.println("absPath "+absPath);
+        try {
+            FileInputStream inputStream = new FileInputStream(new File(absPath));
+            Workbook workbook = WorkbookFactory.create(inputStream);
+       
             
+            Sheet hoja= workbook.getSheet(HISTORICO);
+            int rowid = hoja.getLastRowNum();
+
+            Row fila = hoja.createRow(++rowid);
+            Object[] objectArr = TFG;
+            
+            int cellid = 0;
+      
+            for (Object obj : objectArr) {
+                Cell cell = fila.createCell(cellid++);
+                cell.setCellValue((String)obj);
+            }
+ 
+            FileOutputStream outputStream = new FileOutputStream(absPath);
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+            SistInfDataFactory.setInstanceData("XLS");
            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
-       public HistoricProject detallesTFG(String TFG){
-        
-        return null;
-           
-       }
-    
-    
 }
