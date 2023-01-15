@@ -289,7 +289,7 @@ public class ModifyView extends VerticalLayout {
                  long dias =obtenerDiasTotales(fechaAsignacion,fechaPresentacion);
                  stringCerrado(titulo.getValue(),tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
                          tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsignacion.getValue(),fechaPresentacion.getValue(),nota.getValue(),dias,repo.getValue());
-                 Notification.show("Se ha eliminado el TFGde activos y se ha añadido en historicos correctamente."); 
+                 Notification.show("Se ha eliminado el TFG de activos y se ha añadido en historicos correctamente."); 
              }
         });
  
