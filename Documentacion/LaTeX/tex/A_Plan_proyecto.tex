@@ -121,7 +121,7 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 \end{itemize}
 
-\subsection{Sprint 4 - Asignación TFGs (15/12/22 - --/--/--) }
+\subsection{Sprint 4 - Asignación TFGs (15/12/22 - 11/01/23) }
 
 En este sprint se realizarán varias correcciones de las funcionalidades añadidas previamente y se añadirán dos nuevas pantallas, una para subir TFGs y otra para aceptar o denegarlos.
 
@@ -151,6 +151,28 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	\imagenflotante{Sprint4_CONTROL}{Gráfica Burndown Report- Sprint 4}{0.9}
 \end{itemize} 
 
+\subsection{Sprint 5 - Modificación TFGs (12/01/23 - --/--/--) }
+
+En este sprint se realizarán varias correcciones de las funcionalidades añadidas previamente y además se modificará la pantalla de aceptación de TFGs que pasará a ser de administración, pudiendo modificar los proyectos activos.
+
+A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
+
+\begin{itemize}
+	\item Actualización de métodos para obtener los datos de ficheros CSV. Se han implementado los métodos para obtener la información de los ficheros CSV.
+	\item Implementación del nuevo sistema de \emph{Login}. Pidiendo un registro de forma inicial para asignar un rol al usuario que inicia sesión y mostrarle así las pantallas a las que puede acceder. Se ha restringido la vista a las distintas pantallas de la aplicación dependiendo de los permisos del usuario que inicia sesión.
+	\item Ajustar la nueva barra de navegación ante el usuario que inicia sesión, así como del \emph{sub menu} que se crea en la pantalla de histórico tanto del profesorado como de los proyectos. Se han estudiado también otras formas para realizar la barra de navegación que finalmente no se han implementado por no ser óptimas.
+	\begin{itemize}
+		\item Realizar un desplegable mediante el componente \emph{MenuBar} de Vaadin, que se descartó porque no podía redimensionar.
+		\item Mediante el componente \emph{Tab}. Una barra de navegación que finalmente se descartó ya que era mucho más trabajo del pensado crearla y adaptarla al proyecto.
+	\end{itemize}		
+	\item Creación de la cuenta de \emph{SonarCloud} para analizar la calidad del código creado y de otros proyectos añadidos, para la pantalla de \emph{Metricas}.
+	\item Modificación de la pantalla de aceptación de TFGs que pasa a llamarse\emph{Administrar TFGs}. Se han añadido las siguientes funcionalidades:
+	\begin{itemize}
+		\item Nuevo botón de \emph{Modificación} de TFGs. Botón que solo permite seleccionar un solo TFG de la tabla.
+		\item Creación de la nueva pantalla de modificación de los TFGs. Esta pantalla tiene todos los campos posibles que puede tener un proyect. Permite modificar los datos del TFG seleccionado para mantenerlo abierto y en la pantalla de activos, como para actualizarlo y cerrarlo moviéndolo a la pestaña de \emph{Históricos}.
+		\item Actualización de los datos del TFG seleccionado en el archivo de la base de datos, ya sea eliminándolo de la pestaña de activos y añadiéndolo a la de históricos como actualizándolo unicamente en la pestaña de activos.
+	\end{itemize}
+\end{itemize}
 
 \section{Estudio de viabilidad}
 En este apartado se detallan los costes que llevaría realizar este proyecto de forma real. Se considerarán los costes de recursos humanos, el material empleado y el \emph{Software} usado. 
@@ -192,6 +214,7 @@ También existe una cuestión de legalidad a la hora de hacer \emph{webscraping}
 
 En esta sección se mostrará una ideal inicial de como iba a ser el reparto de horas de las diferentes tareas durante el desarrollo del TFG. La tabla \ref{horas} muestra una predicción de la división del proyecto.
 
+
 \begin{table}[]
 	\label{horas}
 	\centering
@@ -202,7 +225,7 @@ En esta sección se mostrará una ideal inicial de como iba a ser el reparto de 
 		Programación                            & 140 h         \\ \hline
 		Documentación memoria y anexos          & 60 h          \\ \hline
 		Estudio de las herramientas utilizadas y alternativas & 10 h \\ \hline
-			Preparación de la presentación		    & 5 h           \\ \hline
+		Preparación de la presentación		    & 5 h           \\ \hline
 	\end{tabular}
 	\caption{Planteamiento de horas iniciales.}
 \end{table}
