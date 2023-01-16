@@ -375,7 +375,7 @@ public class ProfesoresView extends VerticalLayout {
      * Metodo que despliega los datos de departamentos,areas y profesores para seleccionarlos.
      */
     public void datosGraficas(){
-        H2 metricsTitle = new H2("GRÁFICA");
+        H2 metricsTitle = new H2("DATOS A MOSTRAR");
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
         List<String> courses = new ArrayList<>();
@@ -417,11 +417,11 @@ public class ProfesoresView extends VerticalLayout {
         //Checkbox de areas
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
         List<String> areas= fachadaDatos.getAreas();
-        CheckboxGroup<String> checkboxGroupA = new CheckboxGroup<>();
-        checkboxGroupA.setLabel("Areas:");
-        checkboxGroupA.setItems(areas);
-        
-        checkboxGroupA.addValueChangeListener(event -> {
+       
+        CheckboxGroup<String> selectAreas = new CheckboxGroup<>();
+        selectAreas.setLabel("Areas:");
+        selectAreas.setItems(areas);
+        selectAreas.addValueChangeListener(event -> {
             if (event.getValue().size() == areas.size()) {
                 checkboxA.setValue(true);
                 checkboxA.setIndeterminate(false);
@@ -434,19 +434,20 @@ public class ProfesoresView extends VerticalLayout {
         });
         checkboxA.addValueChangeListener(event -> {
             if (checkboxA.getValue()) {
-                checkboxGroupA.setValue(new HashSet<>(areas));
+                selectAreas.setValue(new HashSet<>(areas));
             } else {
-                checkboxGroupA.deselectAll();
+                selectAreas.deselectAll();
             }
         });
       //Checkbox de departamentos
         Checkbox checkboxD = new Checkbox("Seleccionar todos los departamentos");
         List<String> departamentos= fachadaDatos.getDepartamentos();
-        CheckboxGroup<String> checkboxGroupD = new CheckboxGroup<>();
-        checkboxGroupD.setLabel("Departamentos:");
-        checkboxGroupD.setItems(departamentos);
+        CheckboxGroup<String> selectDepart = new CheckboxGroup<>();
+        
+        selectDepart.setLabel("Departamentos:");
+        selectDepart.setItems(departamentos);
            
-        checkboxGroupD.addValueChangeListener(event -> {
+        selectDepart.addValueChangeListener(event -> {
             if (event.getValue().size() == departamentos.size()) {
                 checkboxD.setValue(true);
                 checkboxD.setIndeterminate(false);
@@ -459,9 +460,9 @@ public class ProfesoresView extends VerticalLayout {
             });
             checkboxD.addValueChangeListener(event -> {
                 if (checkboxD.getValue()) {
-                    checkboxGroupD.setValue(new HashSet<>(departamentos));
+                    selectDepart.setValue(new HashSet<>(departamentos));
                 } else {
-                    checkboxGroupD.deselectAll();
+                    selectDepart.deselectAll();
                 }
          
 
@@ -481,7 +482,7 @@ public class ProfesoresView extends VerticalLayout {
                 buton.addClickListener(event2 ->{
                     profSelect.remove(event.getValue());
                     profes.remove(buton);
-                    pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
+                    pintarGrafica(selectAreas.getValue(),selectDepart.getValue(),profSelect,lineChart);
                 });
                 profes.add(buton);
                 layout.addComponentAtIndex(11, profes);
@@ -491,10 +492,10 @@ public class ProfesoresView extends VerticalLayout {
             Button actualizar= new Button("Actualizar gráfica");
             actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             actualizar.addClickListener(event -> {
-                pintarGrafica(checkboxGroupA.getValue(),checkboxGroupD.getValue(),profSelect,lineChart);
+                pintarGrafica(selectAreas.getValue(),selectDepart.getValue(),profSelect,lineChart);
             });
            
-           layout.add(checkboxA,checkboxGroupA,checkboxD,checkboxGroupD,filtroProfesores,actualizar,lineChart);  
+           layout.add(selectAreas,checkboxA,selectDepart,checkboxD,filtroProfesores,actualizar,lineChart);  
     } 
     
     /**
