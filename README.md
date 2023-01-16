@@ -27,8 +27,9 @@ El proyecto está desplegado en https://gestor-tfg-2022.herokuapp.com/ .
 * Plugin de Vaddin --> Instalar la extensión llamada "Vaadin Plugin for Eclipse" desde el "Eclipse Marketplace".
 
 ### Ejecución en local
-* Eliminar dependencias --> mvn clean
+Desde Eclipse:
 * Instalar dependencias y compilar --> mvn install
 * Instalar en modo producción (despliegue) --> mvn package -Pproduction
-* Iniciar app --> mvn spring-boot:run
-* Ejecutar los test --> mvn test
+* Ejecutar con tomcat --> run on server 
+Desde cmd:
+* Mediante gestor de aplicaciones de Tomcat
