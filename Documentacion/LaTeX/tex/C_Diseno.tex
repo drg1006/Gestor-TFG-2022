@@ -10,7 +10,7 @@ En este anexo se detallarán los aspectos referentes al diseño de la aplicació
 En esta nueva versión del proyecto se han añadido varios ficheros de datos nuevos con los que se va a trabajar. Para que se puedan obtener los datos de estos ficheros \textbf{se deben dar unas condiciones}.
 
 \begin{itemize}
-	\item El fichero \texttt{src/main/resources/data/BaseDeDatosTFGTFM.xls} se ha modificado, al añadir nuevos datos, con información real sobre proyectos y más peso, surgían \emph{bugs} tratando la información por lo que los campos \emph{fechaAsignacion y fechaPresentacion} en la pestaña \emph{``N3\_Historico''} se han cambiado a tipo \emph{texto} y con el formato estándar europeo DD/MM/AAAA.
+	\item El fichero \texttt{src/main/resources/data/BaseDeDatosTFGTFM.xls} se ha modificado, al añadir nuevos datos, con información real sobre proyectos y más peso, surgían \emph{bugs} tratando la información por lo que los campos \emph{fechaAsignacion y fechaPresentacion} en la pestaña \emph{``N3\_Historico''} se han cambiado a tipo \emph{texto} y con el formato DD/MM/AAAA.
 	\item El campo \emph{Nota} también se ha modificado, previamente era un número aleatorio entre 5 y 10, se ha sustituido por un valor natural de tipo \emph{general}.
 \end{itemize}
 
@@ -20,14 +20,14 @@ y los proyectos activos no se mostraran de manera correcta los datos.
 La nueva información obtenida mediante el \emph{webscraping} realizado se ha guardado en dos archivos.
 \begin{itemize}
 	\item En el archivo csv \emph{``N4\_Profesores''}, contiene en una columna separada por comas los parámetros obtenidos sobre los profesores, nombre y apellidos, área y departamentos.
-	\item Esta información se ha añadido en la pestaña \emph{``N4\_Profesores''} de separados por columnas.
+	\item Esta información se ha añadido en la pestaña \emph{``N4\_Profesores''} del fichero \texttt{BaseDeDatosTFGTFM.xls} separados por columnas.
 \end{itemize}
 
-También se ha creado en una de las nuevas pantallas (generar informe) añadidas un fichero descargable que contiene tres columnas con la información de los profesores de los áreas seleccionadas durante el proceso de creación del proceso, todos los campos que se guardan son tipo \emph{general}.
+También se crea en una de las nuevas pantallas añadidas un fichero descargable que contiene tres columnas con la información de los profesores de los áreas seleccionadas durante el proceso de creación del informe, todos los campos que se guardan son tipo \emph{general}.
 
 \subsection{Diagrama de clases}
 
-De forma general la estructura de paquetes y fichero es la misma que en el proyecto anterior \textbf{\textit{Gestor-TFG-2021}}~\cite{Gestor-TFG-2021}. Por lo que en este apartado solo se enseñará la estructura de los nuevos ficheros añadidos para las funcionalidades creadas.
+De forma general la estructura de paquetes y ficheros es la misma que en el proyecto anterior \textbf{\textit{Gestor-TFG-2021}}~\cite{Gestor-TFG-2021}. Por lo que en este apartado solo se enseñará la estructura de los nuevos ficheros añadidos para las funcionalidades creadas.
 
 \begin{itemize}
 	\item En la carpeta \texttt{ubu.digit.ui.view} se han añadido cinco nuevas clases pertenecientes a las funcionalidades añadidas. Ver imagen \ref{fig:views}
@@ -42,11 +42,11 @@ De forma general la estructura de paquetes y fichero es la misma que en el proye
 
 \section{Diseño procedimental}
 En esta versión se ha añadido un sistema de identificación del usuario al comienzo de la aplicación, este registro le dará por lo tanto un rol al usuario. Una vez tenga asignado un rol podrá acceder a las diferentes pantallas y funcionalidades asociadas a ese actor.
-El sistema sigue la siguiente lógica. Ver imagen \ref{fig:diagramaFlujo}
+El sistema sigue la siguiente lógica, ilustrada en la imagen \ref{fig:diagramaFlujo}.
 
 \imagenflotante{diagramaFlujo}{Diagrama de Flujo - Login}{0.9}
 
 \section{Diseño arquitectónico}
 
 El diseño arquitectónico sigue la misma estructura que encontrábamos en la versión anterior del proyecto. Con una clara distinción entre los ficheros \emph{frontend} y los ficheros \emph{backend}.
-A su vez seguimos el patrón de diseño \emph{Singleton}, que es un patrón creacional que nos permite asegurarnos de que una clase tenga una única instancia, a la vez que proporciona un punto de acceso global a dicha instancia. ~\cite{Singleton}.
+A su vez seguimos el patrón de diseño \emph{Singleton}, que es un patrón creacional que nos permite asegurarnos de que una clase tenga una única instancia, a la vez que proporciona un punto de acceso global a dicha instancia.~\cite{Singleton}.
