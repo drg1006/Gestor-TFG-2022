@@ -33,6 +33,7 @@ import static ubu.digit.util.Constants.*;
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 @Route(value = "active-projects")
 @PageTitle("Proyectos activos")

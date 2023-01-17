@@ -89,8 +89,13 @@ public class LoginView extends VerticalLayout{
 	 */
 	public static List<String> permiso=new ArrayList<>();
 
+	/**
+	 * Variable en la que guardamos el nombre del tutor que inicia sesion.
+	 */
     public static String tutorRegistrado;
-    
+    /**
+     * Variable en la que guardamos si se ha iniciado o no sesion.
+     */
     public static Boolean sesionIniciada=false;
 	
 	public LoginView() {
@@ -122,6 +127,7 @@ public class LoginView extends VerticalLayout{
 				login.setError(true);
 			}else {
 				LOGGER.info("Usuario validado ");
+				//Se ha iniciado sesion
 				sesionIniciada=true;
 				CONTROLLER.setUsername(e.getUsername());				
 				login.setEnabled(true);
@@ -171,6 +177,7 @@ public class LoginView extends VerticalLayout{
 			MoodleUser moodleUser = populateMoodleUser.populateMoodleUser(validUsername, CONTROLLER.getUrlHost().toString());
 			
 			LOGGER.info("Obteniendo información del usuario: " + moodleUser.getFullName());
+			//Guardamos el nombre del tutor que inicia sesión
 			tutorRegistrado=moodleUser.getFullName();
 			//Creacion instancia de CreateCourse desde la cual se accedera a los metodos de obtención de los cursos y permisos
 			CreateUserCourses createUserCourses = new CreateUserCourses(CONTROLLER.getWebService());
@@ -199,7 +206,7 @@ public class LoginView extends VerticalLayout{
 				}
 			}   
 			LOGGER.info("Curso TFG del usuario: ID--> " + idTFG);
-            
+            //Obtenemos los permisos
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "update")) {

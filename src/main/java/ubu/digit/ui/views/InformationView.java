@@ -56,7 +56,9 @@ public class InformationView extends VerticalLayout {
 	 *  Fachada para obtener los datos
 	 */
 	private SistInfDataAbstract fachadaDatos;
-	
+	/**
+	 * Creamos el footer.
+	 */
 	private Footer footer;
 
 	/**

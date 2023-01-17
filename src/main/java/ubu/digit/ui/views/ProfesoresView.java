@@ -115,6 +115,9 @@ public class ProfesoresView extends VerticalLayout {
      */
     private SistInfDataAbstract fachadaDatos;
 
+    /**
+     * ArrayList con los profesores seleccionados del desplegable.
+     */
      List<String> profSelect = new ArrayList<>();
      
     /**

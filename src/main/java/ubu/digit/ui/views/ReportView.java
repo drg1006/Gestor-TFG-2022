@@ -313,7 +313,7 @@ public class ReportView extends VerticalLayout {
      * @param profesor profesor a buscar
      * @param ultimoAño el año que se busca
      * @param nAlumn nAlumnos matriculados en TFG
-     * @return
+     * @return valor con el numero de creditos
      */
     private float obtenerCreditos(String profesor,int ultimoAño,Double nAlumn) {
         

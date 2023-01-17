@@ -44,8 +44,7 @@ import ubu.digit.util.ExternalProperties;
 /**
  * Vista de proyectos históricos.
  * 
- * @author Javier de la Fuente Barrios.
- * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 @Route(value = "SubirProyecto")
 @PageTitle("Proponer TFG")
@@ -86,8 +85,6 @@ public class newProjectView extends VerticalLayout {
 	 */
 	private SistInfDataAbstract fachadaDatos;
 	
-	public static String tutorRegistrado;
-
 	/**
 	 * Constructor.
 	 * @throws SQLException 
@@ -136,7 +133,7 @@ public class newProjectView extends VerticalLayout {
         tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");      
         tutor1.setItems(profesores);
-        tutor1.setValue(tutorRegistrado);
+        tutor1.setValue(LoginView.tutorRegistrado);
         tutor1.addValueChangeListener(event -> {
             tutor1.setValue(event.getValue());
         });
@@ -185,7 +182,7 @@ public class newProjectView extends VerticalLayout {
         
         //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
         //Indicarlo por defecto 
-      //Fecha de hoy
+       //Fecha de hoy
         LocalDate today=LocalDate.now();
         
         String fechaIni=today.now().getYear()+"-09-01";
@@ -256,7 +253,7 @@ public class newProjectView extends VerticalLayout {
 
     /**
      * Obtiene el número que le corresponde al siguiente TFG.
-     * @return
+     * @return numero del TFG
      */
     private int obtenerNumeroTFG(String año) {
         int numeroTFG=0;

@@ -6,7 +6,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.ui.views.ManageView;
 import ubu.digit.ui.views.ActiveProjectsView;
@@ -139,7 +138,6 @@ public class NavigationBar extends HorizontalLayout{
         
         buttonUpload = new Button(UPLOAD);
         buttonUpload.addClickListener(e -> {
-            newProjectView.tutorRegistrado=LoginView.tutorRegistrado;
             UI.getCurrent().navigate(newProjectView.class);
             }
         );
