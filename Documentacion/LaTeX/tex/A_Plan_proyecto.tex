@@ -159,19 +159,23 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 
 \begin{itemize}
 	\item Actualización de métodos para obtener los datos de ficheros CSV. Se han implementado los métodos para obtener la información de los ficheros CSV.
-	\item Implementación del nuevo sistema de \emph{Login}. Pidiendo un registro de forma inicial para asignar un rol al usuario que inicia sesión y mostrarle así las pantallas a las que puede acceder. Se ha restringido la vista a las distintas pantallas de la aplicación dependiendo de los permisos del usuario que inicia sesión.
+	\item Implementación del nuevo sistema de \emph{Login}. Pidiendo un registro de forma opcional para asignar un rol al usuario que inicia sesión y mostrarle así las pantallas a las que puede acceder. Se ha restringido la vista a las distintas pantallas de la aplicación dependiendo de los permisos del usuario que inicia sesión.
 	\item Ajustar la nueva barra de navegación ante el usuario que inicia sesión, así como del \emph{sub menu} que se crea en la pantalla de histórico tanto del profesorado como de los proyectos. Se han estudiado también otras formas para realizar la barra de navegación que finalmente no se han implementado por no ser óptimas.
 	\begin{itemize}
 		\item Realizar un desplegable mediante el componente \emph{MenuBar} de Vaadin, que se descartó porque no podía redimensionar.
 		\item Mediante el componente \emph{Tab}. Una barra de navegación que finalmente se descartó ya que era mucho más trabajo del pensado crearla y adaptarla al proyecto.
 	\end{itemize}		
-	\item Creación de la cuenta de \emph{SonarCloud} para analizar la calidad del código creado y de otros proyectos añadidos, para la pantalla de \emph{Metricas}.
+	\item Creación de la cuenta de \emph{SonarCloud} para analizar la calidad del código creado y de otros proyectos añadidos, para la pantalla de \emph{Métricas}.
 	\item Modificación de la pantalla de aceptación de TFGs que pasa a llamarse\emph{Administrar TFGs}. Se han añadido las siguientes funcionalidades:
 	\begin{itemize}
 		\item Nuevo botón de \emph{Modificación} de TFGs. Botón que solo permite seleccionar un solo TFG de la tabla.
 		\item Creación de la nueva pantalla de modificación de los TFGs. Esta pantalla tiene todos los campos posibles que puede tener un proyect. Permite modificar los datos del TFG seleccionado para mantenerlo abierto y en la pantalla de activos, como para actualizarlo y cerrarlo moviéndolo a la pestaña de \emph{Históricos}.
 		\item Actualización de los datos del TFG seleccionado en el archivo de la base de datos, ya sea eliminándolo de la pestaña de activos y añadiéndolo a la de históricos como actualizándolo unicamente en la pestaña de activos.
 	\end{itemize}
+	\item Últimas correcciones sobre la memoria y los anexos.
+	\item Comentar código de los ficheros creados, tanto de los métodos cómo comentarios de ayuda durante las ejecuciones.
+	\item Corrección de bugs en formatos de variables y de código.
+	
 \end{itemize}
 
 \subsection{Planificación temporal}
