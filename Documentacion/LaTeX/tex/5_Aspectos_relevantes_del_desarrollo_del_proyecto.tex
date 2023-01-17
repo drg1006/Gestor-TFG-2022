@@ -41,6 +41,7 @@ Se han tenido que utilizar muchos componentes nuevos que no estaban en la versi�
 	\item \emph{ComboBox}: componente desplegable con diferentes datos.
 	\item \emph{Anchor}: componente utilizado para realizar el documento descargable.
 	\item \emph{Dialog}: componente estilo \emph{pop-up} para realizar confirmaciones.
+	\item \emph{DatePicker}: componente que permite seleccionar una fecha a través de un calendario.
 
 \end{itemize}
 
@@ -51,3 +52,9 @@ Toda la información sobre el uso de \emph{Vaadin} \url{https://vaadin.com/} se 
 Se ha tenido que incorporar en varias ocasiones la creación de archivos \emph{.xls o .csv}, así como la actualización en tiempo real de la información de la base de datos, ya sea al introducir un TFG, al modificar su estado, o cuando queremos actualizar la información del \emph{web scraping} sobre los tutores.
 
 Para ello se ha empleado las librearías \emph{CSVWriter o WorkBook}, estudiando su funcionamiento.
+
+\section{Validación de los usuarios de la aplicación}
+
+En esta versión se ha añadido la gestión de roles en la aplicación según el tipo de usuario que inicia sesión. Existen tres actores dependiendo de los permisos que tengan sobre la asignatura \emph{Trabajos de Fin de Grado} en \emph{Moodle}.
+
+Cuando se inicie sesión, de manera opcional, se mostrarán diferentes opciones en la barra de navegación para los roles que están especificados: alumno, profesor no editor y administrador.

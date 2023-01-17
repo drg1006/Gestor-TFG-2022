@@ -10,16 +10,18 @@ Para utilizar la aplicación no será necesario instalar ningún componente en n
 \section{Manual del usuario}
 A continuación se detallará el uso de la web, exclusivamente de las nuevas pantallas implantadas.
 \subsection{Login}
-El sistema de \emph{Login} es el mismo que estaba implementado, pero en esta versión se pedirá acceder una vez se inicie la aplicación, como primera pantalla, y una vez se haya registrado se verán las opciones a las que puede acceder en la barra de navegación. Los actores \emph{profesor y administrador} en la pantalla de histórico tendrán un submenu que les permitirá acceder a ambas pantallas de histórico, tanto de proyectos como de profesores.
+El sistema de \emph{Login} es el mismo que estaba implementado, en esta versión será opcional y se pedirá si pulsamos en el botón \emph{Iniciar sesión} de la barra de navegación. Una vez se haya registrado se verán las opciones a las que puede acceder en la barra de navegación. Los actores \emph{profesor y administrador} en la pantalla de histórico tendrán un \emph{submenu} que les permitirá acceder a ambas pantallas de histórico, tanto de proyectos como de profesores.
 
-Usuario \emph{Alumno}.Ver imagen \ref{fig:userAlumno}.
+Usuario \emph{Alumno}, tiene los mismos permisos que un usuario que no ha iniciado sesión, por ello se está ejemplificando en la imagen \ref{fig:userAlumno} con el botón \emph{Iniciar sesión} en lugar de visualizar el botón \emph{Cerrar sesión}, que saldría si un alumno iniciase sesión. 
 \imagenflotante{userAlumno}{Barra de navegación del usuario con permisos de alumno.}{0.9}
  
- Usuario \emph{Profesor}.Ver imagen \ref{fig:userProfesor}. 
+ Usuario \emph{Profesor no editor}.Ver imagen \ref{fig:userProfesor}. 
  \imagenflotante{userProfesor}{Barra de navegación del usuario con permisos de profesor.}{0.9}
  
- Usuario \emph{Alumno}.Ver imagen \ref{fig:userAdministrador}.
+ Usuario \emph{Administrador}.Ver imagen \ref{fig:userAdministrador}.
  \imagenflotante{userAdministrador}{Barra de navegación del usuario con permisos de administrador.}{0.9}
+ 
+ También se ha añadido un botón de \emph{Log out} que permite cerrar sesión si un usuario se había conectado.
  
 \subsection{Histórico profesorado}
 En esta nueva pantalla implantada se expone información histórica sobre el profesorado, para acceder a ella será necesario ser \emph{profesor o administrador}.

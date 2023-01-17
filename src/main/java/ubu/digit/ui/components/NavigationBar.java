@@ -184,7 +184,7 @@ public class NavigationBar extends HorizontalLayout{
             layout1.add(buttonLogIn);
         }
         //LoginView.permiso.add("reports");
-        //LoginView.permiso.add("update");
+        LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
