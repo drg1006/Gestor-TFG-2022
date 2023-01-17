@@ -3,6 +3,8 @@ package ubu.digit.ui.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -105,10 +107,10 @@ public class NavigationBar extends HorizontalLayout{
 	    //Layouts para meter los botones de inicio/cierre sesion y toda la otra barra de navegacion
 	    HorizontalLayout layout1 = new HorizontalLayout();	 
 	    HorizontalLayout layout2 = new HorizontalLayout();
-	    buttonLogIn=new Button("Iniciar sesion");
+	    buttonLogIn=new Button("Iniciar sesion",new Icon(VaadinIcon.USER));
 	    buttonLogIn.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
 
-	    buttonLogOut=new Button("Cerrar sesion");
+	    buttonLogOut=new Button("Cerrar sesion",new Icon(VaadinIcon.USER));
         buttonLogOut.addClickListener(e ->{
             //Cerramos la sesion
             LoginView.sesionIniciada=false;
@@ -173,7 +175,8 @@ public class NavigationBar extends HorizontalLayout{
 		buttonReport.setHeight(BUTTON_HEIGHT);
         buttonUpload.setHeight(BUTTON_HEIGHT);
         buttonAcept.setHeight(BUTTON_HEIGHT);
-
+        buttonLogIn.setHeight(BUTTON_HEIGHT);
+        buttonLogOut.setHeight(BUTTON_HEIGHT);
         //Comprobamos si se ha iniciado sesion para ver cual de los dos botones hay que poner
         if(LoginView.sesionIniciada) { 
             layout1.add(buttonLogOut);
@@ -181,7 +184,7 @@ public class NavigationBar extends HorizontalLayout{
             layout1.add(buttonLogIn);
         }
         //LoginView.permiso.add("reports");
-        LoginView.permiso.add("update");
+        //LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
@@ -195,11 +198,8 @@ public class NavigationBar extends HorizontalLayout{
 		}
 		//Que no haya espacio entre botones
 		layout2.setSpacing(false);
-		//Añadimos los dos layouts a uno vertical para que no se junten en uno 
-		VerticalLayout layout3= new VerticalLayout();
+		add(layout2,layout1);
 		
-		layout3.add(layout1,layout2);
-		add(layout3);
 
 
 	}
