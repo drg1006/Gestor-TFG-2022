@@ -31,5 +31,6 @@ Desde Eclipse:
 * Instalar dependencias y compilar --> mvn install
 * Instalar en modo producción (despliegue) --> mvn package -Pproduction
 * Ejecutar con tomcat --> run on server 
+
 Desde cmd:
 * Mediante gestor de aplicaciones de Tomcat
