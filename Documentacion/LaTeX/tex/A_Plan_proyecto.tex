@@ -185,9 +185,9 @@ En esta sección se mostrará una ideal inicial de como iba a ser el reparto de 
 		\hline
 		\multicolumn{1}{|c|}{\textbf{TAREA}}     & \textbf{INICIAL} & \textbf{REAL} \\ \hline
 		Instalación y configuración de software y hardware & 4 h & 8 h  \\ \hline
-		Programación                            & 140 h  & 160 h       \\ \hline
-		Documentación memoria y anexos          & 60 h   & 50 h     \\ \hline
-		Estudio de las herramientas utilizadas y alternativas & 10 h & 12 h \\ \hline
+		Programación                            & 150 h  & 200 h       \\ \hline
+		Documentación memoria y anexos          & 60 h   & 70 h     \\ \hline
+		Estudio de las herramientas utilizadas y alternativas & 10 h & 15 h \\ \hline
 		Preparación de la presentación		    & 5 h   & 8 h        \\ \hline
 	\end{tabular}
 	\caption{Planteamiento de horas iniciales.}
@@ -198,16 +198,63 @@ En esta sección se mostrará una ideal inicial de como iba a ser el reparto de 
 En este apartado se detallan los costes que llevaría realizar este proyecto de forma real. Se considerarán los costes de recursos humanos, el material empleado y el \emph{Software} usado. 
 
 \subsection{Viabilidad económica}
-Los recursos utilizados para la realización de este proyecto son los siguientes:
+Primero se detallarán los costes de los recursos utilizados para la realización de este proyecto.
+
 \begin{itemize}
-	\item  \textbf{Lenovo Legion Y540} Coste aproximado: 1200€.
-	\item  \textbf{Eclipse IDE} como entorno de desarrollo del código. Coste: gratuito.
-	\item  \textbf{TexStudio} para realizar la documentación. Coste: grautito.
-	\item  \textbf{Github Desktop:} como herramienta para actualizar el directorio de github. Coste: grautito.
-	\item \textbf{Heroku:} como herramienta de despliegue del proyecto en la nube. Coste: 7 €/mes aproximado.
-	\item \textbf{Maven:}. Coste: gratuito.
-	\item \textbf{Tomcat:}. Coste: gratuito.
-	\item \textbf{Tiempo empleado:} aproximadamente 250 horas, que con el salario medio español de un programador (14,43 €/hora) es 3607,50 €. \textit{Fuente}~\cite{SalarioProgramador}
+	\item \textbf{Coste de personal}.
+	
+	En este apartado se el gasto que supone mantener a un empleado. Se calcula que se han realizado unas \emph{300} horas de trabajo durante 4 meses. 
+	Con el \textit{salario medio español de un programador} 14,43 €/hora ~\cite{SalarioProgramador} y estimando unas 20 horas semanales obtenemos un salario bruto de:
+	
+
+$$ 20\frac{horas}{semana}\times14,43\frac{\text{€}}{hora}\times4\frac{semanas}{mes}=1154\text{€}\hspace{0.5em}al\hspace{0.5em}mes  $$
+
+Este calculo hace referencia al salario bruto del empleado, para calcular el salario real del empleado debemos  obtener los impuestos que la empresa debe pagar por él. Esto se puede consultar en la página oficial de la seguridad social: \url{http://www.seg-social.es/wps/portal/wss/internet/Trabajadores/CotizacionRecaudacionTrabajadores/36537}.
+
+Los impuestos son:
+\begin{itemize}
+	\tightlist
+	\item 23.6\% contingencias.
+	\item 5.5\% desempleo.
+	\item 0.20\% FOGASA.
+	\item 0.60\% formación profesional.
+\end{itemize}
+
+\imagenflotante{regimen1}{Régimen general de la Seguridad Social parte 1}{0.9}
+
+\imagenflotante{regimen2}{Régimen general de la Seguridad Social parte 2}{0.9}
+
+Teniendo en cuenta estos impuestos, calculamos el gasto que supone el empleado:
+
+$$\frac{1154\frac{\text{€}}{mes}}{1-(0.236+0.055+0.002+0.006)}=1646,21\text{€}\hspace{0.5em}al\hspace{0.5em}mes$$
+
+Tras realizar todos los cálculos,como el proyecto ha durado seis meses, el coste total será de 6584,84€.
+
+\item \textbf{Hardware}.
+El recurso hardware utilizado es un Lenovo Legion Y540 Coste aproximado: 1200€, que ya ha sido amortizado previamente, por lo que el coste real ha sido de 0 €.
+ 
+\item \textbf{Software}.
+Todas las herramientas software utilizadas han sido gratuitas a excepción del despliegue en la nube mediante \emph{Heroku}. Los créditos obtenidos sí que han sido gratuitos gracias a la conexión entre \emph{Github estudiantes y Heroku}, pero realmente supone un gasto de 7 dólares al mes.
+La duración del proyecto desplegado ha sido de tres meses por lo que el coste total ha sido de 21 dólares.
+
+ 
+\item \textbf{Total}.
+Desestimando gastos indirectos como el internet al vivir en un piso compartido, los gastos totales son los siguientes:
+
+\begin{table}[]
+	\label{Costes totales}
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Tipo de costes}}     & \textbf{Total} \\
+		Personal &  6584,84\\ 
+		Hardware & 0 € \\
+		Software & 21 € \\	\hline
+		Total & 6605,84 € \\\hline
+	\end{tabular}
+	\caption{Costes totales.}
+\end{table}
+
 \end{itemize}
 
 \subsection{Viabilidad legal}
