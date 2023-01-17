@@ -5,12 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import ubu.digit.ui.views.InformationView;
-import ubu.digit.ui.views.LoginView;
 
 /**
  * Punto de entrada de la aplicación de Spring boot
  */
-@SpringBootApplication(scanBasePackageClasses = { LoginView.class, Application.class})
+@SpringBootApplication(scanBasePackageClasses = { InformationView.class, Application.class})
 public class Application extends SpringBootServletInitializer {
 	
 	@Override

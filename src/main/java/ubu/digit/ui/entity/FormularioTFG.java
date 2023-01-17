@@ -3,7 +3,6 @@ package ubu.digit.ui.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import com.vaadin.flow.component.datepicker.DatePicker;
 
 /**
  * Clase que se utilizará para bindear con los formularios de los proyectos.

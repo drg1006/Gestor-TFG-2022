@@ -30,8 +30,9 @@ import java.util.List;
  * 
  * @author Javier de la Fuente Barrios
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
-@Route("Information")
+@Route("")
 @CssImport(value = "./styles/shared-styles.css", themeFor = "sistinftheme")
 @PageTitle("Información general")
 public class InformationView extends VerticalLayout {

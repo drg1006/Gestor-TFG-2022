@@ -3,17 +3,8 @@ package ubu.digit.ui.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 
 import ubu.digit.ui.views.ManageView;
 import ubu.digit.ui.views.ActiveProjectsView;
@@ -22,10 +13,11 @@ import ubu.digit.ui.views.InformationView;
 import ubu.digit.ui.views.LoginView;
 import ubu.digit.ui.views.ProfesoresView;
 import ubu.digit.ui.views.ReportView;
-import ubu.digit.ui.views.UploadView;
 import ubu.digit.ui.views.newProjectView;
 
 import static ubu.digit.util.Constants.*;
+
+import java.util.ArrayList;
 
 /**
  * Barra de navegación común a todas las vistas.
@@ -84,6 +76,15 @@ public class NavigationBar extends HorizontalLayout{
      * Botón de la vista de aceptar TFGs.
      */
 	public Button buttonAcept;
+	
+	 /**
+     * Botón para iniciar sesion.
+     */
+    public Button buttonLogIn;
+    /**
+     * Botón para cerrar sesion.
+     */
+    public Button buttonLogOut;
 
 	/**
 	 * Constructor.
@@ -101,7 +102,23 @@ public class NavigationBar extends HorizontalLayout{
 	 */
 	@SuppressWarnings("deprecation")
 	private void initComponents() {
-	    //MenuBar menuBar = new MenuBar();
+	    //Layouts para meter los botones de inicio/cierre sesion y toda la otra barra de navegacion
+	    HorizontalLayout layout1 = new HorizontalLayout();	 
+	    HorizontalLayout layout2 = new HorizontalLayout();
+	    buttonLogIn=new Button("Iniciar sesion");
+	    buttonLogIn.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+
+	    buttonLogOut=new Button("Cerrar sesion");
+        buttonLogOut.addClickListener(e ->{
+            //Cerramos la sesion
+            LoginView.sesionIniciada=false;
+            //Eliminamos los permisos
+            LoginView.permiso=new ArrayList<>();
+            //Quitamos el nombre del tutor
+            LoginView.tutorRegistrado="";            
+            UI.getCurrent().getPage().reload();
+            }
+        );
 	    
 		buttonInfo = new Button(INFORMACION);
 		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
@@ -122,16 +139,32 @@ public class NavigationBar extends HorizontalLayout{
         buttonUpload.addClickListener(e -> {
             newProjectView.tutorRegistrado=LoginView.tutorRegistrado;
             UI.getCurrent().navigate(newProjectView.class);
-            });
+            }
+        );
         
         buttonAcept = new Button(ACEPT);
         buttonAcept.addClickListener(e -> UI.getCurrent().navigate(ManageView.class));
         
         buttonProfessorHistoric = new Button(PROFESORES);
-        buttonProfessorHistoric.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
+        buttonProfessorHistoric.addClickListener(e -> {
+            //Si se ha iniciado sesion se redirige bien,si no se pide logearse
+            if(LoginView.sesionIniciada) {
+                UI.getCurrent().navigate(ProfesoresView.class);
+            }else {
+                UI.getCurrent().navigate(LoginView.class);
+            }
+            }
+        );
         
         buttonProjectsHistoric = new Button(PROYECTOS_HISTORICOS);
-        buttonProjectsHistoric.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
+        buttonProjectsHistoric.addClickListener(e -> { 
+            if(LoginView.sesionIniciada) {
+                UI.getCurrent().navigate(HistoricProjectsView.class);
+            }else {
+                UI.getCurrent().navigate(LoginView.class);
+            }
+
+            });
         
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
@@ -140,28 +173,35 @@ public class NavigationBar extends HorizontalLayout{
 		buttonReport.setHeight(BUTTON_HEIGHT);
         buttonUpload.setHeight(BUTTON_HEIGHT);
         buttonAcept.setHeight(BUTTON_HEIGHT);
-        
-		buttonInfo.setWidth("100%");
-		buttonActive.setWidth("100%");
-		buttonHistoric.setWidth("100%");
-		buttonMetrics.setWidth("100%");
-		buttonReport.setWidth("100%");
-        buttonUpload.setWidth("100%");
-        buttonAcept.setWidth("100%");
- 
-		//LoginView.permiso.add("reports");
-		LoginView.permiso.add("update");
+
+        //Comprobamos si se ha iniciado sesion para ver cual de los dos botones hay que poner
+        if(LoginView.sesionIniciada) { 
+            layout1.add(buttonLogOut);
+        }else{
+            layout1.add(buttonLogIn);
+        }
+        //LoginView.permiso.add("reports");
+        LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
-		    add(buttonInfo,buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
+		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
 		}else if(LoginView.permiso.contains("reports")){
 	     //ROL DE PROFESOR
-           add(buttonInfo, buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
+		    layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
 		}else {
 	       //ROL ALUMNO
-	       add(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
+		    layout2.addAndExpand(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
 		}
+		//Que no haya espacio entre botones
+		layout2.setSpacing(false);
+		//Añadimos los dos layouts a uno vertical para que no se junten en uno 
+		VerticalLayout layout3= new VerticalLayout();
+		
+		layout3.add(layout1,layout2);
+		add(layout3);
+
+
 	}
 	/**
 	 * SubMenu que sale en las pantallas de Historic, de tfgs y de profesores.

@@ -4,7 +4,6 @@ package ubu.digit.ui.views;
 import static ubu.digit.util.Constants.PROYECTO;
 import static ubu.digit.util.Constants.TITULO;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

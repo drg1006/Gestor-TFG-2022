@@ -51,7 +51,7 @@ import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Vista de los proyectos pendientes.
+ * Vista para administrar un proyecto activo.
  * 
  * @author David Renedo Gil
  */

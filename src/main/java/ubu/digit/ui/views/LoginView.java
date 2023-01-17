@@ -40,8 +40,9 @@ import ubu.digit.ui.components.NavigationBar;
  * Vista de inicio de sesión.
  * 
  * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
-@Route(value = "")
+@Route(value = "Login")
 @PageTitle("Login ")
 public class LoginView extends VerticalLayout{
 
@@ -89,6 +90,8 @@ public class LoginView extends VerticalLayout{
 	public static List<String> permiso=new ArrayList<>();
 
     public static String tutorRegistrado;
+    
+    public static Boolean sesionIniciada=false;
 	
 	public LoginView() {
 
@@ -119,6 +122,7 @@ public class LoginView extends VerticalLayout{
 				login.setError(true);
 			}else {
 				LOGGER.info("Usuario validado ");
+				sesionIniciada=true;
 				CONTROLLER.setUsername(e.getUsername());				
 				login.setEnabled(true);
 				UI.getCurrent().navigate(InformationView.class);
