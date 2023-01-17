@@ -47,16 +47,18 @@ import ubu.digit.ui.entity.ActiveProject;
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Vista de proyectos históricos.
+ * Vista para modificar un proyecto activo.
  * 
- * @author Javier de la Fuente Barrios.
- * @author Diana Bringas Ochoa
+ * @author David Renedo Gil
  */
 @Route(value = "Modify")
 @PageTitle("Modificar TFG")
 
 public class ModifyView extends VerticalLayout {
     
+    /**
+     * Variable en la que guardamos el titulo del TFG seleccionado.
+     */
     public static String tituloTFG;
 
     /**
@@ -211,6 +213,7 @@ public class ModifyView extends VerticalLayout {
         });
         
         DatePicker fechaAsignacion=new DatePicker("Fecha de asignacion del TFG");
+        fechaAsignacion.setLocale(getLocale());
         fechaAsignacion.setWidth("40%");
         fechaAsignacion.addValueChangeListener(event->{         
             fechaAsignacion.setValue(event.getValue()); 
@@ -218,6 +221,7 @@ public class ModifyView extends VerticalLayout {
         });
 
         DatePicker fechaPresentacion=new DatePicker("Fecha de presentacion del TFG");
+        fechaPresentacion.setLocale(getLocale());
         fechaPresentacion.setWidth("40%");
         fechaPresentacion.addValueChangeListener(event->{
             fechaPresentacion.setValue(event.getValue()); 
@@ -233,15 +237,13 @@ public class ModifyView extends VerticalLayout {
             nota.setValue(event.getValue()); 
         });
         
-        //int TotalDias= fechaAsignacion-fechaPresentacion;
-        
         TextArea repo=new TextArea("Indique el enlace URL del repositorio");
         repo.setWidth("40%");
         repo.addValueChangeListener(event->{
             repo.setValue(event.getValue()); 
         });
                 
-        
+        //Botones para aceptar y cerrar o mantener abierto
         Button AceptaryAbierto= new Button("Aceptar cambios y dejar abierto");
         Button AceptaryCerrado= new Button("Aceptar cambios y mover a histórico");
         
@@ -252,6 +254,7 @@ public class ModifyView extends VerticalLayout {
         });
         
         AceptaryAbierto.addClickListener(event ->{
+            //Comprobamos si los campos están o no rellenos
             if(vacios1(tutor1,alumno1,descripcion,tituloCorto)) {
                Dialog aviso1 = new Dialog();
                 // Añadidmos un texto
@@ -264,7 +267,7 @@ public class ModifyView extends VerticalLayout {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
               
             }else {
-               
+               //Guardamos los datos y actualizamos
                stringAbierto(tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
                         tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),cursoAsignacion.getValue());
                 Notification.show("Se ha modificado correctamente el TFG propuesto en la pestaña de activos."); 
@@ -286,9 +289,13 @@ public class ModifyView extends VerticalLayout {
                  LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
                
              }else {
+                 //Obtenemos los dias totales de duracion del proyecto
                  long dias =obtenerDiasTotales(fechaAsignacion,fechaPresentacion);
+                 //Cambiamos el formato de las fechas
+                 String fechaAsig=cambiarFormato(fechaAsignacion);
+                 String fechaPresen=cambiarFormato(fechaPresentacion);
                  stringCerrado(titulo.getValue(),tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
-                         tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsignacion.getValue(),fechaPresentacion.getValue(),nota.getValue(),dias,repo.getValue());
+                         tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsig,fechaPresen,nota.getValue(),dias,repo.getValue());
                  Notification.show("Se ha eliminado el TFG de activos y se ha añadido en historicos correctamente."); 
              }
         });
@@ -300,6 +307,20 @@ public class ModifyView extends VerticalLayout {
         
     }
  
+    /**
+     * Cambiamos el formata en el que esta la fecha de YYYY-MM-DD a DD/MM/YYYY.
+     * @param fecha
+     * @return string con la fecha
+     */
+    private String cambiarFormato(DatePicker fecha) {
+        int year=fecha.getValue().getYear();
+        int month=fecha.getValue().getMonthValue();
+        int day =fecha.getValue().getDayOfMonth();
+        
+        String fechaFormat=String.valueOf(day)+"/"+String.valueOf(month)+"/"+ String.valueOf(year);
+        System.out.print(fechaFormat);
+        return fechaFormat;
+    }
 
     /**
      * Método para obtener el número de días que ha estado asignado el proyecto al alumno.
@@ -430,7 +451,6 @@ public class ModifyView extends VerticalLayout {
            try {
                actFicheroActivos(TFG,tituloTFG,estado);
            } catch (IOException e) {
-            // TODO Auto-generated catch block
                e.printStackTrace();
            }
            //Actualizamos en titulo del tfg ya que si modificamos un titulo 
@@ -449,18 +469,18 @@ public class ModifyView extends VerticalLayout {
      * @param alumno1
      * @param alumno2
      * @param alumno3
-     * @param fechaAsignacion
-     * @param fechaPresentacion
+     * @param fechaAsig
+     * @param fechaPresen
      * @param nota
      * @param dias
      * @param repo
      */
     private void stringCerrado(String titulo, String tituloCorto, String descripcion, String tutor1, String tutor2,
-               String tutor3, String alumno1, String alumno2, String alumno3, LocalDate fechaAsignacion,
-               LocalDate fechaPresentacion, Double nota, long dias, String repo) {
+               String tutor3, String alumno1, String alumno2, String alumno3, String fechaAsig,
+               String fechaPresen, Double nota, long dias, String repo) {
 
-           String [] TFG= {titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsignacion.toString(),
-                   fechaPresentacion.toString(),nota.toString(),String.valueOf(dias),repo};
+           String [] TFG= {titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsig,
+                   fechaPresen,nota.toString(),String.valueOf(dias),repo};
            int estado=1;
            //Borramos el TFG del listado de activos;
            try {
