@@ -296,6 +296,7 @@ public class ManageView extends VerticalLayout {
             modificarTFG.addClickListener(event ->{
                 if(table.getSelectedItems().size()==1) {                    
                     for (ActiveProject tfg : table.getSelectedItems()) {
+                        //Guardamos el titulo del TFG
                         ModifyView.tituloTFG=tfg.getTitle();
                     }  
                     UI.getCurrent().navigate(ModifyView.class);
