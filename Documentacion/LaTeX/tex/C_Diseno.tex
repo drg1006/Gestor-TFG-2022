@@ -7,15 +7,15 @@ En este anexo se detallarán los aspectos referentes al diseño de la aplicació
 
 \subsection{Ficheros de datos}
 
-En esta nueva versión del proyecto se han añadido varios ficheros de datos nuevos con los que se va a trabajar. Para que se puedan obtener los datos de estos ficheros \textbf{se deben dar unas condiciones}.
+En esta nueva versión del proyecto se han añadido varios ficheros de datos nuevos con los que se va a trabajar. Para que se puedan obtener los datos de estos ficheros se deben dar unas condiciones:
 
 \begin{itemize}
 	\item El fichero \texttt{src/main/resources/data/BaseDeDatosTFGTFM.xls} se ha modificado, al añadir nuevos datos, con información real sobre proyectos y más peso, surgían \emph{bugs} tratando la información por lo que los campos \emph{fechaAsignacion y fechaPresentacion} en la pestaña \emph{``N3\_Historico''} se han cambiado a tipo \emph{texto} y con el formato DD/MM/AAAA.
 	\item El campo \emph{Nota} también se ha modificado, previamente era un número aleatorio entre 5 y 10, se ha sustituido por un valor natural de tipo \emph{general}.
 \end{itemize}
 
-En el caso que no se cumpla estas condiciones en las vistas del histórico
-y los proyectos activos no se mostraran de manera correcta los datos.
+En el caso de que no se cumplan estas condiciones en las vistas del histórico
+y los proyectos activos, no se mostrarán de manera correcta los datos.
 
 La nueva información obtenida mediante el \emph{webscraping} realizado se ha guardado en dos archivos.
 \begin{itemize}
@@ -41,7 +41,7 @@ De forma general la estructura de paquetes y ficheros es la misma que en el proy
 \end{itemize}
 
 \section{Diseño procedimental}
-En esta versión se ha añadido un sistema de identificación del usuario al comienzo de la aplicación, este registro le dará por lo tanto un rol al usuario. Una vez tenga asignado un rol podrá acceder a las diferentes pantallas y funcionalidades asociadas a ese actor.
+En esta versión se ha añadido un sistema de identificación del usuario al comienzo de la aplicación, este registro le dará por lo tanto un rol al usuario. Una vez tenga asignado un rol podrá acceder a las diferentes pantallas y funcionalidades asociadas a ese rol.
 El sistema sigue la siguiente lógica, ilustrada en la imagen \ref{fig:diagramaFlujo}.
 
 \imagenflotante{diagramaFlujo}{Diagrama de Flujo - Login}{0.9}

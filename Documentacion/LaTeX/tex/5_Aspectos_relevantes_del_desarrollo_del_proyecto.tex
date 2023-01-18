@@ -18,7 +18,7 @@ Para solucionar este problema se accede al archivo \emph{apache-tomcat-9.0.68-we
 
 \imagenflotante{size_tomcat}{Logs proporcionados por Tomcat}{0.9}
 
-Cuando quise ejecutarlo mediante Eclipse no me dejaba añadir el proyecto al servidor de \emph{tomcat}, indicando que las versiones no eran compatibles. Por ello se ha entrado en las propiedades del proyecto y se ha cambiado la versión del parametro \emph{Dynamic Web Module} a la 3.1 en el apartado \emph{Project Facets} como se aprecia en la imagen \ref{fig:Dynamic}.
+Cuando quise ejecutarlo mediante Eclipse no era posible añadir el proyecto al servidor de \emph{tomcat}, indicando que las versiones no eran compatibles. Por ello se ha entrado en las propiedades del proyecto y se ha cambiado la versión del parametro \emph{Dynamic Web Module} a la 3.1 en el apartado \emph{Project Facets} como se aprecia en la imagen \ref{fig:Dynamic}.
 
 \imagenflotante{Dynamic}{Cambio de versión Dynamic Web Module}{0.9}
 
@@ -32,12 +32,12 @@ También se ha utilizado la librería \href{https://opencsv.sourceforge.net/apid
 
 Este proyecto se ha tenido que llevar a cabo con \emph{Vaadin}, es la primera vez que se utiliza este \emph{framework}, por lo que se ha tenido que estudiar todo su funcionamiento, y como implantarlo durante el desarrollo.
 
-Se han tenido que utilizar muchos componentes nuevos que no estaban en la versión anterior como pueden ser:
+Se han tenido que utilizar muchos componentes nuevos que no estaban en la versión anterior como son:
 
 \begin{itemize}
 	\item \emph{TextArea}: componente para guardar texto introducido por teclado por parte del usuario.
 	\item \emph{Checkbox}: componente que permite realizar una selección múltiple de elementos.
-	\item \emph{Binder}: componente para conectar la clase del formulario con la información requerida.
+	\item \emph{Binder}: componente para conectar la clase del formulario con la información requerida, y poder asignar parámetros obligatorios para rellenar.
 	\item \emph{ComboBox}: componente desplegable con diferentes datos.
 	\item \emph{Anchor}: componente utilizado para realizar el documento descargable.
 	\item \emph{Dialog}: componente estilo \emph{pop-up} para realizar confirmaciones.
