@@ -10,6 +10,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
 
 import ubu.digit.ui.views.LoginView;
 import ubu.digit.ui.views.UploadView;
@@ -18,6 +19,9 @@ import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -169,7 +173,7 @@ public class Footer extends VerticalLayout {
 		license.setSpacing(true);
 
 		Text licenseText = new Text("This work is licensed under: ");
-		Anchor ccLink = new Anchor("https://github.com/dbo1001/Gestor-TFG-2021/blob/master/LICENSE.md", "MIT License.");
+		Anchor ccLink = new Anchor("https://github.com/drg1006/Gestor-TFG-2021/blob/master/LICENSE.md", "MIT License.");
 		
 		license.add(licenseText, ccLink);
 		
@@ -185,7 +189,38 @@ public class Footer extends VerticalLayout {
 		actu.addClickListener(e -> {	
 			UI.getCurrent().navigate(UploadView.class);
 		});
-		license.add(actu);
+		//OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
+		Anchor download= new Anchor();
+		
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length()-17);        
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = NOMBRE_BASES;
+        File file = new File(completeDir + fileName);
+        
+		//Generamos el recurso descargable            
+        StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
+        download.setText("Descargar "+file.getName());
+		download.setHref(streamResource);
+        download.getElement().setAttribute("download", true);
+        download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+        download.setVisible(true);
+		license.add(actu,download);
 		}
 	}
+
+    private InputStream getStream(File file) {
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return stream;
+
+    }
+	
+	
 }

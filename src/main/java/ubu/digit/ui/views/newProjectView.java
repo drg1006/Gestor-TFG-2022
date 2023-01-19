@@ -332,7 +332,6 @@ public class newProjectView extends VerticalLayout {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
        
-            
             Sheet hoja= workbook.getSheet(PROYECTO);
             int rowid = hoja.getLastRowNum();
 
@@ -351,9 +350,7 @@ public class newProjectView extends VerticalLayout {
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
-           
-            
-           
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
