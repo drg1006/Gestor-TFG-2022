@@ -26,6 +26,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -177,8 +178,7 @@ public class newProjectView extends VerticalLayout {
         });
         
 
-        TextArea cursoAsignacion=new TextArea("Indique el curso de asigancion del TFG");
-        cursoAsignacion.setWidth("40%");
+        
         
         //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
         //Indicarlo por defecto 
@@ -189,11 +189,17 @@ public class newProjectView extends VerticalLayout {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
 
-        valoresPorDefecto(today,fechaINI,cursoAsignacion,titulo);
-       
+        valoresPorDefecto(today,fechaINI,titulo);
+        
+        //Fecha de asignacion
+        DatePicker fechaAsignacion=new DatePicker("Indique una fecha de oferta/asignacion del TFG");
+        fechaAsignacion.setLocale(getLocale());
+        //Asignamos por defecto la fecha del día de subida
+        fechaAsignacion.setValue(today);
+        fechaAsignacion.setWidth("40%");
         //Si se desea modificar el curso
-        cursoAsignacion.addValueChangeListener(event->{
-            cursoAsignacion.setValue(event.getValue()); 
+        fechaAsignacion.addValueChangeListener(event->{
+            fechaAsignacion.setValue(event.getValue()); 
         });
         //Indicando que los campos son obligatorios
         Binder<FormularioTFG> binder= new Binder<>(FormularioTFG.class);
@@ -212,7 +218,7 @@ public class newProjectView extends VerticalLayout {
                 }else {        
                     Notification.show("Se ha añadido correctamente el TFG propuesto");
                     escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
-                    alumno1.getValue(),alumno2.getValue(),cursoAsignacion.getValue());
+                    alumno1.getValue(),alumno2.getValue(),fechaAsignacion);
                     try {
                         Thread.sleep(2000);  // retraso en milisegundos
                         UI.getCurrent().getPage().reload();
@@ -226,29 +232,23 @@ public class newProjectView extends VerticalLayout {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
             }
         });
-        add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,cursoAsignacion,crear);
+        add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,fechaAsignacion,crear);
        
         
     }
-    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea cursoAsignacion, TextArea titulo) {
-        //Si lo esta se pone ese año y el siguiente
+    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea titulo) {
         if(today.now().isAfter(fechaINI)) {
-           cursoAsignacion.setValue(today.now().getYear()+"-"+(today.now().getYear()+1));
            
            //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
            // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
            String año=String.valueOf(today.getYear()) ;
            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
         }else {
-        //Si no lo esta pertenece al curso anterior
-            cursoAsignacion.setValue((today.now().getYear()-1)+"-"+today.now().getYear());
             
             String año=String.valueOf(today.getYear()-1) ;
             titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
         }
-        //Ejemplo: fecha de hoy : 25/12/2022, fecha inicio del curso de ese año es 01/09/2022
-        //Por lo que "hoy" es posterior a la fecha de inicio de curso y sería el curso 2022-2023
-        
+
     }
 
     /**
@@ -280,11 +280,12 @@ public class newProjectView extends VerticalLayout {
      * @param tutor3 tutor3
      * @param alumno1 alumno1
      * @param alumno2 alumno2
-     * @param cursoAsignacion curso
+     * @param fechaAsignacion curso
      */
     private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
-            String cursoAsignacion) {
-        String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",cursoAsignacion,"Pendiente"};
+            DatePicker fechaAsignacion) {
+        String fecha=cambiarFormato(fechaAsignacion);
+        String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",fecha,"Pendiente"};
         try {
             guardarDatosXLS(TFG);
         } catch (IOException e) {
@@ -292,6 +293,21 @@ public class newProjectView extends VerticalLayout {
             e.printStackTrace();
         }
         
+    }
+    
+    /**
+     * Cambiamos el formata en el que esta la fecha de YYYY-MM-DD a DD/MM/YYYY.
+     * @param fecha
+     * @return string con la fecha
+     */
+    private String cambiarFormato(DatePicker fecha) {
+        int year=fecha.getValue().getYear();
+        int month=fecha.getValue().getMonthValue();
+        int day =fecha.getValue().getDayOfMonth();
+        
+        String fechaFormat=String.valueOf(day)+"/"+String.valueOf(month)+"/"+ String.valueOf(year);
+        System.out.print(fechaFormat);
+        return fechaFormat;
     }
     
     /**

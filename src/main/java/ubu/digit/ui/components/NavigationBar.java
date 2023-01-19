@@ -147,22 +147,12 @@ public class NavigationBar extends HorizontalLayout{
         
         buttonProfessorHistoric = new Button(PROFESORES);
         buttonProfessorHistoric.addClickListener(e -> {
-            //Si se ha iniciado sesion se redirige bien,si no se pide logearse
-            if(LoginView.sesionIniciada) {
-                UI.getCurrent().navigate(ProfesoresView.class);
-            }else {
-                UI.getCurrent().navigate(LoginView.class);
-            }
-            }
+                UI.getCurrent().navigate(ProfesoresView.class);}
         );
         
         buttonProjectsHistoric = new Button(PROYECTOS_HISTORICOS);
-        buttonProjectsHistoric.addClickListener(e -> { 
-            if(LoginView.sesionIniciada) {
+        buttonProjectsHistoric.addClickListener(e -> {          
                 UI.getCurrent().navigate(HistoricProjectsView.class);
-            }else {
-                UI.getCurrent().navigate(LoginView.class);
-            }
 
             });
         
@@ -182,14 +172,14 @@ public class NavigationBar extends HorizontalLayout{
             layout1.add(buttonLogIn);
         }
         //LoginView.permiso.add("reports");
-        //LoginView.permiso.add("update");
+        LoginView.permiso.add("update");
 		if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
-		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload,buttonAcept);
+		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonAcept,buttonMetrics);
 		}else if(LoginView.permiso.contains("reports")){
 	     //ROL DE PROFESOR
-		    layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonMetrics,buttonReport,buttonUpload);
+		    layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonMetrics);
 		}else {
 	       //ROL ALUMNO
 		    layout2.addAndExpand(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);

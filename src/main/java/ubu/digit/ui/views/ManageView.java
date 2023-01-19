@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -137,6 +138,7 @@ public class ManageView extends VerticalLayout {
         setSpacing(true);
 
         NavigationBar bat = new NavigationBar();
+        bat.buttonAcept.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
 
         createDataModel();
@@ -225,7 +227,7 @@ public class ManageView extends VerticalLayout {
         for(int i=0;i<listaDataModel.size();i++) {
             ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
                     listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-                    listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+                    listaDataModel.get(++i),listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i));
             dataActiveProjects.add(actives);
         }
     }
@@ -239,7 +241,7 @@ public class ManageView extends VerticalLayout {
 
         try {
             table = new Grid<>();
-            table.addClassName("pending-projects-grid");
+            table.addClassName("Active-projects-grid");
             table.setWidthFull();
             table.setSelectionMode(SelectionMode.MULTI);
 
@@ -258,18 +260,18 @@ public class ManageView extends VerticalLayout {
                     .forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
 
             table.setItemDetailsRenderer(
-                    new ComponentRenderer<>(PendingProject -> {
+                    new ComponentRenderer<>(ActiveProject -> {
                         VerticalLayout layout = new VerticalLayout();
                         layout.add(new Label("Título: " +
-                                PendingProject.getTitle()));
+                                ActiveProject.getTitle()));
                         layout.add(new Label("Descripción: " +
-                                PendingProject.getDescription()));
+                                ActiveProject.getDescription()));
                         layout.add(new Label("Tutor/es: " +
-                                PendingProject.getTutors()));
+                                ActiveProject.getTutors()));
                         layout.add(new Label("Alumno/s: " +
-                                PendingProject.getStudents()));
+                                ActiveProject.getStudents()));
                         layout.add(new Label("Estado: " +
-                                PendingProject.getStatus()));
+                                ActiveProject.getStatus()));
                         return layout;
                     }));
             table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -404,32 +406,32 @@ public class ManageView extends VerticalLayout {
         String lowercase = valueChange.toLowerCase();
         if (!valueChange.equals(" ")) {
             while (iterator.hasNext()) {
-                ActiveProject PendingProject = iterator.next();
+                ActiveProject ActiveProject = iterator.next();
 
                 switch (column) {
                     case "title":
-                        if (PendingProject.getTitle().toLowerCase().contains(lowercase)) {
-                            dataFilteredGrid.add(PendingProject);
+                        if (ActiveProject.getTitle().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(ActiveProject);
                         }
                         break;
                     case "description":
-                        if (PendingProject.getDescription().toLowerCase().contains(lowercase)) {
-                            dataFilteredGrid.add(PendingProject);
+                        if (ActiveProject.getDescription().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(ActiveProject);
                         }
                         break;
                     case "tutor":
-                        if (PendingProject.getTutors().toLowerCase().contains(lowercase)) {
-                            dataFilteredGrid.add(PendingProject);
+                        if (ActiveProject.getTutors().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(ActiveProject);
                         }
                         break;
                     case "student":
-                        if (PendingProject.getStudents().toLowerCase().contains(lowercase)) {
-                            dataFilteredGrid.add(PendingProject);
+                        if (ActiveProject.getStudents().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(ActiveProject);
                         }
                         break;
                     case "status":
-                        if (PendingProject.getStatus().toLowerCase().contains(lowercase)) {
-                            dataFilteredGrid.add(PendingProject);
+                        if (ActiveProject.getStatus().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(ActiveProject);
                         }
                         break;
                 }
@@ -472,7 +474,7 @@ public class ManageView extends VerticalLayout {
             }
 
             ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
-                    tutors, students, activeproject.getCourseAssignment(),activeproject.getStatus());
+                    tutors, students, activeproject.getDateAssignment(),activeproject.getStatus());
             dataActiveProjectsGrid.add(actives);
         }
     }

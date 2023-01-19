@@ -30,6 +30,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -124,12 +126,6 @@ public class ModifyView extends VerticalLayout {
         //Obtenemos los datos del TFG seleccionado previamente
         ActiveProject TFG= fachadaDatos.getTFG(tituloTFG);
         
-        TextArea titulo =new TextArea("Título del TFG");
-        titulo.setWidth("40%");
-        titulo.addValueChangeListener(event->{
-           titulo.setValue(event.getValue()); 
-        });
-        
         TextArea tituloCorto =new TextArea("Título corto del TFG");
         tituloCorto.setWidth("40%");
         tituloCorto.setValue(TFG.getTitle());
@@ -204,15 +200,10 @@ public class ModifyView extends VerticalLayout {
             alumno3.setValue(event.getValue()); 
         });
 
-        TextArea cursoAsignacion=new TextArea("Curso de asignacion del TFG");
-        cursoAsignacion.setWidth("40%");
-        cursoAsignacion.setValue(TFG.getCourseAssignment());
-        //Si se desea modificar el curso
-        cursoAsignacion.addValueChangeListener(event->{
-            cursoAsignacion.setValue(event.getValue()); 
-        });
         
         DatePicker fechaAsignacion=new DatePicker("Fecha de asignacion del TFG");
+        LocalDate fechaAnt= obtenerFecha(TFG.getDateAssignment());    
+        fechaAsignacion.setValue(fechaAnt);
         fechaAsignacion.setLocale(getLocale());
         fechaAsignacion.setWidth("40%");
         fechaAsignacion.addValueChangeListener(event->{         
@@ -221,6 +212,7 @@ public class ModifyView extends VerticalLayout {
         });
 
         DatePicker fechaPresentacion=new DatePicker("Fecha de presentacion del TFG");
+        fechaPresentacion.setEnabled(false);
         fechaPresentacion.setLocale(getLocale());
         fechaPresentacion.setWidth("40%");
         fechaPresentacion.addValueChangeListener(event->{
@@ -228,7 +220,7 @@ public class ModifyView extends VerticalLayout {
         });
         
         NumberField nota=new NumberField("Indique una nota del TFG");
-        
+        nota.setEnabled(false);
         nota.setMax(10);
         nota.setMin(0);
         nota.setErrorMessage("El valor debe estar entre 0 y 10");
@@ -238,14 +230,44 @@ public class ModifyView extends VerticalLayout {
         });
         
         TextArea repo=new TextArea("Indique el enlace URL del repositorio");
+        repo.setEnabled(false);
         repo.setWidth("40%");
         repo.addValueChangeListener(event->{
             repo.setValue(event.getValue()); 
         });
-                
+              
+        
+        
         //Botones para aceptar y cerrar o mantener abierto
         Button AceptaryAbierto= new Button("Aceptar cambios y dejar abierto");
+        AceptaryAbierto.setEnabled(false);
         Button AceptaryCerrado= new Button("Aceptar cambios y mover a histórico");
+        AceptaryCerrado.setEnabled(false);
+        
+        Button si=new Button("Sí");
+        si.addClickListener(e->{
+            AceptaryCerrado.setEnabled(true);
+            fechaPresentacion.setEnabled(true);
+            nota.setEnabled(true);
+            repo.setEnabled(true);
+            
+          //Por si se había pulsado previamente el botón de no
+            AceptaryAbierto.setEnabled(false);
+            
+        });
+        
+        Button no=new Button("No");
+        no.addClickListener(e->{
+            AceptaryAbierto.setEnabled(true);
+            //Por si se había pulsado previamente el botón de sí
+            AceptaryCerrado.setEnabled(false);
+            fechaPresentacion.setEnabled(false);
+            nota.setEnabled(false);
+            repo.setEnabled(false);
+        });
+        
+        HorizontalLayout layoutHist= new HorizontalLayout();
+        layoutHist.add(si,no);
         
         //Cancelamos y volvemos a la pestaña de administrar tfgs
         Button cancelar= new Button("Cancelar cambios");
@@ -268,8 +290,9 @@ public class ModifyView extends VerticalLayout {
               
             }else {
                //Guardamos los datos y actualizamos
+                String fechaAsig=cambiarFormato(fechaAsignacion);
                stringAbierto(tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
-                        tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),cursoAsignacion.getValue());
+                        tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsig);
                 Notification.show("Se ha modificado correctamente el TFG propuesto en la pestaña de activos."); 
             }
         });
@@ -294,19 +317,45 @@ public class ModifyView extends VerticalLayout {
                  //Cambiamos el formato de las fechas
                  String fechaAsig=cambiarFormato(fechaAsignacion);
                  String fechaPresen=cambiarFormato(fechaPresentacion);
-                 stringCerrado(titulo.getValue(),tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
+                 stringCerrado(tituloCorto.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),
                          tutor3.getValue(),alumno1.getValue(),alumno2.getValue(),alumno3.getValue(),fechaAsig,fechaPresen,nota.getValue(),dias,repo.getValue());
                  Notification.show("Se ha eliminado el TFG de activos y se ha añadido en historicos correctamente."); 
              }
         });
  
-       add(titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion,fechaAsignacion,fechaPresentacion,nota,repo);
+       add(tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsignacion,fechaPresentacion,nota,repo);
+       H3 askHist = new H3("¿Desea mover el proyecto a histórico?");
+       add(askHist,layoutHist);
        HorizontalLayout layout= new HorizontalLayout();
        layout.add(AceptaryAbierto,AceptaryCerrado,cancelar);
        add(layout);
         
     }
  
+    /**
+     * Obtenemos un tipo LocalDate de la fecha que habiamos guardado como String, formato previo String DD/MM/YYYY a LocalDate YYYY-MM-DD.
+     * @param dateAssignment
+     * @return localDate fecha de asignacion
+     */
+    private LocalDate obtenerFecha(String dateAssignment) {
+        
+        //Si esta vacío ponemos la fecha de hoy
+        if (dateAssignment.isBlank()) {
+            return LocalDate.now();
+        }else {
+            String[] parts = dateAssignment.split("/");      
+            System.out.println(dateAssignment);
+            System.out.println(parts[2]);
+            System.out.println(parts[1]);
+            System.out.println(parts[0]);
+            
+            LocalDate fecha=LocalDate.of(Integer.parseInt(parts[2]),Integer.parseInt(parts[1]),Integer.parseInt(parts[0]));
+            System.out.print(fecha);
+
+            return fecha;
+        }
+    }
+
     /**
      * Cambiamos el formata en el que esta la fecha de YYYY-MM-DD a DD/MM/YYYY.
      * @param fecha
@@ -442,9 +491,9 @@ public class ModifyView extends VerticalLayout {
         * @param cursoAsignacion
         */
        private void stringAbierto(String tituloCorto, String descripcion, String tutor1, String tutor2, String tutor3,
-               String alumno1, String alumno2, String alumno3, String cursoAsignacion) {
+               String alumno1, String alumno2, String alumno3, String fechaAsignacion) {
 
-           String [] TFG= {tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,cursoAsignacion};     
+           String [] TFG= {tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsignacion};     
            //Esta variable se va a utilizar para saber si lo que se tiene que hacer es actualizar la fila o si se tiene que borrar
            //Es decir, si se llama desde cerrar un fichero
            int estado=0;
@@ -475,11 +524,11 @@ public class ModifyView extends VerticalLayout {
      * @param dias
      * @param repo
      */
-    private void stringCerrado(String titulo, String tituloCorto, String descripcion, String tutor1, String tutor2,
+    private void stringCerrado(String tituloCorto, String descripcion, String tutor1, String tutor2,
                String tutor3, String alumno1, String alumno2, String alumno3, String fechaAsig,
                String fechaPresen, Double nota, long dias, String repo) {
 
-           String [] TFG= {titulo,tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsig,
+           String [] TFG= {"",tituloCorto,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,alumno3,fechaAsig,
                    fechaPresen,nota.toString(),String.valueOf(dias),repo};
            int estado=1;
            //Borramos el TFG del listado de activos;

@@ -378,7 +378,7 @@ public class ProfesoresView extends VerticalLayout {
      * Metodo que despliega los datos de departamentos,areas y profesores para seleccionarlos.
      */
     public void datosGraficas(){
-        H2 metricsTitle = new H2("DATOS A MOSTRAR");
+        H2 metricsTitle = new H2("Datos a mostrar");
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
         List<String> courses = new ArrayList<>();

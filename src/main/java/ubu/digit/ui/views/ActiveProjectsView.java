@@ -212,7 +212,7 @@ public class ActiveProjectsView extends VerticalLayout{
 			}
 		});
 
-		courseFilter = new TextField("Filtrar por curso:");
+		courseFilter = new TextField("Filtrar por fecha:");
 		courseFilter.setWidth("300px");
 		courseFilter.addValueChangeListener(event -> {
 			if(!courseFilter.isEmpty()) {
@@ -261,7 +261,7 @@ public class ActiveProjectsView extends VerticalLayout{
 			table.addColumn(ActiveProject::getDescription).setHeader("Descripción").setFlexGrow(25);
 			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
 			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
-			table.addColumn(ActiveProject::getCourseAssignment).setHeader("Curso Asignación").setFlexGrow(5);
+			table.addColumn(ActiveProject::getDateAssignment).setHeader("Fecha Asignación").setFlexGrow(5);
 			
 			table.getColumns().forEach(columna -> columna.setResizable(true));
 			table.getColumns().forEach(columna -> columna.setSortable(true));
@@ -280,7 +280,7 @@ public class ActiveProjectsView extends VerticalLayout{
 				        layout.add(new Label("Alumno/s: " +
 				        		ActiveProject.getStudents()));
 				        layout.add(new Label("Curso Asignación: " +
-				        		ActiveProject.getCourseAssignment()));
+				        		ActiveProject.getDateAssignment()));
 				        return layout;
 				}));
 			table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -327,7 +327,7 @@ public class ActiveProjectsView extends VerticalLayout{
 						}
 						break;
 					case "course":
-						if(activeproject.getCourseAssignment().toLowerCase().contains(lowercase)) {
+						if(activeproject.getDateAssignment().toLowerCase().contains(lowercase)) {
 						dataFilteredGrid.add(activeproject);
 						}
 						break;
@@ -370,7 +370,7 @@ public class ActiveProjectsView extends VerticalLayout{
 			}
 
 			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
-					tutors, students, activeproject.getCourseAssignment(),activeproject.getStatus());
+					tutors, students, activeproject.getDateAssignment(),activeproject.getStatus());
 			dataActiveProjectsGrid.add(actives);
 		}	
 	}
