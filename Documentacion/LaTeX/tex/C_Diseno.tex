@@ -42,10 +42,23 @@ De forma general la estructura de paquetes y ficheros es la misma que en el proy
 
 \section{Diseño procedimental}
 En esta versión se ha añadido un sistema de identificación del usuario al comienzo de la aplicación, este registro le dará por lo tanto un rol al usuario. Una vez tenga asignado un rol podrá acceder a las diferentes pantallas y funcionalidades asociadas a ese rol.
-El sistema sigue la siguiente lógica, ilustrada en la imagen \ref{fig:diagramaFlujo}.
-
-\imagenflotante{diagramaFlujo}{Diagrama de Flujo - Login}{0.9}
-
+El sistema sigue la siguiente lógica:
+\begin{itemize}
+	\item Se muestra la pantalla de información por defecto, y en la barra de navegación las funcionalidades que no necesitan permisos para ser accedidas.
+	\item Botón de iniciar sesión que lleva al Login:
+		\begin{itemize}
+			\item Validar usuario.
+			\item Asignación de permisos/roles.
+			\item Redirección pantalla de información.
+			\item Se muestra en la barra de navegación las funcionalidades a la que puede acceder dicho rol.
+		\end{itemize}
+	\item Botón de cierre de sesión:
+		\begin{itemize}
+			\item Solo se activa cuando se ha iniciado sesión previamente.
+			\item Elimina los permisos y los roles del usuario que ha iniciado sesión.
+			\item Vuelve a la situación inicial.
+		\end{itemize}
+\end{itemize}
 \section{Diseño arquitectónico}
 
 El diseño arquitectónico sigue la misma estructura que encontrábamos en la versión anterior del proyecto. Con una clara distinción entre los ficheros \emph{frontend} y los ficheros \emph{backend}.
