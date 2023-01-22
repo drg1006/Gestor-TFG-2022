@@ -12,16 +12,37 @@ A continuación se detallará el uso de la web, exclusivamente de las nuevas pan
 \subsection{Login}
 El sistema de \emph{Login} es el mismo que estaba implementado, en esta versión será opcional y se pedirá si pulsamos en el botón \emph{Iniciar sesión} de la barra de navegación. Una vez se haya registrado se verán las opciones a las que puede acceder en la barra de navegación. Los actores \emph{profesor y administrador} en la pantalla de histórico tendrán un \emph{submenu} que les permitirá acceder a ambas pantallas de histórico, tanto de proyectos como de profesores.
 
-Usuario \emph{Alumno}, tiene los mismos permisos que un usuario que no ha iniciado sesión, por ello se está ejemplificando en la imagen \ref{fig:userAlumno} con el botón \emph{Iniciar sesión} en lugar de visualizar el botón \emph{Cerrar sesión}, que saldría si un alumno iniciase sesión. 
-\imagenflotante{userAlumno}{Barra de navegación del usuario con permisos de alumno.}{0.9}
+Las pantallas a las que pueden acceder los diferentes roles asignados tras iniciar sesión se ven las tablas
+\ref{actores} y \ref{actores2}.
  
- Usuario \emph{Profesor no editor}.Ver imagen \ref{fig:userProfesor}. 
- \imagenflotante{userProfesor}{Barra de navegación del usuario con permisos de profesor.}{0.9}
- 
- Usuario \emph{Administrador}.Ver imagen \ref{fig:userAdministrador}.
- \imagenflotante{userAdministrador}{Barra de navegación del usuario con permisos de administrador.}{0.9}
- 
- También se ha añadido un botón de \emph{Log out} que permite cerrar sesión si un usuario se había conectado.
+ \begin{table}[]
+ 	\label{actores}
+ 	\centering
+ 	\begin{tabular}{|l|c|c|c|c|}
+ 		\hline
+ 		\multicolumn{1}{|c|}{\textbf{ACTOR}}     & \textbf{Proyectos} & \textbf{Histórico} & \textbf{Histórico} & \textbf{Subir TFG} \\
+ 		\multicolumn{1}{|c|}{}     & \textbf{activos} & \textbf{de proyectos} & \textbf{de profesores} & {}  \\ \hline 
+ 		Alumno & X & X & {} & {} \\ \hline
+ 		Profesor  & X & X & X & X   \\ \hline
+ 		Administrador   & X & X & X & X   \\ \hline
+ 	\end{tabular}
+ 	\caption{Permisos de los actores.Parte 1}
+ \end{table}
+
+ \begin{table}[]
+	\label{actores2}
+	\centering
+	\begin{tabular}{|l|c|c|c|c|}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{ACTOR}}     &  \textbf{Informes} & \textbf{Administrar TFG} & \textbf{Metricas} & \textbf{Actualizar Ficheros}\\ \hline
+		Alumno & {} & {} & X & {} \\ \hline
+		Profesor  & X & {} & X   & {}  \\ \hline
+		Administrador   & X & X & X  & X  \\ \hline
+	\end{tabular}
+	\caption{Permisos de los actores. Parte 2}
+\end{table}
+
+También se ha añadido un botón de \emph{Log out} que permite cerrar sesión si un usuario se había conectado.
  
 \subsection{Histórico profesorado}
 En esta nueva pantalla implantada se expone información histórica sobre el profesorado, para acceder a ella será necesario ser \emph{profesor o administrador}.
