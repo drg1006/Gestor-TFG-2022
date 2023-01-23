@@ -19,26 +19,31 @@ Nos centraremos en los siguientes puntos:
 \end{itemize}
 
 \section{Catálogo de requisitos}
-Se describirán los requisitos específicos, funcionales y los no funcionales.
+Se describirán los requisitos específicos, funcionales y los no funcionales, exclusivamente de las nuevas funcionalidades que se han implementado en esta versión.
 \subsection{Requisitos funcionales}
 \begin{itemize}
-		\item \texttt{RF-1 Realizar WebScraping}: la aplicación debe obtener los datos de los tutores de la EPS.
+		\item \texttt{RF-1  Histórico del profesorado}: mostrar el número de profesores, áreas y departamentos encontrados en la EPS.
 		\begin{itemize}
-				\item \texttt{RF-1.1 Preguntar al usuario}: preguntar al usuario si desea o no realizar la actualización, indicando la última fecha de modifiación y avisando de que el proceso puede tardar un tiempo.
-				\item \texttt{RF-1.2 Búsqueda de datos}: los datos (nombre, apellidos y área) se obtendrán de las \emph{webs}: \href{https://investigacion.ubu.es/unidades/2682/investigadores}{Investigadores} y para obtener el departamento de cada profesor deberemos entrar en \href{https://investigacion.ubu.es/investigadores/34937/detalle}{Detalles}.
-				\item \texttt{RF-1.3 Actualizar la información}: guardar los datos en el fichero \emph{BaseDeDatosTFGTFM.xls} y en el fichero \emph{N2 Profesores}, sustituyendo la información previa.
+			\item \texttt{RF-1.1 Parametrizar la búsqueda}: permitir al usuario escoger qué información desea obtener en la gráfica, mostrando todas las opciones de áreas, departamentos y profesores, de las que podrá seleccionar las que desee mostrar.
+			\item \texttt{RF-1.2 Obtener el número de TFGs}: mostrar en la gráfica el número de TFGs por curso de los datos seleccionados.
+			\item \texttt{RF-1.3 Actualizar gráfica}: darle al usuario la opción de introducir nuevos parámetros y la gráfica se actualizará \emph{clickando} en \emph{Actualizar gráfica}. A su vez, se aleatorizarán los colores que aparecen en la leyenda y las líneas de la gráfica.
+		\end{itemize}
+		\item \texttt{RF-2 Actualizar base de datos}: la aplicación debe obtener los datos de los tutores de la EPS.
+		\begin{itemize}
+				\item \texttt{RF-2.1 Preguntar al usuario}: preguntar al usuario si desea o no realizar la actualización, indicando la última fecha de modifiación y avisando de que el proceso puede tardar un tiempo.
+				\item \texttt{RF-2.2 Búsqueda de datos}: los datos (nombre, apellidos y área) se obtendrán de las \emph{webs}: \href{https://investigacion.ubu.es/unidades/2682/investigadores}{Investigadores} y para obtener el departamento de cada profesor deberemos entrar en \href{https://investigacion.ubu.es/investigadores/34937/detalle}{Detalles}.
+				\item \texttt{RF-2.3 Actualizar la información}: guardar los datos en el fichero \emph{BaseDeDatosTFGTFM.xls} y en el fichero \emph{N2 Profesores}, sustituyendo la información previa.				
+		\end{itemize}
 				
-		\end{itemize}
-		\item \texttt{RF-2  Estadísticas EPS}: mostrar el número de profesores, áreas y departamentos encontrados en la EPS.
-		\item \texttt{RF-3 Gráfica histórico profesores}: se creará un gráfico con el histórico de los tutores.
+		\item \texttt{RF-3 Generar informes}: permitir al usuario seleccionar un área o áreas sobre los que generar un informe sobre los profesores de las áreas seleccionadas. En este \emph{excel} se mostrarán el número de TFGs dirigidos, codirigidos y el número de créditos asignados a cada tutor del área en el último año. El usuario deberá indicar el número de alumnos matriculados en la asignatura de \emph{TFGs}, el nombre del informe y la hoja de ruta de descarga.
+		\item \texttt{RF-4 Proponer un TFG}: permitir subir un \emph{TFG} a la base de datos del sistema, introduciendo toda su información mediante \emph{el framework Vaadin}, y además se indica de forma automática que su estado está es \emph{Pendiente} de aprobación.
+		\item \texttt{RF-5 Admimistrar los TFGs}: dar la capacidad de visualizar todos los \emph{TFGs} activos para poder actualizarlos.
 		\begin{itemize}
-			\item \texttt{RF-3.1 Parametrizar la búsqueda}: permitir al usuario escoger qué información desea obtener el la gráfica, mostrando todas las opciones de áreas, departamentos y profesores, de las que podrá seleccionar las que desee mostrar.
-			\item \texttt{RF-3.2 Obtener el número de TFGs}: mostrar en la gráfica el número de TFGs por curso de los datos seleccionados.
-			\item \texttt{RF-3.3 Actualizar gráfica}: darle al usuario la opción de introducir nuevos parámetros y la gráfica se actualizará \emph{clickando} en \emph{Actualizar gráfica}. A su vez, se aleatorizarán los colores que aparecen en la leyenda y las líneas de la gráfica.
+			\item RF-5.1 \texttt{Aceptar/Denegar un TFG}: Permitir aprobar o denegar los proyectos que estén con estado \emph{Pendiente}. 
+			\item RF-5.2 \texttt{Modificar un TFG}: Permitir actualizar al usuario la información  de un \emph{TFG}, de esta forma también se podrá cerrar un proyecto y cambiarlo a la pestaña de \emph{Histórico} o mantenerlo abierto.
 		\end{itemize}
-		\item \texttt{RF-4 Generar un informe sobre un área}: permitir al usuario seleccionar un área o áreas sobre los que generar un informe con la información  mencionada anteriormente de cada uno de los tutores pertenecientes a ese área. El usuario podrá indicar también el nombre del informe y la hoja de ruta.
-		\item \texttt{RF-5 Proponer un TFG}: permitir subir un \emph{TFG} a la base de datos del sistema, introduciendo toda su información mediante \emph{el framework Vaadin}, y además se indica de forma automática que su estado está es \emph{Pendiente de aprobación}.
-		\item \texttt{RF-6 Admimistrar los TFGs}: dar la capacidad de visualizar todos los \emph{TFGs} activos para poder modificarlos, y aprobar o denegar los que esten con estado \emph{Pendiente}.
+		\item \texttt{RF-6 Descargar base de datos}: se le permitirá al usuario administrador descargar la base de datos con toda la información sobre los proyectos.	
+	
 		
 \end{itemize}
 
@@ -63,107 +68,141 @@ Este rol se le asigna una vez el usuario se registra en la aplicación en la pan
 	
 	Profesor & Es el usuario con el permiso \emph{reports} para poder generar informes y proponer TFGs, también tendrá acceso a la pantalla de histórico del profesorado, además de tener acceso a todas las mencionadas en el usuario \emph{Alumno}. \\\hline
 	
-	Administrador & Es el usuario que más permisos tiene, con el permiso \emph{update} que le da el acceso a todas las pantallas/botones restringidos. Tiene la capacidad de administrar los TFGs, es decir, modificar su información, aceptarlos, denegarlos, así como actualizar los datos de las bases de datos utilizadas para guardar la información. \\
+	Administrador & Es el usuario que más permisos tiene, con el permiso \emph{update} que le da el acceso a todas las pantallas/botones restringidos. Tiene la capacidad de administrar los \emph{TFGs}, es decir, modificar su información, aceptarlos, denegarlos, así como actualizar los datos de las bases de datos utilizadas para guardar la información. \\
 }
-Se puede ver un resumen de actores para los casos de uso que se van a describir posteriormente en la imagen \ref{fig:actores}
+Se puede ver un resumen de actores para los casos de uso en la imagen \ref{fig:actores}
 \imagenflotante{actores}{Actores de la aplicación frente a las nuevas funcionalidades.}{1.3}
 
-\tablaSmallSinColores{Caso de uso 1:  Realizar WebScraping.}{p{3cm} p{.75cm} p{9cm}}{tablaCU1}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 1:  Realizar WebScraping.} \\
+\tablaSmallSinColores{Caso de uso 1: Histórico del profesorado.}{p{3cm} p{.75cm} p{9cm}}{tablaCU1}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 1: Histórico del profesorado.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Información estadística sobre el profesorado y una gráfica con el número de \emph{TFGs} de los parámetros seleccionados previamente.} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Haber iniciado sesión y tener permisos de administrador} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Indicar los parámetros que el usuario quiere mostrar en la gráfica, profesores, área, departamentos.\\\cline{2-3}
+	& 2    & \emph{Clickar} en el boton \emph{Actualizar gráfica}. \\\cline{2-3}
+	& 3    & Repetir el proceso para cambiar los parámetros o para añadir otros tutores. \\\hline
+	Postcondiciones                        & Ninguna\\\hline
+	Excepciones                        & Ninguna\\\hline
+	Frecuencia                             & Baja \\\hline
+	Importancia                            & Media \\\hline
+	Urgencia                               & Baja \\
+}
+
+\tablaSmallSinColores{Caso de uso 2:  Actualizar base de datos.}{p{3cm} p{.75cm} p{9cm}}{tablaCU2}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 2: Actualizar base de datos.} \\
 }
 {
 	Descripción                            & \multicolumn{2}{p{10.25cm}}{Obtención de la información sobre los profesores de la EPS } \\\hline
-	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Las páginas donde se realiza la búsqueda no estén caídas.} \\\hline
-	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1.1, RF-1.2, RF-1.3} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Estar en la pantalla de \emph{Histórico de profesores} y comprobar que las páginas web donde se realiza la búsqueda no estén caídas} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
-	& 1    & Preguntar al usuario si desea actualizar, el usuario pulsará el botón \emph{SI}, si quiere actualizar. \\\cline{2-3}
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-	Excepciones                        & \multicolumn{2}{p{10.25cm}}{No se encuentre la ruta del archivo a actualizar o las páginas \emph{web} estén caídas. }\\\hline
+	& 1    & Preguntar al usuario si desea actualizar, el usuario pulsará el botón \emph{SI}, si quiere actualizar.\\\hline
+	Postcondiciones                        & Ninguna\\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{No se encuentre la ruta del archivo a actualizar o las páginas \emph{web} estén caídas.} \\\hline
 	Frecuencia                             & Baja \\\hline
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
 }
 
-\tablaSmallSinColores{Caso de uso 2:  Estadísticas EPS.}{p{3cm} p{.75cm} p{9cm}}{tablaCU2}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 2:   Estadísticas EPS.} \\
-}
-{
-	Descripción                            & \multicolumn{2}{p{10.25cm}}{Mostrar el número de profesores, áreas y departamentos encontrados en la EPS.} \\\hline
-Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
-& 1    & Acceder a la vista de profesores. \\\cline{2-3}
-Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna}\\\hline
-Frecuencia                             & Baja \\\hline
-Importancia                            & Media \\\hline
-Urgencia                               & Baja \\
-}
-
-\tablaSmallSinColores{Caso de uso 3:  Gráfica histórico profesores.}{p{3cm} p{.75cm} p{9cm}}{tablaCU3}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 3: Gráfica histórico profesores.} \\
-}
-{
-	Descripción                            & \multicolumn{2}{p{10.25cm}}{Crear un gráfico con el histórico de los tutores } \\\hline
-	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-3.1, RF-3.2, RF-3.3} \\\hline
-	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
-	& 1    & Indicar los parámetros que el usuario quiere mostrar en la gráfica, profesores, área, departamentos.\\\cline{2-3}
-	& 2    & \emph{Clickar} en el boton \emph{Actualizar gráfica}. \\\cline{2-3}
-	& 3    & Repetir el proceso para cambiar los parámetros o para añadir otros tutores. \\\cline{2-3}
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
-	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
-	Frecuencia                             & Media \\\hline
-	Importancia                            & Alta \\\hline
-	Urgencia                               & Alta \\
-}
-
-\tablaSmallSinColores{Caso de uso 4: Generar un informe.}{p{3cm} p{.75cm} p{9cm}}{tablaCU4}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 4: Generar un informe.} \\
+\tablaSmallSinColores{Caso de uso 3: Generar informes.}{p{3cm} p{.75cm} p{9cm}}{tablaCU3}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 3: Generar informes.} \\
 }
 {
 	Descripción                            & \multicolumn{2}{p{10.25cm}}{ Crear un informe cuando un usuario seleccione un área o áreas sobre los que obtenerla información mencionada anteriormente de cada uno de los tutores pertenecientes a ese área. } \\\hline
-	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Iniciar sesión y tener permisos de profesor o administrador} \\\hline
 	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguno} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
 	& 1    & Indicar el área o áreas sobre las que hacer el informe.\\\cline{2-3}
 	& 2    & Indicar el número de alumnos matriculados en la asignatura TFG. \\\cline{2-3}
-	& 3    & Indicar el nombre que le queremos dar al informe\\\cline{2-3}
+	& 3    & Indicar el nombre que le queremos dar al informe\\\hline{2-3}
 	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Indicar la ruta en la que descargar el informe generado} \\\hline
-	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
 	Frecuencia                             & Media \\\hline
 	Importancia                            & Media \\\hline
 	Urgencia                               & Alta \\
 }
 
-\tablaSmallSinColores{Caso de uso 5: Proponer un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU5}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 5: Proponer un TFG.} \\
+\tablaSmallSinColores{Caso de uso 4: Proponer un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU4}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 4: Proponer un TFG.} \\
 }
 {
-	Descripción                            & \multicolumn{2}{p{10.25cm}}{ Permitir a un tutor subir a la base de datos un TFG nuevo. } \\\hline
-	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ser validado como profesor a través del login} \\\hline
-	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguno} \\\hline
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{ Permitir subir a la base de datos un TFG nuevo. } \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ser validado como profesor o administrador a través del login} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Introducir todos los parámetros que son obligatorios.} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
-	& 1    & Añadir toda la información en los campos que se indican sobre el \emph{TFG} que se quiera subir titulo, descripción, tutor1,cursoAsignación y tutor2, alumno1, alumno2 si procede.\\\cline{2-3}
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Introducir todos los parámetros que son obligatorios.} \\\hline
-	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
+	& 1    & Añadir toda la información en los campos que se indican sobre el \emph{TFG} que se quiera subir titulo, descripción, tutor1, fechaAsignación y tutor2, alumno1, alumno2 si procede.\\\cline{2-3}
+	& 2    & \emph{Clickar} en el botón \emph{Crear TFG}.\\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
 	Frecuencia                             & Media \\\hline
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
 }
 
-\tablaSmallSinColores{Caso de uso 6: Administrar un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU6}{
-	\multicolumn{3}{p{10.25cm}}{Caso de uso 6: Administrar un TFG.} \\
+\tablaSmallSinColores{Caso de uso 5: Administrar un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU5}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 5: Administrar un TFG.} \\
 }
 {
-	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador modificar los datos de los TFGs activos además de cambiar el estado de los que están en \emph{Pendiente} } \\\hline
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador modificar la información de los TFGs activos además de cambiar el estado de los que están en \emph{Pendiente} } \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ser validado como administrador a través del login} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Comprobar que los datos se han introducido de manera correcta y que no falte ninguno de los parámetros obligatorios.} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Seleccionar el TFG/TFGs de los que se desea realizar la modificación \\\cline{2-3}
+	& 2    & Realizar la operación deseada.\\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{RF-5.1, RF-5.2} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Frecuencia                             & Media \\\hline
+	Importancia                            & Alta \\\hline
+	Urgencia                               & Alta \\
+}
+
+\tablaSmallSinColores{Caso de uso 5.1: Aceptar/Denegar un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU51}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 5.1: Aceptar/Denegar un TFG.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir aceptar o denegar un \emph{TFG} seleccionado} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Seleccionar uno o varios TFGs} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-5} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Seleccionar el TFG/TFGs de los que se desea realizar la modificación \\\cline{2-3}
+	& 2    & \emph{Clickar} en el botón de \emph{aceptar o denegar}.\\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Frecuencia                             & Media \\\hline
+	Importancia                            & Alta \\\hline
+	Urgencia                               & Alta \\
+}
+\tablaSmallSinColores{Caso de uso 5.2: Modificar un TFG.}{p{3cm} p{.75cm} p{9cm}}{tablaCU52}{
+	\multicolumn{3}{p{10.25cm}}{Caso de uso 5.2: Modificar un TFG.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador modificar el \emph{TFG} seleccionado en RF-5} \\\hline
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Haber seleccionado un solo \emph{TFG} y haber \emph{clickado} en el botón \emph{Modificar}} \\\hline
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-5} \\\hline
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Actualizar la información deseada.\\\cline{2-3}
+	& 2    & \emph{Clickar} en el botón deseado: \emph{Mantener abierto o cerrarlo}\\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Comprobar que los datos se han introducido de manera correcta y que no falte ninguno de los parámetros obligatorios.} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
+	Frecuencia                             & Media \\\hline
+	Importancia                            & Alta \\\hline
+	Urgencia                               & Alta \\
+}
+
+\tablaSmallSinColores{Caso de uso 6: Descargar base de datos.}{p{3cm} p{.75cm} p{9cm}}{tablaCU6}{
+\multicolumn{3}{p{10.25cm}}{Caso de uso 6:  Descargar base de datos.} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permitir a un administrador descargar la base de datos utilizada en la aplicación } \\\hline
 	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{Ser validado como administrador a través del login} \\\hline
 	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{Ninguno} \\\hline
 	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
-	& 1    & Sustituir el campo estado del \emph{TFG} que se quiera modificar por \emph{Aceptado o Denegado}.\\\cline{2-3}
-
-	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Comprobar que los datos se han introducido de manera correcta y que no falte ninguno de los parámetros obligatorios.} \\\hline
-	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna }\\\hline
+	& 1    & \emph{Clickar en el botón} de descarga en la parte inferior de la pantalla.\\\hline
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Indicar la ruta de descarga} \\\hline
+	Excepciones                        & \multicolumn{2}{p{10.25cm}}{Ninguna} \\\hline
 	Frecuencia                             & Media \\\hline
 	Importancia                            & Alta \\\hline
 	Urgencia                               & Alta \\
