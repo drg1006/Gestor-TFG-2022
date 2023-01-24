@@ -301,8 +301,20 @@ public class newProjectView extends VerticalLayout {
         int year=fecha.getValue().getYear();
         int month=fecha.getValue().getMonthValue();
         int day =fecha.getValue().getDayOfMonth();
-        
-        String fechaFormat=String.valueOf(day)+"/"+String.valueOf(month)+"/"+ String.valueOf(year);
+      //Una fecha con un día o menos menor que diez se guardaría como 1/1/2023 en lugar de 01/01/2023 que es como queremos
+        String monthBien="";
+        String dayBien="";
+        if(month<10) {
+            monthBien="0"+month;
+        }else {
+            monthBien=String.valueOf(month);
+        }
+        if(day<10) {
+            dayBien="0"+day;
+        }else {
+            dayBien=String.valueOf(day);
+        }
+        String fechaFormat=dayBien+"/"+monthBien+"/"+ String.valueOf(year);
         System.out.print(fechaFormat);
         return fechaFormat;
     }
