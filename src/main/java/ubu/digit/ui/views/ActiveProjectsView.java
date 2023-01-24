@@ -1,5 +1,7 @@
 package ubu.digit.ui.views;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,6 +106,10 @@ public class ActiveProjectsView extends VerticalLayout{
 	 *  Fachada para obtener los datos
 	 */
 	private SistInfDataAbstract fachadaDatos;
+	/**
+     * Formateador de fechas.
+     */
+    public transient DateTimeFormatter dateTimeFormatter;
 
 	/**
 	 * Constructor.
@@ -111,7 +117,7 @@ public class ActiveProjectsView extends VerticalLayout{
 	public ActiveProjectsView() {
 		
 		fachadaDatos = SistInfDataFactory.getInstanceData();
-		
+		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		addClassName("active-projects-view");
 		setMargin(true);
 		setSpacing(true);
@@ -231,13 +237,14 @@ public class ActiveProjectsView extends VerticalLayout{
 	 */
 	private void createDataModel() { 
 		//Se obtienen los datos del modelo
-		List<String> listaDataModel = fachadaDatos.getDataModel();
+	    @SuppressWarnings("rawtypes")
+	    ArrayList listaDataModel = fachadaDatos.getDataModel(dateTimeFormatter);
 		dataActiveProjects = new ArrayList<ActiveProject>();
 		
 		for(int i=0;i<listaDataModel.size();i++) {
-			ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
-					listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-					listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i));
+			ActiveProject actives = new ActiveProject((String)listaDataModel.get(i),(String) listaDataModel.get(++i), 
+			        (String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
+			        (String)listaDataModel.get(++i),(String) listaDataModel.get(++i),(LocalDate) listaDataModel.get(++i), (String)listaDataModel.get(++i));
 			dataActiveProjects.add(actives);
 		}
 	}
@@ -298,6 +305,7 @@ public class ActiveProjectsView extends VerticalLayout{
 	 * @param valueChange
 	 */
 	private void applyFilter(String column, String valueChange) {
+	    LocalDate dateChange = null;
 		dataFilteredGrid = new ArrayList<ActiveProject>();
 		Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
 		String lowercase=valueChange.toLowerCase();
@@ -327,7 +335,8 @@ public class ActiveProjectsView extends VerticalLayout{
 						}
 						break;
 					case "course":
-						if(activeproject.getDateAssignment().toLowerCase().contains(lowercase)) {
+					    dateChange= LocalDate.parse(valueChange, dateTimeFormatter);
+						if(activeproject.getDateAssignment().equals(dateChange)) {
 						dataFilteredGrid.add(activeproject);
 						}
 						break;

@@ -788,8 +788,10 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Obtener los datos del modelo de datos de los proyectos activos.
 	 */
-	public List<String> getDataModel() { 
-		List<String> listaDataModel = new ArrayList<String>();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public ArrayList getDataModel(DateTimeFormatter dateTimeFormatter) { 
+		ArrayList listaDataModel = new ArrayList();
 		String sql = SELECT_ALL + FROM + PROYECTO + WHERE + TITULO + DISTINTO_DE_VACIO;
 		
 		try (Statement statement = connection.createStatement();
@@ -1162,7 +1164,7 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
     }
 
         @Override
-    public ActiveProject getTFG(String tituloTFG) {
+    public ActiveProject getTFG(String tituloTFG,DateTimeFormatter dateTimeFormatter) {
         // TODO Auto-generated method stub
         return null;
     }

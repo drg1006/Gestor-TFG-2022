@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -125,6 +126,11 @@ public class ManageView extends VerticalLayout {
      * Fachada para obtener los datos
      */
     public SistInfDataAbstract fachadaDatos;
+    
+    /**
+     * Formateador de fechas.
+     */
+    public transient DateTimeFormatter dateTimeFormatter;
 
     /**
      * Constructor.
@@ -132,7 +138,7 @@ public class ManageView extends VerticalLayout {
     public ManageView() {
 
         fachadaDatos = SistInfDataFactory.getInstanceData();
-
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         addClassName("active-projects-view");
         setMargin(true);
         setSpacing(true);
@@ -220,14 +226,15 @@ public class ManageView extends VerticalLayout {
      * Crea el modelo de datos de los proyectos activos.
      */
     private void createDataModel() { 
-        //Se obtienen los datos del modelo
-        List<String> listaDataModel = fachadaDatos.getDataModel();
+      //Se obtienen los datos del modelo
+        @SuppressWarnings("rawtypes")
+        ArrayList listaDataModel = fachadaDatos.getDataModel(dateTimeFormatter);
         dataActiveProjects = new ArrayList<ActiveProject>();
         
         for(int i=0;i<listaDataModel.size();i++) {
-            ActiveProject actives = new ActiveProject(listaDataModel.get(i), listaDataModel.get(++i), 
-                    listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i), listaDataModel.get(++i),
-                    listaDataModel.get(++i),listaDataModel.get(++i),listaDataModel.get(++i), listaDataModel.get(++i));
+            ActiveProject actives = new ActiveProject((String)listaDataModel.get(i),(String) listaDataModel.get(++i), 
+                    (String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
+                    (String)listaDataModel.get(++i),(String) listaDataModel.get(++i),(LocalDate) listaDataModel.get(++i), (String)listaDataModel.get(++i));
             dataActiveProjects.add(actives);
         }
     }

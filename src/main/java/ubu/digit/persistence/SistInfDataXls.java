@@ -614,9 +614,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 	/**
 	 * Obtener los datos del modelo de datos de los proyectos activos.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<String> getDataModel() { 
-		List<String> listaDataModel = new ArrayList<String>();
+	public ArrayList getDataModel(DateTimeFormatter format) { 
+	    LocalDate courseAssignment=null;
+	    ArrayList listaDataModel = new ArrayList();
 		try{
 			Recordset result = getResultSet(PROYECTO, TITULO);
 			while (result.next()) {
@@ -640,7 +642,11 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
 				if (student3 == null) {
 					student3 = "";
 				}
-				String courseAssignment = result.getField(CURSO_ASIGNACION);
+				if(result.getField(CURSO_ASIGNACION).isBlank()) {
+				    courseAssignment=null;
+				}else {
+				    courseAssignment = LocalDate.parse(result.getField(CURSO_ASIGNACION), format);
+				}
 				
 				String status =result.getField(ESTADO);
 				if (status== null) {
@@ -1173,7 +1179,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     }
 
     @Override
-    public ActiveProject getTFG(String tituloTFG) {
+    public ActiveProject getTFG(String tituloTFG,DateTimeFormatter dateTimeFormatter) {
         ActiveProject TFG= new ActiveProject();
         String sql= SELECT_ALL + FROM + PROYECTO +WHERE+TITULO + " = "+"'"+tituloTFG+"'";
      
@@ -1190,8 +1196,8 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
                 TFG.setStudent1( result.getField(ALUMNO1).toString());
                 TFG.setStudent2( result.getField(ALUMNO2).toString());
                 TFG.setStudent3( result.getField(ALUMNO3).toString());
-                
-                TFG.setCourseAssignment(result.getField(CURSO_ASIGNACION).toString());
+                LocalDate assignmentDate = LocalDate.parse(result.getField(CURSO_ASIGNACION), dateTimeFormatter);
+                TFG.setCourseAssignment(assignmentDate);
                 TFG.setStatus(result.getField(ESTADO).toString());
                 
             }

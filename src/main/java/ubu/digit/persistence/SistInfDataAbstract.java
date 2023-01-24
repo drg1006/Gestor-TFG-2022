@@ -173,8 +173,8 @@ public abstract class SistInfDataAbstract implements Serializable {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(date, dateTimeFormatter);
     }
-    
-    public abstract List<String> getDataModel();
+    @SuppressWarnings("rawtypes")
+    public abstract ArrayList getDataModel(DateTimeFormatter dateTimeFormatter);
     
     public abstract List<String> getTribunal();
     
@@ -213,6 +213,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 
     public abstract String getUltimoTFG();
 
-    public abstract ActiveProject getTFG(String tituloTFG);
+    public abstract ActiveProject getTFG(String tituloTFG,DateTimeFormatter dateTimeFormatter);
     
 }

@@ -514,7 +514,7 @@ public class HistoricProjectsView extends VerticalLayout {
 	                        .withCurve(Curve.straight)
 	                        .build())
 	                .withTitle(TitleSubtitleBuilder.get()
-	                        .withText("Métricas agrupadas por curso")
+	                        .withText("Nota media y número de meses agrupadas por curso")
 	                        .withAlign(Align.center)
 	                        .build())
 	                .withGrid(GridBuilder.get()

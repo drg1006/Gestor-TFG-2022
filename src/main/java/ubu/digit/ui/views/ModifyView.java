@@ -30,7 +30,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
@@ -124,7 +123,7 @@ public class ModifyView extends VerticalLayout {
      */
     private void introducirDatos() {
         //Obtenemos los datos del TFG seleccionado previamente
-        ActiveProject TFG= fachadaDatos.getTFG(tituloTFG);
+        ActiveProject TFG= fachadaDatos.getTFG(tituloTFG,dateTimeFormatter);
         
         TextArea tituloCorto =new TextArea("Título corto del TFG");
         tituloCorto.setWidth("40%");
@@ -202,8 +201,8 @@ public class ModifyView extends VerticalLayout {
 
         
         DatePicker fechaAsignacion=new DatePicker("Fecha de asignacion del TFG");
-        LocalDate fechaAnt= obtenerFecha(TFG.getDateAssignment());    
-        fechaAsignacion.setValue(fechaAnt);
+        //LocalDate fechaAnt= obtenerFecha(TFG.getDateAssignment());    
+        fechaAsignacion.setValue(TFG.getDateAssignment());
         fechaAsignacion.setLocale(getLocale());
         fechaAsignacion.setWidth("40%");
         fechaAsignacion.addValueChangeListener(event->{         
@@ -333,35 +332,11 @@ public class ModifyView extends VerticalLayout {
     }
  
     /**
-     * Obtenemos un tipo LocalDate de la fecha que habiamos guardado como String, formato previo String DD/MM/YYYY a LocalDate YYYY-MM-DD.
-     * @param dateAssignment
-     * @return localDate fecha de asignacion
-     */
-    private LocalDate obtenerFecha(String dateAssignment) {
-        
-        //Si esta vacío ponemos la fecha de hoy
-        if (dateAssignment.isBlank()) {
-            return LocalDate.now();
-        }else {
-            String[] parts = dateAssignment.split("/");      
-            System.out.println(dateAssignment);
-            System.out.println(parts[2]);
-            System.out.println(parts[1]);
-            System.out.println(parts[0]);
-            
-            LocalDate fecha=LocalDate.of(Integer.parseInt(parts[2]),Integer.parseInt(parts[1]),Integer.parseInt(parts[0]));
-            System.out.print(fecha);
-
-            return fecha;
-        }
-    }
-
-    /**
      * Cambiamos el formata en el que esta la fecha de YYYY-MM-DD a DD/MM/YYYY.
      * @param fecha
      * @return string con la fecha
      */
-    private String cambiarFormato(DatePicker fecha) {
+    private String cambiarFormato(DatePicker fecha) {        
         int year=fecha.getValue().getYear();
         int month=fecha.getValue().getMonthValue();
         int day =fecha.getValue().getDayOfMonth();

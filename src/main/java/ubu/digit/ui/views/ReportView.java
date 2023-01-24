@@ -145,7 +145,7 @@ public class ReportView extends VerticalLayout {
 	    Checkbox checkbox = new Checkbox("Seleccionar Todas");
 	    List<String> areas= fachadaDatos.getAreas();
 	    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-	    checkboxGroup.setLabel("Areas");
+	    checkboxGroup.setLabel("Áreas");
 	    checkboxGroup.setItems(areas);
 	    checkboxGroup.addValueChangeListener(event -> {
 	        if (event.getValue().size() == areas.size()) {

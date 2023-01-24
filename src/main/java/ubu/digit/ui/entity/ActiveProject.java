@@ -1,6 +1,7 @@
 package ubu.digit.ui.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Clase para almacenar los proyectos activos.
@@ -14,7 +15,7 @@ public class ActiveProject extends Projects implements Serializable {
 	/**
 	 * Curso de asignación.
 	 */
-	private String dateAssignment="";
+	private LocalDate dateAssignment;
 
 	/**
 	 * Tutores del proyecto.
@@ -41,7 +42,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 * @param courseAssignment
 	 *            Curso de asignación del proyecto.
 	 */
-	public ActiveProject(String title, String description, String tutors,String students, String dateAssignment, String status) {
+	public ActiveProject(String title, String description, String tutors,String students,LocalDate dateAssignment, String status) {
 		this.title = title;
 		this.description = description;
 		this.tutors = tutors;
@@ -73,7 +74,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 *            Curso de asignación del proyecto.
 	 */
 	public ActiveProject(String title, String description, String tutor1, String tutor2, String tutor3,
-			String student1, String student2, String student3, String dateAssignment, String status) {
+			String student1, String student2, String student3, LocalDate dateAssignment, String status) {
 		this.title = title;
 		this.description = description;
 		this.tutor1 = tutor1;
@@ -132,7 +133,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 * @return courseAssignment 
 	 * 			Curso de asignación del proyecto
 	 */
-	public String getDateAssignment() {
+	public LocalDate getDateAssignment() {
 		return dateAssignment;
 	}
 
@@ -142,7 +143,7 @@ public class ActiveProject extends Projects implements Serializable {
 	 * @param courseAssignment
 	 *            curso de asignación del proyecto
 	 */
-	public void setCourseAssignment(String dateAssignment) {
+	public void setCourseAssignment(LocalDate dateAssignment) {
 		this.dateAssignment =dateAssignment;
 	}
 	/**
