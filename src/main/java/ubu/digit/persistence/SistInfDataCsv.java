@@ -1165,8 +1165,32 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
 
         @Override
     public ActiveProject getTFG(String tituloTFG,DateTimeFormatter dateTimeFormatter) {
-        // TODO Auto-generated method stub
-        return null;
+            ActiveProject TFG= new ActiveProject();
+            String sql= SELECT_ALL + FROM + PROYECTO +WHERE+TITULO + " = "+"'"+tituloTFG+"'";
+         
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(sql);
+                while (result.next()) {
+                    TFG.setTitle(tituloTFG); 
+                    TFG.setDescription( result.getString(DESCRIPCION));
+                    
+                    TFG.setTutor1( result.getString(TUTOR1));
+                    TFG.setTutor2( result.getString(TUTOR2));
+                    TFG.setTutor3( result.getString(TUTOR3));
+
+                    TFG.setStudent1( result.getString(ALUMNO1));
+                    TFG.setStudent2( result.getString(ALUMNO2));
+                    TFG.setStudent3( result.getString(ALUMNO3));
+                    LocalDate assignmentDate = LocalDate.parse(result.getString(CURSO_ASIGNACION), dateTimeFormatter);
+                    TFG.setCourseAssignment(assignmentDate);
+                    TFG.setStatus(result.getString(ESTADO));
+                    
+                }
+            } catch (Exception e) {
+                LOGGER.error("Error al obtener los datos del tribunal", e);
+            }
+            return TFG;
     }
     
 }

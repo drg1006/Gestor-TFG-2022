@@ -377,7 +377,7 @@ public class ReportView extends VerticalLayout {
         try {
             stream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
 
         return stream;
