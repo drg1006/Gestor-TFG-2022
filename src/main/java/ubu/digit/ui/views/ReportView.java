@@ -203,7 +203,7 @@ public class ReportView extends VerticalLayout {
             
          });
         
-	    add(nAlum,checkbox, checkboxGroup,nombreInforme,crearInforme,download);
+	    add(nAlum, checkboxGroup,checkbox,nombreInforme,crearInforme,download);
 
 	}
 	
@@ -241,7 +241,12 @@ public class ReportView extends VerticalLayout {
 	                    int cellid = 0;
 	                    for (Object obj : objectArr) {
 	                        Cell cell = rowCount.createCell(cellid++);
+	                        if(obj.getClass().equals(Double.class)) {
+	                            
+	                            cell.setCellValue((double) obj);
+	                        }else
 	                        cell.setCellValue((String)obj);
+	                        
 	                    }
 	                }
 	            }
@@ -274,10 +279,10 @@ public class ReportView extends VerticalLayout {
         for(String prof:profes) {
             
             i++;
-            int tfgs=0;
-            int tfgs2=0;
+            double tfgs=0;
+            double tfgs2=0;
             //obtenemos los creditos
-            float creditos=obtenerCreditos(prof, ultimoAño,nAlumn);
+            double creditos=obtenerCreditos(prof, ultimoAño,nAlumn);
             //Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
             for(int n=0;n<activos.dataActiveProjects.size();n++) {
                 if(activos.dataActiveProjects.get(n).getTutor1()==prof && 
@@ -286,6 +291,7 @@ public class ReportView extends VerticalLayout {
                     tfgs++; 
                 }
            }
+            //Codirigidos
             for(int n=0;n<activos.dataActiveProjects.size();n++) {
                 if(activos.dataActiveProjects.get(n).getTutor2()==prof && 
                         !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
@@ -294,7 +300,7 @@ public class ReportView extends VerticalLayout {
            }
             
             //Array con toda la informacion
-            String [] profesor= {prof,String.valueOf(tfgs),String.valueOf(tfgs2),String.valueOf(creditos)};
+            Object [] profesor= {prof,tfgs,tfgs2,creditos};
             //Si esla primera linea se añaden los titulos y el primer profesor
             if(i==2) {
                 dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos","ETCS"});

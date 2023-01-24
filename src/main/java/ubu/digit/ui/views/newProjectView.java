@@ -176,10 +176,7 @@ public class newProjectView extends VerticalLayout {
         alumno2.addValueChangeListener(event->{
             alumno2.setValue(event.getValue()); 
         });
-        
 
-        
-        
         //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
         //Indicarlo por defecto 
        //Fecha de hoy
