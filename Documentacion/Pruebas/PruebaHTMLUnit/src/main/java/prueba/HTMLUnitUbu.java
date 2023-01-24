@@ -19,12 +19,12 @@ public class HTMLUnitUbu {
       WebClient webClient = new WebClient();
       
       HtmlPage page = webClient.getPage("https://investigacion.ubu.es/");
-      System.out.println(page.getTitleText());
+       LOGGER.info(page.getTitleText());
       webClient.close();      
       /*
       List<HtmlAnchor> anchors = page.getAnchors();
       for (HtmlAnchor anchor : anchors) {
-        System.out.println(anchor.getAttribute("href"));
+        LOGGER.info(anchor.getAttribute("href"));
       }*/
    }
 

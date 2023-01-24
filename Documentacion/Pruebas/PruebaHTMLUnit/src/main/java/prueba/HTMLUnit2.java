@@ -32,11 +32,11 @@ public class HTMLUnit2 {
 	      webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 	      
 	      String title = page.getTitleText();
-	      System.out.println("Page Title: " + title);
+	      LOGGER.info("Page Title: " + title);
 	     List<HtmlAnchor> links = page.getAnchors();
 	      for (HtmlAnchor link : links) {
 	         String href = link.getHrefAttribute();
-	         System.out.println("Link: " + href);
+	          LOGGER.info("Link: " + href);
 	      }
 	      List<?> anchors = page.getByXPath("//a[@class='card-link']");
 	      String recipeTitle =null;
@@ -55,7 +55,7 @@ public class HTMLUnit2 {
 	      recipesFile.close();
 
 	   } catch (IOException e) {
-	      System.out.println("An error occurred: " + e);
+	       LOGGER.info("An error occurred: " + e);
 	   }
    }
 

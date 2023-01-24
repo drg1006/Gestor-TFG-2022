@@ -20,7 +20,7 @@ public class HTMLUnit {
       
       DomNodeList<DomElement> nodeList = page.getElementsByTagName("a");
       for (DomElement element : nodeList){
-         System.out.println(element.getTextContent()+ " -> " +element.getAttribute("href"));
+        LOGGER.info(element.getTextContent()+ " -> " +element.getAttribute("href"));
       }
       
    }

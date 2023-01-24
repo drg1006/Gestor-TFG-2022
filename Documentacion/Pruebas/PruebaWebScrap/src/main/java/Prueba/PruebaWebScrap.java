@@ -29,9 +29,9 @@ public class PruebaWebScrap{
     	try {
     		response = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).ignoreHttpErrors(true).execute();
     	} catch (IOException ex) {
-    		System.out.println("Excepción al obtener el Status Code: " + ex.getMessage());
+    		 LOGGER.info("Excepción al obtener el Status Code: " + ex.getMessage());
     	}
-    	System.out.println("response: "+ response.statusMessage());
+    	 LOGGER.info("response: "+ response.statusMessage());
     	return response.statusCode();
 	}
 	
@@ -47,7 +47,7 @@ public class PruebaWebScrap{
 		try {
 		    doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36").timeout(100000).get();
 		    } catch (IOException ex) {
-			System.out.println("Excepción al obtener el HTML de la página" + ex.getMessage());
+			 LOGGER.info("Excepción al obtener el HTML de la página" + ex.getMessage());
 		    }
 	    return doc;
 	}
@@ -64,7 +64,7 @@ public static final String url = "https://investigacion.ubu.es/unidades/2682/inv
 			
             // Busco todas las entradas que estan dentro de: 
             Elements entradas = document.select("div.c-persona-card__detalles");
-            System.out.println("Número de entradas en la página inicial : "+entradas.size()+"\n");
+          	LOGGER.info("Número de entradas en la página inicial : "+entradas.size()+"\n");
 			
             // Paseo cada una de las entradas
             for (Element elem : entradas) {
@@ -72,13 +72,13 @@ public static final String url = "https://investigacion.ubu.es/unidades/2682/inv
                 String apellidos = elem.getElementsByClass("c-persona-card_nombre").text();
                 String area = elem.getElementsByClass("c-persona-card_nombre").text();
 				
-                System.out.println(nombre+"\n"+apellidos+"\n"+area+"\n\n");
+                 LOGGER.info(nombre+"\n"+apellidos+"\n"+area+"\n\n");
 				
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
             }
 				
         }else
-            System.out.println("El Status Code no es OK es: "+getStatusConnectionCode(url));
+            LOGGER.info("El Status Code no es OK es: "+getStatusConnectionCode(url));
     }
 }

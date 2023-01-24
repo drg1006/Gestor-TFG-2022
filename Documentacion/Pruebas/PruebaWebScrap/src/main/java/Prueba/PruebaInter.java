@@ -30,7 +30,7 @@ public class PruebaInter {
         for (int i=1; i<maxPages; i++){
 			
             String urlPage = String.format(url, i);
-            System.out.println("Comprobando entradas de: "+urlPage);
+            LOGGER.info("Comprobando entradas de: "+urlPage);
 			
             // Compruebo si me da un 200 al hacer la petición
             if (getStatusConnectionCode(urlPage) == 200) {
@@ -47,12 +47,12 @@ public class PruebaInter {
                     String autor = elem.getElementsByClass("autor").toString();
                     String fecha = elem.getElementsByClass("fecha").text();
 					
-                    System.out.println(titulo+"\n"+autor+"\n"+fecha+"\n");
+                    LOGGER.info(titulo+"\n"+autor+"\n"+fecha+"\n");
 					
                 }
 		
             }else{
-                System.out.println("El Status Code no es OK es: "+getStatusConnectionCode(urlPage));
+                LOGGER.info("El Status Code no es OK es: "+getStatusConnectionCode(urlPage));
                 break;
             }
         }
@@ -77,9 +77,9 @@ public class PruebaInter {
         try {
             response = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).ignoreHttpErrors(true).execute();
         } catch (IOException ex) {
-            System.out.println("Excepción al obtener el Status Code: " + ex.getMessage());
+            LOGGER.info("Excepción al obtener el Status Code: " + ex.getMessage());
         }
-        System.out.println("response: "+ response);
+        LOGGER.info("response: "+ response);
         return response.statusCode();
     }
 	
@@ -97,7 +97,7 @@ public class PruebaInter {
         try {
             doc = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).get();
         } catch (IOException ex) {
-            System.out.println("Excepción al obtener el HTML de la página" + ex.getMessage());
+            LOGGER.info("Excepción al obtener el HTML de la página" + ex.getMessage());
         }
 
         return doc;

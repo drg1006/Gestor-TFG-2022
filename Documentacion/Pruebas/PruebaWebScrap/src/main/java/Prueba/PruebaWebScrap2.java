@@ -87,9 +87,9 @@ public class PruebaWebScrap2{
                 String apellidos = elem.getElementsByClass("c-persona-card__apellidos").text();
                 String area = elem.getElementsByClass("c-persona-card__area").text();
 				//Imprimimos por pantalla
-               //System.out.println("Nombre: "+nombre);
-                //System.out.println("Apellidos: " +apellidos);
-                //System.out.println("Area: "+area);
+               // LOGGER.info("Nombre: "+nombre);
+                // LOGGER.info("Apellidos: " +apellidos);
+                // LOGGER.info("Area: "+area);
 
                 //Para sacar el Departamento debemos ir a otra url 
                 try {
@@ -117,7 +117,7 @@ public class PruebaWebScrap2{
         		//Cogemos el primer link de tipo "a"(href) que tiene la información sobre el departamento y sacamos su texto
         		Element link2= entrada.select("a").first();
         		String departamento = link2.text();	
-        		//System.out.println("Departamento: "+ departamento + "\n");
+        		// LOGGER.info("Departamento: "+ departamento + "\n");
 
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
