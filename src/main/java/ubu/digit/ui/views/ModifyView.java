@@ -201,7 +201,6 @@ public class ModifyView extends VerticalLayout {
 
         
         DatePicker fechaAsignacion=new DatePicker("Fecha de asignacion del TFG");
-        //LocalDate fechaAnt= obtenerFecha(TFG.getDateAssignment());    
         fechaAsignacion.setValue(TFG.getDateAssignment());
         fechaAsignacion.setLocale(getLocale());
         fechaAsignacion.setWidth("40%");
@@ -244,18 +243,21 @@ public class ModifyView extends VerticalLayout {
         AceptaryCerrado.setEnabled(false);
         
         Button si=new Button("Sí");
+        Button no=new Button("No");
+        
         si.addClickListener(e->{
             AceptaryCerrado.setEnabled(true);
             fechaPresentacion.setEnabled(true);
             nota.setEnabled(true);
             repo.setEnabled(true);
-            
+            si.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            no.removeThemeVariants(ButtonVariant.LUMO_PRIMARY);
           //Por si se había pulsado previamente el botón de no
             AceptaryAbierto.setEnabled(false);
             
         });
         
-        Button no=new Button("No");
+        
         no.addClickListener(e->{
             AceptaryAbierto.setEnabled(true);
             //Por si se había pulsado previamente el botón de sí
@@ -263,6 +265,8 @@ public class ModifyView extends VerticalLayout {
             fechaPresentacion.setEnabled(false);
             nota.setEnabled(false);
             repo.setEnabled(false);
+            no.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            si.removeThemeVariants(ButtonVariant.LUMO_PRIMARY);
         });
         
         HorizontalLayout layoutHist= new HorizontalLayout();

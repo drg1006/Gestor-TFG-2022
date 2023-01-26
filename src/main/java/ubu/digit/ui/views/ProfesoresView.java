@@ -524,6 +524,7 @@ public class ProfesoresView extends VerticalLayout {
      * @param profSelect
      * @param lineChart grafico
      */
+    @SuppressWarnings("unchecked")
     public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect, ApexCharts lineChart) {
         //Creamos el array de series
         Series[] series = new Series[departamentos.size()+areas.size()+profSelect.size()];
@@ -571,7 +572,7 @@ public class ProfesoresView extends VerticalLayout {
             for(int i=0;i<vista.dataHistoric.size();i++) {
                 if(vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
                     && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
-                    && vista.dataHistoric.get(i).getTutor1()==profesor) {
+                    && vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
                     num1++; 
                 }
            }
