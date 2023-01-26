@@ -39,7 +39,7 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
-import ubu.digit.ui.entity.FormularioTFG;
+import ubu.digit.ui.entity.Formularios;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -197,7 +197,7 @@ public class newProjectView extends VerticalLayout {
             fechaAsignacion.setValue(event.getValue()); 
         });
         //Indicando que los campos son obligatorios
-        Binder<FormularioTFG> binder= new Binder<>(FormularioTFG.class);
+        Binder<Formularios> binder= new Binder<>(Formularios.class);
         binder.forField(titulo).asRequired("Debes indicar un titulo").bind("titulo");
         binder.forField(descripcion).asRequired("Debes indicar una descripción").bind("descripcion");
         binder.forField(tutor1).asRequired("Debes indicar un tutor1").bind("tutor1");

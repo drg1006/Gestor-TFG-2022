@@ -37,11 +37,12 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
-
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
@@ -50,6 +51,7 @@ import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
 import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
+import ubu.digit.ui.entity.Formularios;
 import ubu.digit.util.ExternalProperties;
 
 /**
@@ -171,7 +173,7 @@ public class ReportView extends VerticalLayout {
 	    TextField nombreInforme = new TextField();
 	    nombreInforme.setLabel("Indique el nombre del informe");
 	    nombreInforme.setWidth("25%");
-
+	    nombreInforme.setHelperText("No introduzcas el formato del archivo (.xls)");
 	    nombreInforme.addValueChangeListener(event ->{
 	       nombreInforme.setValue(event.getValue());
 	    });
@@ -179,7 +181,10 @@ public class ReportView extends VerticalLayout {
 	    //BOTON PARA CREAR EL INFORME 
 	    Button crearInforme = new Button("Crear Informe");
 	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
+	  //Indicando que los campos son obligatorios
+        Binder<Formularios> binder= new Binder<>(Formularios.class);
+        binder.forField(nombreInforme).asRequired("Debes indicar nombre para el informe").bind("nombreInforme");
+        binder.forField(nAlum).asRequired("Debes indicar un numero de alumnos").bind("nAlumnos");
 	    
 	    //Boton para descargar el archivo que se genera
 	    Anchor download = new Anchor();
@@ -187,20 +192,22 @@ public class ReportView extends VerticalLayout {
 	    download.setVisible(false);
 	    //Cuando pulsamos en crear informe
         crearInforme.addClickListener(event -> {
+            if(binder.validate().isOk()&&!checkboxGroup.getValue().isEmpty()) {
+                //Creamos el informe
+                File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue()); 
             
-            //Creamos el informe
-            File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue()); 
+                //Generamos el recurso descargable            
+                StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
             
-            //Generamos el recurso descargable            
-            StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
-            
-            //Lo introducimos en el boton para descargar
-            download.setText("Descargar "+file.getName());
-            download.setHref(streamResource);
-            download.getElement().setAttribute("download", true);
-            download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
-            download.setVisible(true);
-            
+                //Lo introducimos en el boton para descargar
+                download.setText("Descargar "+file.getName());
+                download.setHref(streamResource);
+                download.getElement().setAttribute("download", true);
+                download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+                download.setVisible(true);
+            }else {
+                Notification.show("Debes indicar un valor para todos los campos").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
          });
         
 	    add(nAlum, checkboxGroup,checkbox,nombreInforme,crearInforme,download);

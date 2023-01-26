@@ -5,14 +5,17 @@ import java.time.LocalDate;
 
 
 /**
- * Clase que se utilizará para bindear con los formularios de los proyectos.
+ * Clase que se utilizará para bindear con los formularios, se utiliza en la creación de informes y en la subida de tfgs.
  * 
  * @author David Renedo Gil
  */
-public class FormularioTFG extends Projects implements Serializable {
+public class Formularios extends Projects implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Variables utilizadas para hacer las conexiones mediante Binder y crear parametros obligatorios.
+     */
     private String titulo;
     private String descripcion;
     private String tutor1;
@@ -26,6 +29,9 @@ public class FormularioTFG extends Projects implements Serializable {
     private LocalDate fechaPresentacion;
     private String tituloCorto;
     private String repo;
+    private String nombreInforme;
+    private double nAlumnos;
+    
 
     /**
      * Obtiene el titulo del formulario.
@@ -243,5 +249,39 @@ public class FormularioTFG extends Projects implements Serializable {
         this.tituloCorto = tituloCorto;
     }
     
+    /**
+     * Obtiene el titulo corto del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public String getnombreInforme() {
+        return this.nombreInforme;
+    }
+
+    /**
+     * Escribe el titulo corto del formulario.
+     * 
+     */
+    public void setnombreInforme(String nombreInforme) {
+        this.nombreInforme = nombreInforme;
+    }
+    /**
+     * Obtiene el titulo corto del formulario.
+     * 
+     * @return cursoAsignacion
+     */
+    public double getnAlumnos() {
+        return this.nAlumnos;
+    }
+
+    /**
+     * Escribe el titulo corto del formulario.
+     * 
+     */
+    public void setnAlumnos(double nAlumnos) {
+        this.nAlumnos = nAlumnos;
+    }
+
+
     
 }
