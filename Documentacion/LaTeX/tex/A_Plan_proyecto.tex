@@ -151,7 +151,7 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	\imagenflotante{Sprint4_CONTROL}{Gráfica Burndown <<Report-- Sprint 4>>}{0.9}
 \end{itemize} 
 
-\subsection{Sprint 5 - Modificación TFGs (12/01/23 - --/--/--) }
+\subsection{Sprint 5 - Modificación TFGs (12/01/23 - 28/01/23) }
 
 En este sprint se realizarán varias correcciones de las funcionalidades añadidas previamente y además se modificará la pantalla de aceptación de TFGs que pasará a ser de administración, pudiendo modificar los proyectos activos.
 
@@ -172,15 +172,29 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 		\item Creación de la nueva pantalla de modificación de los TFGs. Esta pantalla tiene todos los campos posibles que puede tener un proyecto. Permite modificar los datos del TFG seleccionado para mantenerlo abierto y en la pantalla de activos, o para actualizarlo y cerrarlo moviéndolo a la pestaña de \emph{Históricos}.
 		\item Actualización de los datos del TFG seleccionado en el archivo de la base de datos, ya sea eliminándolo de la pestaña de activos y añadiéndolo a la de históricos como actualizándolo unicamente en la pestaña de activos.
 	\end{itemize}
-	\item Últimas correcciones sobre la memoria y los anexos.
+	\item Correcciones sobre la memoria y los anexos, casos de uso y gestión de roles.
 	\item Comentar código de los ficheros creados, tanto de los métodos cómo comentarios de ayuda durante las ejecuciones.
 	\item Corrección de bugs en formatos de variables y de código.
-	\item Modificación del campo \emph{CursoAsignacion} que a partir de ahora será designado como \emph{FechaAsignacion}, teniendo que cambiar los valores de la base de datos.
+	\item Modificación del campo \emph{CursoAsignacion} que a partir de ahora será designado como \emph{FechaAsignacion}, teniendo que cambiar los valores de la base de datos. Este campo será recogido como \emph{LocalDate} y no como \emph{String} que estaba antes.
 	\item Se ha añadido la posibilidad de descargar la base de datos con todos los proyectos, exclusivamente para los administradores.
+	\item Se ha actualizado la licencia del proyecto.
+	\item Se ha prescindido del campo \emph{Titulo} de la pestaña de históricos, que hacía referencia al \emph{hiperenlace} del proyecto en  \emph{GitHub}.
+	\item Comprobación de los campos introducidos a la hora de crear un informe. 
 	
+	Se puede ver el trascurso de estas tareas en la ilustración \ref{fig:Sprint5_CONTROL}.
 	
-	
+	\imagenflotante{Sprint5_CONTROL}{Gráfica Burndown <<Report-- Sprint 5>>}{0.9}
 \end{itemize}
+
+\subsection{Sprint 6 - Manejo de Sesiones/Casos de Prueba (29/01/23 - --/--/-) }
+
+En este sprint se realizarán los casos de prueba para comprobar que el funcionamiento de la aplicación es correcto y se realizará el manejo de diferentes sesiones que se crean al acceder a la aplicación, ya que anteriormente se utilizaban variables globales
+
+A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
+\begin{itemize}
+	\item Manejo de sesiones
+	\item Casos de prueba
+\end{itemize}	
 
 \subsection{Planificación temporal}
 
