@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,19 +16,15 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginI18n.ErrorMessage;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import ubu.digit.security.*;
 import ubu.digit.util.Constants;
 import ubu.digit.util.UtilMethods;
-import ubu.digit.webService.CoreCourseGetCoursesByField;
 import ubu.digit.webService.CoreCourseGetUserAdministrationOptions;
-import ubu.digit.webService.CoreUserGetCourseUserProfiles;
 import ubu.digit.webService.CoreWebserviceGetSiteInfo;
 import ubu.digit.ui.entity.Course;
 import ubu.digit.ui.entity.MoodleUser;
@@ -96,7 +91,7 @@ public class LoginView extends VerticalLayout{
     /**
      * Variable en la que guardamos si se ha iniciado o no sesion.
      */
-    public static Boolean sesionIniciada=false;
+    //public static Boolean sesionIniciada=false;
 	
 	public LoginView() {
 
@@ -128,7 +123,8 @@ public class LoginView extends VerticalLayout{
 			}else {
 				LOGGER.info("Usuario validado ");
 				//Se ha iniciado sesion
-				sesionIniciada=true;
+				//sesionIniciada=true;
+				UI.getCurrent().getSession().setAttribute("sesionIniciada", "true");
 				CONTROLLER.setUsername(e.getUsername());				
 				login.setEnabled(true);
 				UI.getCurrent().navigate(InformationView.class);
@@ -178,7 +174,8 @@ public class LoginView extends VerticalLayout{
 			
 			LOGGER.info("Obteniendo información del usuario: " + moodleUser.getFullName());
 			//Guardamos el nombre del tutor que inicia sesión
-			tutorRegistrado=moodleUser.getFullName();
+			//tutorRegistrado=moodleUser.getFullName();
+			UI.getCurrent().getSession().setAttribute("tutorRegistrado", moodleUser.getFullName());
 			//Creacion instancia de CreateCourse desde la cual se accedera a los metodos de obtención de los cursos y permisos
 			CreateUserCourses createUserCourses = new CreateUserCourses(CONTROLLER.getWebService());
 			
@@ -210,10 +207,12 @@ public class LoginView extends VerticalLayout{
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "update")) {
-			    permiso.add("update");
+			    //permiso.add("update");
+			    UI.getCurrent().getSession().setAttribute("update", "true");
 			};
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
-			    permiso.add("reports");
+			   // permiso.add("reports");
+			    UI.getCurrent().getSession().setAttribute("reports", "true");
 			};
 			return true;
 		} catch (Exception e) {

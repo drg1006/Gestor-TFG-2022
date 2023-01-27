@@ -134,7 +134,8 @@ public class newProjectView extends VerticalLayout {
         tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");      
         tutor1.setItems(profesores);
-        tutor1.setValue(LoginView.tutorRegistrado);
+        //tutor1.setValue(LoginView.tutorRegistrado);
+        tutor1.setValue((String)UI.getCurrent().getSession().getAttribute("tutorRegistrado"));
         tutor1.addValueChangeListener(event -> {
             tutor1.setValue(event.getValue());
         });

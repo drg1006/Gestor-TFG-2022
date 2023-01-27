@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.server.VaadinSession;
 
 import ubu.digit.ui.views.ManageView;
 import ubu.digit.ui.views.ActiveProjectsView;
@@ -103,6 +104,11 @@ public class NavigationBar extends HorizontalLayout{
 	 */
 	@SuppressWarnings("deprecation")
 	private void initComponents() {
+	    
+	   // if(UI.getCurrent().getSession()!=null)
+        //    System.out.println(UI.getCurrent().getSession());
+	    
+	    
 	    //Layouts para meter los botones de inicio/cierre sesion y toda la otra barra de navegacion
 	    HorizontalLayout layout1 = new HorizontalLayout();	 
 	    HorizontalLayout layout2 = new HorizontalLayout();
@@ -112,17 +118,22 @@ public class NavigationBar extends HorizontalLayout{
 	    buttonLogOut=new Button("Cerrar sesion",new Icon(VaadinIcon.USER));
         buttonLogOut.addClickListener(e ->{
             //Cerramos la sesion
-            LoginView.sesionIniciada=false;
+            //LoginView.sesionIniciada=false;
+            UI.getCurrent().getSession().setAttribute("sesionIniciada", "false");
+            UI.getCurrent().getSession().setAttribute("reports", "false");
+            UI.getCurrent().getSession().setAttribute("update", "false");
             //Eliminamos los permisos
-            LoginView.permiso=new ArrayList<>();
+            //LoginView.permiso=new ArrayList<>();
             //Quitamos el nombre del tutor
-            LoginView.tutorRegistrado="";            
+            //LoginView.tutorRegistrado="";     
+            
             UI.getCurrent().getPage().reload();
             }
         );
 	    
 		buttonInfo = new Button(INFORMACION);
-		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
+		buttonInfo.addClickListener(e ->{ 
+		    UI.getCurrent().navigate(InformationView.class);});
 		
 		buttonActive = new Button(PROYECTOS_ACTIVOS);
 		buttonActive.addClickListener(e -> UI.getCurrent().navigate(ActiveProjectsView.class));
@@ -166,20 +177,29 @@ public class NavigationBar extends HorizontalLayout{
         buttonLogIn.setHeight(BUTTON_HEIGHT);
         buttonLogOut.setHeight(BUTTON_HEIGHT);
         //Comprobamos si se ha iniciado sesion para ver cual de los dos botones hay que poner
-        if(LoginView.sesionIniciada) { 
-            layout1.add(buttonLogOut);
+        //if(LoginView.sesionIniciada) { 
+       // UI.getCurrent().getSession().setAttribute("update","true");
+        if(UI.getCurrent().getSession().getAttribute("sesionIniciada")!=null) {
+              if(UI.getCurrent().getSession().getAttribute("sesionIniciada").equals("true")) {
+                  layout1.add(buttonLogOut);
+                  }
         }else{
             layout1.add(buttonLogIn);
         }
         //LoginView.permiso.add("reports");
         //LoginView.permiso.add("update");
-		if(LoginView.permiso.contains("update")) {
+		//if(LoginView.permiso.contains("update")) {
 		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
 		    //ROL DE ADMINISTRADOR
-		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonAcept,buttonMetrics);
-		}else if(LoginView.permiso.contains("reports")){
+        if(UI.getCurrent().getSession().getAttribute("update")!=null) {
+            if(UI.getCurrent().getSession().getAttribute("update").equals("true")) {
+		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonAcept,buttonMetrics);}
+		//}else if(LoginView.permiso.contains("reports")){
+        }else if(UI.getCurrent().getSession().getAttribute("reports")!=null) {
+                    if(UI.getCurrent().getSession().getAttribute("reports").equals("true")){
 	     //ROL DE PROFESOR
-		    layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonMetrics);
+                        layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonMetrics);
+            }
 		}else {
 	       //ROL ALUMNO
 		    layout2.addAndExpand(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
