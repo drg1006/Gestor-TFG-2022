@@ -23,8 +23,6 @@ import ubu.digit.ui.components.*;
 import ubu.digit.util.ExternalProperties;
 import static ubu.digit.util.Constants.*;
 
-import com.vaadin.server.VaadinSession;
-
 import java.util.List;
 
 /**

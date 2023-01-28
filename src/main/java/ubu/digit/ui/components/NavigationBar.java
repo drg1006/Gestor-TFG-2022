@@ -6,7 +6,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.server.VaadinSession;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.server.Page;
 
 import ubu.digit.ui.views.ManageView;
 import ubu.digit.ui.views.ActiveProjectsView;
@@ -18,8 +19,6 @@ import ubu.digit.ui.views.ReportView;
 import ubu.digit.ui.views.newProjectView;
 
 import static ubu.digit.util.Constants.*;
-
-import java.util.ArrayList;
 
 /**
  * Barra de navegación común a todas las vistas.
@@ -104,11 +103,7 @@ public class NavigationBar extends HorizontalLayout{
 	 */
 	@SuppressWarnings("deprecation")
 	private void initComponents() {
-	    
-	   // if(UI.getCurrent().getSession()!=null)
-        //    System.out.println(UI.getCurrent().getSession());
-	    
-	    
+	   	    
 	    //Layouts para meter los botones de inicio/cierre sesion y toda la otra barra de navegacion
 	    HorizontalLayout layout1 = new HorizontalLayout();	 
 	    HorizontalLayout layout2 = new HorizontalLayout();
@@ -119,16 +114,15 @@ public class NavigationBar extends HorizontalLayout{
         buttonLogOut.addClickListener(e ->{
             //Cerramos la sesion
             //LoginView.sesionIniciada=false;
-            UI.getCurrent().getSession().setAttribute("sesionIniciada", "false");
-            UI.getCurrent().getSession().setAttribute("reports", "false");
-            UI.getCurrent().getSession().setAttribute("update", "false");
+            UI.getCurrent().getSession().setAttribute("sesionIniciada", null);
+            UI.getCurrent().getSession().setAttribute("reports", null);
+            UI.getCurrent().getSession().setAttribute("update", null);
             //Eliminamos los permisos
             //LoginView.permiso=new ArrayList<>();
-            //Quitamos el nombre del tutor
-            //LoginView.tutorRegistrado="";     
-            
-            UI.getCurrent().getPage().reload();
-            }
+            //Quitamos el nombre del tutor       
+            UI.getCurrent().navigate(InformationView.class);   
+        }
+              
         );
 	    
 		buttonInfo = new Button(INFORMACION);
@@ -181,7 +175,7 @@ public class NavigationBar extends HorizontalLayout{
        // UI.getCurrent().getSession().setAttribute("update","true");
         if(UI.getCurrent().getSession().getAttribute("sesionIniciada")!=null) {
               if(UI.getCurrent().getSession().getAttribute("sesionIniciada").equals("true")) {
-                  layout1.add(buttonLogOut);
+                      layout1.add(buttonLogOut);
                   }
         }else{
             layout1.add(buttonLogIn);

@@ -209,11 +209,11 @@ public class LoginView extends VerticalLayout{
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "update")) {
 			    //permiso.add("update");
 			    UI.getCurrent().getSession().setAttribute("update", "true");
-			};
+			    };
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
 			   // permiso.add("reports");
 			    UI.getCurrent().getSession().setAttribute("reports", "true");
-			};
+			    };						
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("Error al recuperar los datos del usuario ", e);
