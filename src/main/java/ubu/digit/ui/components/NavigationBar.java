@@ -120,7 +120,8 @@ public class NavigationBar extends HorizontalLayout{
             //Eliminamos los permisos
             //LoginView.permiso=new ArrayList<>();
             //Quitamos el nombre del tutor       
-            UI.getCurrent().navigate(InformationView.class);   
+            UI.getCurrent().navigate(InformationView.class);       
+            UI.getCurrent().getPage().reload(); 
         }
               
         );
