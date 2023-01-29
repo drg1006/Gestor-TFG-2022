@@ -184,11 +184,13 @@ public class Footer extends VerticalLayout {
 			license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
 			license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
 		}
-		if(LoginView.permiso.contains("update")) {
-		Button actu= new Button("Actualizar");
-		actu.addClickListener(e -> {	
-			UI.getCurrent().navigate(UploadView.class);
-		});
+		 if(UI.getCurrent().getSession().getAttribute("update")!=null) {
+	            if(UI.getCurrent().getSession().getAttribute("update").equals("true")){
+	                Button actu= new Button("Actualizar");
+	                    actu.addClickListener(e -> {	
+	                        UI.getCurrent().navigate(UploadView.class);
+	                    });
+		
 		//OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
 		Anchor download= new Anchor();
 		
@@ -208,6 +210,7 @@ public class Footer extends VerticalLayout {
         download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
         download.setVisible(true);
 		license.add(actu,download);
+	            }
 		}
 	}
 

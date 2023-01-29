@@ -195,10 +195,13 @@ public class HistoricProjectsView extends VerticalLayout {
 		bat.buttonProjectsHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 		add(bat);
 		//Este submenu solo les sale a los profesores/administradores
-		if(LoginView.permiso.contains("update")||LoginView.permiso.contains("reports")){  
-		    add( bat.subMenu());
-		 
-		}
+		 if(UI.getCurrent().getSession().getAttribute("update")!=null || 
+		         UI.getCurrent().getSession().getAttribute("reports")!=null ) {
+	            if(UI.getCurrent().getSession().getAttribute("update").equals("true") ||
+	                    UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
+	                add( bat.subMenu());
+	            }
+	     }
 		
 		createDataModel();
 		CreateDataModelToGrid();

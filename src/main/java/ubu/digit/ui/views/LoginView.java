@@ -82,7 +82,7 @@ public class LoginView extends VerticalLayout{
 	/**
 	 * Lista con los permisos update y reports (true o false).
 	 */
-	public static List<String> permiso=new ArrayList<>();
+	//public static List<String> permiso=new ArrayList<>();
 
 	/**
 	 * Variable en la que guardamos el nombre del tutor que inicia sesion.

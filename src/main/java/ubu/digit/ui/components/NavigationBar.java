@@ -197,6 +197,7 @@ public class NavigationBar extends HorizontalLayout{
             }
 		}else {
 	       //ROL ALUMNO
+		    //layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonAcept,buttonMetrics);
 		    layout2.addAndExpand(buttonInfo, buttonActive, buttonHistoric, buttonMetrics);
 		}
 		//Que no haya espacio entre botones

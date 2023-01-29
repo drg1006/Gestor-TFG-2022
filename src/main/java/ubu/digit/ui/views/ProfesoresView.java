@@ -46,6 +46,7 @@ import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.opencsv.CSVWriter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -140,15 +141,23 @@ public class ProfesoresView extends VerticalLayout {
         bat.buttonProfessorHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         //Este submenu solo les sale a los profesores/administradores
-        if(LoginView.permiso.contains("update")||LoginView.permiso.contains("reports")){
-           add( bat.subMenu());}
+        if(UI.getCurrent().getSession().getAttribute("update")!=null ||
+                UI.getCurrent().getSession().getAttribute("reports")!=null ) {
+               if(UI.getCurrent().getSession().getAttribute("update").equals("true") ||
+                       UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
+                   add( bat.subMenu());
+               }
+        }
         
         
         crearEstadisticas();
         datosGraficas();
         //Si tiene permisos de administrador para actualizar archivos
-        if(LoginView.permiso.contains("update")) {
-        preguntarSiActualizar();}
+        if(UI.getCurrent().getSession().getAttribute("update")!=null) {
+            if(UI.getCurrent().getSession().getAttribute("update").equals("true")){
+                preguntarSiActualizar();
+                }
+            }
         add(layout);
         Footer footer = new Footer("N4_Profesores.csv");
         add(footer);
