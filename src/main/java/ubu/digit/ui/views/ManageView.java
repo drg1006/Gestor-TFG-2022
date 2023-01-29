@@ -43,7 +43,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
+import com.vaadin.flow.component.notification.Notification;
 
 import ubu.digit.persistence.SistInfDataAbstract;
 import ubu.digit.persistence.SistInfDataFactory;
@@ -290,15 +290,24 @@ public class ManageView extends VerticalLayout {
             
             // boton con la opcion de denegar tfgs
             Button modificarTFG = new Button("MODIFICAR");
-            
             // Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la
             // pasamos a seleccionarTFG
             aceptar.addClickListener(event -> {
-                aceptarTFG(table.getSelectedItems());
+                if(table.getSelectedItems().size()==0) {
+                    Notification.show("Seleccione al menos un TFG para aceptar");
+                }else {
+                    aceptarTFG(table.getSelectedItems());
+                }
+
+                    
             });
 
             denegar.addClickListener(event -> {
-                denegarTFG(table.getSelectedItems());
+                if(table.getSelectedItems().size()==0) {
+                    Notification.show("Seleccione al menos un TFG para aceptar");
+                }else {
+                   denegarTFG(table.getSelectedItems());
+                }
 
             });
 
@@ -342,8 +351,7 @@ public class ManageView extends VerticalLayout {
         // Cogemos los titulos seleccionados
         List<String> titulos = new ArrayList<>();
         for (ActiveProject tfg : selectedItems) {
-            titulos.add(tfg.getTitle());
-            
+            titulos.add(tfg.getTitle());           
         }
         
         // Boton que confirma la modificacion (se introduce en ambos pop-ups)
@@ -493,7 +501,6 @@ public class ManageView extends VerticalLayout {
      * @param estado        nuevo estado que se introducira
      */
     private void modificar(List<String> titulos, String estado) {
-        System.out.println(titulos);
         String newEstado;
         if (estado.equals("Aceptar")) {
             newEstado = "";

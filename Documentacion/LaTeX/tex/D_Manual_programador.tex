@@ -186,3 +186,55 @@ Una vez hemos obtenido los créditos modificamos el plan de nuestra aplicación 
 \imagenflotante{Basic}{Modificar el plan de despliegue.}{0.9}
 
 \section{Pruebas del sistema}
+
+En esta sección se detallarán todas las pruebas realizadas en la aplicación para comprobar su correcto funcionamiento.
+
+Se realizarán pruebas manuales para todas las nuevas funcionalidades añadidas en esta versión.
+
+\subsection{Login}
+Validación del correcto acceso a las funcionalidades de los distintos roles que un usuario puede tener.
+----
+
+\subsection{Histórico del profesorado}
+
+Para realizar estas pruebas o validaciones de la aplicación se subirán, mediante la opción de actualizar ficheros, nuevos archivos con menos proyectos para comprobar que las estadísticas se realizan de forma correcta.
+--------
+
+\subsection{Creación de informes}
+
+En esta pantalla se realizan varias validaciones antes de la creación del informe como se puede ver en la imagen \ref{fig:validacionInforme}.
+En ella se pueden ver los campos obligatorios para la creación del informe, así como una notificación y avisos al usuario.
+
+\imagenflotante{validacionInforme}{Validación campos del informe.}{0.9}
+
+De igual manera que en la sección anterior se ha subido otro archivo para comprobar que los datos que se generan en el informe son correctos:
+---------
+
+\subsection{Subida de TFGs}
+
+En esta funcionalidad, al igual que en la pantalla de creación de informes, el usuario debe introducir una serie de campos obligatorios si desea proponer un proyecto. Se le avisa al usuario de los campos obligatorios como se puede ver en la imagen \ref{fig:validacionSubirTfg}.
+
+\imagenflotante{validacionSubirTfg}{Validación campos de propuesta de TFG.}{0.9}
+
+\subsection{Administrar TFGs}
+A la hora de administrar los \emph{TFGs}, tanto para aceptar y denegar, como para modificarlos se realizan diferentes validaciones.
+
+A la hora de y denegar se debe seleccionar al menos un proyecto como se ve en las imágenes \ref{fig:aceptTFG} y \ref{fig:denegTFG}.
+
+\imagenflotante{aceptTFG}{Validación seleccionar TFG para aceptar.}{0.9}
+\imagenflotante{denegTFG}{Validación seleccionar TFG para denegar.}{0.9}
+
+Una vez se ha seleccionado más de un proyecto se vuelve a realizar una confirmación al usuario antes de realizar la operación como se puede ver en las imágenes \ref{fig:validAcept} y \ref{fig:validDeneg}.
+
+\imagenflotante{validAcept}{Validación para aceptar TFGs}{0.9}
+\imagenflotante{validDeneg}{Validación para denegar TFGs.}{0.9}
+
+A la hora de seleccionar un proyecto para modificar nos salta un aviso si seleccionamos varios o si no seleccionamos ninguno como se ve en la imagen \ref{fig:validModif}
+
+\imagenflotante{validModif}{Validación para modificar TFGs.}{0.9}
+
+\subsection{Manejo de sesiones}
+
+En esta versión se ha añadido la posibilidad de tener varias sesiones iniciadas a la vez en la aplicación, ya que actualmente se han añadido varios roles para los usuarios, es necesario controlar las sesiones que se generan. Mediante el uso de variables internas se permite a diferentes usuarios iniciar sesión al mismo tiempo en la \emph{web} como se puede ver en la imagen \ref{fig:variasSesiones}, en la que en un navegador se ha iniciado sesión y en otro no.
+
+\imagenflotante{variasSesiones}{Aplicación web con varias sesiones a la vez.}{0.9}
