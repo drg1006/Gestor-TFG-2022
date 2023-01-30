@@ -140,7 +140,7 @@ public class PruebaWebScrap2{
             
             try {
 				guardarDatosCSV(profesores);
-			} catch (IOException e) 
+			} catch (IOException e) { 
 				e.printStackTrace();
 			}
 			

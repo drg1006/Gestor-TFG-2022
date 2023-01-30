@@ -63,11 +63,6 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
     public static final String VIEW_NAME = "upload";
 
     /**
-     * Botón para cerrar sesión.
-     */
-    private Button logout;
-
-    /**
      * Elemento para subida de archivos.
      */
     private Upload upload;
@@ -228,13 +223,6 @@ public class UploadView extends VerticalLayout implements BeforeEnterObserver {
         });
 
         add(upload, output);
-        logout = new Button("Cerrar sesión");
-        logout.addClickListener(e -> {
-            LOGGER.info("Cerrando sesión");
-            CONTROLLER.setUsername("");
-            UI.getCurrent().navigate(InformationView.class);
-        });
-        add(logout);
     }
 
     /**
