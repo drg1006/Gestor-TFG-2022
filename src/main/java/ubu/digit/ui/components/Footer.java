@@ -213,7 +213,7 @@ public class Footer extends VerticalLayout {
                 license.add(actu, download);
             }
         }
-        license.add(actu, download);
+        //license.add(actu, download);
 
     }
 

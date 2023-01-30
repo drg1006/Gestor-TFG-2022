@@ -152,7 +152,8 @@ public class ModifyView extends VerticalLayout {
         });
         tutor1.addCustomValueSetListener(event -> {
             tutor1.setValue(event.getDetail());
-            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
+            if (!profesores.contains(tutor1.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");
         });
         ComboBox<String> tutor2 = new ComboBox<>("Tutor 2 del TFG");
         tutor2.setAllowCustomValue(true);
@@ -164,7 +165,8 @@ public class ModifyView extends VerticalLayout {
         });
         tutor2.addCustomValueSetListener(event -> {
             tutor2.setValue(event.getDetail());
-            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
+            if (!profesores.contains(tutor2.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");
         });
         ComboBox<String> tutor3 = new ComboBox<>("Tutor 3 del TFG");
         tutor3.setAllowCustomValue(true);
@@ -176,7 +178,8 @@ public class ModifyView extends VerticalLayout {
         });
         tutor3.addCustomValueSetListener(event -> {
             tutor3.setValue(event.getDetail());
-            Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
+            if (!profesores.contains(tutor3.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");
         });
 
         TextArea alumno1 = new TextArea("Alumno 1 del TFG");

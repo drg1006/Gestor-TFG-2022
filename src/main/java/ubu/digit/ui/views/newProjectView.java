@@ -259,19 +259,26 @@ public class newProjectView extends VerticalLayout {
      * 
      * @return numero del TFG
      */
-    private int obtenerNumeroTFG(String año) {
-        int numeroTFG = 0;
+    private String obtenerNumeroTFG(String año) {
+        String numeroTFG;
         String titulo = fachadaDatos.getUltimoTFG();
+        int temp=0;
         // Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de
         // GII 22.XX y ahora estamos en el curso 2023
         // El nuevo numero sería el 0
         
         // Si es un año distino se inicia en 0
         if (Integer.parseInt("20" + titulo.substring(4, 6)) != Integer.parseInt(año)) {
-            numeroTFG = 0;
-        } else
-            // Mismo año, se suma uno
-            numeroTFG = (Integer.parseInt(titulo.substring(7, 9)) + 1);
+            numeroTFG = "01";
+        } else {
+            // Mismo año, se suma uno           
+            temp= (Integer.parseInt(titulo.substring(7, 9))+1);
+            //Por si es 01
+            if(temp<10) 
+                numeroTFG = "0"+temp;
+            else
+                numeroTFG = String.valueOf(temp);
+        }
 
         return numeroTFG;
     }
