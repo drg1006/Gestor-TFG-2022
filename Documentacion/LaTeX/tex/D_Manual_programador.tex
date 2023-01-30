@@ -191,14 +191,31 @@ En esta sección se detallarán todas las pruebas realizadas en la aplicación p
 
 Se realizarán pruebas manuales para todas las nuevas funcionalidades añadidas en esta versión.
 
-\subsection{Login}
-Validación del correcto acceso a las funcionalidades de los distintos roles que un usuario puede tener.
-----
+\subsection{Archivo de prueba: Prueba01}
+Este archivo situado en la carpeta \texttt{Documentacion/Pruebas} denominado \texttt{Prueba01}, es un archivo estructurado de igual forma que la base de datos que utilizamos de forma habitual pero con menos carga de datos.
+Se cargará con la opción \emph{Actualizar base de datos} de la parte inferior de la pantalla, de acceso exclusivo para los administradores y se probará su correcto tratamiento durante todas las pantallas de la aplicación.
 
-\subsection{Histórico del profesorado}
+Tiene un total de nueve proyectos en la pestaña de activos, tres de ellos con un estado \emph{Pendiente} y un total de 10 en la de históricos.
 
-Para realizar estas pruebas o validaciones de la aplicación se subirán, mediante la opción de actualizar ficheros, nuevos archivos con menos proyectos para comprobar que las estadísticas se realizan de forma correcta.
---------
+\begin{itemize}
+	\item \textbf{Proyectos activos}: como podemos observar en la imagen \ref{fig:P01Activos} la información estadística es correcta y la tabla muestra bien todos los proyectos activos.
+	\item \textbf{Histórico de proyectos}: en esta pantalla también se carga bien la información como se ve en la imagen \ref{fig:P01HistProyectos}.
+	\item \textbf{Histórico del profesorado}: para esta comprobación crearemos varias gráficas. La primera de ellas para el tutor César Ignacio García, que participa en dos proyectos como tutor ambos durante el curso 2013/2014, ver imagen \ref{fig:P01GraficaCesar}. La segunda de ellas se realizará para el área \emph{Lenguajes y Sistemas informáticos}, y el departamento \emph{Ingeniería Informática}. Este área tiene tutores que aparecen en la pantalla de históricos como César Ignacio, Raúl Marticorena, Carlos López y Carlos Pardo, un total de 6 proyectos, además el departamento de \emph{informática} también tiene tutores cómo Álvaro Herrero Cosío y Bruno Baruque del departamento de \emph{Ciencia de la Computación e Inteligencia Artificial}, que sumarían dos proyectos más a la gráfica como se puede observar en la imagen \ref{fig:P01GraficaAD}.
+	\item \textbf{Creación de informes}
+	\item \textbf{Aceptar/Denegar TFG}
+	\item \textbf{Modificar TFG}
+		\begin{itemize}
+				\item \textbf{Modificar datos y mantener activo}
+				\item \textbf{Modificar datos y cerrarlo}
+		\end{itemize}
+
+\end{itemize}
+
+\imagenflotante{P01Activos}{Comprobación pantalla activos.}{0.9}
+\imagenflotante{P01HistProyectos}{Comprobación pantalla historico de proyectos.}{0.9}
+\imagenflotante{P01GraficaCesar}{Comprobación gráfica de proyectos dirigidos de César.}{0.9}
+\imagenflotante{P01GraficaAD}{Comprobación proyectos históricos areas y departamentos.}{0.9}
+\section{Validaciones del sistema}
 
 \subsection{Creación de informes}
 
@@ -206,9 +223,6 @@ En esta pantalla se realizan varias validaciones antes de la creación del infor
 En ella se pueden ver los campos obligatorios para la creación del informe, así como una notificación y avisos al usuario.
 
 \imagenflotante{validacionInforme}{Validación campos del informe.}{0.9}
-
-De igual manera que en la sección anterior se ha subido otro archivo para comprobar que los datos que se generan en el informe son correctos:
----------
 
 \subsection{Subida de TFGs}
 
@@ -238,3 +252,7 @@ A la hora de seleccionar un proyecto para modificar nos salta un aviso si selecc
 En esta versión se ha añadido la posibilidad de tener varias sesiones iniciadas a la vez en la aplicación, ya que actualmente se han añadido varios roles para los usuarios, es necesario controlar las sesiones que se generan. Mediante el uso de variables internas se permite a diferentes usuarios iniciar sesión al mismo tiempo en la \emph{web} como se puede ver en la imagen \ref{fig:variasSesiones}, en la que en un navegador se ha iniciado sesión y en otro no.
 
 \imagenflotante{variasSesiones}{Aplicación web con varias sesiones a la vez.}{0.9}
+
+\subsection{Actualización de ficheros}
+
+Aunque esta funcionalidad ya estuviese incluida en la versión anterior se ha probado que el archivo que se sube a la base de datos y el que se descarga, sin realizar ningún tipo de modificación durante su uso, es el mismo, y tiene los mismos datos e información.
