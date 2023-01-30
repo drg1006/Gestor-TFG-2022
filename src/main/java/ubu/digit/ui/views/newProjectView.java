@@ -239,7 +239,7 @@ public class newProjectView extends VerticalLayout {
 
     }
 
-    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea titulo) {
+    private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea titulo) {        
         if (today.now().isAfter(fechaINI)) {
 
             // Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
@@ -265,7 +265,7 @@ public class newProjectView extends VerticalLayout {
         // Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de
         // GII 22.XX y ahora estamos en el curso 2023
         // El nuevo numero sería el 0
-
+        
         // Si es un año distino se inicia en 0
         if (Integer.parseInt("20" + titulo.substring(4, 6)) != Integer.parseInt(año)) {
             numeroTFG = 0;

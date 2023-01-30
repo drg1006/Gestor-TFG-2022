@@ -1180,7 +1180,7 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
     @Override
     public String getUltimoTFG() {
         List<String> titulos = new ArrayList<>();
-        String sql = SELECT + TITULO + FROM + PROYECTO;
+        String sql = SELECT + TITULO + FROM + PROYECTO+WHERE + TITULO + DISTINTO_DE_VACIO;
         try {
             Recordset result = connection.executeQuery(sql);
             while (result.next()) {
