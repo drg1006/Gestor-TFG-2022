@@ -176,7 +176,7 @@ public class Footer extends VerticalLayout {
 
         license.add(licenseText, ccLink);
 
-        if (fileName != null) {
+        if (!fileName.isBlank()) {
             LOGGER.info("actualización fecha fichero " + fileName);
             String lastModifiedCsv = getLastModified(fileName);
             String lastModifiedXls = getLastModified("BaseDeDatosTFGTFM.xls");
@@ -184,7 +184,7 @@ public class Footer extends VerticalLayout {
             license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
         }
         
-        Button actu = new Button("Actualizar");
+        Button actu = new Button("Actualizar Base de datos");
         actu.addClickListener(e -> {
             UI.getCurrent().navigate(UploadView.class);
         });
