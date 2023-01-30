@@ -1,6 +1,5 @@
 package ubu.digit.ui.views;
 
-
 import static ubu.digit.util.Constants.PROYECTO;
 import static ubu.digit.util.Constants.TITULO;
 
@@ -28,7 +27,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -64,320 +62,326 @@ import ubu.digit.util.ExternalProperties;
 
 public class ReportView extends VerticalLayout {
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 8431807779365780674L;
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 8431807779365780674L;
 
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReportView.class.getName());
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportView.class.getName());
 
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "Report";
-	/**
-	 * Fichero de configuración.
-	 */
-	private ExternalProperties config;
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "Report";
+    /**
+     * Fichero de configuración.
+     */
+    private ExternalProperties config;
 
-	/**
-	 * Formateador de números.
-	 */
-	private NumberFormat numberFormatter;
+    /**
+     * Formateador de números.
+     */
+    private NumberFormat numberFormatter;
 
-	/**
-	 * Formateador de fechas.
-	 */
-	private transient DateTimeFormatter dateTimeFormatter;
-	/**
-	 * Vista de historicos.
-	 */
-	HistoricProjectsView vista= new  HistoricProjectsView();
-	/**
-	 * Vista de activos.
-	 */
-    ActiveProjectsView activos= new ActiveProjectsView();
-	
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	private SistInfDataAbstract fachadaDatos;
+    /**
+     * Formateador de fechas.
+     */
+    private transient DateTimeFormatter dateTimeFormatter;
+    /**
+     * Vista de historicos.
+     */
+    HistoricProjectsView vista = new HistoricProjectsView();
+    /**
+     * Vista de activos.
+     */
+    ActiveProjectsView activos = new ActiveProjectsView();
 
-	/**
-	 * Constructor.
-	 * @throws SQLException 
-	 */
-	public ReportView(){
-		
-		fachadaDatos = SistInfDataFactory.getInstanceData();
-		config = ExternalProperties.getInstance("/config.properties", false);
-		numberFormatter = NumberFormat.getInstance();
-		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
-		setMargin(true);
-		setSpacing(true);
+    /**
+     * Fachada para obtener los datos
+     */
+    private SistInfDataAbstract fachadaDatos;
 
-		NavigationBar bat = new NavigationBar();
-		bat.buttonReport.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		add(bat);
-		
-		opciones();
-		
-		Footer footer = new Footer("");
-		
-		add(footer);
-	}
-	
+    /**
+     * Constructor.
+     * 
+     * @throws SQLException
+     */
+    public ReportView() {
 
-	/**
-	 * Metodo para seleccionar las areas.
-	 */
-	public void opciones() {
-        //obtendriamos el total de alumnos matriculados en el curso
-        NumberField nAlum= new NumberField("Indique el número de alumnos matriculados");
+        fachadaDatos = SistInfDataFactory.getInstanceData();
+        config = ExternalProperties.getInstance("/config.properties", false);
+        numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(2);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        setMargin(true);
+        setSpacing(true);
+
+        NavigationBar bat = new NavigationBar();
+        bat.buttonReport.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        add(bat);
+
+        opciones();
+
+        Footer footer = new Footer("");
+
+        add(footer);
+    }
+
+    /**
+     * Metodo para seleccionar las areas.
+     */
+    public void opciones() {
+        // obtendriamos el total de alumnos matriculados en el curso
+        NumberField nAlum = new NumberField("Indique el número de alumnos matriculados");
         nAlum.setWidth("20%");
-        nAlum.addValueChangeListener(event ->{
+        nAlum.addValueChangeListener(event -> {
             nAlum.setValue(event.getValue());
         });
-        //Checkbox con todas las areas
-	    Checkbox checkbox = new Checkbox("Seleccionar Todas");
-	    List<String> areas= fachadaDatos.getAreas();
-	    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-	    checkboxGroup.setLabel("Áreas");
-	    checkboxGroup.setItems(areas);
-	    checkboxGroup.addValueChangeListener(event -> {
-	        if (event.getValue().size() == areas.size()) {
-	            checkbox.setValue(true);
-	            checkbox.setIndeterminate(false);
-	        } else if (event.getValue().size() == 0) {
-	            checkbox.setValue(false);
-	            checkbox.setIndeterminate(false);
-	        } else {
-	            checkbox.setIndeterminate(true);
-	        }
-	    });
-	    checkbox.addValueChangeListener(event -> {
-	        if (checkbox.getValue()) {
-	            checkboxGroup.setValue(new HashSet<>(areas));
-	        } else {
-	            checkboxGroup.deselectAll();
-	        }
+        // Checkbox con todas las areas
+        Checkbox checkbox = new Checkbox("Seleccionar Todas");
+        List<String> areas = fachadaDatos.getAreas();
+        CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
+        checkboxGroup.setLabel("Áreas");
+        checkboxGroup.setItems(areas);
+        checkboxGroup.addValueChangeListener(event -> {
+            if (event.getValue().size() == areas.size()) {
+                checkbox.setValue(true);
+                checkbox.setIndeterminate(false);
+            } else if (event.getValue().size() == 0) {
+                checkbox.setValue(false);
+                checkbox.setIndeterminate(false);
+            } else {
+                checkbox.setIndeterminate(true);
+            }
+        });
+        checkbox.addValueChangeListener(event -> {
+            if (checkbox.getValue()) {
+                checkboxGroup.setValue(new HashSet<>(areas));
+            } else {
+                checkboxGroup.deselectAll();
+            }
 
-	    });
-	    
-	    //TEXTO PARA AÑADIR NOMBRE AL INFORME
-	    TextField nombreInforme = new TextField();
-	    nombreInforme.setLabel("Indique el nombre del informe");
-	    nombreInforme.setWidth("25%");
-	    nombreInforme.setHelperText("No introduzcas el formato del archivo (.xls)");
-	    nombreInforme.addValueChangeListener(event ->{
-	       nombreInforme.setValue(event.getValue());
-	    });
-	    
-	    //BOTON PARA CREAR EL INFORME 
-	    Button crearInforme = new Button("Crear Informe");
-	    crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-	  //Indicando que los campos son obligatorios
-        Binder<Formularios> binder= new Binder<>(Formularios.class);
+        });
+
+        // TEXTO PARA AÑADIR NOMBRE AL INFORME
+        TextField nombreInforme = new TextField();
+        nombreInforme.setLabel("Indique el nombre del informe");
+        nombreInforme.setWidth("25%");
+        nombreInforme.setHelperText("No introduzcas el formato del archivo (.xls)");
+        nombreInforme.addValueChangeListener(event -> {
+            nombreInforme.setValue(event.getValue());
+        });
+
+        // BOTON PARA CREAR EL INFORME
+        Button crearInforme = new Button("Crear Informe");
+        crearInforme.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        // Indicando que los campos son obligatorios
+        Binder<Formularios> binder = new Binder<>(Formularios.class);
         binder.forField(nombreInforme).asRequired("Debes indicar nombre para el informe").bind("nombreInforme");
         binder.forField(nAlum).asRequired("Debes indicar un numero de alumnos").bind("nAlumnos");
-	    
-	    //Boton para descargar el archivo que se genera
-	    Anchor download = new Anchor();
-	    //Lo ocultamos
-	    download.setVisible(false);
-	    //Cuando pulsamos en crear informe
+
+        // Boton para descargar el archivo que se genera
+        Anchor download = new Anchor();
+        // Lo ocultamos
+        download.setVisible(false);
+        // Cuando pulsamos en crear informe
         crearInforme.addClickListener(event -> {
-            if(binder.validate().isOk()&&!checkboxGroup.getValue().isEmpty()) {
-                //Creamos el informe
-                File file= creacionInforme(checkboxGroup.getValue(),nombreInforme.getValue(),nAlum.getValue()); 
-            
-                //Generamos el recurso descargable            
+            if (binder.validate().isOk() && !checkboxGroup.getValue().isEmpty()) {
+                // Creamos el informe
+                File file = creacionInforme(checkboxGroup.getValue(), nombreInforme.getValue(), nAlum.getValue());
+
+                // Generamos el recurso descargable
                 StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
-            
-                //Lo introducimos en el boton para descargar
-                download.setText("Descargar "+file.getName());
+
+                // Lo introducimos en el boton para descargar
+                download.setText("Descargar " + file.getName());
                 download.setHref(streamResource);
                 download.getElement().setAttribute("download", true);
                 download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
                 download.setVisible(true);
-            }else {
-                Notification.show("Debes indicar un valor para todos los campos").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            } else {
+                Notification.show("Debes indicar un valor para todos los campos")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
-         });
-        
-	    add(nAlum, checkboxGroup,checkbox,nombreInforme,crearInforme,download);
+        });
 
-	}
-	
-	/**
-	 * Metodo que crea el archivo xls y escribe los datos.
-	 * @param listaAreas
-	 * @param nombreInforme
-	 * @param string 
-	 * @param años 
-	 * @return File
-	 */
-    public File creacionInforme(Set<String> listaAreas, String nombreInforme, Double nAlumn) {
-	       
-	       File archivo = new File(nombreInforme+".xls");
-	       Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
-	       Workbook workbook = new HSSFWorkbook();
-	       try {
-	            //Recorremos el listado de areas pasados
-	            for(String area: listaAreas) {
-	                //Creamos la hoja con el nombre del area
-	                Sheet hoja=workbook.createSheet(area);
-	                dataTFG = obtencionDatos(area,nAlumn);
-	                Row rowCount=null;
-	                //Cogemos los ids
-	                Set<String> keyid = dataTFG.keySet();
-	                int rowid = 0;
-	                
-	                //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
-	                // writing the data into the sheets...
-	                for (String key : keyid) {
+        add(nAlum, checkboxGroup, checkbox, nombreInforme, crearInforme, download);
 
-	                    rowCount = workbook.getSheet(hoja.getSheetName()).createRow(rowid++);
-	                    Object[] objectArr = dataTFG.get(key);
-	                    
-	                    int cellid = 0;
-	                    for (Object obj : objectArr) {
-	                        Cell cell = rowCount.createCell(cellid++);
-	                        if(obj.getClass().equals(Double.class)) {
-	                            
-	                            cell.setCellValue((double) obj);
-	                        }else
-	                        cell.setCellValue((String)obj);
-	                        
-	                    }
-	                }
-	            }
-	            //Se genera el documento
-	            FileOutputStream out = new FileOutputStream(archivo);
-	            workbook.write(out);
-	            workbook.close(); 
-	            out.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-        return archivo;
-	   }
-
+    }
 
     /**
-     * Metodo que obtiene los datos del area seleccionada sobre el ultimo curso academico.
+     * Metodo que crea el archivo xls y escribe los datos.
+     * 
+     * @param listaAreas
+     * @param nombreInforme
+     * @param string
+     * @param años
+     * @return File
+     */
+    public File creacionInforme(Set<String> listaAreas, String nombreInforme, Double nAlumn) {
+
+        File archivo = new File(nombreInforme + ".xls");
+        Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
+        Workbook workbook = new HSSFWorkbook();
+        try {
+            // Recorremos el listado de areas pasados
+            for (String area : listaAreas) {
+                // Creamos la hoja con el nombre del area
+                Sheet hoja = workbook.createSheet(area);
+                dataTFG = obtencionDatos(area, nAlumn);
+                Row rowCount = null;
+                // Cogemos los ids
+                Set<String> keyid = dataTFG.keySet();
+                int rowid = 0;
+
+                // https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
+                // writing the data into the sheets...
+                for (String key : keyid) {
+
+                    rowCount = workbook.getSheet(hoja.getSheetName()).createRow(rowid++);
+                    Object[] objectArr = dataTFG.get(key);
+
+                    int cellid = 0;
+                    for (Object obj : objectArr) {
+                        Cell cell = rowCount.createCell(cellid++);
+                        if (obj.getClass().equals(Double.class)) {
+
+                            cell.setCellValue((double) obj);
+                        } else
+                            cell.setCellValue((String) obj);
+
+                    }
+                }
+            }
+            // Se genera el documento
+            FileOutputStream out = new FileOutputStream(archivo);
+            workbook.write(out);
+            workbook.close();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return archivo;
+    }
+
+    /**
+     * Metodo que obtiene los datos del area seleccionada sobre el ultimo curso
+     * academico.
+     * 
      * @param area
-     * @param nAlumn 
+     * @param nAlumn
      * @return mapa con los datos.
      */
     private Map<String, Object[]> obtencionDatos(String area, Double nAlumn) {
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
-        
-        //Cogemos el año
-        int ultimoAño =vista.maxCourse;
-        List<String> profes =fachadaDatos.getProfesoresDeArea(area);
-        int i=1;
 
-        for(String prof:profes) {
-            
+        // Cogemos el año
+        int ultimoAño = vista.maxCourse;
+        List<String> profes = fachadaDatos.getProfesoresDeArea(area);
+        int i = 1;
+
+        for (String prof : profes) {
+
             i++;
-            double tfgs=0;
-            double tfgs2=0;
-            //obtenemos los creditos
-            double creditos=obtenerCreditos(prof, ultimoAño,nAlumn);
-            //Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
-            for(int n=0;n<activos.dataActiveProjects.size();n++) {
-                if(activos.dataActiveProjects.get(n).getTutor1()==prof && 
-                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")
-                    ) {
-                    tfgs++; 
-                }
-           }
-            //Codirigidos
-            for(int n=0;n<activos.dataActiveProjects.size();n++) {
-                if(activos.dataActiveProjects.get(n).getTutor2()==prof && 
+            double tfgs = 0;
+            double tfgs2 = 0;
+            // obtenemos los creditos
+            double creditos = obtenerCreditos(prof, ultimoAño, nAlumn);
+            // Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
+            for (int n = 0; n < activos.dataActiveProjects.size(); n++) {
+                if (activos.dataActiveProjects.get(n).getTutor1() == prof &&
                         !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
-                    tfgs2++; 
+                    tfgs++;
                 }
-           }
-            
-            //Array con toda la informacion
-            Object [] profesor= {prof,tfgs,tfgs2,creditos};
-            //Si esla primera linea se añaden los titulos y el primer profesor
-            if(i==2) {
-                dataTFG.put("1", new Object[] {"Tutor","TFGs Dirigidos","TFGs CoDirigidos","ETCS"});
-                dataTFG.put("2",profesor);
-            }else {
-                String id=Integer.toString(i);
-                dataTFG.put(id,profesor);
-            } 
-        }   
+            }
+            // Codirigidos
+            for (int n = 0; n < activos.dataActiveProjects.size(); n++) {
+                if (activos.dataActiveProjects.get(n).getTutor2() == prof &&
+                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
+                    tfgs2++;
+                }
+            }
+
+            // Array con toda la informacion
+            Object[] profesor = { prof, tfgs, tfgs2, creditos };
+            // Si esla primera linea se añaden los titulos y el primer profesor
+            if (i == 2) {
+                dataTFG.put("1", new Object[] { "Tutor", "TFGs Dirigidos", "TFGs CoDirigidos", "ETCS" });
+                dataTFG.put("2", profesor);
+            } else {
+                String id = Integer.toString(i);
+                dataTFG.put(id, profesor);
+            }
+        }
 
         return dataTFG;
     }
-	   
+
     /**
      * Metodo que obtiene el numero de creditos de un tutor
-     * @param profesor profesor a buscar
+     * 
+     * @param profesor  profesor a buscar
      * @param ultimoAño el año que se busca
-     * @param nAlumn nAlumnos matriculados en TFG
+     * @param nAlumn    nAlumnos matriculados en TFG
      * @return valor con el numero de creditos
      */
-    private float obtenerCreditos(String profesor,int ultimoAño,Double nAlumn) {
-        
-        //creditos del tutor
-        float nCreditosTutor=0;
-        //TOTAL de creditos a repartir
+    private float obtenerCreditos(String profesor, int ultimoAño, Double nAlumn) {
+
+        // creditos del tutor
+        float nCreditosTutor = 0;
+        // TOTAL de creditos a repartir
         float valorCred = Float.parseFloat(config.getSetting("ECTS"));
-        float total=(float) (nAlumn*valorCred);
-        
-        //Obtenemos  todos los TFGs activos de este año 
-        Number tfgsActivos=fachadaDatos.getTotalNumber(TITULO, PROYECTO);
-        
-        //Total de creditos a asignar entre todos los directores
-        float crDir=(float) ((total*0.6)/tfgsActivos.intValue());
-        //Total de creditos a asignar para tribunal (a dividir entre 6 porque hay 6 miembros en el tribunal)
-        float crTri= (float) (total  *0.4/6);
-        //float crePorTFG=crDir/;
-        
-        //Recorremos todos los tfgs activos y con alumno asignado y buscamos si es tutor1 o tutor2
-        //y comprobamos si es codirigido por otro tutor de la EPS
-        for(int n=0;n<activos.dataActiveProjects.size();n++) {
-            //RECORREMOS SOLO LOS TFGS ASIGNADOS
-            if(!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
-                //SI ES EL TUTOR 1
-                if(activos.dataActiveProjects.get(n).getTutor1().equals(profesor)) {
-                    //SI EL TUTOR 2 ESTA O NO EN LA EPS
-                    if(fachadaDatos.getProfesores().contains(activos.dataActiveProjects.get(n).getTutor2())) {
-                        //Se reparten los creditos para este profesor en este tfg
-                        nCreditosTutor+=crDir*0.3;
-                    }else{
-                        //Se queda todo el porcentaje de los creditos
-                        nCreditosTutor+=crDir*0.6;
+        float total = (float) (nAlumn * valorCred);
+
+        // Obtenemos todos los TFGs activos de este año
+        Number tfgsActivos = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
+
+        // Total de creditos a asignar entre todos los directores
+        float crDir = (float) ((total * 0.6) / tfgsActivos.intValue());
+        // Total de creditos a asignar para tribunal (a dividir entre 6 porque hay 6
+        // miembros en el tribunal)
+        float crTri = (float) (total * 0.4 / 6);
+        // float crePorTFG=crDir/;
+
+        // Recorremos todos los tfgs activos y con alumno asignado y buscamos si es
+        // tutor1 o tutor2
+        // y comprobamos si es codirigido por otro tutor de la EPS
+        for (int n = 0; n < activos.dataActiveProjects.size(); n++) {
+            // RECORREMOS SOLO LOS TFGS ASIGNADOS
+            if (!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
+                // SI ES EL TUTOR 1
+                if (activos.dataActiveProjects.get(n).getTutor1().equals(profesor)) {
+                    // SI EL TUTOR 2 ESTA O NO EN LA EPS
+                    if (fachadaDatos.getProfesores().contains(activos.dataActiveProjects.get(n).getTutor2())) {
+                        // Se reparten los creditos para este profesor en este tfg
+                        nCreditosTutor += crDir * 0.3;
+                    } else {
+                        // Se queda todo el porcentaje de los creditos
+                        nCreditosTutor += crDir * 0.6;
                     }
-                //SI ES EL TUTOR 2
-                }else if(activos.dataActiveProjects.get(n).getTutor2().equals(profesor) ){
-                    nCreditosTutor+=crDir*0.3;
+                    // SI ES EL TUTOR 2
+                } else if (activos.dataActiveProjects.get(n).getTutor2().equals(profesor)) {
+                    nCreditosTutor += crDir * 0.3;
                 }
             }
         }
 
-        //Si el tutor pertenece al tribunal
-        if(fachadaDatos.getNombresTribunal().contains(profesor)) {
-            nCreditosTutor+=crTri;
+        // Si el tutor pertenece al tribunal
+        if (fachadaDatos.getNombresTribunal().contains(profesor)) {
+            nCreditosTutor += crTri;
         }
-        return nCreditosTutor;   
+        return nCreditosTutor;
     }
 
     /**
      * Metodo para transformar un archivo en InputStream.
+     * 
      * @param file
-     * @return InputStream 
+     * @return InputStream
      */
     private InputStream getStream(File file) {
         FileInputStream stream = null;
@@ -390,6 +394,3 @@ public class ReportView extends VerticalLayout {
         return stream;
     }
 }
-
-
-

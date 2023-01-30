@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ExternalProperties implements Serializable {
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 3667519929144990872L;
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 3667519929144990872L;
 
-	/**
+    /**
      * Logger de la clase.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ExternalProperties.class.getName());
@@ -36,7 +36,7 @@ public class ExternalProperties implements Serializable {
     /**
      * Fichero del que leeremos las propiedades.
      */
-	private static String file;
+    private static String file;
 
     /**
      * Instancia que tendrá la propiedad.
@@ -46,8 +46,8 @@ public class ExternalProperties implements Serializable {
     /**
      * Dirección de los ficheros en la aplicación del servidor.
      */
-	@SuppressWarnings("unused")
-	private static String basePath = "";
+    @SuppressWarnings("unused")
+    private static String basePath = "";
 
     /**
      * Constructor.
@@ -56,36 +56,37 @@ public class ExternalProperties implements Serializable {
 
         InputStream inputStream = null;
         try {
-        	inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream(file);
+            inputStream = ExternalProperties.class.getClassLoader().getResourceAsStream(file);
             PROPERTIES.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("ExternalProperties error al crear el InputStream y leerlo :", e);
         }
     }
 
-	/**
-	 * Método singleton para obtener la instancia del fichero de propiedades.
-	 * 
-	 * @param propFileName
-	 *            nombre del fichero
-	 * @param testFlag
-	 *            bandera para diferenciar los ficheros de propiedades de test y
-	 *            ejecución (true: test, false: no test)
-	 * @return
-	 */
-    public static ExternalProperties getInstance(String propFileName, Boolean testFlag) { 
-    	if(!testFlag) {
-    		String path = ExternalProperties.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-    		basePath = path.substring(1, path.length()-1);
-    	}
-    	
+    /**
+     * Método singleton para obtener la instancia del fichero de propiedades.
+     * 
+     * @param propFileName
+     *                     nombre del fichero
+     * @param testFlag
+     *                     bandera para diferenciar los ficheros de propiedades de
+     *                     test y
+     *                     ejecución (true: test, false: no test)
+     * @return
+     */
+    public static ExternalProperties getInstance(String propFileName, Boolean testFlag) {
+        if (!testFlag) {
+            String path = ExternalProperties.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+            basePath = path.substring(1, path.length() - 1);
+        }
+
         if (instance == null) {
             file = propFileName;
             instance = new ExternalProperties();
         }
         return instance;
     }
-    
+
     /**
      * Método que obtiene el valor de la propiedad que se pasa.
      * 
@@ -94,7 +95,7 @@ public class ExternalProperties implements Serializable {
      * @return El valor de la propiedad.
      */
     public String getSetting(String key) {
-		return PROPERTIES.getProperty(key).trim();
-	}
+        return PROPERTIES.getProperty(key).trim();
+    }
 
 }

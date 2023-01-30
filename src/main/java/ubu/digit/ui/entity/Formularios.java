@@ -3,9 +3,9 @@ package ubu.digit.ui.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-
 /**
- * Clase que se utilizará para bindear con los formularios, se utiliza en la creación de informes y en la subida de tfgs.
+ * Clase que se utilizará para bindear con los formularios, se utiliza en la
+ * creación de informes y en la subida de tfgs.
  * 
  * @author David Renedo Gil
  */
@@ -14,7 +14,8 @@ public class Formularios extends Projects implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Variables utilizadas para hacer las conexiones mediante Binder y crear parametros obligatorios.
+     * Variables utilizadas para hacer las conexiones mediante Binder y crear
+     * parametros obligatorios.
      */
     private String titulo;
     private String descripcion;
@@ -31,7 +32,6 @@ public class Formularios extends Projects implements Serializable {
     private String repo;
     private String nombreInforme;
     private double nAlumnos;
-    
 
     /**
      * Obtiene el titulo del formulario.
@@ -58,7 +58,7 @@ public class Formularios extends Projects implements Serializable {
     public String getDescripcion() {
         return this.descripcion;
     }
-    
+
     /**
      * Escribe la descripcion del formulario.
      * 
@@ -168,6 +168,7 @@ public class Formularios extends Projects implements Serializable {
     public void setCursoAsignacion(String cursoAsignacion) {
         this.cursoAsignacion = cursoAsignacion;
     }
+
     /**
      * Obtiene la nota del formulario.
      * 
@@ -184,6 +185,7 @@ public class Formularios extends Projects implements Serializable {
     public void setNota(int nota) {
         this.nota = nota;
     }
+
     /**
      * Obtiene la fecha de asignacion del formulario.
      * 
@@ -200,8 +202,9 @@ public class Formularios extends Projects implements Serializable {
     public void setFechaAsignacion(LocalDate fechaAsignacion) {
         this.fechaAsignacion = fechaAsignacion;
     }
+
     /**
-     * Obtiene la fecha de presentacion  del formulario.
+     * Obtiene la fecha de presentacion del formulario.
      * 
      * @return cursoAsignacion
      */
@@ -216,6 +219,7 @@ public class Formularios extends Projects implements Serializable {
     public void FechaPresentacion(LocalDate fechaPresentacion) {
         this.fechaPresentacion = fechaPresentacion;
     }
+
     /**
      * Obtiene el repositorio del formulario.
      * 
@@ -232,6 +236,7 @@ public class Formularios extends Projects implements Serializable {
     public void setRepo(String repositorio) {
         this.repo = repositorio;
     }
+
     /**
      * Obtiene el titulo corto del formulario.
      * 
@@ -248,7 +253,7 @@ public class Formularios extends Projects implements Serializable {
     public void setTituloCorto(String tituloCorto) {
         this.tituloCorto = tituloCorto;
     }
-    
+
     /**
      * Obtiene el titulo corto del formulario.
      * 
@@ -265,6 +270,7 @@ public class Formularios extends Projects implements Serializable {
     public void setnombreInforme(String nombreInforme) {
         this.nombreInforme = nombreInforme;
     }
+
     /**
      * Obtiene el titulo corto del formulario.
      * 
@@ -282,6 +288,4 @@ public class Formularios extends Projects implements Serializable {
         this.nAlumnos = nAlumnos;
     }
 
-
-    
 }

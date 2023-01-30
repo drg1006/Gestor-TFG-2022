@@ -95,7 +95,7 @@ public class ManageView extends VerticalLayout {
     /**
      * Lista con los proyectos activos filtrados
      */
-    List<ActiveProject>  dataActiveProjectsGrid;
+    List<ActiveProject> dataActiveProjectsGrid;
 
     /**
      * Campo de texto para filtrar por proyecto.
@@ -116,7 +116,7 @@ public class ManageView extends VerticalLayout {
      * Campo de texto para filtrar por alumno.
      */
     public TextField studentsFilter;
-    
+
     /**
      * Campo de texto para filtrar por alumno.
      */
@@ -126,7 +126,7 @@ public class ManageView extends VerticalLayout {
      * Fachada para obtener los datos
      */
     public SistInfDataAbstract fachadaDatos;
-    
+
     /**
      * Formateador de fechas.
      */
@@ -167,13 +167,13 @@ public class ManageView extends VerticalLayout {
         HorizontalLayout filters = new HorizontalLayout();
         filters.setSpacing(true);
         filters.setMargin(false);
-        
+
         projectFilter = new TextField("Filtrar por proyectos:");
         projectFilter.setWidth("300px");
         projectFilter.addValueChangeListener(event -> {
-            if(!projectFilter.isEmpty()) {
+            if (!projectFilter.isEmpty()) {
                 applyFilter("title", event.getValue());
-            }else {
+            } else {
                 table.setItems(dataActiveProjectsGrid);
             }
         });
@@ -181,9 +181,9 @@ public class ManageView extends VerticalLayout {
         descriptionFilter = new TextField("Filtrar por descripción:");
         descriptionFilter.setWidth("300px");
         descriptionFilter.addValueChangeListener(event -> {
-            if(!descriptionFilter.isEmpty()) {
+            if (!descriptionFilter.isEmpty()) {
                 applyFilter("description", event.getValue());
-            }else {
+            } else {
                 table.setItems(dataActiveProjectsGrid);
             }
         });
@@ -191,9 +191,9 @@ public class ManageView extends VerticalLayout {
         tutorsFilter = new TextField("Filtrar por tutores:");
         tutorsFilter.setWidth("300px");
         tutorsFilter.addValueChangeListener(event -> {
-            if(!tutorsFilter.isEmpty()) {
+            if (!tutorsFilter.isEmpty()) {
                 applyFilter("tutor", event.getValue());
-            }else {
+            } else {
                 table.setItems(dataActiveProjectsGrid);
             }
         });
@@ -201,9 +201,9 @@ public class ManageView extends VerticalLayout {
         studentsFilter = new TextField("Filtrar por alumnos:");
         studentsFilter.setWidth("300px");
         studentsFilter.addValueChangeListener(event -> {
-            if(!studentsFilter.isEmpty()) {
+            if (!studentsFilter.isEmpty()) {
                 applyFilter("student", event.getValue());
-            }else {
+            } else {
                 table.setItems(dataActiveProjectsGrid);
             }
         });
@@ -211,13 +211,13 @@ public class ManageView extends VerticalLayout {
         statusFilter = new TextField("Filtrar por estado:");
         statusFilter.setWidth("300px");
         statusFilter.addValueChangeListener(event -> {
-            if(!statusFilter.isEmpty()) {
+            if (!statusFilter.isEmpty()) {
                 applyFilter("status", event.getValue());
-            }else {
+            } else {
                 table.setItems(dataActiveProjectsGrid);
             }
         });
-        
+
         filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter, statusFilter);
         add(filters);
     }
@@ -225,19 +225,22 @@ public class ManageView extends VerticalLayout {
     /**
      * Crea el modelo de datos de los proyectos activos.
      */
-    private void createDataModel() { 
-      //Se obtienen los datos del modelo
+    private void createDataModel() {
+        // Se obtienen los datos del modelo
         @SuppressWarnings("rawtypes")
         ArrayList listaDataModel = fachadaDatos.getDataModel(dateTimeFormatter);
         dataActiveProjects = new ArrayList<ActiveProject>();
-        
-        for(int i=0;i<listaDataModel.size();i++) {
-            ActiveProject actives = new ActiveProject((String)listaDataModel.get(i),(String) listaDataModel.get(++i), 
-                    (String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
-                    (String)listaDataModel.get(++i),(String) listaDataModel.get(++i),(LocalDate) listaDataModel.get(++i), (String)listaDataModel.get(++i));
+
+        for (int i = 0; i < listaDataModel.size(); i++) {
+            ActiveProject actives = new ActiveProject((String) listaDataModel.get(i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (LocalDate) listaDataModel.get(++i), (String) listaDataModel.get(++i));
             dataActiveProjects.add(actives);
         }
     }
+
     /**
      * Crea la tabla de proyectos activos.
      */
@@ -287,53 +290,53 @@ public class ManageView extends VerticalLayout {
             Button aceptar = new Button("ACEPTAR");
             // boton con la opcion de denegar tfgs
             Button denegar = new Button("DENEGAR");
-            
+
             // boton con la opcion de denegar tfgs
             Button modificarTFG = new Button("MODIFICAR");
             // Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la
             // pasamos a seleccionarTFG
             aceptar.addClickListener(event -> {
-                if(table.getSelectedItems().size()==0) {
+                if (table.getSelectedItems().size() == 0) {
                     Notification.show("Seleccione al menos un TFG para aceptar");
-                }else {
+                } else {
                     aceptarTFG(table.getSelectedItems());
                 }
 
-                    
             });
 
             denegar.addClickListener(event -> {
-                if(table.getSelectedItems().size()==0) {
+                if (table.getSelectedItems().size() == 0) {
                     Notification.show("Seleccione al menos un TFG para aceptar");
-                }else {
-                   denegarTFG(table.getSelectedItems());
+                } else {
+                    denegarTFG(table.getSelectedItems());
                 }
 
             });
 
-            modificarTFG.addClickListener(event ->{
-                if(table.getSelectedItems().size()==1) {                    
+            modificarTFG.addClickListener(event -> {
+                if (table.getSelectedItems().size() == 1) {
                     for (ActiveProject tfg : table.getSelectedItems()) {
-                        //Guardamos el titulo del TFG
-                        ModifyView.tituloTFG=tfg.getTitle();
-                    }  
+                        // Guardamos el titulo del TFG
+                        ModifyView.tituloTFG = tfg.getTitle();
+                    }
                     UI.getCurrent().navigate(ModifyView.class);
-                }else {
-                    //Si se han seleccionado varios tfgs y se ha dado a modificar
+                } else {
+                    // Si se han seleccionado varios tfgs y se ha dado a modificar
                     Dialog aviso = new Dialog();
                     // Añadidmos un texto
-                   aviso.add("Puedes aceptar/denegar varios TFGs al mismo tiempo, pero para modificar solo puedes seleccionar uno. ");
-                   aviso.open();
-                   Button closeButton = new Button(new Icon("lumo", "cross"),
-                           (e) -> aviso.close());
-                   closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-                  aviso.add(closeButton);
+                    aviso.add(
+                            "Puedes aceptar/denegar varios TFGs al mismo tiempo, pero para modificar solo puedes seleccionar uno. ");
+                    aviso.open();
+                    Button closeButton = new Button(new Icon("lumo", "cross"),
+                            (e) -> aviso.close());
+                    closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+                    aviso.add(closeButton);
                 }
             });
             HorizontalLayout layout = new HorizontalLayout();
             layout.setSpacing(true);
             add(table);
-            layout.add(aceptar, denegar,modificarTFG);
+            layout.add(aceptar, denegar, modificarTFG);
             add(layout);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -351,9 +354,9 @@ public class ManageView extends VerticalLayout {
         // Cogemos los titulos seleccionados
         List<String> titulos = new ArrayList<>();
         for (ActiveProject tfg : selectedItems) {
-            titulos.add(tfg.getTitle());           
+            titulos.add(tfg.getTitle());
         }
-        
+
         // Boton que confirma la modificacion (se introduce en ambos pop-ups)
         Button aceptarBtn = new Button("Sí");
         // Boton que deniega la modificacion (se introduce en ambos pop-ups)
@@ -467,29 +470,29 @@ public class ManageView extends VerticalLayout {
         Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
         while (iterator.hasNext()) {
             ActiveProject activeproject = iterator.next();
-            
-            tutors = activeproject.getTutor1(); 
-            if(!tutors.equals("")) {
-                if(!activeproject.getTutor2().equals("")) {
-                    tutors +=  ", " + activeproject.getTutor2();
-                    if(!activeproject.getTutor3().equals("")) {
-                        tutors +=  ", " + activeproject.getTutor3();
+
+            tutors = activeproject.getTutor1();
+            if (!tutors.equals("")) {
+                if (!activeproject.getTutor2().equals("")) {
+                    tutors += ", " + activeproject.getTutor2();
+                    if (!activeproject.getTutor3().equals("")) {
+                        tutors += ", " + activeproject.getTutor3();
                     }
                 }
             }
-            
+
             students = activeproject.getStudent1();
-            if(!students.equals("")) {
-                if(!activeproject.getStudent2().equals("")) {
-                    students +=  ", " + activeproject.getStudent2();
-                    if(!activeproject.getStudent3().equals("")) {
-                        students +=  ", " + activeproject.getStudent3();
+            if (!students.equals("")) {
+                if (!activeproject.getStudent2().equals("")) {
+                    students += ", " + activeproject.getStudent2();
+                    if (!activeproject.getStudent3().equals("")) {
+                        students += ", " + activeproject.getStudent3();
                     }
                 }
             }
 
             ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
-                    tutors, students, activeproject.getDateAssignment(),activeproject.getStatus());
+                    tutors, students, activeproject.getDateAssignment(), activeproject.getStatus());
             dataActiveProjectsGrid.add(actives);
         }
     }
@@ -535,7 +538,8 @@ public class ManageView extends VerticalLayout {
             }
             for (String titulo : titulos) {
                 // Recorremos la hoja para obtener el numero de fila de la celda que tiene el
-                // titulo que se ha pasado por parametro, para no hardcodearlo si se cambia de columna
+                // titulo que se ha pasado por parametro, para no hardcodearlo si se cambia de
+                // columna
                 for (Row row : hoja) {
                     for (Cell cell : row) {
                         if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().equals(titulo)) {
@@ -553,10 +557,10 @@ public class ManageView extends VerticalLayout {
             workbook.write(outputStream);
             workbook.close();
             outputStream.close();
-            //Actualizamos la instancia
+            // Actualizamos la instancia
             SistInfDataFactory.setInstanceData("XLS");
             UI.getCurrent().getPage().reload();
-            } catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

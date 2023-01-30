@@ -9,18 +9,18 @@ package ubu.digit.webService;
  */
 public class CoreUsersCourses extends WSFunctionAbstract {
 
-	public CoreUsersCourses(int userId) {
-		super(WSFunctionEnum.CORE_ENROL_GET_USERS_COURSES);
-		setUserid(userId);
-	}
+    public CoreUsersCourses(int userId) {
+        super(WSFunctionEnum.CORE_ENROL_GET_USERS_COURSES);
+        setUserid(userId);
+    }
 
-	/**
-	 * Id del usuario
-	 * 
-	 * @param userId
-	 */
-	public void setUserid(int userId) {
-		parameters.put("userid", userId);
+    /**
+     * Id del usuario
+     * 
+     * @param userId
+     */
+    public void setUserid(int userId) {
+        parameters.put("userid", userId);
 
-	}
+    }
 }

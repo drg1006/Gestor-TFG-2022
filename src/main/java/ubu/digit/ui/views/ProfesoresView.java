@@ -70,7 +70,6 @@ import ubu.digit.ui.components.Footer;
 import ubu.digit.ui.components.NavigationBar;
 import ubu.digit.util.ExternalProperties;
 
-
 /**
  * Vista del histórico de profesores.
  *
@@ -81,8 +80,7 @@ import ubu.digit.util.ExternalProperties;
 
 public class ProfesoresView extends VerticalLayout {
     VerticalLayout layout = new VerticalLayout();
-    
-    
+
     /**
      * Serial Version UID.
      */
@@ -106,33 +104,34 @@ public class ProfesoresView extends VerticalLayout {
      * Formateador de números.
      */
     private NumberFormat numberFormatter;
-    
+
     /**
      * Formateador de fechas.
      */
     private transient DateTimeFormatter dateTimeFormatter;
     /**
-     *  Fachada para obtener los datos
+     * Fachada para obtener los datos
      */
     private SistInfDataAbstract fachadaDatos;
 
     /**
      * ArrayList con los profesores seleccionados del desplegable.
      */
-     List<String> profSelect = new ArrayList<>();
-     
+    List<String> profSelect = new ArrayList<>();
+
     /**
      * Constructor.
-     * @throws SQLException 
+     * 
+     * @throws SQLException
      */
-    public ProfesoresView(){
+    public ProfesoresView() {
         layout.setSpacing(true);
         fachadaDatos = SistInfDataFactory.getInstanceData();
         config = ExternalProperties.getInstance("/config.properties", false);
         numberFormatter = NumberFormat.getInstance();
         numberFormatter.setMaximumFractionDigits(2);
         dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
+
         setMargin(true);
         setSpacing(true);
 
@@ -140,29 +139,28 @@ public class ProfesoresView extends VerticalLayout {
         bat.buttonHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         bat.buttonProfessorHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
-        //Este submenu solo les sale a los profesores/administradores
-        if(UI.getCurrent().getSession().getAttribute("update")!=null ||
-                UI.getCurrent().getSession().getAttribute("reports")!=null ) {
-               if(UI.getCurrent().getSession().getAttribute("update").equals("true") ||
-                       UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
-                   add( bat.subMenu());
-               }
+        // Este submenu solo les sale a los profesores/administradores
+        if (UI.getCurrent().getSession().getAttribute("update") != null ||
+                UI.getCurrent().getSession().getAttribute("reports") != null) {
+            if (UI.getCurrent().getSession().getAttribute("update").equals("true") ||
+                    UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
+                add(bat.subMenu());
+            }
         }
-        
-        
+
         crearEstadisticas();
         datosGraficas();
-        //Si tiene permisos de administrador para actualizar archivos
-        if(UI.getCurrent().getSession().getAttribute("update")!=null) {
-            if(UI.getCurrent().getSession().getAttribute("update").equals("true")){
+        // Si tiene permisos de administrador para actualizar archivos
+        if (UI.getCurrent().getSession().getAttribute("update") != null) {
+            if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
                 preguntarSiActualizar();
-                }
             }
+        }
         add(layout);
         Footer footer = new Footer("N4_Profesores.csv");
         add(footer);
     }
-    
+
     /**
      * Crea las métricas de los proyectos activos.
      */
@@ -170,60 +168,66 @@ public class ProfesoresView extends VerticalLayout {
         H1 metricsTitle = new H1(INFO_ESTADISTICA);
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
-       
+
         try {
-            
-            Number numProfes= fachadaDatos.getNumProfesores();
-            Label totalProfessors = new Label("- Número total de profesores: " +numProfes.intValue());
-            
-            Number numAreas= fachadaDatos.getNumAreas();
-            Label totalAreas = new Label("- Número total de areas: "+numAreas.intValue() );
-           
-            Number numDepartamentos= fachadaDatos.getNumDepartamentos();
-            Label totalDepartments = new Label("- Número total de departamentos: "+ numDepartamentos.intValue());
+
+            Number numProfes = fachadaDatos.getNumProfesores();
+            Label totalProfessors = new Label("- Número total de profesores: " + numProfes.intValue());
+
+            Number numAreas = fachadaDatos.getNumAreas();
+            Label totalAreas = new Label("- Número total de areas: " + numAreas.intValue());
+
+            Number numDepartamentos = fachadaDatos.getNumDepartamentos();
+            Label totalDepartments = new Label("- Número total de departamentos: " + numDepartamentos.intValue());
             layout.add(totalProfessors, totalAreas, totalDepartments);
         } catch (Exception e) {
             LOGGER.error("Error en estadísticas", e);
         }
     }
-   /**
-    * Metodo para preguntar al usuario si quiere actualizar los datos de los archivos.
-    */
+
+    /**
+     * Metodo para preguntar al usuario si quiere actualizar los datos de los
+     * archivos.
+     */
     private void preguntarSiActualizar() {
         Button actualizar = new Button("Si");
         actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Footer footer= new Footer("");
+        Footer footer = new Footer("");
         String lastModifiedXls = footer.getLastModified(NOMBRE_BASES);
-        
-        Label ultimaAct= new Label("La última actualización de los datos fue el: " + lastModifiedXls+" ¿Quiere actualizar los datos? ");
-        Label AVISO= new Label("Este proceso puede llevar un tiempo");
-        layout.add(ultimaAct,AVISO,actualizar);   
+
+        Label ultimaAct = new Label(
+                "La última actualización de los datos fue el: " + lastModifiedXls + " ¿Quiere actualizar los datos? ");
+        Label AVISO = new Label("Este proceso puede llevar un tiempo");
+        layout.add(ultimaAct, AVISO, actualizar);
         actualizar.addClickListener(event -> {
             long startTime = System.nanoTime();
-           actualizarDatos();
-           long estimatedTime = System.nanoTime() - startTime;
-           double seconds =   (double)estimatedTime/1000000000.0;
-           Notification notification = Notification.show("Se han actualizado los archivos, el proceso ha tardado: "+seconds + " segundos");
-            
+            actualizarDatos();
+            long estimatedTime = System.nanoTime() - startTime;
+            double seconds = (double) estimatedTime / 1000000000.0;
+            Notification notification = Notification
+                    .show("Se han actualizado los archivos, el proceso ha tardado: " + seconds + " segundos");
+
         });
-        
+
     }
+
     /**
-     * Metodo que actualiza los datos realizando el webscraping a la web de investigadores dela ubu.
+     * Metodo que actualiza los datos realizando el webscraping a la web de
+     * investigadores dela ubu.
      */
     public void actualizarDatos() {
         List<String[]> profesores = new ArrayList<String[]>();
-        Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>(); 
+        Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
         Response response = null;
         try {
-            //Realizamos la petición de la url
+            // Realizamos la petición de la url
             response = Jsoup.connect("https://investigacion.ubu.es/unidades/2682/investigadores")
-                   .ignoreContentType(true)
-                   .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")  
-                   .referrer("http://www.google.com")   
-                   .timeout(12000) 
-                   .followRedirects(true)
-                   .execute();
+                    .ignoreContentType(true)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+                    .referrer("http://www.google.com")
+                    .timeout(12000)
+                    .followRedirects(true)
+                    .execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -234,145 +238,152 @@ public class ProfesoresView extends VerticalLayout {
         } catch (IOException e) {
             e.printStackTrace();
         }
-            
-            // Busco todas las entradas que estan dentro de: 
-            Elements entradas = doc.select("div.c-persona-card__detalles");
-            // Paseo cada una de las entradas
-            int i=1;
-            for (Element elem : entradas) {
-                
-                /*Referencia de estas dos lineas de código:
-                 * https://stackoverflow.com/questions/30408174/jsoup-how-to-get-href*/
-                
-                //Cogemos la url de detalles para posteriormente coger su departamento
-                Element link = elem.select("div.c-persona-card__detalles > a").first();
-                String url = link.absUrl("href");
-                
-                //Cogemos los elementos que necesitamos
-                String nombre = elem.getElementsByClass("c-persona-card__nombre").text();
-                String apellidos = elem.getElementsByClass("c-persona-card__apellidos").text();
-                String area = elem.getElementsByClass("c-persona-card__area").text();
 
+        // Busco todas las entradas que estan dentro de:
+        Elements entradas = doc.select("div.c-persona-card__detalles");
+        // Paseo cada una de las entradas
+        int i = 1;
+        for (Element elem : entradas) {
 
-                //Para sacar el Departamento debemos ir a otra url 
-                try {
-                    response = Jsoup.connect(url)
-                           .ignoreContentType(true)
-                           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")  
-                           .referrer("http://www.google.com")   
-                           .timeout(12000) 
-                           .followRedirects(true)
-                           .execute();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+            /*
+             * Referencia de estas dos lineas de código:
+             * https://stackoverflow.com/questions/30408174/jsoup-how-to-get-href
+             */
 
-                Document doc2 = null;
-                try {
-                    doc2 = response.parse();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                //Obtenemos el contenido donde está la información del profesor
-                Elements entrada= doc2.select("div.main-content");
-                //Cogemos el primer link de tipo "a"(href) que tiene la información sobre el departamento y sacamos su texto
-                Element link2= entrada.select("a").first();
-                String departamento = link2.text(); 
+            // Cogemos la url de detalles para posteriormente coger su departamento
+            Element link = elem.select("div.c-persona-card__detalles > a").first();
+            String url = link.absUrl("href");
 
-                // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
-                // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
-                //https://commons.apache.org/proper/commons-lang//apidocs/org/apache/commons/lang3/StringUtils.html#stripAccents-java.lang.String-
-                String [] profesor= {nombre +" "+ apellidos, area, departamento};
-                
-                profesores.add(profesor);
-                i++;
-                if(i==2) {
-                    dataTFG.put("1", new Object[] {"NombreApellidos", "Area","Departamento"});
-                    dataTFG.put("2",profesor);
-                }else {
-                    String id=Integer.toString(i);
-                    dataTFG.put(id,profesor);
-                }  
-                
-            }
-            
+            // Cogemos los elementos que necesitamos
+            String nombre = elem.getElementsByClass("c-persona-card__nombre").text();
+            String apellidos = elem.getElementsByClass("c-persona-card__apellidos").text();
+            String area = elem.getElementsByClass("c-persona-card__area").text();
+
+            // Para sacar el Departamento debemos ir a otra url
             try {
-                guardarDatosXLS(dataTFG);
-                guardarDatosCSV(profesores);
+                response = Jsoup.connect(url)
+                        .ignoreContentType(true)
+                        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+                        .referrer("http://www.google.com")
+                        .timeout(12000)
+                        .followRedirects(true)
+                        .execute();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
+            Document doc2 = null;
+            try {
+                doc2 = response.parse();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            // Obtenemos el contenido donde está la información del profesor
+            Elements entrada = doc2.select("div.main-content");
+            // Cogemos el primer link de tipo "a"(href) que tiene la información sobre el
+            // departamento y sacamos su texto
+            Element link2 = entrada.select("a").first();
+            String departamento = link2.text();
+
+            // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas
+            // HTML
+            // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
+            // https://commons.apache.org/proper/commons-lang//apidocs/org/apache/commons/lang3/StringUtils.html#stripAccents-java.lang.String-
+            String[] profesor = { nombre + " " + apellidos, area, departamento };
+
+            profesores.add(profesor);
+            i++;
+            if (i == 2) {
+                dataTFG.put("1", new Object[] { "NombreApellidos", "Area", "Departamento" });
+                dataTFG.put("2", profesor);
+            } else {
+                String id = Integer.toString(i);
+                dataTFG.put(id, profesor);
+            }
+
+        }
+
+        try {
+            guardarDatosXLS(dataTFG);
+            guardarDatosCSV(profesores);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
+
     /**
      * Metodo paara escribir los datos en el archivo csv.
+     * 
      * @param profesores
      * @throws IOException
      */
     public void guardarDatosCSV(List<String[]> profesores) throws IOException {
-        //https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx 
- 
+        // https://www.campusmvp.es/recursos/post/como-leer-y-escribir-archivos-csv-con-java.aspx
+
         String path = this.getClass().getClassLoader().getResource("").getPath();
-        String serverPath = path.substring(0, path.length()-17);
-        
+        String serverPath = path.substring(0, path.length() - 17);
+
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
         String fileName = "N4_Profesores.csv";
         File file = new File(completeDir + fileName);
         String absPath = file.getAbsolutePath();
-        CSVWriter writer = new CSVWriter(new FileWriter(absPath));      
+        CSVWriter writer = new CSVWriter(new FileWriter(absPath));
         writer.writeAll(profesores);
         writer.close();
         SistInfDataFactory.setInstanceData("CSV");
     }
+
     /**
      * Metodo para escribir los datos en el archivo XLS.
+     * 
      * @param dataTFG
      * @throws IOException
      */
     public void guardarDatosXLS(Map<String, Object[]> dataTFG) throws IOException {
-        //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+        // https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
         String path = this.getClass().getClassLoader().getResource("").getPath();
-        String serverPath = path.substring(0, path.length()-17);
-        
+        String serverPath = path.substring(0, path.length() - 17);
+
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
         String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
- 
-        String absPath = file.getAbsolutePath();       
+
+        String absPath = file.getAbsolutePath();
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
- 
-            Sheet hoja= workbook.getSheet(PROFESOR);
-      
+
+            Sheet hoja = workbook.getSheet(PROFESOR);
+
             Row rowCount;
-              
+
             Set<String> keyid = dataTFG.keySet();
-            
+
             int rowid = 0;
-            
-            //https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
+
+            // https://es.acervolima.com/como-escribir-datos-en-una-hoja-de-excel-usando-java/
             // writing the data into the sheets...
-      
+
             for (String key : keyid) {
-      
+
                 rowCount = hoja.createRow(rowid++);
                 Object[] objectArr = dataTFG.get(key);
                 int cellid = 0;
-      
+
                 for (Object obj : objectArr) {
                     Cell cell = rowCount.createCell(cellid++);
-                    cell.setCellValue((String)obj);
+                    cell.setCellValue((String) obj);
                 }
             }
- 
+
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);
             workbook.close();
@@ -382,21 +393,23 @@ public class ProfesoresView extends VerticalLayout {
             ex.printStackTrace();
         }
     }
+
     /**
-     * Metodo que despliega los datos de departamentos,areas y profesores para seleccionarlos.
+     * Metodo que despliega los datos de departamentos,areas y profesores para
+     * seleccionarlos.
      */
-    public void datosGraficas(){
+    public void datosGraficas() {
         H2 metricsTitle = new H2("Datos a mostrar");
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
         List<String> courses = new ArrayList<>();
-        //REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
-        HistoricProjectsView vista= new  HistoricProjectsView();
+        // REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
+        HistoricProjectsView vista = new HistoricProjectsView();
         for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
             courses.add(year - 1 + "/" + year);
         }
-        String[] colors =getRandomColors();
-        //Grafico
+        String[] colors = getRandomColors();
+        // Grafico
         ApexCharts lineChart = ApexChartsBuilder.get()
                 .withChart(ChartBuilder.get()
                         .withType(Type.line)
@@ -415,8 +428,8 @@ public class ProfesoresView extends VerticalLayout {
                 .withGrid(GridBuilder.get()
                         .withRow(RowBuilder.get()
                                 .withColors("#f3f3f3", "transparent")
-                                .withOpacity(0.5).build()
-                        ).build())
+                                .withOpacity(0.5).build())
+                        .build())
                 .withXaxis(XAxisBuilder.get()
                         .withCategories(courses)
                         .build())
@@ -424,11 +437,11 @@ public class ProfesoresView extends VerticalLayout {
                 .withColors(colors)
                 .build();
         lineChart.setWidth("800px");
-        
-        //Checkbox de areas
+
+        // Checkbox de areas
         Checkbox checkboxA = new Checkbox("Seleccionar todas las Areas");
-        List<String> areas= fachadaDatos.getAreas();
-       
+        List<String> areas = fachadaDatos.getAreas();
+
         CheckboxGroup<String> selectAreas = new CheckboxGroup<>();
         selectAreas.setLabel("Areas:");
         selectAreas.setItems(areas);
@@ -450,14 +463,14 @@ public class ProfesoresView extends VerticalLayout {
                 selectAreas.deselectAll();
             }
         });
-      //Checkbox de departamentos
+        // Checkbox de departamentos
         Checkbox checkboxD = new Checkbox("Seleccionar todos los departamentos");
-        List<String> departamentos= fachadaDatos.getDepartamentos();
+        List<String> departamentos = fachadaDatos.getDepartamentos();
         CheckboxGroup<String> selectDepart = new CheckboxGroup<>();
-        
+
         selectDepart.setLabel("Departamentos:");
         selectDepart.setItems(departamentos);
-           
+
         selectDepart.addValueChangeListener(event -> {
             if (event.getValue().size() == departamentos.size()) {
                 checkboxD.setValue(true);
@@ -468,49 +481,49 @@ public class ProfesoresView extends VerticalLayout {
             } else {
                 checkboxD.setIndeterminate(true);
             }
-            });
-            checkboxD.addValueChangeListener(event -> {
-                if (checkboxD.getValue()) {
-                    selectDepart.setValue(new HashSet<>(departamentos));
-                } else {
-                    selectDepart.deselectAll();
-                }
-         
+        });
+        checkboxD.addValueChangeListener(event -> {
+            if (checkboxD.getValue()) {
+                selectDepart.setValue(new HashSet<>(departamentos));
+            } else {
+                selectDepart.deselectAll();
+            }
 
         });
-            
-          //ComboBox con los profesores
-            ComboBox<String> filtroProfesores=new ComboBox<>("Indique el profesor");
-            List<String> profesores = fachadaDatos.getProfesores();
-            filtroProfesores.setItems(profesores);
-            HorizontalLayout profes= new HorizontalLayout();
 
-            filtroProfesores.addValueChangeListener(event -> {
-                profSelect.add(event.getValue());
-                
-                Button buton = new Button(event.getValue(),new Icon(VaadinIcon.CLOSE_SMALL));
-                buton.getElement().setAttribute("aria-label", "Close");
-                buton.addClickListener(event2 ->{
-                    profSelect.remove(event.getValue());
-                    profes.remove(buton);
-                    pintarGrafica(selectAreas.getValue(),selectDepart.getValue(),profSelect,lineChart);
-                });
-                profes.add(buton);
-                layout.addComponentAtIndex(11, profes);
+        // ComboBox con los profesores
+        ComboBox<String> filtroProfesores = new ComboBox<>("Indique el profesor");
+        List<String> profesores = fachadaDatos.getProfesores();
+        filtroProfesores.setItems(profesores);
+        HorizontalLayout profes = new HorizontalLayout();
+
+        filtroProfesores.addValueChangeListener(event -> {
+            profSelect.add(event.getValue());
+
+            Button buton = new Button(event.getValue(), new Icon(VaadinIcon.CLOSE_SMALL));
+            buton.getElement().setAttribute("aria-label", "Close");
+            buton.addClickListener(event2 -> {
+                profSelect.remove(event.getValue());
+                profes.remove(buton);
+                pintarGrafica(selectAreas.getValue(), selectDepart.getValue(), profSelect, lineChart);
             });
-                       
-            //Boton para actualizar los datos de las graficas
-            Button actualizar= new Button("Actualizar gráfica");
-            actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            actualizar.addClickListener(event -> {
-                pintarGrafica(selectAreas.getValue(),selectDepart.getValue(),profSelect,lineChart);
-            });
-           
-           layout.add(selectAreas,checkboxA,selectDepart,checkboxD,filtroProfesores,actualizar,lineChart);  
-    } 
-    
+            profes.add(buton);
+            layout.addComponentAtIndex(11, profes);
+        });
+
+        // Boton para actualizar los datos de las graficas
+        Button actualizar = new Button("Actualizar gráfica");
+        actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        actualizar.addClickListener(event -> {
+            pintarGrafica(selectAreas.getValue(), selectDepart.getValue(), profSelect, lineChart);
+        });
+
+        layout.add(selectAreas, checkboxA, selectDepart, checkboxD, filtroProfesores, actualizar, lineChart);
+    }
+
     /**
      * Metodo para obtener el array de colores aleatorios.
+     * 
      * @return String[] colores
      */
     private String[] getRandomColors() {
@@ -524,73 +537,83 @@ public class ProfesoresView extends VerticalLayout {
         }
         return colors;
     }
- 
+
     /**
-     * Metodo para actualizar y pintar la grafica cuando el usuario ha elegido los parametros.
+     * Metodo para actualizar y pintar la grafica cuando el usuario ha elegido los
+     * parametros.
+     * 
      * @param areas
      * @param departamentos
      * @param profSelect
-     * @param lineChart grafico
+     * @param lineChart     grafico
      */
     @SuppressWarnings("unchecked")
-    public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect, ApexCharts lineChart) {
-        //Creamos el array de series
-        Series[] series = new Series[departamentos.size()+areas.size()+profSelect.size()];
-        //variable para indicar el index del array
-        int n=0;
-        //Cogemos los tfgs de los departamentos
-        for(String dep:departamentos) { 
-            series[n]=new Series(dep,obtenerTFGSañoDepartamento(dep).toArray());      
+    public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect,
+            ApexCharts lineChart) {
+        // Creamos el array de series
+        Series[] series = new Series[departamentos.size() + areas.size() + profSelect.size()];
+        // variable para indicar el index del array
+        int n = 0;
+        // Cogemos los tfgs de los departamentos
+        for (String dep : departamentos) {
+            series[n] = new Series(dep, obtenerTFGSañoDepartamento(dep).toArray());
             n++;
-         }
-      //Cogemos los tfgs de las areas
-         for(String area:areas) {
-             series[n]=new Series(area,obtenerTFGSañoArea(area).toArray());
-             n++;
-         }
-         
-         for (String profe: profSelect) {
-             series[n]=new Series(profe,obtenerTFGSañoProfesor(profe).toArray());
-             n++;
-             
-         }  
-         lineChart.updateSeries(series);
+        }
+        // Cogemos los tfgs de las areas
+        for (String area : areas) {
+            series[n] = new Series(area, obtenerTFGSañoArea(area).toArray());
+            n++;
+        }
+
+        for (String profe : profSelect) {
+            series[n] = new Series(profe, obtenerTFGSañoProfesor(profe).toArray());
+            n++;
+
+        }
+        lineChart.updateSeries(series);
     }
+
     /**
-     * Metodo que obtiene el array con los TFGs del profesor que se le pasa por parametro.
+     * Metodo que obtiene el array con los TFGs del profesor que se le pasa por
+     * parametro.
+     * 
      * @param profesor
      * @return list<Integer> de tfgs por curso
      */
     private List<Integer> obtenerTFGSañoProfesor(String profesor) {
         List<Integer> TFGs = new ArrayList<>();
-        //Datos ya obtenidos en historicos
-        HistoricProjectsView vista= new  HistoricProjectsView();
-           //Formato de la fecha
+        // Datos ya obtenidos en historicos
+        HistoricProjectsView vista = new HistoricProjectsView();
+        // Formato de la fecha
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //Bucle para sacar los TFGs que tiene asignado un profesor por cada año, siendo el año de presentacion del tfg el curso en el que se incluye
-        //Ejemplo: Fecha de presentacion 10-01-2021: (Curso 2020-2021)
+        // Bucle para sacar los TFGs que tiene asignado un profesor por cada año, siendo
+        // el año de presentacion del tfg el curso en el que se incluye
+        // Ejemplo: Fecha de presentacion 10-01-2021: (Curso 2020-2021)
 
-        for(int año=vista.minCourse-1;año<vista.maxCourse;año++) {
-            int num1=0;
-            //El curso va del 1 de septiembre de un año al siguiente
-            String fechaIni=año+"-09-01";
-            String fechaFin=(año+1)+"-09-01";
-            LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
-            LocalDate fechaFIN = LocalDate.parse(fechaFin,formato);
-            for(int i=0;i<vista.dataHistoric.size();i++) {
-                if(vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
-                    && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
-                    && vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
-                    num1++; 
+        for (int año = vista.minCourse - 1; año < vista.maxCourse; año++) {
+            int num1 = 0;
+            // El curso va del 1 de septiembre de un año al siguiente
+            String fechaIni = año + "-09-01";
+            String fechaFin = (año + 1) + "-09-01";
+            LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
+            LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
+            for (int i = 0; i < vista.dataHistoric.size(); i++) {
+                if (vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
+                        && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
+                        && vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
+                    num1++;
                 }
-           }
-           TFGs.add(num1); 
+            }
+            TFGs.add(num1);
         }
-        return TFGs;   
-        
+        return TFGs;
+
     }
+
     /**
-     * Metodo que obtiene el array con los TFGs por curso del departamento que se le pasa por parametro.
+     * Metodo que obtiene el array con los TFGs por curso del departamento que se le
+     * pasa por parametro.
+     * 
      * @param departamento
      * @return list<Integer> de tfgs por curso
      */
@@ -599,48 +622,50 @@ public class ProfesoresView extends VerticalLayout {
         List<Integer> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
-        int n=0;
-            for(String profe: profes) {
-                //Obtenemos los tfgs de los profesores que pertenecen al departamento
-                List<Integer> tfgprofes=obtenerTFGSañoProfesor(profe);
-                if(n==0) {
-                    //Si es el primer profesor se añade al array
-                    n++;
-                    TFGs.addAll(tfgprofes); 
-                }else {
-                    //Si no es el primero se suma al anterior
-                    for(int i=0;i<TFGs.size();i++) {
-                        TFGs.set(i, TFGs.get(i)+tfgprofes.get(i));
-                    }
-                }          
+        int n = 0;
+        for (String profe : profes) {
+            // Obtenemos los tfgs de los profesores que pertenecen al departamento
+            List<Integer> tfgprofes = obtenerTFGSañoProfesor(profe);
+            if (n == 0) {
+                // Si es el primer profesor se añade al array
+                n++;
+                TFGs.addAll(tfgprofes);
+            } else {
+                // Si no es el primero se suma al anterior
+                for (int i = 0; i < TFGs.size(); i++) {
+                    TFGs.set(i, TFGs.get(i) + tfgprofes.get(i));
+                }
+            }
         }
         return TFGs;
-        
+
     }
+
     /**
-     * Metodo que obtiene el array con los TFGs por curso del area que se le pasa por parametro.
-     * @param area 
+     * Metodo que obtiene el array con los TFGs por curso del area que se le pasa
+     * por parametro.
+     * 
+     * @param area
      * @return list<Integer> de tfgs por curso
      */
     private List<Integer> obtenerTFGSañoArea(String area) {
-     // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
+        // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
         List<Integer> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeArea(area));
-        int n=0;
-            for(String profe: profes) {
-                List<Integer> tfgprofes=obtenerTFGSañoProfesor(profe);
-                if(n==0) {
-                    n++;
-                    TFGs.addAll(tfgprofes); 
-                }else {
-                    for(int i=0;i<TFGs.size();i++) {
-                        TFGs.set(i, TFGs.get(i)+tfgprofes.get(i));
-                    }
-                }          
+        int n = 0;
+        for (String profe : profes) {
+            List<Integer> tfgprofes = obtenerTFGSañoProfesor(profe);
+            if (n == 0) {
+                n++;
+                TFGs.addAll(tfgprofes);
+            } else {
+                for (int i = 0; i < TFGs.size(); i++) {
+                    TFGs.set(i, TFGs.get(i) + tfgprofes.get(i));
+                }
+            }
         }
         return TFGs;
     }
-    
-    
+
 }

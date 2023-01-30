@@ -9,13 +9,13 @@ import ubu.digit.ui.views.InformationView;
 /**
  * Punto de entrada de la aplicación de Spring boot
  */
-@SpringBootApplication(scanBasePackageClasses = { InformationView.class, Application.class})
+@SpringBootApplication(scanBasePackageClasses = { InformationView.class, Application.class })
 public class Application extends SpringBootServletInitializer {
-	
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder){
-		return builder.sources(Application.class);
-	}
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(Application.class);
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

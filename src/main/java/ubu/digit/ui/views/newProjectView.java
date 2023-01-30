@@ -1,6 +1,5 @@
 package ubu.digit.ui.views;
 
-
 import static ubu.digit.util.Constants.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +42,7 @@ import ubu.digit.ui.entity.Formularios;
 import ubu.digit.util.ExternalProperties;
 
 /**
- * Vista de proyectos históricos.
+ * Vista para subir nuevos proyectos, por parte de administradores y profesores.
  * 
  * @author David Renedo Gil
  */
@@ -52,311 +51,320 @@ import ubu.digit.util.ExternalProperties;
 
 public class newProjectView extends VerticalLayout {
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 8431807779365780674L;
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 8431807779365780674L;
 
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(newProjectView.class.getName());
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(newProjectView.class.getName());
 
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "Report";
-	/**
-	 * Fichero de configuración.
-	 */
-	private ExternalProperties config;
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "Report";
+    /**
+     * Fichero de configuración.
+     */
+    private ExternalProperties config;
 
-	/**
-	 * Formateador de números.
-	 */
-	private NumberFormat numberFormatter;
-	
-	/**
-	 * Formateador de fechas.
-	 */
-	private transient DateTimeFormatter dateTimeFormatter;
+    /**
+     * Formateador de números.
+     */
+    private NumberFormat numberFormatter;
 
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	private SistInfDataAbstract fachadaDatos;
-	
-	/**
-	 * Constructor.
-	 * @throws SQLException 
-	 */
-	public newProjectView(){
-	    
+    /**
+     * Formateador de fechas.
+     */
+    private transient DateTimeFormatter dateTimeFormatter;
+
+    /**
+     * Fachada para obtener los datos
+     */
+    private SistInfDataAbstract fachadaDatos;
+
+    /**
+     * Constructor.
+     * 
+     * @throws SQLException
+     */
+    public newProjectView() {
+
         fachadaDatos = SistInfDataFactory.getInstanceData();
-		config = ExternalProperties.getInstance("/config.properties", false);
-		numberFormatter = NumberFormat.getInstance();
-		numberFormatter.setMaximumFractionDigits(2);
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
-		setMargin(true);
-		setSpacing(true);
+        config = ExternalProperties.getInstance("/config.properties", false);
+        numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(2);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-		NavigationBar bat = new NavigationBar();
-		bat.buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		add(bat);
-		introducirDatos();
-		Footer footer = new Footer("");
-		add(footer);
-	}
+        setMargin(true);
+        setSpacing(true);
 
-	/**
-	 * Metodo que permite la introducción de todos los datos del TFG y los guarda.
-	 */
+        NavigationBar bat = new NavigationBar();
+        bat.buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        add(bat);
+        introducirDatos();
+        Footer footer = new Footer("");
+        add(footer);
+    }
+
+    /**
+     * Metodo que permite la introducción de todos los datos del TFG y los guarda.
+     */
     private void introducirDatos() {
-        
-        
-        TextArea titulo =new TextArea("Indique un nombre para el TFG");
-        titulo.setWidth("40%");       
-        titulo.addValueChangeListener(event->{
-           titulo.setValue(event.getValue()); 
+
+        TextArea titulo = new TextArea("Indique un nombre para el TFG");
+        titulo.setWidth("40%");
+        titulo.addValueChangeListener(event -> {
+            titulo.setValue(event.getValue());
         });
-        
-        TextArea descripcion =new TextArea("Indique una descripción para el TFG");
+
+        TextArea descripcion = new TextArea("Indique una descripción para el TFG");
         descripcion.setWidth("40%");
         descripcion.setHeight("30%");
-        descripcion.addValueChangeListener(event->{
-            descripcion.setValue(event.getValue()); 
+        descripcion.addValueChangeListener(event -> {
+            descripcion.setValue(event.getValue());
         });
-        
+
         List<String> profesores = fachadaDatos.getProfesores();
-        
-        ComboBox<String> tutor1=new ComboBox<>("Indique el tutor 1 del TFG");
+
+        ComboBox<String> tutor1 = new ComboBox<>("Indique el tutor 1 del TFG");
         tutor1.setAllowCustomValue(true);
-        tutor1.setWidth("40%");      
+        tutor1.setWidth("40%");
         tutor1.setItems(profesores);
-        tutor1.setValue((String)UI.getCurrent().getSession().getAttribute("tutorRegistrado"));
+        tutor1.setValue((String) UI.getCurrent().getSession().getAttribute("tutorRegistrado"));
         tutor1.addValueChangeListener(event -> {
             tutor1.setValue(event.getValue());
         });
         tutor1.addCustomValueSetListener(event -> {
             tutor1.setValue(event.getDetail());
-            if(!profesores.contains(tutor1.getValue()))
-                Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");            
-           
+            if (!profesores.contains(tutor1.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");
+
         });
-        ComboBox<String> tutor2=new ComboBox<>("Indique el tutor 2 del TFG");
+        ComboBox<String> tutor2 = new ComboBox<>("Indique el tutor 2 del TFG");
         tutor2.setAllowCustomValue(true);
         tutor2.setWidth("40%");
         tutor2.setItems(profesores);
         tutor2.addValueChangeListener(event -> {
-            tutor2.setValue(event.getValue());          
+            tutor2.setValue(event.getValue());
         });
         tutor2.addCustomValueSetListener(event -> {
             tutor2.setValue(event.getDetail());
-            if(!profesores.contains(tutor2.getValue()))
-                Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");   
+            if (!profesores.contains(tutor2.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor3=new ComboBox<>("Indique el tutor 3 del TFG");
+        ComboBox<String> tutor3 = new ComboBox<>("Indique el tutor 3 del TFG");
         tutor3.setAllowCustomValue(true);
         tutor3.setWidth("40%");
         tutor3.setItems(profesores);
         tutor3.addValueChangeListener(event -> {
-            tutor3.setValue(event.getValue());          
+            tutor3.setValue(event.getValue());
         });
         tutor3.addCustomValueSetListener(event -> {
             tutor3.setValue(event.getDetail());
-            if(!profesores.contains(tutor3.getValue()))
-                Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");   
+            if (!profesores.contains(tutor3.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");
         });
-        
-        TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
+
+        TextArea alumno1 = new TextArea("Indique el alumno 1 del TFG");
         alumno1.setWidth("40%");
         alumno1.setValue("Aalumnos sin asignar");
-        alumno1.addValueChangeListener(event->{
-            alumno1.setValue(event.getValue()); 
+        alumno1.addValueChangeListener(event -> {
+            alumno1.setValue(event.getValue());
         });
-        TextArea alumno2 =new TextArea("Indique el alumno 2 del TFG");
+        TextArea alumno2 = new TextArea("Indique el alumno 2 del TFG");
         alumno2.setWidth("40%");
-        alumno2.addValueChangeListener(event->{
-            alumno2.setValue(event.getValue()); 
+        alumno2.addValueChangeListener(event -> {
+            alumno2.setValue(event.getValue());
         });
 
-        //Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio de curso de ese mismo año
-        //Indicarlo por defecto 
-       //Fecha de hoy
-        LocalDate today=LocalDate.now();
-        
-        String fechaIni=today.now().getYear()+"-09-01";
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fechaINI = LocalDate.parse(fechaIni,formato);
+        // Cogemos la fecha de hoy y comprobamos si está después de la fecha de inicio
+        // de curso de ese mismo año
+        // Indicarlo por defecto
+        // Fecha de hoy
+        LocalDate today = LocalDate.now();
 
-        valoresPorDefecto(today,fechaINI,titulo);
-        
-        //Fecha de asignacion
-        DatePicker fechaAsignacion=new DatePicker("Indique una fecha de oferta/asignacion del TFG");
+        String fechaIni = today.now().getYear() + "-09-01";
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
+
+        valoresPorDefecto(today, fechaINI, titulo);
+
+        // Fecha de asignacion
+        DatePicker fechaAsignacion = new DatePicker("Indique una fecha de oferta/asignacion del TFG");
         fechaAsignacion.setLocale(getLocale());
-        //Asignamos por defecto la fecha del día de subida
+        // Asignamos por defecto la fecha del día de subida
         fechaAsignacion.setValue(today);
         fechaAsignacion.setWidth("40%");
-        //Si se desea modificar el curso
-        fechaAsignacion.addValueChangeListener(event->{
-            fechaAsignacion.setValue(event.getValue()); 
+        // Si se desea modificar el curso
+        fechaAsignacion.addValueChangeListener(event -> {
+            fechaAsignacion.setValue(event.getValue());
         });
-        //Indicando que los campos son obligatorios
-        Binder<Formularios> binder= new Binder<>(Formularios.class);
+        // Indicando que los campos son obligatorios
+        Binder<Formularios> binder = new Binder<>(Formularios.class);
         binder.forField(titulo).asRequired("Debes indicar un titulo").bind("titulo");
         binder.forField(descripcion).asRequired("Debes indicar una descripción").bind("descripcion");
         binder.forField(tutor1).asRequired("Debes indicar un tutor1").bind("tutor1");
         binder.forField(alumno1).asRequired("Debes indicar un alumno").bind("alumno1");
-        
-        Button crear= new Button("Crear TFG");
-        crear.addClickListener(event ->{
-            if(binder.validate().isOk()) {
-                if(tutor1.getValue().equals(tutor2.getValue())) {
+
+        Button crear = new Button("Crear TFG");
+        crear.addClickListener(event -> {
+            if (binder.validate().isOk()) {
+                if (tutor1.getValue().equals(tutor2.getValue())) {
                     LOGGER.info("Tutor1 y tutor2 no pueden tener el mismo valor");
                     Notification notif2 = Notification.show("Tutor1 y tutor2 no pueden tener el mismo valor");
-                   notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                }else {        
-                    
+                    notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                } else {
+
                     Notification.show("Se ha añadido correctamente el TFG propuesto");
-                    escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
-                    alumno1.getValue(),alumno2.getValue(),fechaAsignacion);
+                    escribirDatos(titulo.getValue(), descripcion.getValue(), tutor1.getValue(), tutor2.getValue(),
+                            tutor3.getValue(),
+                            alumno1.getValue(), alumno2.getValue(), fechaAsignacion);
                     try {
-                        Thread.sleep(2000);  // retraso en milisegundos
+                        Thread.sleep(2000); // retraso en milisegundos
                         UI.getCurrent().getPage().reload();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    
+
                 }
-                
-            }else {
+
+            } else {
                 LOGGER.info("FALTAN PARAMETROS POR RELLENAR");
             }
         });
-        add(titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2,fechaAsignacion,crear);
-       
-        
+        add(titulo, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, fechaAsignacion, crear);
+
     }
+
     private void valoresPorDefecto(LocalDate today, LocalDate fechaINI, TextArea titulo) {
-        if(today.now().isAfter(fechaINI)) {
-           
-           //Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
-           // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
-           String año=String.valueOf(today.getYear()) ;
-           titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
-        }else {
-            
-            String año=String.valueOf(today.getYear()-1) ;
-            titulo.setValue("GII "+año.substring(2,4) +"."+ obtenerNumeroTFG(año));
+        if (today.now().isAfter(fechaINI)) {
+
+            // Para el titulo hacemos lo mismo y del año 2022 cogemos solo el '22'
+            // ya que queremos indicar por defecto el valor GII 'año'-'numeroSiguienteTfg'
+            String año = String.valueOf(today.getYear());
+            titulo.setValue("GII " + año.substring(2, 4) + "." + obtenerNumeroTFG(año));
+        } else {
+
+            String año = String.valueOf(today.getYear() - 1);
+            titulo.setValue("GII " + año.substring(2, 4) + "." + obtenerNumeroTFG(año));
         }
 
     }
 
     /**
      * Obtiene el número que le corresponde al siguiente TFG.
+     * 
      * @return numero del TFG
      */
     private int obtenerNumeroTFG(String año) {
-        int numeroTFG=0;
-        String titulo=fachadaDatos.getUltimoTFG();
-        //Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de GII 22.XX y ahora estamos en el curso 2023
-        //El nuevo numero sería el 0
+        int numeroTFG = 0;
+        String titulo = fachadaDatos.getUltimoTFG();
+        // Comprobamos si es un TFG de un curso nuevo, es decir, si el último TFG es de
+        // GII 22.XX y ahora estamos en el curso 2023
+        // El nuevo numero sería el 0
 
-        //Si es un año distino se inicia en 0
-        if(Integer.parseInt("20"+titulo.substring(4,6))!=Integer.parseInt(año)) {
-            numeroTFG=0;
-        }else
-            //Mismo año, se suma uno
-            numeroTFG=(Integer.parseInt(titulo.substring(7,9))+1);
+        // Si es un año distino se inicia en 0
+        if (Integer.parseInt("20" + titulo.substring(4, 6)) != Integer.parseInt(año)) {
+            numeroTFG = 0;
+        } else
+            // Mismo año, se suma uno
+            numeroTFG = (Integer.parseInt(titulo.substring(7, 9)) + 1);
 
         return numeroTFG;
     }
 
     /**
      * Metodo que guarda los datos en un Array [].
-     * @param titulo titulo del tfg
-     * @param descripcion descripcion del tfg
-     * @param tutor1 tutor1
-     * @param tutor2 tutor2
-     * @param tutor3 tutor3
-     * @param alumno1 alumno1
-     * @param alumno2 alumno2
+     * 
+     * @param titulo          titulo del tfg
+     * @param descripcion     descripcion del tfg
+     * @param tutor1          tutor1
+     * @param tutor2          tutor2
+     * @param tutor3          tutor3
+     * @param alumno1         alumno1
+     * @param alumno2         alumno2
      * @param fechaAsignacion curso
      */
-    private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3, String alumno1, String alumno2,
+    private void escribirDatos(String titulo, String descripcion, String tutor1, String tutor2, String tutor3,
+            String alumno1, String alumno2,
             DatePicker fechaAsignacion) {
-        String fecha=cambiarFormato(fechaAsignacion);
-        String [] TFG= {titulo,descripcion,tutor1,tutor2,tutor3,alumno1,alumno2," ",fecha,"Pendiente"};
+        String fecha = cambiarFormato(fechaAsignacion);
+        String[] TFG = { titulo, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, " ", fecha, "Pendiente" };
         try {
             guardarDatosXLS(TFG);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
     }
-    
+
     /**
      * Cambiamos el formata en el que esta la fecha de YYYY-MM-DD a DD/MM/YYYY.
+     * 
      * @param fecha
      * @return string con la fecha
      */
     private String cambiarFormato(DatePicker fecha) {
-        int year=fecha.getValue().getYear();
-        int month=fecha.getValue().getMonthValue();
-        int day =fecha.getValue().getDayOfMonth();
-      //Una fecha con un día o menos menor que diez se guardaría como 1/1/2023 en lugar de 01/01/2023 que es como queremos
-        String monthBien="";
-        String dayBien="";
-        if(month<10) {
-            monthBien="0"+month;
-        }else {
-            monthBien=String.valueOf(month);
+        int year = fecha.getValue().getYear();
+        int month = fecha.getValue().getMonthValue();
+        int day = fecha.getValue().getDayOfMonth();
+        // Una fecha con un día o menos menor que diez se guardaría como 1/1/2023 en
+        // lugar de 01/01/2023 que es como queremos
+        String monthBien = "";
+        String dayBien = "";
+        if (month < 10) {
+            monthBien = "0" + month;
+        } else {
+            monthBien = String.valueOf(month);
         }
-        if(day<10) {
-            dayBien="0"+day;
-        }else {
-            dayBien=String.valueOf(day);
+        if (day < 10) {
+            dayBien = "0" + day;
+        } else {
+            dayBien = String.valueOf(day);
         }
-        String fechaFormat=dayBien+"/"+monthBien+"/"+ String.valueOf(year);
+        String fechaFormat = dayBien + "/" + monthBien + "/" + String.valueOf(year);
         return fechaFormat;
     }
-    
+
     /**
      * Metodo para escribir los datos en el archivo XLS.
+     * 
      * @param tFG
      * @throws IOException
      */
     public void guardarDatosXLS(String[] TFG) throws IOException {
-        //https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
+        // https://www.codejava.net/coding/java-example-to-update-existing-excel-files-using-apache-poi
         String path = this.getClass().getClassLoader().getResource("").getPath();
-        String serverPath = path.substring(0, path.length()-17);
-        
+        String serverPath = path.substring(0, path.length() - 17);
+
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
         String fileName = NOMBRE_BASES;
         File file = new File(completeDir + fileName);
-        
-        String absPath = file.getAbsolutePath();       
+
+        String absPath = file.getAbsolutePath();
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
-       
-            Sheet hoja= workbook.getSheet(PROYECTO);
+
+            Sheet hoja = workbook.getSheet(PROYECTO);
             int rowid = hoja.getLastRowNum();
 
             Row fila = hoja.createRow(++rowid);
             Object[] objectArr = TFG;
-            
+
             int cellid = 0;
-      
+
             for (Object obj : objectArr) {
                 Cell cell = fila.createCell(cellid++);
-                cell.setCellValue((String)obj);
+                cell.setCellValue((String) obj);
             }
- 
+
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);
             workbook.close();
@@ -368,6 +376,4 @@ public class newProjectView extends VerticalLayout {
         }
     }
 
-    
-	
 }

@@ -39,348 +39,353 @@ import static ubu.digit.util.Constants.*;
  */
 @Route(value = "active-projects")
 @PageTitle("Proyectos activos")
-public class ActiveProjectsView extends VerticalLayout{
+public class ActiveProjectsView extends VerticalLayout {
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 8857805864102975132L;
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 8857805864102975132L;
 
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ActiveProjectsView.class.getName());
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActiveProjectsView.class.getName());
 
-	/**
-	 * Nombre de la vista.
-	 */
-	public static final String VIEW_NAME = "active-projects";
+    /**
+     * Nombre de la vista.
+     */
+    public static final String VIEW_NAME = "active-projects";
 
-	/**
-	 * Tabla de proyectos.
-	 */
-	private Grid<ActiveProject> table;
-	
-	/**
-	 * Lista con los proyectos activos
-	 */
-	List<ActiveProject> dataActiveProjects;
-	
-	/**
-	 * Lista con los proyectos activos que se usarán el el grid
-	 * En este los tutores y alumnos se incluyen juntos en una columna.
-	 */
-	List<ActiveProject> dataActiveProjectsGrid;
-	
-	/**
-	 * Lista con los proyectos activos filtrados 
-	 */
-	List<ActiveProject> dataFilteredGrid;
+    /**
+     * Tabla de proyectos.
+     */
+    private Grid<ActiveProject> table;
 
-	/**
-	 * Campo de texto para filtrar por proyecto.
-	 */
-	private TextField projectFilter;
+    /**
+     * Lista con los proyectos activos
+     */
+    List<ActiveProject> dataActiveProjects;
 
-	/**
-	 * Campo de texto para filtrar por descripción.
-	 */
-	private TextField descriptionFilter;
+    /**
+     * Lista con los proyectos activos que se usarán el el grid
+     * En este los tutores y alumnos se incluyen juntos en una columna.
+     */
+    List<ActiveProject> dataActiveProjectsGrid;
 
-	/**
-	 * Campo de texto para filtrar por tutor.
-	 */
-	private TextField tutorsFilter;
+    /**
+     * Lista con los proyectos activos filtrados
+     */
+    List<ActiveProject> dataFilteredGrid;
 
-	/**
-	 * Campo de texto para filtrar por alumno.
-	 */
-	private TextField studentsFilter;
+    /**
+     * Campo de texto para filtrar por proyecto.
+     */
+    private TextField projectFilter;
 
-	/**
-	 * Campo de texto para filtrar por curso.
-	 */
-	private TextField courseFilter;
-	
-	/**
-	 *  Fachada para obtener los datos
-	 */
-	private SistInfDataAbstract fachadaDatos;
-	/**
+    /**
+     * Campo de texto para filtrar por descripción.
+     */
+    private TextField descriptionFilter;
+
+    /**
+     * Campo de texto para filtrar por tutor.
+     */
+    private TextField tutorsFilter;
+
+    /**
+     * Campo de texto para filtrar por alumno.
+     */
+    private TextField studentsFilter;
+
+    /**
+     * Campo de texto para filtrar por curso.
+     */
+    private TextField courseFilter;
+
+    /**
+     * Fachada para obtener los datos
+     */
+    private SistInfDataAbstract fachadaDatos;
+    /**
      * Formateador de fechas.
      */
     public transient DateTimeFormatter dateTimeFormatter;
 
-	/**
-	 * Constructor.
-	 */
-	public ActiveProjectsView() {
-		
-		fachadaDatos = SistInfDataFactory.getInstanceData();
-		dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		addClassName("active-projects-view");
-		setMargin(true);
-		setSpacing(true);
-		
-		NavigationBar bat = new NavigationBar();
-		bat.buttonActive.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		add(bat);
+    /**
+     * Constructor.
+     */
+    public ActiveProjectsView() {
 
-		createDataModel();
-		CreateDataModelToGrid();
-		createMetrics();
-		createFilters();
-		createCurrentProjectsTable();
-		add(table);
-		
-		Footer footer = new Footer("N2_Proyecto.csv");
-		add(footer);
-	}
-	/**
-	 * Crea las métricas de los proyectos activos.
-	 */
-	private void createMetrics() {
-		H1 metricsTitle = new H1(INFO_ESTADISTICA);
-		metricsTitle.addClassName("lbl-title");
-		add(metricsTitle);
+        fachadaDatos = SistInfDataFactory.getInstanceData();
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        addClassName("active-projects-view");
+        setMargin(true);
+        setSpacing(true);
 
-		try {
-			Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
-			Label totalProjects = new Label("- Número total de proyectos: " + totalProjectsNumber.intValue());
+        NavigationBar bat = new NavigationBar();
+        bat.buttonActive.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        add(bat);
 
-			Number totalFreeProjectNumber = fachadaDatos.getTotalFreeProject();
-			Label totalFreeProject = new Label(
-					"- Número total de proyectos sin asignar: " + totalFreeProjectNumber.intValue());
-			Label aalumnos = new Label("Buscar la cadena 'Aalumnos sin asignar' en columna Alumnos.");
-			
-			Number totalStudentNumber = fachadaDatos.getTotalNumber(APELLIDOS_NOMBRE, ALUMNO);
-			Label totalStudent = new Label("- Número total de alumnos: " + totalStudentNumber.intValue());
+        createDataModel();
+        CreateDataModelToGrid();
+        createMetrics();
+        createFilters();
+        createCurrentProjectsTable();
+        add(table);
 
-			String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
-			Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
-			Label totalTutor = new Label("- Número total de tutores involucrados: " + totalTutorNumber.intValue());
+        Footer footer = new Footer("N2_Proyecto.csv");
+        add(footer);
+    }
 
-			add(totalProjects, totalFreeProject, aalumnos, totalStudent, totalTutor);
-		} catch (Exception e) {
-			LOGGER.error("Error en estadísticas", e);
-		}
-	}
+    /**
+     * Crea las métricas de los proyectos activos.
+     */
+    private void createMetrics() {
+        H1 metricsTitle = new H1(INFO_ESTADISTICA);
+        metricsTitle.addClassName("lbl-title");
+        add(metricsTitle);
 
-	/**
-	 * Crea los filtros de la tabla.
-	 */
-	private void createFilters() {
-		H1 filtersTitle = new H1(FILTROS);
-		filtersTitle.addClassName(TITLE_STYLE);
-		add(filtersTitle);
+        try {
+            Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
+            Label totalProjects = new Label("- Número total de proyectos: " + totalProjectsNumber.intValue());
 
-		HorizontalLayout filters = new HorizontalLayout();
-		filters.setSpacing(true);
-		filters.setMargin(false);
-		
-		projectFilter = new TextField("Filtrar por proyectos:");
-		projectFilter.setWidth("300px");
-		projectFilter.addValueChangeListener(event -> {
-			if(!projectFilter.isEmpty()) {
-				applyFilter("title", event.getValue());
-			}else {
-				table.setItems(dataActiveProjectsGrid);
-			}
-		});
+            Number totalFreeProjectNumber = fachadaDatos.getTotalFreeProject();
+            Label totalFreeProject = new Label(
+                    "- Número total de proyectos sin asignar: " + totalFreeProjectNumber.intValue());
+            Label aalumnos = new Label("Buscar la cadena 'Aalumnos sin asignar' en columna Alumnos.");
 
-		descriptionFilter = new TextField("Filtrar por descripción:");
-		descriptionFilter.setWidth("300px");
-		descriptionFilter.addValueChangeListener(event -> {
-			if(!descriptionFilter.isEmpty()) {
-				applyFilter("description", event.getValue());
-			}else {
-				table.setItems(dataActiveProjectsGrid);
-			}
-		});
+            Number totalStudentNumber = fachadaDatos.getTotalNumber(APELLIDOS_NOMBRE, ALUMNO);
+            Label totalStudent = new Label("- Número total de alumnos: " + totalStudentNumber.intValue());
 
-		tutorsFilter = new TextField("Filtrar por tutores:");
-		tutorsFilter.setWidth("300px");
-		tutorsFilter.addValueChangeListener(event -> {
-			if(!tutorsFilter.isEmpty()) {
-				applyFilter("tutor", event.getValue());
-			}else {
-				table.setItems(dataActiveProjectsGrid);
-			}
-		});
+            String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
+            Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
+            Label totalTutor = new Label("- Número total de tutores involucrados: " + totalTutorNumber.intValue());
 
-		studentsFilter = new TextField("Filtrar por alumnos:");
-		studentsFilter.setWidth("300px");
-		studentsFilter.addValueChangeListener(event -> {
-			if(!studentsFilter.isEmpty()) {
-				applyFilter("student", event.getValue());
-			}else {
-				table.setItems(dataActiveProjectsGrid);
-			}
-		});
+            add(totalProjects, totalFreeProject, aalumnos, totalStudent, totalTutor);
+        } catch (Exception e) {
+            LOGGER.error("Error en estadísticas", e);
+        }
+    }
 
-		courseFilter = new TextField("Filtrar por fecha:");
-		courseFilter.setWidth("300px");
-		courseFilter.addValueChangeListener(event -> {
-			if(!courseFilter.isEmpty()) {
-				applyFilter("course", event.getValue());
-			}else {
-				table.setItems(dataActiveProjectsGrid);
-			}
-		});
-		
-		filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter, courseFilter);
-		add(filters);
-	}
+    /**
+     * Crea los filtros de la tabla.
+     */
+    private void createFilters() {
+        H1 filtersTitle = new H1(FILTROS);
+        filtersTitle.addClassName(TITLE_STYLE);
+        add(filtersTitle);
 
-	/**
-	 * Crea el modelo de datos de los proyectos activos.
-	 */
-	private void createDataModel() { 
-		//Se obtienen los datos del modelo
-	    @SuppressWarnings("rawtypes")
-	    ArrayList listaDataModel = fachadaDatos.getDataModel(dateTimeFormatter);
-		dataActiveProjects = new ArrayList<ActiveProject>();
-		
-		for(int i=0;i<listaDataModel.size();i++) {
-			ActiveProject actives = new ActiveProject((String)listaDataModel.get(i),(String) listaDataModel.get(++i), 
-			        (String)listaDataModel.get(++i),(String)listaDataModel.get(++i), (String)listaDataModel.get(++i), (String)listaDataModel.get(++i),
-			        (String)listaDataModel.get(++i),(String) listaDataModel.get(++i),(LocalDate) listaDataModel.get(++i), (String)listaDataModel.get(++i));
-			dataActiveProjects.add(actives);
-		}
-	}
-	
-	/**
-	 * Crea la tabla de proyectos activos.
-	 */
-	private void createCurrentProjectsTable() {
-		H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
-		proyectosTitle.addClassName(TITLE_STYLE);
-		add(proyectosTitle);
-		
-		try {
-			table = new Grid<>();
-			table.addClassName("active-projects-grid");
-			table.setWidthFull();
-			
-			table.setItems(dataActiveProjectsGrid);
-			
-			table.addColumn(ActiveProject::getTitle).setHeader("Título").setFlexGrow(10);
-			table.addColumn(ActiveProject::getDescription).setHeader("Descripción").setFlexGrow(25);
-			table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
-			table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
-			table.addColumn(ActiveProject::getDateAssignment).setHeader("Fecha Asignación").setFlexGrow(5);
-			
-			table.getColumns().forEach(columna -> columna.setResizable(true));
-			table.getColumns().forEach(columna -> columna.setSortable(true));
-			table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
-			table.getColumns().subList(1, table.getColumns().size()).forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
-			
-			table.setItemDetailsRenderer(
-				    new ComponentRenderer<>(ActiveProject -> {
-				        VerticalLayout layout = new VerticalLayout();
-				        layout.add(new Label("Título: " +
-				        		ActiveProject.getTitle()));
-				        layout.add(new Label("Descripción: " +
-				        		ActiveProject.getDescription()));
-				        layout.add(new Label("Tutor/es: " +
-				        		ActiveProject.getTutors()));
-				        layout.add(new Label("Alumno/s: " +
-				        		ActiveProject.getStudents()));
-				        layout.add(new Label("Curso Asignación: " +
-				        		ActiveProject.getDateAssignment()));
-				        return layout;
-				}));
-			table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-			
-		}catch(Exception e) {
-			LOGGER.error(e.getMessage());
-			throw e;
-		}
-	}
+        HorizontalLayout filters = new HorizontalLayout();
+        filters.setSpacing(true);
+        filters.setMargin(false);
 
-	/**
-	 * Crea una nueva lista con los valores filtrados
-	 * 
-	 * @param column
-	 * @param valueChange
-	 */
-	private void applyFilter(String column, String valueChange) {
-	    LocalDate dateChange = null;
-		dataFilteredGrid = new ArrayList<ActiveProject>();
-		Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
-		String lowercase=valueChange.toLowerCase();
-		if(!valueChange.equals(" ")) {
-			while (iterator.hasNext()) {
-				ActiveProject activeproject = iterator.next();
-				
-				switch(column) {
-					case "title":
-						if(activeproject.getTitle().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(activeproject);
-						}
-						break;
-					case "description":
-						if(activeproject.getDescription().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(activeproject);
-						}
-						break;
-					case "tutor":
-						if(activeproject.getTutors().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(activeproject);
-						}
-						break;
-					case "student":
-						if(activeproject.getStudents().toLowerCase().contains(lowercase)) {
-							dataFilteredGrid.add(activeproject);
-						}
-						break;
-					case "course":
-					    dateChange= LocalDate.parse(valueChange, dateTimeFormatter);
-						if(activeproject.getDateAssignment().equals(dateChange)) {
-						dataFilteredGrid.add(activeproject);
-						}
-						break;
-				}
-			}
-			//Se establece los nuevos valores del grid
-			table.setItems(dataFilteredGrid);
-		}
-	}
-	
-	/**
-	 * Se crea una nueva lista con los datos que se usarán en la tabla de descripción de proyectos.
-	 */
-	private void CreateDataModelToGrid() {
-		String tutors = "";
-		String students = "";
-		dataActiveProjectsGrid = new ArrayList<ActiveProject>();
-		Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
-		while (iterator.hasNext()) {
-			ActiveProject activeproject = iterator.next();
-			
-			tutors = activeproject.getTutor1();	
-			if(!tutors.equals("")) {
-				if(!activeproject.getTutor2().equals("")) {
-					tutors +=  ", " + activeproject.getTutor2();
-					if(!activeproject.getTutor3().equals("")) {
-						tutors +=  ", " + activeproject.getTutor3();
-					}
-				}
-			}
-			
-			students = activeproject.getStudent1();
-			if(!students.equals("")) {
-				if(!activeproject.getStudent2().equals("")) {
-					students +=  ", " + activeproject.getStudent2();
-					if(!activeproject.getStudent3().equals("")) {
-						students +=  ", " + activeproject.getStudent3();
-					}
-				}
-			}
+        projectFilter = new TextField("Filtrar por proyectos:");
+        projectFilter.setWidth("300px");
+        projectFilter.addValueChangeListener(event -> {
+            if (!projectFilter.isEmpty()) {
+                applyFilter("title", event.getValue());
+            } else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
 
-			ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
-					tutors, students, activeproject.getDateAssignment(),activeproject.getStatus());
-			dataActiveProjectsGrid.add(actives);
-		}	
-	}
+        descriptionFilter = new TextField("Filtrar por descripción:");
+        descriptionFilter.setWidth("300px");
+        descriptionFilter.addValueChangeListener(event -> {
+            if (!descriptionFilter.isEmpty()) {
+                applyFilter("description", event.getValue());
+            } else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
+
+        tutorsFilter = new TextField("Filtrar por tutores:");
+        tutorsFilter.setWidth("300px");
+        tutorsFilter.addValueChangeListener(event -> {
+            if (!tutorsFilter.isEmpty()) {
+                applyFilter("tutor", event.getValue());
+            } else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
+
+        studentsFilter = new TextField("Filtrar por alumnos:");
+        studentsFilter.setWidth("300px");
+        studentsFilter.addValueChangeListener(event -> {
+            if (!studentsFilter.isEmpty()) {
+                applyFilter("student", event.getValue());
+            } else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
+
+        courseFilter = new TextField("Filtrar por fecha:");
+        courseFilter.setWidth("300px");
+        courseFilter.addValueChangeListener(event -> {
+            if (!courseFilter.isEmpty()) {
+                applyFilter("course", event.getValue());
+            } else {
+                table.setItems(dataActiveProjectsGrid);
+            }
+        });
+
+        filters.add(projectFilter, descriptionFilter, tutorsFilter, studentsFilter, courseFilter);
+        add(filters);
+    }
+
+    /**
+     * Crea el modelo de datos de los proyectos activos.
+     */
+    private void createDataModel() {
+        // Se obtienen los datos del modelo
+        @SuppressWarnings("rawtypes")
+        ArrayList listaDataModel = fachadaDatos.getDataModel(dateTimeFormatter);
+        dataActiveProjects = new ArrayList<ActiveProject>();
+
+        for (int i = 0; i < listaDataModel.size(); i++) {
+            ActiveProject actives = new ActiveProject((String) listaDataModel.get(i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
+                    (LocalDate) listaDataModel.get(++i), (String) listaDataModel.get(++i));
+            dataActiveProjects.add(actives);
+        }
+    }
+
+    /**
+     * Crea la tabla de proyectos activos.
+     */
+    private void createCurrentProjectsTable() {
+        H1 proyectosTitle = new H1(DESCRIPCION_PROYECTOS);
+        proyectosTitle.addClassName(TITLE_STYLE);
+        add(proyectosTitle);
+
+        try {
+            table = new Grid<>();
+            table.addClassName("active-projects-grid");
+            table.setWidthFull();
+
+            table.setItems(dataActiveProjectsGrid);
+
+            table.addColumn(ActiveProject::getTitle).setHeader("Título").setFlexGrow(10);
+            table.addColumn(ActiveProject::getDescription).setHeader("Descripción").setFlexGrow(25);
+            table.addColumn(ActiveProject::getTutors).setHeader("Tutor/es").setFlexGrow(6);
+            table.addColumn(ActiveProject::getStudents).setHeader("Alumno/s").setFlexGrow(6);
+            table.addColumn(ActiveProject::getDateAssignment).setHeader("Fecha Asignación").setFlexGrow(5);
+
+            table.getColumns().forEach(columna -> columna.setResizable(true));
+            table.getColumns().forEach(columna -> columna.setSortable(true));
+            table.getColumns().get(0).setTextAlign(ColumnTextAlign.START);
+            table.getColumns().subList(1, table.getColumns().size())
+                    .forEach(columna -> columna.setTextAlign(ColumnTextAlign.CENTER));
+
+            table.setItemDetailsRenderer(
+                    new ComponentRenderer<>(ActiveProject -> {
+                        VerticalLayout layout = new VerticalLayout();
+                        layout.add(new Label("Título: " +
+                                ActiveProject.getTitle()));
+                        layout.add(new Label("Descripción: " +
+                                ActiveProject.getDescription()));
+                        layout.add(new Label("Tutor/es: " +
+                                ActiveProject.getTutors()));
+                        layout.add(new Label("Alumno/s: " +
+                                ActiveProject.getStudents()));
+                        layout.add(new Label("Curso Asignación: " +
+                                ActiveProject.getDateAssignment()));
+                        return layout;
+                    }));
+            table.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Crea una nueva lista con los valores filtrados
+     * 
+     * @param column
+     * @param valueChange
+     */
+    private void applyFilter(String column, String valueChange) {
+        LocalDate dateChange = null;
+        dataFilteredGrid = new ArrayList<ActiveProject>();
+        Iterator<ActiveProject> iterator = dataActiveProjectsGrid.iterator();
+        String lowercase = valueChange.toLowerCase();
+        if (!valueChange.equals(" ")) {
+            while (iterator.hasNext()) {
+                ActiveProject activeproject = iterator.next();
+
+                switch (column) {
+                    case "title":
+                        if (activeproject.getTitle().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(activeproject);
+                        }
+                        break;
+                    case "description":
+                        if (activeproject.getDescription().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(activeproject);
+                        }
+                        break;
+                    case "tutor":
+                        if (activeproject.getTutors().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(activeproject);
+                        }
+                        break;
+                    case "student":
+                        if (activeproject.getStudents().toLowerCase().contains(lowercase)) {
+                            dataFilteredGrid.add(activeproject);
+                        }
+                        break;
+                    case "course":
+                        dateChange = LocalDate.parse(valueChange, dateTimeFormatter);
+                        if (activeproject.getDateAssignment().equals(dateChange)) {
+                            dataFilteredGrid.add(activeproject);
+                        }
+                        break;
+                }
+            }
+            // Se establece los nuevos valores del grid
+            table.setItems(dataFilteredGrid);
+        }
+    }
+
+    /**
+     * Se crea una nueva lista con los datos que se usarán en la tabla de
+     * descripción de proyectos.
+     */
+    private void CreateDataModelToGrid() {
+        String tutors = "";
+        String students = "";
+        dataActiveProjectsGrid = new ArrayList<ActiveProject>();
+        Iterator<ActiveProject> iterator = dataActiveProjects.iterator();
+        while (iterator.hasNext()) {
+            ActiveProject activeproject = iterator.next();
+
+            tutors = activeproject.getTutor1();
+            if (!tutors.equals("")) {
+                if (!activeproject.getTutor2().equals("")) {
+                    tutors += ", " + activeproject.getTutor2();
+                    if (!activeproject.getTutor3().equals("")) {
+                        tutors += ", " + activeproject.getTutor3();
+                    }
+                }
+            }
+
+            students = activeproject.getStudent1();
+            if (!students.equals("")) {
+                if (!activeproject.getStudent2().equals("")) {
+                    students += ", " + activeproject.getStudent2();
+                    if (!activeproject.getStudent3().equals("")) {
+                        students += ", " + activeproject.getStudent3();
+                    }
+                }
+            }
+
+            ActiveProject actives = new ActiveProject(activeproject.getTitle(), activeproject.getDescription(),
+                    tutors, students, activeproject.getDateAssignment(), activeproject.getStatus());
+            dataActiveProjectsGrid.add(actives);
+        }
+    }
 }

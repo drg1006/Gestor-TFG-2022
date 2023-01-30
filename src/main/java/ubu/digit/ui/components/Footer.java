@@ -9,7 +9,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 
 import ubu.digit.ui.views.UploadView;
@@ -37,181 +37,182 @@ import org.slf4j.LoggerFactory;
  */
 public class Footer extends VerticalLayout {
 
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = 1285443082746553886L;
-	
-	/**
-	 * Layout que contiene los layout verticales (columnas)
-	 * de information y license
-	 */
-	HorizontalLayout conten;
-	
-	/**
-	 * Layout correspondiente a la columna con la licencia, 
-	 * fecha de actualización de los ficheros y acceso al login.
-	 */
-	VerticalLayout license;
-	
-	/**
-	 * Layout con la información sobre los autores y tutores de la app
-	 */
-	VerticalLayout information;
-	
-	/**
-	 * Nombre del fichero .csv  o .xls relacionado con la vista
-	 */
-	private String fileName;
-	
-	/**
-	 * Logger de la clase.
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(Footer.class.getName());
+    /**
+     * Serial Version UID.
+     */
+    private static final long serialVersionUID = 1285443082746553886L;
 
-	/**
-	 * Constructor.
-	 */
-	public Footer(String fileName) {
-		this.fileName = fileName;
-		conten = new HorizontalLayout();
-		conten.addClassName("Footer-grid");
-		
-		H2 subtitle = new H2(INFORMACION);
-		subtitle.addClassName(SUBTITLE_STYLE);
-		
-		addInformation();
-		addLicense();
-		conten.add(information, license);
-		
-		add(subtitle, conten);
-	}
+    /**
+     * Layout que contiene los layout verticales (columnas)
+     * de information y license
+     */
+    HorizontalLayout conten;
 
-	/**
-	 * Añade la información de los autores y tutores del proyecto.
-	 */
-	private void addInformation() {
-		information = new VerticalLayout();
-		information.setMargin(false);
-		information.setSpacing(true);
+    /**
+     * Layout correspondiente a la columna con la licencia,
+     * fecha de actualización de los ficheros y acceso al login.
+     */
+    VerticalLayout license;
 
-		Text version1 = new Text("Versión 1.0 creada por Beatriz Zurera Martínez-Acitores");
-		Anchor link1 = new Anchor("mailto:bzm0001@alu.ubu.es","bzm0001@alu.ubu.es");
-		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link1));
-		information.add(version1);
-		
-		Text version2 = new Text("Versión 2.0 creada por Javier de la Fuente Barrios");
-		Anchor link2 = new Anchor("mailto:jfb0019@alu.ubu.es","jfb0019@alu.ubu.es");
-		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link2));
-		information.add(version2);
-		
-		Text version3 = new Text("Versión 3.0 creada por Diana Bringas Ochoa");
-		Anchor link3 = new Anchor("mailto:dbo1001@alu.ubu.es","dbo1001@alu.ubu.es");
-		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link3));
-		information.add(version3);
-		
-		Text version4 = new Text("Versión 4.0 creada por David Renedo Gil");
-        Anchor link4 = new Anchor("mailto:drg1006@alu.ubu.es","drg1006@alu.ubu.es");
-        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),link4));
+    /**
+     * Layout con la información sobre los autores y tutores de la app
+     */
+    VerticalLayout information;
+
+    /**
+     * Nombre del fichero .csv o .xls relacionado con la vista
+     */
+    private String fileName;
+
+    /**
+     * Logger de la clase.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Footer.class.getName());
+
+    /**
+     * Constructor.
+     */
+    public Footer(String fileName) {
+        this.fileName = fileName;
+        conten = new HorizontalLayout();
+        conten.addClassName("Footer-grid");
+
+        H2 subtitle = new H2(INFORMACION);
+        subtitle.addClassName(SUBTITLE_STYLE);
+
+        addInformation();
+        addLicense();
+        conten.add(information, license);
+
+        add(subtitle, conten);
+    }
+
+    /**
+     * Añade la información de los autores y tutores del proyecto.
+     */
+    private void addInformation() {
+        information = new VerticalLayout();
+        information.setMargin(false);
+        information.setSpacing(true);
+
+        Text version1 = new Text("Versión 1.0 creada por Beatriz Zurera Martínez-Acitores");
+        Anchor link1 = new Anchor("mailto:bzm0001@alu.ubu.es", "bzm0001@alu.ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), link1));
+        information.add(version1);
+
+        Text version2 = new Text("Versión 2.0 creada por Javier de la Fuente Barrios");
+        Anchor link2 = new Anchor("mailto:jfb0019@alu.ubu.es", "jfb0019@alu.ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), link2));
+        information.add(version2);
+
+        Text version3 = new Text("Versión 3.0 creada por Diana Bringas Ochoa");
+        Anchor link3 = new Anchor("mailto:dbo1001@alu.ubu.es", "dbo1001@alu.ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), link3));
+        information.add(version3);
+
+        Text version4 = new Text("Versión 4.0 creada por David Renedo Gil");
+        Anchor link4 = new Anchor("mailto:drg1006@alu.ubu.es", "drg1006@alu.ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), link4));
         information.add(version4);
-		
-		Text tutor1 = new Text("Tutorizado por Ana Serrano Mamolar");
-		Anchor linkT1 = new Anchor("mailto:asmamolar@ubu.es","asmamolar@ubu.es");
-		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),linkT1));
-		information.add(tutor1);
-		
-		Text tutor2 = new Text("Tutorizado por Alvar Arnaiz Gonzalez");
-		Anchor linkT2 = new Anchor("mailto:alvarag@ubu.es", "alvarag@ubu.es");
-		information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE),linkT2));
-		information.add(tutor2);
-		
-		Text copyright = new Text("Copyright @ LSI");
-		information.add(new HorizontalLayout(copyright));
-	}
-	
-	/**
-	 * Obtiene la fecha de última modificación del fichero asociado a la vista.
-	 * 
-	 * @param fileName
-	 *            nombre del fichero
-	 * @return fecha de última modificación del fichero
-	 */
-	public String getLastModified(String fileName) {
-		String path = this.getClass().getClassLoader().getResource("").getPath();
-  		String serverPath = path.substring(0, path.length()-17);
-  		
-  		ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
-		String dir = config.getSetting("dataIn");
-		String completeDir = serverPath + dir + "/";
-		
-		TimeZone zoneId = TimeZone.getTimeZone( "Europe/Madrid" );
-		Locale locale = new Locale("es","ES");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale);
-		sdf.setTimeZone(zoneId);
-		
-		String lastModified = null;
-		File file = new File(completeDir + fileName);
-		LOGGER.info("Comprobar si existe el fichero " + file + " en el path " + completeDir + fileName);
-		if (file.exists()) {
-			LOGGER.info("Path file" + file);
-			Date date = new Date(file.lastModified());
-			lastModified = sdf.format(date);
-			LOGGER.info("Fecha de última modificación sin formato  " + date);
-			LOGGER.info("Fecha empleando la zona horaria Europe/Madrid " + lastModified);
-		}
-		return lastModified;
-	}
 
-	/**
-	 * Añade la información de la licencia del proyecto, la fecha de actualización 
-	 * de los ficheros de datos y el butón del acceso al Login.
-	 */
-	private void addLicense() {
-		license = new VerticalLayout();
-		license.setMargin(false);
-		license.setSpacing(true);
+        Text tutor1 = new Text("Tutorizado por Ana Serrano Mamolar");
+        Anchor linkT1 = new Anchor("mailto:asmamolar@ubu.es", "asmamolar@ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), linkT1));
+        information.add(tutor1);
 
-		Text licenseText = new Text("This work is licensed under: ");
-		Anchor ccLink = new Anchor("https://github.com/drg1006/Gestor-TFG-2022/blob/master/LICENSE.md", "MIT License.");
-		
-		license.add(licenseText, ccLink);
-		
-		if (fileName != null) {
-			LOGGER.info("actualización fecha fichero " + fileName);
-			String lastModifiedCsv = getLastModified(fileName);
-			String lastModifiedXls = getLastModified("BaseDeDatosTFGTFM.xls");
-			license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
-			license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
-		}
-		 if(UI.getCurrent().getSession().getAttribute("update")!=null) {
-	            if(UI.getCurrent().getSession().getAttribute("update").equals("true")){
-	                Button actu= new Button("Actualizar");
-	                    actu.addClickListener(e -> {	
-	                        UI.getCurrent().navigate(UploadView.class);
-	                    });
-		
-		//OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
-		Anchor download= new Anchor();
-		
+        Text tutor2 = new Text("Tutorizado por Alvar Arnaiz Gonzalez");
+        Anchor linkT2 = new Anchor("mailto:alvarag@ubu.es", "alvarag@ubu.es");
+        information.add(new HorizontalLayout(new Icon(VaadinIcon.ENVELOPE), linkT2));
+        information.add(tutor2);
+
+        Text copyright = new Text("Copyright @ LSI");
+        information.add(new HorizontalLayout(copyright));
+    }
+
+    /**
+     * Obtiene la fecha de última modificación del fichero asociado a la vista.
+     * 
+     * @param fileName
+     *                 nombre del fichero
+     * @return fecha de última modificación del fichero
+     */
+    public String getLastModified(String fileName) {
         String path = this.getClass().getClassLoader().getResource("").getPath();
-        String serverPath = path.substring(0, path.length()-17);        
+        String serverPath = path.substring(0, path.length() - 17);
+
         ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
         String dir = config.getSetting("dataIn");
         String completeDir = serverPath + dir + "/";
-        String fileName = NOMBRE_BASES;
+
+        TimeZone zoneId = TimeZone.getTimeZone("Europe/Madrid");
+        Locale locale = new Locale("es", "ES");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale);
+        sdf.setTimeZone(zoneId);
+
+        String lastModified = null;
         File file = new File(completeDir + fileName);
-        
-		//Generamos el recurso descargable            
-        StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
-        download.setText("Descargar "+file.getName());
-		download.setHref(streamResource);
-        download.getElement().setAttribute("download", true);
-        download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
-        download.setVisible(true);
-		license.add(actu,download);
-	            }
-		}
-	}
+        LOGGER.info("Comprobar si existe el fichero " + file + " en el path " + completeDir + fileName);
+        if (file.exists()) {
+            LOGGER.info("Path file" + file);
+            Date date = new Date(file.lastModified());
+            lastModified = sdf.format(date);
+            LOGGER.info("Fecha de última modificación sin formato  " + date);
+            LOGGER.info("Fecha empleando la zona horaria Europe/Madrid " + lastModified);
+        }
+        return lastModified;
+    }
+
+    /**
+     * Añade la información de la licencia del proyecto, la fecha de actualización
+     * de los ficheros de datos y el butón del acceso al Login.
+     */
+    private void addLicense() {
+        license = new VerticalLayout();
+        license.setMargin(false);
+        license.setSpacing(true);
+
+        Text licenseText = new Text("This work is licensed under: ");
+        Anchor ccLink = new Anchor("https://github.com/drg1006/Gestor-TFG-2022/blob/master/LICENSE.md", "MIT License.");
+
+        license.add(licenseText, ccLink);
+
+        if (fileName != null) {
+            LOGGER.info("actualización fecha fichero " + fileName);
+            String lastModifiedCsv = getLastModified(fileName);
+            String lastModifiedXls = getLastModified("BaseDeDatosTFGTFM.xls");
+            license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
+            license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
+        }
+        if (UI.getCurrent().getSession().getAttribute("update") != null) {
+            if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
+                Button actu = new Button("Actualizar");
+                actu.addClickListener(e -> {
+                    UI.getCurrent().navigate(UploadView.class);
+                });
+
+                // OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
+                Anchor download = new Anchor();
+
+                String path = this.getClass().getClassLoader().getResource("").getPath();
+                String serverPath = path.substring(0, path.length() - 17);
+                ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+                String dir = config.getSetting("dataIn");
+                String completeDir = serverPath + dir + "/";
+                String fileName = NOMBRE_BASES;
+                File file = new File(completeDir + fileName);
+
+                // Generamos el recurso descargable
+                StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
+                download.setText("Descargar " + file.getName());
+                download.setHref(streamResource);
+                download.getElement().setAttribute("download", true);
+                download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+                download.setVisible(true);
+                license.add(actu, download);
+            }
+        }
+
+    }
 
     private InputStream getStream(File file) {
         FileInputStream stream = null;
@@ -223,6 +224,5 @@ public class Footer extends VerticalLayout {
         return stream;
 
     }
-	
-	
+
 }

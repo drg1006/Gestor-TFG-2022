@@ -14,7 +14,7 @@ public final class Constants {
     public static final String TRIBUNAL = "N1_Tribunal";
 
     /**
-     * Norma 
+     * Norma
      */
     public static final String NORMA = "N1_Norma";
 
@@ -22,30 +22,29 @@ public final class Constants {
      * Profesores
      */
     public static final String PROFESOR = "N4_Profesores";
-    
+
     /**
      * Documento
      */
     public static final String DOCUMENTO = "N1_Documento";
 
     /**
-     * Proyecto 
+     * Proyecto
      */
     public static final String PROYECTO = "N2_Proyecto";
 
     /**
-     * Histórico 
+     * Histórico
      */
     public static final String HISTORICO = "N3_Historico";
-    
-    /**
-     * Alumno 
-     */
-    public static final String ALUMNO = "N2_Alumno";
-    
 
     /**
-     * Cargo 
+     * Alumno
+     */
+    public static final String ALUMNO = "N2_Alumno";
+
+    /**
+     * Cargo
      */
     public static final String CARGO = "Cargo";
 
@@ -68,17 +67,16 @@ public final class Constants {
      * Descripción
      */
     public static final String DESCRIPCION = "descripcion";
-    
+
     /**
      * Area
      */
     public static final String AREA = "Area";
-    
+
     /**
      * Area
      */
     public static final String DEPARTAMENTO = "Departamento";
-
 
     /**
      * Primer alumno
@@ -121,7 +119,7 @@ public final class Constants {
     public static final String CURSO_ASIGNACION = "cursoAsignacion";
 
     /**
-     *      de asignación (csv).
+     * de asignación (csv).
      */
     public static final String FECHA_ASIGNACION = "fechaAsignacion";
 
@@ -209,22 +207,22 @@ public final class Constants {
      * Projectos (columna generada).
      */
     public static final String PROJECTS = "projects";
-    
+
     /**
      * Rankings según el percentil de las notas de los proyectos
      */
     public static final String RANKING_PERCENTILE = "rankingPercentile";
-    
+
     /**
      * Rankings de las notas totales de los proyectos
      */
     public static final String RANKING_TOTAL = "rankingTotal";
-    
+
     /**
      * Rankings de las notas según el curso de los proyectos
      */
     public static final String RANKING_CURSE = "rankingCurse";
-    
+
     /**
      * Línea en blanco.
      */
@@ -259,12 +257,12 @@ public final class Constants {
      * Proyectos históricos (botón).
      */
     public static final String HISTORICOS = "Histórico";
-    
+
     /**
      * Proyectos históricos (botón).
      */
     public static final String PROYECTOS_HISTORICOS = "De proyectos";
-    
+
     /**
      * Proyectos de profesores (botón).
      */
@@ -274,7 +272,7 @@ public final class Constants {
      * Gerenacion de informes (botón).
      */
     public static final String INFORME = "Informes";
-    
+
     /**
      * Métricas (botón).
      */
@@ -283,17 +281,16 @@ public final class Constants {
      * Subir TFGs(botón).
      */
     public static final String UPLOAD = "Subir TFG";
-    
+
     /**
      * Subir TFGs(botón).
      */
     public static final String ACEPT = "Administrar TFGs";
-    
+
     /**
      * Subir TFGs(botón).
      */
     public static final String ESTADO = "Estado";
-
 
     /**
      * Información estadística (etiqueta título).
@@ -333,11 +330,11 @@ public final class Constants {
      * Nombre del archivo de la base de datos.
      */
     public static final String NOMBRE_BASES = "BaseDeDatosTFGTFM.xls";
-    
+
     /**
      * Constantes empleadas en la obtención de información del Moodle de UbuVirtual
      */
-    
+
     public static final String ID = "id";
     public static final String IDNUMBER = "idnumber";
     public static final String USERNAME = "username";
@@ -348,7 +345,7 @@ public final class Constants {
     public static final String NAME = "name";
     public static final String AVAILABLE = "available";
     public static final String OPTIONS = "options";
-    
+
     /**
      * Constructor vacío y privado.
      */
