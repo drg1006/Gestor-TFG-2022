@@ -56,7 +56,6 @@ public class PruebaWebScrap2{
 			       .followRedirects(true)
 			       .execute();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -64,13 +63,11 @@ public class PruebaWebScrap2{
 		try {
 			doc = response.parse();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
             // Busco todas las entradas que estan dentro de: 
             Elements entradas = doc.select("div.c-persona-card__detalles");
-            System.out.println("Número de profesores de la EPS : "+entradas.size()+"\n");
             // Paseo cada una de las entradas
             int i=1;
             for (Element elem : entradas) {
@@ -86,10 +83,6 @@ public class PruebaWebScrap2{
                 String nombre = elem.getElementsByClass("c-persona-card__nombre").text();
                 String apellidos = elem.getElementsByClass("c-persona-card__apellidos").text();
                 String area = elem.getElementsByClass("c-persona-card__area").text();
-				//Imprimimos por pantalla
-               // LOGGER.info("Nombre: "+nombre);
-                // LOGGER.info("Apellidos: " +apellidos);
-                // LOGGER.info("Area: "+area);
 
                 //Para sacar el Departamento debemos ir a otra url 
                 try {
@@ -101,7 +94,6 @@ public class PruebaWebScrap2{
         			       .followRedirects(true)
         			       .execute();
         		} catch (IOException e) {
-        			// TODO Auto-generated catch block
         			e.printStackTrace();
         		}
 
@@ -109,7 +101,6 @@ public class PruebaWebScrap2{
         		try {
         			doc2 = response.parse();
         		} catch (IOException e) {
-        			// TODO Auto-generated catch block
         			e.printStackTrace();
         		}
         		//Obtenemos el contenido donde está la información del profesor
@@ -117,7 +108,6 @@ public class PruebaWebScrap2{
         		//Cogemos el primer link de tipo "a"(href) que tiene la información sobre el departamento y sacamos su texto
         		Element link2= entrada.select("a").first();
         		String departamento = link2.text();	
-        		// LOGGER.info("Departamento: "+ departamento + "\n");
 
                 // Con el método "text()" obtengo el contenido que hay dentro de las etiquetas HTML
                 // Con el método "toString()" obtengo todo el HTML con etiquetas incluidas
@@ -145,14 +135,12 @@ public class PruebaWebScrap2{
         	try {
 				guardarDatosXLS(dataTFG);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
             try {
 				guardarDatosCSV(profesores);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) 
 				e.printStackTrace();
 			}
 			

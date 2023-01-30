@@ -30,7 +30,6 @@ public class PruebaInter {
         for (int i=1; i<maxPages; i++){
 			
             String urlPage = String.format(url, i);
-           // LOGGER.info("Comprobando entradas de: "+urlPage);
 			
             // Compruebo si me da un 200 al hacer la petición
             if (getStatusConnectionCode(urlPage) == 200) {
@@ -45,14 +44,10 @@ public class PruebaInter {
                 for (Element elem : entradas) {
                     String titulo = elem.getElementsByClass("tituloPost").text();
                     String autor = elem.getElementsByClass("autor").toString();
-                    String fecha = elem.getElementsByClass("fecha").text();
-					
-                    //LOGGER.info(titulo+"\n"+autor+"\n"+fecha+"\n");
-					
+                    String fecha = elem.getElementsByClass("fecha").text();						
                 }
 		
             }else{
-                //LOGGER.info("El Status Code no es OK es: "+getStatusConnectionCode(urlPage));
                 break;
             }
         }
@@ -77,9 +72,8 @@ public class PruebaInter {
         try {
             response = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).ignoreHttpErrors(true).execute();
         } catch (IOException ex) {
-           // LOGGER.info("Excepción al obtener el Status Code: " + ex.getMessage());
+		ex.printStackTrace();
         }
-        //LOGGER.info("response: "+ response);
         return response.statusCode();
     }
 	
@@ -97,7 +91,7 @@ public class PruebaInter {
         try {
             doc = Jsoup.connect(url).userAgent("Mozilla/5.0").timeout(100000).get();
         } catch (IOException ex) {
-           // LOGGER.info("Excepción al obtener el HTML de la página" + ex.getMessage());
+           ex.printStackTrace();
         }
 
         return doc;

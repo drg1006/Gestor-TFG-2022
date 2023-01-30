@@ -183,34 +183,37 @@ public class Footer extends VerticalLayout {
             license.add(new Label("Ultima actualización de " + fileName + " : " + lastModifiedCsv));
             license.add(new Label("Ultima actualización de BaseDeDatosTFGTFM.xls : " + lastModifiedXls));
         }
+        
+        Button actu = new Button("Actualizar");
+        actu.addClickListener(e -> {
+            UI.getCurrent().navigate(UploadView.class);
+        });
+
+        // OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
+        Anchor download = new Anchor();
+
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String serverPath = path.substring(0, path.length() - 17);
+        ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
+        String dir = config.getSetting("dataIn");
+        String completeDir = serverPath + dir + "/";
+        String fileName = NOMBRE_BASES;
+        File file = new File(completeDir + fileName);
+
+        // Generamos el recurso descargable
+        StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
+        download.setText("Descargar " + file.getName());
+        download.setHref(streamResource);
+        download.getElement().setAttribute("download", true);
+        download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+        download.setVisible(true);
+        //Si se tienen los permisos se añaden los botones
         if (UI.getCurrent().getSession().getAttribute("update") != null) {
             if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
-                Button actu = new Button("Actualizar");
-                actu.addClickListener(e -> {
-                    UI.getCurrent().navigate(UploadView.class);
-                });
-
-                // OBTENEMOS EL ARCHIVO PARA DESCARGAR Y LO HACEMOS DESCARGABLE
-                Anchor download = new Anchor();
-
-                String path = this.getClass().getClassLoader().getResource("").getPath();
-                String serverPath = path.substring(0, path.length() - 17);
-                ExternalProperties config = ExternalProperties.getInstance("/config.properties", false);
-                String dir = config.getSetting("dataIn");
-                String completeDir = serverPath + dir + "/";
-                String fileName = NOMBRE_BASES;
-                File file = new File(completeDir + fileName);
-
-                // Generamos el recurso descargable
-                StreamResource streamResource = new StreamResource(file.getName(), () -> getStream(file));
-                download.setText("Descargar " + file.getName());
-                download.setHref(streamResource);
-                download.getElement().setAttribute("download", true);
-                download.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
-                download.setVisible(true);
                 license.add(actu, download);
             }
         }
+        license.add(actu, download);
 
     }
 
