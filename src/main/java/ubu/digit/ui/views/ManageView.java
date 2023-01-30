@@ -555,7 +555,8 @@ public class ManageView extends VerticalLayout {
             outputStream.close();
             //Actualizamos la instancia
             SistInfDataFactory.setInstanceData("XLS");
-        } catch (IOException ex) {
+            UI.getCurrent().getPage().reload();
+            } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

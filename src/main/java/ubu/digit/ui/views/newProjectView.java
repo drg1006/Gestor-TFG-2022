@@ -140,6 +140,8 @@ public class newProjectView extends VerticalLayout {
         });
         tutor1.addCustomValueSetListener(event -> {
             tutor1.setValue(event.getDetail());
+            if(!profesores.contains(tutor1.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");            
            
         });
         ComboBox<String> tutor2=new ComboBox<>("Indique el tutor 2 del TFG");
@@ -151,6 +153,8 @@ public class newProjectView extends VerticalLayout {
         });
         tutor2.addCustomValueSetListener(event -> {
             tutor2.setValue(event.getDetail());
+            if(!profesores.contains(tutor2.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");   
         });
         ComboBox<String> tutor3=new ComboBox<>("Indique el tutor 3 del TFG");
         tutor3.setAllowCustomValue(true);
@@ -161,6 +165,8 @@ public class newProjectView extends VerticalLayout {
         });
         tutor3.addCustomValueSetListener(event -> {
             tutor3.setValue(event.getDetail());
+            if(!profesores.contains(tutor3.getValue()))
+                Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");   
         });
         
         TextArea alumno1 =new TextArea("Indique el alumno 1 del TFG");
@@ -211,9 +217,7 @@ public class newProjectView extends VerticalLayout {
                     Notification notif2 = Notification.show("Tutor1 y tutor2 no pueden tener el mismo valor");
                    notif2.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 }else {        
-                    if(!profesores.contains(tutor1.getValue())||!profesores.contains(tutor2.getValue())||!profesores.contains(tutor3.getValue())) {
-                        Notification.show("Estas introduciendo un nombre que no está en la EPS, ¿estas seguro?");
-                    }
+                    
                     Notification.show("Se ha añadido correctamente el TFG propuesto");
                     escribirDatos(titulo.getValue(),descripcion.getValue(),tutor1.getValue(),tutor2.getValue(),tutor3.getValue(),
                     alumno1.getValue(),alumno2.getValue(),fechaAsignacion);
