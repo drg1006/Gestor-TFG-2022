@@ -269,7 +269,6 @@ public class ProfesoresView extends VerticalLayout {
                         .followRedirects(true)
                         .execute();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -277,7 +276,6 @@ public class ProfesoresView extends VerticalLayout {
             try {
                 doc2 = response.parse();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             // Obtenemos el contenido donde está la información del profesor
@@ -309,7 +307,6 @@ public class ProfesoresView extends VerticalLayout {
             guardarDatosXLS(dataTFG);
             guardarDatosCSV(profesores);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
