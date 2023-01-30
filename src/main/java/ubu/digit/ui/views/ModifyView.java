@@ -359,7 +359,6 @@ public class ModifyView extends VerticalLayout {
             dayBien=String.valueOf(day);
         }
         String fechaFormat=dayBien+"/"+monthBien+"/"+ String.valueOf(year);
-        System.out.print(fechaFormat);
         return fechaFormat;
     }
 
@@ -441,7 +440,6 @@ public class ModifyView extends VerticalLayout {
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       
-        System.out.println("absPath "+absPath);
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -552,7 +550,6 @@ public class ModifyView extends VerticalLayout {
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       
-        System.out.println("absPath "+absPath);
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);      
@@ -608,7 +605,6 @@ public class ModifyView extends VerticalLayout {
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       
-        System.out.println("absPath "+absPath);
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);

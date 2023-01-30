@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import  com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 
-import ubu.digit.ui.views.LoginView;
 import ubu.digit.ui.views.UploadView;
 import ubu.digit.util.ExternalProperties;
 

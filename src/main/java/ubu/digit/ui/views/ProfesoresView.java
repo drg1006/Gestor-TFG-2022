@@ -237,7 +237,6 @@ public class ProfesoresView extends VerticalLayout {
             
             // Busco todas las entradas que estan dentro de: 
             Elements entradas = doc.select("div.c-persona-card__detalles");
-            //System.out.println("Número de profesores de la EPS : "+entradas.size()+"\n");
             // Paseo cada una de las entradas
             int i=1;
             for (Element elem : entradas) {

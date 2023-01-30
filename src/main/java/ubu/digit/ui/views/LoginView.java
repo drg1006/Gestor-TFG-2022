@@ -79,20 +79,6 @@ public class LoginView extends VerticalLayout{
 	 */
 	VerticalLayout layout=new VerticalLayout();
 	
-	/**
-	 * Lista con los permisos update y reports (true o false).
-	 */
-	//public static List<String> permiso=new ArrayList<>();
-
-	/**
-	 * Variable en la que guardamos el nombre del tutor que inicia sesion.
-	 */
-    public static String tutorRegistrado;
-    /**
-     * Variable en la que guardamos si se ha iniciado o no sesion.
-     */
-    //public static Boolean sesionIniciada=false;
-	
 	public LoginView() {
 
 		addClassName("login-view");
@@ -123,7 +109,6 @@ public class LoginView extends VerticalLayout{
 			}else {
 				LOGGER.info("Usuario validado ");
 				//Se ha iniciado sesion
-				//sesionIniciada=true;
 				UI.getCurrent().getSession().setAttribute("sesionIniciada", "true");
 				CONTROLLER.setUsername(e.getUsername());				
 				login.setEnabled(true);
@@ -174,7 +159,6 @@ public class LoginView extends VerticalLayout{
 			
 			LOGGER.info("Obteniendo información del usuario: " + moodleUser.getFullName());
 			//Guardamos el nombre del tutor que inicia sesión
-			//tutorRegistrado=moodleUser.getFullName();
 			UI.getCurrent().getSession().setAttribute("tutorRegistrado", moodleUser.getFullName());
 			//Creacion instancia de CreateCourse desde la cual se accedera a los metodos de obtención de los cursos y permisos
 			CreateUserCourses createUserCourses = new CreateUserCourses(CONTROLLER.getWebService());
@@ -206,12 +190,11 @@ public class LoginView extends VerticalLayout{
             //Obtenemos los permisos
 			JSONArray jsonArray;
 			jsonArray = UtilMethods.getJSONObjectResponse(CONTROLLER.getWebService(), new CoreCourseGetUserAdministrationOptions(idTFG)).getJSONArray(Constants.COURSES);
+			//Guardamos los permisos en las variables de la sesion
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "update")) {
-			    //permiso.add("update");
 			    UI.getCurrent().getSession().setAttribute("update", "true");
 			    };
 			if(createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
-			   // permiso.add("reports");
 			    UI.getCurrent().getSession().setAttribute("reports", "true");
 			    };						
 			return true;

@@ -134,7 +134,6 @@ public class newProjectView extends VerticalLayout {
         tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");      
         tutor1.setItems(profesores);
-        //tutor1.setValue(LoginView.tutorRegistrado);
         tutor1.setValue((String)UI.getCurrent().getSession().getAttribute("tutorRegistrado"));
         tutor1.addValueChangeListener(event -> {
             tutor1.setValue(event.getValue());
@@ -317,7 +316,6 @@ public class newProjectView extends VerticalLayout {
             dayBien=String.valueOf(day);
         }
         String fechaFormat=dayBien+"/"+monthBien+"/"+ String.valueOf(year);
-        System.out.print(fechaFormat);
         return fechaFormat;
     }
     
@@ -338,7 +336,6 @@ public class newProjectView extends VerticalLayout {
         File file = new File(completeDir + fileName);
         
         String absPath = file.getAbsolutePath();       
-        System.out.println("absPath "+absPath);
         try {
             FileInputStream inputStream = new FileInputStream(new File(absPath));
             Workbook workbook = WorkbookFactory.create(inputStream);

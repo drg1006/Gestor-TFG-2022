@@ -113,13 +113,12 @@ public class NavigationBar extends HorizontalLayout{
 	    buttonLogOut=new Button("Cerrar sesion",new Icon(VaadinIcon.USER));
         buttonLogOut.addClickListener(e ->{
             //Cerramos la sesion
-            //LoginView.sesionIniciada=false;
+           //Eliminamos los atributos
             UI.getCurrent().getSession().setAttribute("sesionIniciada", null);
             UI.getCurrent().getSession().setAttribute("reports", null);
             UI.getCurrent().getSession().setAttribute("update", null);
-            //Eliminamos los permisos
-            //LoginView.permiso=new ArrayList<>();
-            //Quitamos el nombre del tutor       
+            UI.getCurrent().getSession().setAttribute("tutorRegistrado", null);
+            //Recargamos
             UI.getCurrent().navigate(InformationView.class);       
             UI.getCurrent().getPage().reload(); 
         }
@@ -127,8 +126,7 @@ public class NavigationBar extends HorizontalLayout{
         );
 	    
 		buttonInfo = new Button(INFORMACION);
-		buttonInfo.addClickListener(e ->{ 
-		    UI.getCurrent().navigate(InformationView.class);});
+		buttonInfo.addClickListener(e -> UI.getCurrent().navigate(InformationView.class));
 		
 		buttonActive = new Button(PROYECTOS_ACTIVOS);
 		buttonActive.addClickListener(e -> UI.getCurrent().navigate(ActiveProjectsView.class));
@@ -143,24 +141,16 @@ public class NavigationBar extends HorizontalLayout{
         buttonReport.addClickListener(e -> UI.getCurrent().navigate(ReportView.class));
         
         buttonUpload = new Button(UPLOAD);
-        buttonUpload.addClickListener(e -> {
-            UI.getCurrent().navigate(newProjectView.class);
-            }
-        );
+        buttonUpload.addClickListener(e ->UI.getCurrent().navigate(newProjectView.class));
         
         buttonAcept = new Button(ACEPT);
         buttonAcept.addClickListener(e -> UI.getCurrent().navigate(ManageView.class));
         
         buttonProfessorHistoric = new Button(PROFESORES);
-        buttonProfessorHistoric.addClickListener(e -> {
-                UI.getCurrent().navigate(ProfesoresView.class);}
-        );
+        buttonProfessorHistoric.addClickListener(e -> UI.getCurrent().navigate(ProfesoresView.class));
         
         buttonProjectsHistoric = new Button(PROYECTOS_HISTORICOS);
-        buttonProjectsHistoric.addClickListener(e -> {          
-                UI.getCurrent().navigate(HistoricProjectsView.class);
-
-            });
+        buttonProjectsHistoric.addClickListener(e -> UI.getCurrent().navigate(HistoricProjectsView.class));
         
 		buttonInfo.setHeight(BUTTON_HEIGHT);
 		buttonActive.setHeight(BUTTON_HEIGHT);
@@ -172,8 +162,6 @@ public class NavigationBar extends HorizontalLayout{
         buttonLogIn.setHeight(BUTTON_HEIGHT);
         buttonLogOut.setHeight(BUTTON_HEIGHT);
         //Comprobamos si se ha iniciado sesion para ver cual de los dos botones hay que poner
-        //if(LoginView.sesionIniciada) { 
-       // UI.getCurrent().getSession().setAttribute("update","true");
         if(UI.getCurrent().getSession().getAttribute("sesionIniciada")!=null) {
               if(UI.getCurrent().getSession().getAttribute("sesionIniciada").equals("true")) {
                       layout1.add(buttonLogOut);
@@ -181,18 +169,16 @@ public class NavigationBar extends HorizontalLayout{
         }else{
             layout1.add(buttonLogIn);
         }
-        //LoginView.permiso.add("reports");
-        //LoginView.permiso.add("update");
-		//if(LoginView.permiso.contains("update")) {
-		    //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
-		    //ROL DE ADMINISTRADOR
+
+		    
         if(UI.getCurrent().getSession().getAttribute("update")!=null) {
             if(UI.getCurrent().getSession().getAttribute("update").equals("true")) {
+              //EL BOTON DE HISTORICO ES UN DESPLEGABLE CON DOS BOTONES
+                //ROL DE ADMINISTRADOR
 		    layout2.addAndExpand(buttonInfo,buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonAcept,buttonMetrics);}
-		//}else if(LoginView.permiso.contains("reports")){
         }else if(UI.getCurrent().getSession().getAttribute("reports")!=null) {
                     if(UI.getCurrent().getSession().getAttribute("reports").equals("true")){
-	     //ROL DE PROFESOR
+                        //ROL DE PROFESOR
                         layout2.addAndExpand(buttonInfo, buttonActive,buttonHistoric, buttonReport,buttonUpload,buttonMetrics);
             }
 		}else {
