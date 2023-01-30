@@ -114,7 +114,7 @@ public class ModifyView extends VerticalLayout {
         NavigationBar bat = new NavigationBar();
         add(bat);
         introducirDatos();
-        Footer footer = new Footer("");
+        Footer footer = new Footer(null);
         add(footer);
     }
 

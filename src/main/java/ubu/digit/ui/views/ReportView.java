@@ -126,7 +126,7 @@ public class ReportView extends VerticalLayout {
 
         opciones();
 
-        Footer footer = new Footer("");
+        Footer footer = new Footer(null);
 
         add(footer);
     }

@@ -176,7 +176,7 @@ public class Footer extends VerticalLayout {
 
         license.add(licenseText, ccLink);
 
-        if (!fileName.isBlank()) {
+        if (fileName != null) {
             LOGGER.info("actualización fecha fichero " + fileName);
             String lastModifiedCsv = getLastModified(fileName);
             String lastModifiedXls = getLastModified("BaseDeDatosTFGTFM.xls");

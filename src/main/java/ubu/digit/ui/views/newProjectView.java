@@ -105,7 +105,7 @@ public class newProjectView extends VerticalLayout {
         bat.buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         introducirDatos();
-        Footer footer = new Footer("");
+        Footer footer = new Footer(null);
         add(footer);
     }
 
