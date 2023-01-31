@@ -140,10 +140,13 @@ public class ProfesoresView extends VerticalLayout {
         bat.buttonProfessorHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         // Este submenu solo les sale a los profesores/administradores
-        if (UI.getCurrent().getSession().getAttribute("update") != null ||
-                UI.getCurrent().getSession().getAttribute("reports") != null) {
-            if (UI.getCurrent().getSession().getAttribute("update").equals("true") ||
-                    UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
+        //Comprobamos si es profesor o administrador
+        if (UI.getCurrent().getSession().getAttribute("update") != null) {
+            if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
+                add(bat.subMenu());
+            }
+        } else if (UI.getCurrent().getSession().getAttribute("reports") != null) {
+            if (UI.getCurrent().getSession().getAttribute("reports").equals("true")) {
                 add(bat.subMenu());
             }
         }
@@ -204,7 +207,7 @@ public class ProfesoresView extends VerticalLayout {
             actualizarDatos();
             long estimatedTime = System.nanoTime() - startTime;
             double seconds = (double) estimatedTime / 1000000000.0;
-            Notification notification = Notification
+           Notification
                     .show("Se han actualizado los archivos, el proceso ha tardado: " + seconds + " segundos");
 
         });
