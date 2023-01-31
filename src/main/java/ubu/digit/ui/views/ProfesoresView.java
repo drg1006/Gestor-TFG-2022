@@ -140,7 +140,7 @@ public class ProfesoresView extends VerticalLayout {
         bat.buttonProfessorHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         // Este submenu solo les sale a los profesores/administradores
-        //Comprobamos si es profesor o administrador
+        // Comprobamos si es profesor o administrador
         if (UI.getCurrent().getSession().getAttribute("update") != null) {
             if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
                 add(bat.subMenu());
@@ -207,7 +207,7 @@ public class ProfesoresView extends VerticalLayout {
             actualizarDatos();
             long estimatedTime = System.nanoTime() - startTime;
             double seconds = (double) estimatedTime / 1000000000.0;
-           Notification
+            Notification
                     .show("Se han actualizado los archivos, el proceso ha tardado: " + seconds + " segundos");
 
         });
@@ -218,6 +218,7 @@ public class ProfesoresView extends VerticalLayout {
      * Metodo que actualiza los datos realizando el webscraping a la web de
      * investigadores dela ubu.
      */
+    @SuppressWarnings("null")
     public void actualizarDatos() {
         List<String[]> profesores = new ArrayList<String[]>();
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
@@ -398,6 +399,7 @@ public class ProfesoresView extends VerticalLayout {
      * Metodo que despliega los datos de departamentos,areas y profesores para
      * seleccionarlos.
      */
+    @SuppressWarnings("rawtypes")
     public void datosGraficas() {
         H2 metricsTitle = new H2("Datos a mostrar");
         metricsTitle.addClassName("lbl-title");
@@ -406,6 +408,7 @@ public class ProfesoresView extends VerticalLayout {
         // REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
         HistoricProjectsView vista = new HistoricProjectsView();
         for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
+            //courses.add(year + "/" + (year+1));
             courses.add(year - 1 + "/" + year);
         }
         String[] colors = getRandomColors();
@@ -547,7 +550,7 @@ public class ProfesoresView extends VerticalLayout {
      * @param profSelect
      * @param lineChart     grafico
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void pintarGrafica(Set<String> areas, Set<String> departamentos, List<String> profSelect,
             ApexCharts lineChart) {
         // Creamos el array de series
@@ -580,8 +583,8 @@ public class ProfesoresView extends VerticalLayout {
      * @param profesor
      * @return list<Integer> de tfgs por curso
      */
-    private List<Integer> obtenerTFGSañoProfesor(String profesor) {
-        List<Integer> TFGs = new ArrayList<>();
+    private List<Double> obtenerTFGSañoProfesor(String profesor) {
+        List<Double> TFGs = new ArrayList<>();
         // Datos ya obtenidos en historicos
         HistoricProjectsView vista = new HistoricProjectsView();
         // Formato de la fecha
@@ -590,18 +593,34 @@ public class ProfesoresView extends VerticalLayout {
         // el año de presentacion del tfg el curso en el que se incluye
         // Ejemplo: Fecha de presentacion 10-01-2021: (Curso 2020-2021)
 
-        for (int año = vista.minCourse - 1; año < vista.maxCourse; año++) {
-            int num1 = 0;
+        List<String> tutoresEPS = fachadaDatos.getProfesores();
+
+        for (int año = vista.minCourse; año <= vista.maxCourse; año++) {
+            Double num1 = 0.0;
             // El curso va del 1 de septiembre de un año al siguiente
             String fechaIni = año + "-09-01";
             String fechaFin = (año + 1) + "-09-01";
             LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
             LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
             for (int i = 0; i < vista.dataHistoric.size(); i++) {
+                // COMPROBAMOS LA FECHA
                 if (vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
-                        && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)
-                        && vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
-                    num1++;
+                        && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)) {
+                    // PRIMERO SI ES TUTOR 1
+                    if (vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
+
+                        if (tutoresEPS.contains(vista.dataHistoric.get(i).getTutor2())) {
+                            // Si es de la EPS el tutor2
+                            num1 += 0.5;
+                        } else {
+                            // no es de la EPS el tutor2
+                            num1++;
+                        }
+                    // Si es tutor 2: tfgs codirigidos
+                    } else if (vista.dataHistoric.get(i).getTutor2().equals(profesor)) {
+                        num1 += 0.5;
+                    }
+
                 }
             }
             TFGs.add(num1);
@@ -617,15 +636,15 @@ public class ProfesoresView extends VerticalLayout {
      * @param departamento
      * @return list<Integer> de tfgs por curso
      */
-    private List<Integer> obtenerTFGSañoDepartamento(String departamento) {
+    private List<Double> obtenerTFGSañoDepartamento(String departamento) {
         // Sacamos los profesores que pertenecen a ese departamento y sumamos sus TFGs
-        List<Integer> TFGs = new ArrayList<>();
+        List<Double> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
         int n = 0;
         for (String profe : profes) {
             // Obtenemos los tfgs de los profesores que pertenecen al departamento
-            List<Integer> tfgprofes = obtenerTFGSañoProfesor(profe);
+            List<Double> tfgprofes = obtenerTFGSañoProfesor(profe);
             if (n == 0) {
                 // Si es el primer profesor se añade al array
                 n++;
@@ -648,14 +667,14 @@ public class ProfesoresView extends VerticalLayout {
      * @param area
      * @return list<Integer> de tfgs por curso
      */
-    private List<Integer> obtenerTFGSañoArea(String area) {
+    private List<Double> obtenerTFGSañoArea(String area) {
         // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
-        List<Integer> TFGs = new ArrayList<>();
+        List<Double> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeArea(area));
         int n = 0;
         for (String profe : profes) {
-            List<Integer> tfgprofes = obtenerTFGSañoProfesor(profe);
+            List<Double> tfgprofes = obtenerTFGSañoProfesor(profe);
             if (n == 0) {
                 n++;
                 TFGs.addAll(tfgprofes);
