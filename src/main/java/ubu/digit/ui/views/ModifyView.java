@@ -125,14 +125,14 @@ public class ModifyView extends VerticalLayout {
         // Obtenemos los datos del TFG seleccionado previamente
         ActiveProject TFG = fachadaDatos.getTFG(tituloTFG, dateTimeFormatter);
 
-        TextArea tituloCorto = new TextArea("Título corto del TFG");
+        TextArea tituloCorto = new TextArea("Título corto");
         tituloCorto.setWidth("40%");
         tituloCorto.setValue(TFG.getTitle());
         tituloCorto.addValueChangeListener(event -> {
             tituloCorto.setValue(event.getValue());
         });
 
-        TextArea descripcion = new TextArea("Descripción del TFG");
+        TextArea descripcion = new TextArea("Descripción");
         descripcion.setWidth("40%");
         descripcion.setHeight("30%");
         descripcion.setValue(TFG.getDescription());
@@ -142,7 +142,7 @@ public class ModifyView extends VerticalLayout {
 
         List<String> profesores = fachadaDatos.getProfesores();
 
-        ComboBox<String> tutor1 = new ComboBox<>("Tutor 1 del TFG");
+        ComboBox<String> tutor1 = new ComboBox<>("Tutor 1");
         tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");
         tutor1.setItems(profesores);
@@ -155,7 +155,7 @@ public class ModifyView extends VerticalLayout {
             if (!profesores.contains(tutor1.getValue()))
                 Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor2 = new ComboBox<>("Tutor 2 del TFG");
+        ComboBox<String> tutor2 = new ComboBox<>("Tutor 2");
         tutor2.setAllowCustomValue(true);
         tutor2.setWidth("40%");
         tutor2.setItems(profesores);
@@ -168,7 +168,7 @@ public class ModifyView extends VerticalLayout {
             if (!profesores.contains(tutor2.getValue()))
                 Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor3 = new ComboBox<>("Tutor 3 del TFG");
+        ComboBox<String> tutor3 = new ComboBox<>("Tutor 3");
         tutor3.setAllowCustomValue(true);
         tutor3.setWidth("40%");
         tutor3.setItems(profesores);
@@ -182,27 +182,27 @@ public class ModifyView extends VerticalLayout {
                 Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");
         });
 
-        TextArea alumno1 = new TextArea("Alumno 1 del TFG");
+        TextArea alumno1 = new TextArea("Alumno 1");
         alumno1.setWidth("40%");
         alumno1.setValue(TFG.getStudent1());
         alumno1.addValueChangeListener(event -> {
             alumno1.setValue(event.getValue());
         });
-        TextArea alumno2 = new TextArea("Alumno 2 del TFG");
+        TextArea alumno2 = new TextArea("Alumno 2");
         alumno2.setWidth("40%");
         alumno2.setValue(TFG.getStudent2());
         alumno2.addValueChangeListener(event -> {
             alumno2.setValue(event.getValue());
         });
 
-        TextArea alumno3 = new TextArea("Alumno 3 del TFG");
+        TextArea alumno3 = new TextArea("Alumno 3");
         alumno3.setWidth("40%");
         alumno3.setValue(TFG.getStudent3());
         alumno3.addValueChangeListener(event -> {
             alumno3.setValue(event.getValue());
         });
 
-        DatePicker fechaAsignacion = new DatePicker("Fecha de asignacion del TFG");
+        DatePicker fechaAsignacion = new DatePicker("Fecha de asignacion");
         fechaAsignacion.setValue(TFG.getDateAssignment());
         fechaAsignacion.setLocale(getLocale());
         fechaAsignacion.setWidth("40%");
@@ -211,7 +211,7 @@ public class ModifyView extends VerticalLayout {
 
         });
 
-        DatePicker fechaPresentacion = new DatePicker("Fecha de presentacion del TFG");
+        DatePicker fechaPresentacion = new DatePicker("Fecha de presentacion");
         fechaPresentacion.setEnabled(false);
         fechaPresentacion.setLocale(getLocale());
         fechaPresentacion.setWidth("40%");
@@ -219,7 +219,7 @@ public class ModifyView extends VerticalLayout {
             fechaPresentacion.setValue(event.getValue());
         });
 
-        NumberField nota = new NumberField("Indique una nota del TFG");
+        NumberField nota = new NumberField("Nota");
         nota.setEnabled(false);
         nota.setMax(10);
         nota.setMin(0);
@@ -229,7 +229,7 @@ public class ModifyView extends VerticalLayout {
             nota.setValue(event.getValue());
         });
 
-        TextArea repo = new TextArea("Indique el enlace URL del repositorio");
+        TextArea repo = new TextArea("Enlace URL del repositorio");
         repo.setEnabled(false);
         repo.setWidth("40%");
         repo.addValueChangeListener(event -> {

@@ -136,8 +136,8 @@ public class ReportView extends VerticalLayout {
      */
     public void opciones() {
         // obtendriamos el total de alumnos matriculados en el curso
-        NumberField nAlum = new NumberField("Indique el número de alumnos matriculados");
-        nAlum.setWidth("20%");
+        NumberField nAlum = new NumberField("Indique el número de alumnos matriculados en este curso académico");
+        nAlum.setWidth("25%");
         nAlum.addValueChangeListener(event -> {
             nAlum.setValue(event.getValue());
         });
@@ -145,7 +145,7 @@ public class ReportView extends VerticalLayout {
         Checkbox checkbox = new Checkbox("Seleccionar Todas");
         List<String> areas = fachadaDatos.getAreas();
         CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setLabel("Áreas");
+        checkboxGroup.setLabel("Áreas"); 
         checkboxGroup.setItems(areas);
         checkboxGroup.addValueChangeListener(event -> {
             if (event.getValue().size() == areas.size()) {
@@ -171,7 +171,7 @@ public class ReportView extends VerticalLayout {
         TextField nombreInforme = new TextField();
         nombreInforme.setLabel("Indique el nombre del informe");
         nombreInforme.setWidth("25%");
-        nombreInforme.setHelperText("No introduzcas el formato del archivo (.xls)");
+        nombreInforme.setHelperText("No introduzcas la extensión del archivo (.xls)");
         nombreInforme.addValueChangeListener(event -> {
             nombreInforme.setValue(event.getValue());
         });

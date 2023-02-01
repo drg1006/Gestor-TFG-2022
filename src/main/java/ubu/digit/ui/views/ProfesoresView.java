@@ -193,15 +193,14 @@ public class ProfesoresView extends VerticalLayout {
      * archivos.
      */
     private void preguntarSiActualizar() {
-        Button actualizar = new Button("Si");
+        Button actualizar = new Button("Actualizar datos de profesorado");
         actualizar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Footer footer = new Footer("");
         String lastModifiedXls = footer.getLastModified(NOMBRE_BASES);
 
         Label ultimaAct = new Label(
-                "La última actualización de los datos fue el: " + lastModifiedXls + " ¿Quiere actualizar los datos? ");
-        Label AVISO = new Label("Este proceso puede llevar un tiempo");
-        layout.add(ultimaAct, AVISO, actualizar);
+                "La última actualización de los datos fue el: " + lastModifiedXls + " ¿Quiere actualizar los datos?  Este proceso puede llevar un tiempo");
+        layout.add(ultimaAct,actualizar);
         actualizar.addClickListener(event -> {
             long startTime = System.nanoTime();
             actualizarDatos();
@@ -390,6 +389,7 @@ public class ProfesoresView extends VerticalLayout {
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
             LOGGER.info("Se ha actualizado la base de datos correctamente");
+            UI.getCurrent().getPage().reload();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

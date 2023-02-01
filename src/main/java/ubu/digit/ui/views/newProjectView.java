@@ -114,13 +114,13 @@ public class newProjectView extends VerticalLayout {
      */
     private void introducirDatos() {
 
-        TextArea titulo = new TextArea("Indique un nombre para el TFG");
+        TextArea titulo = new TextArea("Nombre del Trabajo de Fin de Grado");
         titulo.setWidth("40%");
         titulo.addValueChangeListener(event -> {
             titulo.setValue(event.getValue());
         });
 
-        TextArea descripcion = new TextArea("Indique una descripción para el TFG");
+        TextArea descripcion = new TextArea("Descripción");
         descripcion.setWidth("40%");
         descripcion.setHeight("30%");
         descripcion.addValueChangeListener(event -> {
@@ -129,7 +129,7 @@ public class newProjectView extends VerticalLayout {
 
         List<String> profesores = fachadaDatos.getProfesores();
 
-        ComboBox<String> tutor1 = new ComboBox<>("Indique el tutor 1 del TFG");
+        ComboBox<String> tutor1 = new ComboBox<>("Tutor 1");
         tutor1.setAllowCustomValue(true);
         tutor1.setWidth("40%");
         tutor1.setItems(profesores);
@@ -143,7 +143,7 @@ public class newProjectView extends VerticalLayout {
                 Notification.show("Estas introduciendo un nombre de tutor1 que no está en la EPS, ¿estas seguro?");
 
         });
-        ComboBox<String> tutor2 = new ComboBox<>("Indique el tutor 2 del TFG");
+        ComboBox<String> tutor2 = new ComboBox<>("Tutor 2");
         tutor2.setAllowCustomValue(true);
         tutor2.setWidth("40%");
         tutor2.setItems(profesores);
@@ -155,7 +155,7 @@ public class newProjectView extends VerticalLayout {
             if (!profesores.contains(tutor2.getValue()))
                 Notification.show("Estas introduciendo un nombre de tutor2 que no está en la EPS, ¿estas seguro?");
         });
-        ComboBox<String> tutor3 = new ComboBox<>("Indique el tutor 3 del TFG");
+        ComboBox<String> tutor3 = new ComboBox<>("Tutor 3");
         tutor3.setAllowCustomValue(true);
         tutor3.setWidth("40%");
         tutor3.setItems(profesores);
@@ -168,13 +168,13 @@ public class newProjectView extends VerticalLayout {
                 Notification.show("Estas introduciendo un nombre de tutor3 que no está en la EPS, ¿estas seguro?");
         });
 
-        TextArea alumno1 = new TextArea("Indique el alumno 1 del TFG");
+        TextArea alumno1 = new TextArea("Alumno 1");
         alumno1.setWidth("40%");
         alumno1.setValue("Aalumnos sin asignar");
         alumno1.addValueChangeListener(event -> {
             alumno1.setValue(event.getValue());
         });
-        TextArea alumno2 = new TextArea("Indique el alumno 2 del TFG");
+        TextArea alumno2 = new TextArea("Alumno 2");
         alumno2.setWidth("40%");
         alumno2.addValueChangeListener(event -> {
             alumno2.setValue(event.getValue());
@@ -193,7 +193,7 @@ public class newProjectView extends VerticalLayout {
         valoresPorDefecto(today, fechaINI, titulo);
 
         // Fecha de asignacion
-        DatePicker fechaAsignacion = new DatePicker("Indique una fecha de oferta/asignacion del TFG");
+        DatePicker fechaAsignacion = new DatePicker("Fecha de oferta/asignacion");
         fechaAsignacion.setLocale(getLocale());
         // Asignamos por defecto la fecha del día de subida
         fechaAsignacion.setValue(today);
