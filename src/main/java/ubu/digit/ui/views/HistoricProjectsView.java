@@ -303,6 +303,25 @@ public class HistoricProjectsView extends VerticalLayout {
         if (getCourse(true) != null && getCourse(false) != null) {
             minCourse = getCourse(true).getYear();
             maxCourse = getCourse(false).getYear();
+            
+           //Comprobamos a que curso pertenecen las fechas obtenidas
+            int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
+            int startDay = Integer.parseInt(config.getSetting("inicioCurso.dia"));
+            
+            LocalDate fechaMinCourse= LocalDate.of(getCourse(true).getYear(), startMonth, startDay);
+            LocalDate fechaMaxCourse= LocalDate.of(getCourse(false).getYear(), startMonth, startDay);
+
+            if(fechaMinCourse.isAfter(getCourse(true))) {
+                minCourse=getCourse(true).getYear()-1;
+            }else {
+                minCourse=getCourse(true).getYear();
+            }
+            
+            if(fechaMaxCourse.isAfter(getCourse(false))) {
+                maxCourse=getCourse(false).getYear()-1;
+            }else {
+                maxCourse=getCourse(false).getYear();
+            }
         }
 
         yearOfProjects = new HashMap<>();

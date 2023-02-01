@@ -337,7 +337,6 @@ public class ProfesoresView extends VerticalLayout {
         CSVWriter writer = new CSVWriter(new FileWriter(absPath));
         writer.writeAll(profesores);
         writer.close();
-        SistInfDataFactory.setInstanceData("CSV");
     }
 
     /**
@@ -390,6 +389,7 @@ public class ProfesoresView extends VerticalLayout {
             workbook.close();
             outputStream.close();
             SistInfDataFactory.setInstanceData("XLS");
+            LOGGER.info("Se ha actualizado la base de datos correctamente");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
