@@ -155,7 +155,7 @@ public class ActiveProjectsView extends VerticalLayout {
             Label aalumnos = new Label("Buscar la cadena 'Aalumnos sin asignar' en columna Alumnos.");
 
             Number totalStudentNumber = fachadaDatos.getTotalNumber(APELLIDOS_NOMBRE, ALUMNO);
-            Label totalStudent = new Label("- Número total de alumnos: " + totalStudentNumber.intValue());
+            Label totalStudent = new Label("- Número total de alumnos sin asignar: " + totalStudentNumber.intValue());
 
             String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
             Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);

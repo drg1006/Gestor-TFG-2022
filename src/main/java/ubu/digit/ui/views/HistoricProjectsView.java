@@ -301,8 +301,8 @@ public class HistoricProjectsView extends VerticalLayout {
      */
     public void initProjectsStructures() {
         if (getCourse(true) != null && getCourse(false) != null) {
-            minCourse = getCourse(true).getYear();
-            maxCourse = getCourse(false).getYear();
+          //  minCourse = getCourse(true).getYear();
+           // maxCourse = getCourse(false).getYear();
             
            //Comprobamos a que curso pertenecen las fechas obtenidas
             int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
@@ -847,18 +847,19 @@ public class HistoricProjectsView extends VerticalLayout {
         LocalDate dateChange = null;
         dataFilteredGrid = new ArrayList<HistoricProject>();
         Iterator<HistoricProject> iterator = dataHistoricGrid.iterator();
+        String lowercase = valueChange.toLowerCase();
         if (!valueChange.equals(" ")) {
             while (iterator.hasNext()) {
                 HistoricProject historicProject = iterator.next();
 
                 switch (column) {
                     case "title":
-                        if (historicProject.getTitle().contains(valueChange)) {
+                        if (historicProject.getTitle().contains(lowercase)) {
                             dataFilteredGrid.add(historicProject);
                         }
                         break;
                     case "tutor":
-                        if (historicProject.getTutors().contains(valueChange)) {
+                        if (historicProject.getTutors().contains(lowercase)) {
                             dataFilteredGrid.add(historicProject);
                         }
                         break;

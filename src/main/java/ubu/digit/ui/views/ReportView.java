@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 import java.sql.SQLException;
 import java.text.NumberFormat;
-
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import java.util.HashSet;
@@ -145,7 +145,7 @@ public class ReportView extends VerticalLayout {
         Checkbox checkbox = new Checkbox("Seleccionar Todas");
         List<String> areas = fachadaDatos.getAreas();
         CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setLabel("Áreas"); 
+        checkboxGroup.setLabel("Áreas");
         checkboxGroup.setItems(areas);
         checkboxGroup.addValueChangeListener(event -> {
             if (event.getValue().size() == areas.size()) {
@@ -279,9 +279,10 @@ public class ReportView extends VerticalLayout {
     private Map<String, Object[]> obtencionDatos(String area, Double nAlumn) {
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 
-        // Cogemos el año
-        int ultimoAño = vista.maxCourse;
         List<String> profes = fachadaDatos.getProfesoresDeArea(area);
+        List<String> profesEPS = fachadaDatos.getProfesores();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String cursoActual = obtenerCursoActual();
         int i = 1;
 
         for (String prof : profes) {
@@ -290,20 +291,58 @@ public class ReportView extends VerticalLayout {
             double tfgs = 0;
             double tfgs2 = 0;
             // obtenemos los creditos
-            double creditos = obtenerCreditos(prof, ultimoAño, nAlumn);
+            double creditos = obtenerCreditos(prof, nAlumn);
             // Recorremos todos los tfgs y buscamos los del año y tutor correspondientes
             for (int n = 0; n < activos.dataActiveProjects.size(); n++) {
-                if (activos.dataActiveProjects.get(n).getTutor1() == prof &&
-                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
-                    tfgs++;
+                // Proyectos con alumno asignado
+                if (!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
+                    // Es tutor 1
+                    System.out.println("TUTOR"+prof);
+                   
+                    if (activos.dataActiveProjects.get(n).getTutor1().equals(prof)) {
+                        // Tiene tutor 2 de la EPS
+                        if (profesEPS.contains(activos.dataActiveProjects.get(n).getTutor2())) {
+                            tfgs2++;
+                        } else { // No tiene tutor2 de la EPS
+                            tfgs++;
+                        }
+                        // Es tutor2 del tfg
+                    } else if (activos.dataActiveProjects.get(n).getTutor2().equals(prof)) {
+                        tfgs2++;
+                    }
+
                 }
             }
-            // Codirigidos
-            for (int n = 0; n < activos.dataActiveProjects.size(); n++) {
-                if (activos.dataActiveProjects.get(n).getTutor2() == prof &&
-                        !activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
-                    tfgs2++;
+            // OBTENER LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE CUENTA
+            for (int p = 0; p < vista.dataHistoric.size(); p++) {
+                String cursoTFG = "";
+                int año = vista.dataHistoric.get(p).getPresentationDate().getYear();
+                String fechaIni = año + "-09-01";
+                String fechaFin = (año + 1) + "-09-01";
+                LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
+                LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
+                // Obtenemos el curso del TFG
+                if (vista.dataHistoric.get(p).getPresentationDate().isAfter(fechaINI)
+                        && vista.dataHistoric.get(p).getPresentationDate().isBefore(fechaFIN)) {
+                    // asignamos el curso
+                    cursoTFG = String.valueOf(año) + "/" + String.valueOf(año + 1);
+
+                } else {
+                    cursoTFG = String.valueOf(año - 1) + "/" + String.valueOf(año);
                 }
+
+                // Miramos si nos interesa para este curso y si es el profesor que buscamos
+                // sumamos
+                if (cursoTFG.equals(cursoActual)) {
+                    // Cogemos los tfgs del profesor que nos interesa
+                    if (vista.dataHistoric.get(p).getTutor1().equals(prof)) {
+                        tfgs++;
+                    } else if (vista.dataHistoric.get(p).getTutor2().equals(prof)) {
+                        tfgs2++;
+
+                    }
+                }
+
             }
 
             // Array con toda la informacion
@@ -321,6 +360,28 @@ public class ReportView extends VerticalLayout {
         return dataTFG;
     }
 
+    private String obtenerCursoActual() {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String cursoActual = "";
+        // Obtenemos el curso actual
+        LocalDate today = LocalDate.now();
+        int esteAño = today.now().getYear();
+
+        String fechahoy = today.now().getYear() + "-09-01";
+        String fechaIniEsteAño = esteAño + "-09-01";
+        String fechaFinEsteAño = (esteAño + 1) + "-09-01";
+        LocalDate fechaINIESTEAÑO = LocalDate.parse(fechaIniEsteAño, formato);
+        LocalDate fechaFINESTEAÑO = LocalDate.parse(fechaFinEsteAño, formato);
+        LocalDate fechaHOY = LocalDate.parse(fechahoy, formato);
+        if (fechaHOY.isAfter(fechaINIESTEAÑO) && fechaHOY.isBefore(fechaFINESTEAÑO)) {
+            cursoActual = String.valueOf(esteAño) + "/" + String.valueOf(esteAño + 1);
+        } else {
+            cursoActual = String.valueOf(esteAño - 1) + "/" + String.valueOf(esteAño);
+        }
+        return cursoActual;
+
+    }
+
     /**
      * Metodo que obtiene el numero de creditos de un tutor
      * 
@@ -329,7 +390,10 @@ public class ReportView extends VerticalLayout {
      * @param nAlumn    nAlumnos matriculados en TFG
      * @return valor con el numero de creditos
      */
-    private float obtenerCreditos(String profesor, int ultimoAño, Double nAlumn) {
+    private float obtenerCreditos(String profesor, Double nAlumn) {
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String cursoActual = obtenerCursoActual();
 
         // creditos del tutor
         float nCreditosTutor = 0;
@@ -369,6 +433,43 @@ public class ReportView extends VerticalLayout {
                 }
             }
         }
+        // OBTENER LOS CREDITOS DE LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE
+        // CUENTA
+        for (int p = 0; p < vista.dataHistoric.size(); p++) {
+            String cursoTFG = "";
+            int año = vista.dataHistoric.get(p).getPresentationDate().getYear();
+            String fechaIni = año + "-09-01";
+            String fechaFin = (año + 1) + "-09-01";
+            LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
+            LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
+            // Obtenemos el curso del TFG
+            if (vista.dataHistoric.get(p).getPresentationDate().isAfter(fechaINI)
+                    && vista.dataHistoric.get(p).getPresentationDate().isBefore(fechaFIN)) {
+                // asignamos el curso
+                cursoTFG = String.valueOf(año) + "/" + String.valueOf(año + 1);
+
+            } else {
+                cursoTFG = String.valueOf(año - 1) + "/" + String.valueOf(año);
+            }
+
+            // Miramos si nos interesa para este curso y si es el profesor que buscamos
+            // sumamos
+            if (cursoTFG.equals(cursoActual)) {
+                // COMPROBAMOS SI ES TUTOR1 O 2
+                if (vista.dataHistoric.get(p).getTutor1().equals(profesor)) {
+                    //es tutor 1 y si el tutor 2 es de la EPS
+                    if (fachadaDatos.getProfesores().contains(vista.dataHistoric.get(p).getTutor2())) {
+                        nCreditosTutor += crDir * 0.3;
+                    } else {
+                        nCreditosTutor += crDir * 0.6;
+                    }
+                  //ES TUTOR 2 
+                } else if (vista.dataHistoric.get(p).getTutor2().equals(profesor)) {
+                    nCreditosTutor += crDir * 0.3;
+                }
+            }
+
+        }
 
         // Si el tutor pertenece al tribunal
         if (fachadaDatos.getNombresTribunal().contains(profesor)) {
@@ -393,4 +494,5 @@ public class ReportView extends VerticalLayout {
 
         return stream;
     }
+
 }
