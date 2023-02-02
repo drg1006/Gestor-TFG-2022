@@ -339,7 +339,7 @@ public class ManageView extends VerticalLayout {
                         // Guardamos el titulo del TFG
                         ModifyView.tituloTFG = tfg.getTitle();
                     }
-                        UI.getCurrent().navigate(ModifyView.class);
+                    UI.getCurrent().navigate(ModifyView.class);
                 } else {
                     // Si se han seleccionado varios tfgs y se ha dado a modificar
                     Dialog aviso = new Dialog();
@@ -524,11 +524,6 @@ public class ManageView extends VerticalLayout {
      * @param estado        nuevo estado que se introducira
      */
     private void modificar(List<String> titulos, String estado) {
-        String newEstado;
-        if (estado.equals("Aceptar")) {
-            newEstado = "";
-        } else
-            newEstado = "Denegado";
 
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String serverPath = path.substring(0, path.length() - 17);
@@ -570,8 +565,16 @@ public class ManageView extends VerticalLayout {
                 }
                 // Cambiamos la celda de: la fila rowid y columna column
                 Row fila1 = hoja.getRow(rowid);
-                Cell estadoNuevo = fila1.getCell(column);
-                estadoNuevo.setCellValue(newEstado);
+                if (estado.equals("Aceptar")) {
+                    Cell estadoNuevo = fila1.getCell(column);
+                    estadoNuevo.setCellValue("");
+                } else {
+                    //BORRAMOS EL TFG QUE SE HA MANDAD DENEGAR HASTA LA COLUMNA ESTADO QUE ES LA ULTIMA
+                    for (int cellid = 0; cellid < column; cellid++) {
+                        Cell cell = fila1.createCell(cellid++);
+                        cell.setCellValue("");
+                    }
+                }
             }
             FileOutputStream outputStream = new FileOutputStream(absPath);
             workbook.write(outputStream);
@@ -579,10 +582,16 @@ public class ManageView extends VerticalLayout {
             outputStream.close();
             // Actualizamos la instancia
             SistInfDataFactory.setInstanceData("XLS");
+            borrarTFGs();
             UI.getCurrent().getPage().reload();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void borrarTFGs() {
+        // TODO Auto-generated method stub
+
     }
 
 }
