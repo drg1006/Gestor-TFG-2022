@@ -277,6 +277,9 @@ public class ReportView extends VerticalLayout {
      * @return mapa con los datos.
      */
     private Map<String, Object[]> obtencionDatos(String area, Double nAlumn) {
+        //Se llama a este metodo que asigna cursos a los tfgs de historicos
+        vista.initProjectsStructures();
+        
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 
         List<String> profes = fachadaDatos.getProfesoresDeArea(area);
@@ -297,7 +300,6 @@ public class ReportView extends VerticalLayout {
                 // Proyectos con alumno asignado
                 if (!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
                     // Es tutor 1
-                    System.out.println("TUTOR"+prof);
                    
                     if (activos.dataActiveProjects.get(n).getTutor1().equals(prof)) {
                         // Tiene tutor 2 de la EPS
@@ -315,22 +317,7 @@ public class ReportView extends VerticalLayout {
             }
             // OBTENER LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE CUENTA
             for (int p = 0; p < vista.dataHistoric.size(); p++) {
-                String cursoTFG = "";
-                int año = vista.dataHistoric.get(p).getPresentationDate().getYear();
-                String fechaIni = año + "-09-01";
-                String fechaFin = (año + 1) + "-09-01";
-                LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
-                LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
-                // Obtenemos el curso del TFG
-                if (vista.dataHistoric.get(p).getPresentationDate().isAfter(fechaINI)
-                        && vista.dataHistoric.get(p).getPresentationDate().isBefore(fechaFIN)) {
-                    // asignamos el curso
-                    cursoTFG = año + "/" + String.valueOf(año + 1);
-
-                } else {
-                    cursoTFG = año - 1 + "/" + año;
-                }
-
+                String cursoTFG= vista.dataHistoric.get(p).getCourse();               
                 // Miramos si nos interesa para este curso y si es el profesor que buscamos
                 // sumamos
                 if (cursoTFG.equals(cursoActual)) {
@@ -436,21 +423,7 @@ public class ReportView extends VerticalLayout {
         // OBTENER LOS CREDITOS DE LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE
         // CUENTA
         for (int p = 0; p < vista.dataHistoric.size(); p++) {
-            String cursoTFG = "";
-            int año = vista.dataHistoric.get(p).getPresentationDate().getYear();
-            String fechaIni = año + "-09-01";
-            String fechaFin = (año + 1) + "-09-01";
-            LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
-            LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
-            // Obtenemos el curso del TFG
-            if (vista.dataHistoric.get(p).getPresentationDate().isAfter(fechaINI)
-                    && vista.dataHistoric.get(p).getPresentationDate().isBefore(fechaFIN)) {
-                // asignamos el curso
-                cursoTFG = String.valueOf(año) + "/" + String.valueOf(año + 1);
-
-            } else {
-                cursoTFG = String.valueOf(año - 1) + "/" + String.valueOf(año);
-            }
+            String cursoTFG = vista.dataHistoric.get(p).getCourse();           
 
             // Miramos si nos interesa para este curso y si es el profesor que buscamos
             // sumamos
