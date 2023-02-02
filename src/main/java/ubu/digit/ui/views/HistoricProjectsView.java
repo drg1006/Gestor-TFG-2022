@@ -233,7 +233,7 @@ public class HistoricProjectsView extends VerticalLayout {
         metricsTitle.addClassName(TITLE_STYLE);
         add(metricsTitle);
         try {
-            Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, HISTORICO);
+            Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO_CORTO, HISTORICO);
             Label totalProjects = new Label("Número total de proyectos: " + totalProjectsNumber.intValue());
 
             String[] studentColumnNames = { ALUMNO1, ALUMNO2, ALUMNO3 };

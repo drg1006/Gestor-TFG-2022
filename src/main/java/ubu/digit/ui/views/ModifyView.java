@@ -535,7 +535,7 @@ public class ModifyView extends VerticalLayout {
             String tutor3, String alumno1, String alumno2, String alumno3, String fechaAsig,
             String fechaPresen, Double nota, long dias, String repo) {
 
-        String[] TFG = { "", tituloCorto, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, alumno3, fechaAsig,
+        String[] TFG = { " ", tituloCorto, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, alumno3, fechaAsig,
                 fechaPresen, nota.toString(), String.valueOf(dias), repo };
         int estado = 1;
         // Borramos el TFG del listado de activos;
