@@ -12,6 +12,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +120,7 @@ public class ProfesoresView extends VerticalLayout {
      */
     List<String> profSelect = new ArrayList<>();
 
+    HistoricProjectsView vista = new HistoricProjectsView();
     /**
      * Constructor.
      * 
@@ -150,7 +152,9 @@ public class ProfesoresView extends VerticalLayout {
                 add(bat.subMenu());
             }
         }
-
+        // REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
+        vista.initProjectsStructures();
+        //tablaTFGsPorCursoDeCadaTutor();
         crearEstadisticas();
         datosGraficas();
         // Si tiene permisos de administrador para actualizar archivos
@@ -199,8 +203,9 @@ public class ProfesoresView extends VerticalLayout {
         String lastModifiedXls = footer.getLastModified(NOMBRE_BASES);
 
         Label ultimaAct = new Label(
-                "La última actualización de los datos fue el: " + lastModifiedXls + " ¿Quiere actualizar los datos?  Este proceso puede llevar un tiempo");
-        layout.add(ultimaAct,actualizar);
+                "La última actualización de los datos fue el: " + lastModifiedXls
+                        + " ¿Quiere actualizar los datos?  Este proceso puede llevar un tiempo");
+        layout.add(ultimaAct, actualizar);
         actualizar.addClickListener(event -> {
             long startTime = System.nanoTime();
             actualizarDatos();
@@ -404,13 +409,7 @@ public class ProfesoresView extends VerticalLayout {
         H2 metricsTitle = new H2("Datos a mostrar");
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
-        List<String> courses = new ArrayList<>();
-        // REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
-        HistoricProjectsView vista = new HistoricProjectsView();
-        for (int year = vista.minCourse; year <= vista.maxCourse; year++) {
-            //courses.add(year + "/" + (year+1));
-            courses.add(year - 1 + "/" + year);
-        }
+        
         String[] colors = getRandomColors();
         // Grafico
         ApexCharts lineChart = ApexChartsBuilder.get()
@@ -434,7 +433,7 @@ public class ProfesoresView extends VerticalLayout {
                                 .withOpacity(0.5).build())
                         .build())
                 .withXaxis(XAxisBuilder.get()
-                        .withCategories(courses)
+                        .withCategories(vista.courses)
                         .build())
                 .withSeries(new Series())
                 .withColors(colors)
@@ -584,9 +583,11 @@ public class ProfesoresView extends VerticalLayout {
      * @return list<Integer> de tfgs por curso
      */
     private List<Double> obtenerTFGSañoProfesor(String profesor) {
+
         List<Double> TFGs = new ArrayList<>();
         // Datos ya obtenidos en historicos
         HistoricProjectsView vista = new HistoricProjectsView();
+
         // Formato de la fecha
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // Bucle para sacar los TFGs que tiene asignado un profesor por cada año, siendo
@@ -595,17 +596,12 @@ public class ProfesoresView extends VerticalLayout {
 
         List<String> tutoresEPS = fachadaDatos.getProfesores();
 
-        for (int año = vista.minCourse; año <= vista.maxCourse; año++) {
+        for(String curso:vista.courses) {
             Double num1 = 0.0;
             // El curso va del 1 de septiembre de un año al siguiente
-            String fechaIni = año + "-09-01";
-            String fechaFin = (año + 1) + "-09-01";
-            LocalDate fechaINI = LocalDate.parse(fechaIni, formato);
-            LocalDate fechaFIN = LocalDate.parse(fechaFin, formato);
             for (int i = 0; i < vista.dataHistoric.size(); i++) {
                 // COMPROBAMOS LA FECHA
-                if (vista.dataHistoric.get(i).getPresentationDate().isAfter(fechaINI)
-                        && vista.dataHistoric.get(i).getPresentationDate().isBefore(fechaFIN)) {
+                if (vista.dataHistoric.get(i).getCourse().equals(curso)) {
                     // PRIMERO SI ES TUTOR 1
                     if (vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
 
@@ -616,7 +612,7 @@ public class ProfesoresView extends VerticalLayout {
                             // no es de la EPS el tutor2
                             num1++;
                         }
-                    // Si es tutor 2: tfgs codirigidos
+                        // Si es tutor 2: tfgs codirigidos
                     } else if (vista.dataHistoric.get(i).getTutor2().equals(profesor)) {
                         num1 += 0.5;
                     }
@@ -685,6 +681,42 @@ public class ProfesoresView extends VerticalLayout {
             }
         }
         return TFGs;
+    }
+
+    private void tablaTFGsPorCursoDeCadaTutor() {
+        List<String> tutoresEPS = fachadaDatos.getProfesores();
+        // Hashmap con clave curso y value : double valor n tfgs
+        HashMap<String, Double> cursoTFG = new HashMap<>();
+
+        // Hashmap con clave nombre del tutor y value : hashmap de cursoTFG
+        HashMap<String, HashMap<String, Double>> tabla = new HashMap<String, HashMap<String, Double>>();
+        HistoricProjectsView vista = new HistoricProjectsView();
+        // Asignamos un curso a cada proyecto
+        vista.initProjectsStructures();
+
+        // Asignamos las keys, que serán los tutores y los cursos a cada tutor, con
+        // valor 0 inicial
+        for (String profe : tutoresEPS) {
+            for (String curso : vista.courses) {
+                cursoTFG.put(curso, 0.0);
+            }
+            tabla.put(profe, cursoTFG);
+        }
+        // Recorremos el historico
+        for (int i = 0; i < vista.dataHistoric.size(); i++) {
+            // Comprobamos que el tutor 1 esta en la EPS
+            if (tabla.containsKey(vista.dataHistoric.get(i).getTutor1())) {
+                // Cogemos el curso del TFG y su tutor
+                String cursoDelTFG = vista.dataHistoric.get(i).getCourse();
+                String tutorDelTFG = vista.dataHistoric.get(i).getTutor1();
+                // Le sumamos 1 al tutor de este tfg, en ese curso
+                // NO LO HACE BIEN
+                // LO SUMA A TODOS Y NO AL QUE PONE
+                tabla.get(tutorDelTFG).replace(cursoDelTFG, tabla.get(tutorDelTFG).get(cursoDelTFG) + 1.0);
+
+            }
+        }
+
     }
 
 }
