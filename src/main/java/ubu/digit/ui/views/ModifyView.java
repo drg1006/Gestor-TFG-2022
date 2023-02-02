@@ -297,6 +297,7 @@ public class ModifyView extends VerticalLayout {
                 stringAbierto(tituloCorto.getValue(), descripcion.getValue(), tutor1.getValue(), tutor2.getValue(),
                         tutor3.getValue(), alumno1.getValue(), alumno2.getValue(), alumno3.getValue(), fechaAsig);
                 Notification.show("Se ha modificado correctamente el TFG propuesto en la pestaña de activos.");
+                UI.getCurrent().navigate(ManageView.class);
             }
         });
 
@@ -325,6 +326,7 @@ public class ModifyView extends VerticalLayout {
                         tutor3.getValue(), alumno1.getValue(), alumno2.getValue(), alumno3.getValue(), fechaAsig,
                         fechaPresen, nota.getValue(), dias, repo.getValue());
                 Notification.show("Se ha eliminado el TFG de activos y se ha añadido en historicos correctamente.");
+                UI.getCurrent().navigate(ManageView.class);
             }
         });
 
@@ -497,7 +499,7 @@ public class ModifyView extends VerticalLayout {
     private void stringAbierto(String tituloCorto, String descripcion, String tutor1, String tutor2, String tutor3,
             String alumno1, String alumno2, String alumno3, String fechaAsignacion) {
 
-        String[] TFG = { tituloCorto, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, alumno3, fechaAsignacion };
+        String[] TFG = { tituloCorto, descripcion, tutor1, tutor2, tutor3, alumno1, alumno2, alumno3, fechaAsignacion};
         // Esta variable se va a utilizar para saber si lo que se tiene que hacer es
         // actualizar la fila o si se tiene que borrar
         // Es decir, si se llama desde cerrar un fichero

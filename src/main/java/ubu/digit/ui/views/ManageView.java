@@ -131,6 +131,8 @@ public class ManageView extends VerticalLayout {
      * Formateador de fechas.
      */
     public transient DateTimeFormatter dateTimeFormatter;
+    Boolean seDeniega = true;
+    Boolean seAcepta = true;
 
     /**
      * Constructor.
@@ -296,19 +298,37 @@ public class ManageView extends VerticalLayout {
             // Cuando indicamos que la lista de TFGs seleccionada es la definitiva, se la
             // pasamos a seleccionarTFG
             aceptar.addClickListener(event -> {
+
                 if (table.getSelectedItems().size() == 0) {
                     Notification.show("Seleccione al menos un TFG para aceptar");
                 } else {
-                    aceptarTFG(table.getSelectedItems());
-                }
+                    for (ActiveProject tfg : table.getSelectedItems()) {
 
+                        // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
+                        if (tfg.getStatus().equals(""))
+                            seAcepta = false;
+                    }
+                    if (seAcepta)
+                        aceptarTFG(table.getSelectedItems());
+                    else
+                        Notification.show("No puedes aceptar un proyecto ya aceptado");
+                }
             });
 
             denegar.addClickListener(event -> {
                 if (table.getSelectedItems().size() == 0) {
                     Notification.show("Seleccione al menos un TFG para aceptar");
                 } else {
-                    denegarTFG(table.getSelectedItems());
+
+                    for (ActiveProject tfg : table.getSelectedItems()) {
+                        // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
+                        if (tfg.getStatus().equals(""))
+                            seDeniega = false;
+                    }
+                    if (seDeniega)
+                        denegarTFG(table.getSelectedItems());
+                    else
+                        Notification.show("No puedes denegar un proyecto ya aceptado");
                 }
 
             });

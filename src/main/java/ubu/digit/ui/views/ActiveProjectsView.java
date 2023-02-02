@@ -146,8 +146,7 @@ public class ActiveProjectsView extends VerticalLayout {
         add(metricsTitle);
 
         try {
-            Number totalProjectsNumber = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
-            Label totalProjects = new Label("- Número total de proyectos: " + totalProjectsNumber.intValue());
+            Label totalProjects = new Label("- Número total de proyectos: " + dataActiveProjects.size());
 
             Number totalFreeProjectNumber = fachadaDatos.getTotalFreeProject();
             Label totalFreeProject = new Label(
@@ -248,7 +247,10 @@ public class ActiveProjectsView extends VerticalLayout {
                     (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
                     (String) listaDataModel.get(++i), (String) listaDataModel.get(++i),
                     (LocalDate) listaDataModel.get(++i), (String) listaDataModel.get(++i));
-            dataActiveProjects.add(actives);
+            if(actives.getStatus().equals("Pendiente") || actives.getStatus().equals("Denegado"))
+                LOGGER.info("Este TFG no se añade porque está pendiente de activar o está denegado");
+            else
+                dataActiveProjects.add(actives);
         }
     }
 
