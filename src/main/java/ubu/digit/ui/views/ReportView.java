@@ -325,10 +325,10 @@ public class ReportView extends VerticalLayout {
                 if (vista.dataHistoric.get(p).getPresentationDate().isAfter(fechaINI)
                         && vista.dataHistoric.get(p).getPresentationDate().isBefore(fechaFIN)) {
                     // asignamos el curso
-                    cursoTFG = String.valueOf(año) + "/" + String.valueOf(año + 1);
+                    cursoTFG = año + "/" + String.valueOf(año + 1);
 
                 } else {
-                    cursoTFG = String.valueOf(año - 1) + "/" + String.valueOf(año);
+                    cursoTFG = año - 1 + "/" + año;
                 }
 
                 // Miramos si nos interesa para este curso y si es el profesor que buscamos

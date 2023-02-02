@@ -67,6 +67,9 @@ public class HistoricProject extends Projects implements Serializable {
     private int rankingCurse;
 
     private String tutors;
+    
+    private String course;
+
 
     /**
      * Constructor vacío sin parámetros (convención JavaBean).
@@ -379,5 +382,23 @@ public class HistoricProject extends Projects implements Serializable {
      */
     public void setNumTutors(int numTutors) {
         this.numTutors = numTutors;
+    }
+    /**
+     * Obtiene el número de tutores del proyecto.
+     * 
+     * @return número de tutores del proyecto.
+     */
+    public String getCourse() {
+        return course;
+    }
+
+    /**
+     * Establece el número de tutores del proyecto.
+     * 
+     * @param numTutors
+     *                  número de tutores del proyecto.
+     */
+    public void setCourse(String course) {
+        this.course = course;
     }
 }

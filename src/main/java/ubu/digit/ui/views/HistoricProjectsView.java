@@ -40,8 +40,6 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
@@ -118,27 +116,6 @@ public class HistoricProjectsView extends VerticalLayout {
      * Formateador de fechas.
      */
     public transient DateTimeFormatter dateTimeFormatter;
-
-    /**
-     * Mapa auxiliar con los diferentes cursos.
-     */
-    public transient Map<Integer, List<HistoricProject>> yearOfProjects;
-
-    /**
-     * Mapa con los cursos que tienen proyectos de nueva asignación.
-     */
-    public transient Map<Integer, List<HistoricProject>> newProjects;
-
-    /**
-     * Mapa con los cursos que tienen proyectos ya asignados.
-     */
-    public transient Map<Integer, List<HistoricProject>> oldProjects;
-
-    /**
-     * Mapa con los cursos que tienen proyectos presentados.
-     */
-    public transient Map<Integer, List<HistoricProject>> presentedProjects;
-
     /**
      * Menor curso total (más antiguo).
      */
@@ -174,6 +151,10 @@ public class HistoricProjectsView extends VerticalLayout {
      */
     public SistInfDataAbstract fachadaDatos;
 
+    List<String> courses;
+    
+    Map<String, Number> tfgsPerCourse;
+
     /**
      * Constructor.
      * 
@@ -196,7 +177,7 @@ public class HistoricProjectsView extends VerticalLayout {
         bat.buttonProjectsHistoric.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(bat);
         // Este submenu solo les sale a los profesores/administradores
-        //Comprobamos si es profesor o administrador
+        // Comprobamos si es profesor o administrador
         if (UI.getCurrent().getSession().getAttribute("update") != null) {
             if (UI.getCurrent().getSession().getAttribute("update").equals("true")) {
                 add(bat.subMenu());
@@ -300,199 +281,51 @@ public class HistoricProjectsView extends VerticalLayout {
      * Inicializa los mapas.
      */
     public void initProjectsStructures() {
-        if (getCourse(true) != null && getCourse(false) != null) {
-          //  minCourse = getCourse(true).getYear();
-           // maxCourse = getCourse(false).getYear();
-            
-           //Comprobamos a que curso pertenecen las fechas obtenidas
-            int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
-            int startDay = Integer.parseInt(config.getSetting("inicioCurso.dia"));
-            
-            LocalDate fechaMinCourse= LocalDate.of(getCourse(true).getYear(), startMonth, startDay);
-            LocalDate fechaMaxCourse= LocalDate.of(getCourse(false).getYear(), startMonth, startDay);
 
-            if(fechaMinCourse.isAfter(getCourse(true))) {
-                minCourse=getCourse(true).getYear()-1;
-            }else {
-                minCourse=getCourse(true).getYear();
-            }
-            
-            if(fechaMaxCourse.isAfter(getCourse(false))) {
-                maxCourse=getCourse(false).getYear()-1;
-            }else {
-                maxCourse=getCourse(false).getYear();
-            }
+        // Comprobamos a que curso pertenecen las fechas obtenidas
+        int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
+        int startDay = Integer.parseInt(config.getSetting("inicioCurso.dia"));
+
+        LocalDate fechaMinCourse = LocalDate.of(getCourse(true).getYear(), startMonth, startDay);
+        LocalDate fechaMaxCourse = LocalDate.of(getCourse(false).getYear(), startMonth, startDay);
+
+        if (fechaMinCourse.isAfter(getCourse(true))) {
+            minCourse = getCourse(true).getYear() - 1;
+        } else {
+            minCourse = getCourse(true).getYear();
         }
 
-        yearOfProjects = new HashMap<>();
-        newProjects = new HashMap<>();
-        oldProjects = new HashMap<>();
-        presentedProjects = new HashMap<>();
+        if (fechaMaxCourse.isAfter(getCourse(false))) {
+            maxCourse = getCourse(false).getYear() - 1;
+        } else {
+            maxCourse = getCourse(false).getYear();
+        }
+        courses = new ArrayList<>();
+        for (int year = minCourse; year <= maxCourse; year++) {
+            courses.add(year + "/" + (year + 1));
+        }
 
+        // LES ASIGNAREMOS UN CURSO A CADA HISTORICO
         Iterator<HistoricProject> iterator = dataHistoric.iterator();
         while (iterator.hasNext()) {
-            HistoricProject bean = iterator.next();
-            int year = bean.getAssignmentDate().getYear();
-            if (yearOfProjects.containsKey(year)) {
-                yearOfProjects.get(year).add(bean);
+            HistoricProject prj = iterator.next();
+
+            LocalDate fechaPres = prj.getPresentationDate();
+            LocalDate fechaINI = LocalDate.of(prj.getPresentationDate().getYear(), startMonth, startDay);
+            LocalDate fechaFIN = LocalDate.of(prj.getPresentationDate().getYear() + 1, startMonth, startDay);
+
+            if (fechaPres.isAfter(fechaINI) && fechaPres.isBefore(fechaFIN)) {
+                String cursoPrj = prj.getPresentationDate().getYear() + "/" + (prj.getPresentationDate().getYear() + 1);
+                prj.setCourse(cursoPrj);
             } else {
-                List<HistoricProject> aux = new ArrayList<>();
-                aux.add(bean);
-                yearOfProjects.put(year, aux);
+                String cursoPrj = (prj.getPresentationDate().getYear() - 1) + "/" + prj.getPresentationDate().getYear();
+                prj.setCourse(cursoPrj);
             }
         }
-        organizeProjects();
+        //organizeProjects();
     }
 
-    /**
-     * Organiza los proyectos (nueva o vieja asignación, y presentados).
-     */
-    public void organizeProjects() {
-        Iterator<Integer> iterator = yearOfProjects.keySet().iterator();
-        while (iterator.hasNext()) {
-            Integer year = iterator.next();
-            for (int index = 0; index < yearOfProjects.get(year).size(); index++) {
-                HistoricProject project = yearOfProjects.get(year).get(index);
-                LocalDate assignmentDate = project.getAssignmentDate();
 
-                int startMonth = Integer.parseInt(config.getSetting("inicioCurso.mes"));
-                int startDay = Integer.parseInt(config.getSetting("inicioCurso.dia"));
-                LocalDate startDate = LocalDate.of(year, startMonth, startDay);
-
-                int totalDays = project.getTotalDays();
-                int totalYears = totalDays / 365;
-
-                if (assignmentDate.isBefore(startDate)) {
-                    assignProjectCourses(year, project, totalYears, true);
-                } else {
-                    assignProjectCourses(year, project, totalYears, false);
-                }
-                buildPresentedProjects(project);
-            }
-        }
-    }
-
-    /**
-     * Asigna un proyecto a los distintos cursos que pertenece.
-     * 
-     * @param year
-     *                        curso actual
-     * @param project
-     *                        proyecto actual
-     * @param totalYears
-     *                        nº de años que dura el proyecto
-     * @param isCurrentCourse
-     *                        si el proyecto se corresponde con el curso actual
-     */
-    public void assignProjectCourses(int year, HistoricProject project, int totalYears, boolean isCurrentCourse) {
-        for (int yearCount = 0; yearCount <= totalYears; yearCount++) {
-            assignProject(year, yearCount, project, isCurrentCourse);
-        }
-    }
-
-    /**
-     * Asigna un proyecto a su respectivo curso.
-     * 
-     * @param year
-     *                        curso actual
-     * @param yearCount
-     *                        nº de año
-     * @param project
-     *                        proyecto actual
-     * @param isCurrentCourse
-     *                        si el proyecto se corresponde con el curso actual
-     */
-    public void assignProject(int year, int yearCount, HistoricProject project, boolean isCurrentCourse) {
-        int before = 0;
-        if (!isCurrentCourse) {
-            before = 1;
-        }
-        if (yearCount == 0) {
-            if (newProjects.containsKey(year + before)) {
-                newProjects.get(year + before).add(project);
-            } else {
-                List<HistoricProject> aux = new ArrayList<>();
-                aux.add(project);
-                newProjects.put(year + before, aux);
-            }
-        } else {
-            if (oldProjects.containsKey(year + yearCount + before)) {
-                oldProjects.get(year + yearCount + before).add(project);
-            } else {
-                List<HistoricProject> aux = new ArrayList<>();
-                aux.add(project);
-                oldProjects.put(year + yearCount + before, aux);
-            }
-        }
-    }
-
-    /**
-     * Añade un proyecto a presentedProjects si este se ha presentado.
-     * 
-     * @param project
-     *                proyecto actual
-     */
-    public void buildPresentedProjects(HistoricProject project) {
-        LocalDate presentedDate = project.getPresentationDate();
-        LocalDate startDate = LocalDate.of(presentedDate.getYear(),
-                Integer.parseInt(config.getSetting("finPresentaciones.mes")),
-                Integer.parseInt(config.getSetting("finPresentaciones.dia")));
-        if (presentedDate.isBefore(startDate)) {
-            if (presentedProjects.containsKey(presentedDate.getYear())) {
-                presentedProjects.get(presentedDate.getYear()).add(project);
-            } else {
-                List<HistoricProject> aux = new ArrayList<>();
-                aux.add(project);
-                presentedProjects.put(presentedDate.getYear(), aux);
-            }
-        }
-    }
-
-    /**
-     * Obtiene el número de alumnos con proyectos de nueva asignación en cada
-     * curso.
-     * 
-     * @return número de alumnos con proyectos de nueva asignación en cada
-     *         curso.
-     */
-    public Map<Integer, Number> getStudentsCount() {
-        Map<Integer, Number> studentsCount = new HashMap<>();
-        for (int year = minCourse; year <= maxCourse; year++) {
-            HistoricProject project;
-            int numStudents = 0;
-            if (newProjects.containsKey(year)) {
-                for (int index = 0; index < newProjects.get(year).size(); index++) {
-                    project = newProjects.get(year).get(index);
-                    numStudents += project.getNumStudents();
-                }
-            }
-            studentsCount.put(year, numStudents);
-        }
-        return studentsCount;
-    }
-
-    /**
-     * Obtiene el número de tutores con proyectos de nueva asignación en cada
-     * curso.
-     * 
-     * @return número de tutores con proyectos de nueva asignación en cada
-     *         curso.
-     */
-    public Map<Integer, Number> getTutorsCount() {
-        Map<Integer, Number> tutorsCount = new HashMap<>();
-        for (int year = minCourse; year <= maxCourse; year++) {
-            HistoricProject current;
-            int numTutors = 0;
-            if (newProjects.containsKey(year)) {
-                for (int index = 0; index < newProjects.get(year).size(); index++) {
-                    current = newProjects.get(year).get(index);
-                    numTutors += current.getNumTutors();
-                }
-            }
-            tutorsCount.put(year, numTutors);
-        }
-        return tutorsCount;
-    }
 
     /**
      * Genera las estadísticas (medias aritméticas) anuales de los proyectos
@@ -503,20 +336,19 @@ public class HistoricProjectsView extends VerticalLayout {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void createYearlyAverageStats() {
-        Map<Integer, Number> averageScores = getAverageScores();
-        Map<Integer, Number> averageTotalDays = getAverageTotalDays();
-        Map<Integer, Number> averageMonths = new HashMap<>();
+        //MAPAS CON EL CURSO COMO KEY
+        Map<String, Number> averageScores = getAverageScores();
+        Map<String, Number> averageTotalDays = getAverageTotalDays();
+        Map<String, Number> averageMonths = new HashMap<>();
 
-        for (int index = minCourse; index <= maxCourse; index++) {
-            Number averageDays = averageTotalDays.get(index);
-            averageMonths.put(index, averageDays.floatValue() / 31);
+        for (String curso:courses) {
+            Number averageDays= averageTotalDays.get(curso);
+            averageMonths.put(curso, averageDays.floatValue() / 31);
         }
 
         List<String> scores = new ArrayList<>();
-        List<String> days = new ArrayList<>();
         List<String> months = new ArrayList<>();
 
-        List<String> courses = new ArrayList<>();
         List<String> avgScores = new ArrayList<>();
         List<String> avgMonths = new ArrayList<>();
 
@@ -524,18 +356,13 @@ public class HistoricProjectsView extends VerticalLayout {
         separadoresPersonalizados.setDecimalSeparator('.');
         DecimalFormat df = new DecimalFormat("#.00", separadoresPersonalizados);
 
-        for (int year = minCourse; year <= maxCourse; year++) {
-            scores.add(numberFormatter.format(averageScores.get(year)));
-            days.add(numberFormatter.format(averageTotalDays.get(year)));
-            months.add(numberFormatter.format(averageMonths.get(year)));
-            courses.add(year - 1 + "/" + year);
-            avgScores.add(df.format(averageScores.get(year)));
-            avgMonths.add(df.format(averageMonths.get(year)));
+        for (String curso:courses) {
+            scores.add(numberFormatter.format(averageScores.get(curso)));
+            months.add(numberFormatter.format(averageMonths.get(curso)));
+            avgScores.add(df.format(averageScores.get(curso)));
+            avgMonths.add(df.format(averageMonths.get(curso)));
         }
 
-        add(new Label("Media de notas por curso: " + scores));
-        add(new Label("Media de dias por curso: " + days));
-        add(new Label("Media de meses por curso: " + months));
         ApexCharts lineChart = ApexChartsBuilder.get()
                 .withChart(ChartBuilder.get()
                         .withType(Type.line)
@@ -571,19 +398,25 @@ public class HistoricProjectsView extends VerticalLayout {
      * 
      * @return media aritmética de las notas de cada curso.
      */
-    public Map<Integer, Number> getAverageScores() {
-        Map<Integer, Number> averageScores = new HashMap<>();
-        for (int year = minCourse; year <= maxCourse; year++) {
-            HistoricProject project;
+    public Map<String, Number> getAverageScores() {
+        Map<String, Number> averageScores = new HashMap<>();        
+        tfgsPerCourse = new HashMap<>();
+        // Recorremos los cursos
+        for (String curso : courses) {
             double mean = 0;
-            if (newProjects.containsKey(year)) {
-                for (int index = 0; index < newProjects.get(year).size(); index++) {
-                    project = newProjects.get(year).get(index);
-                    mean += project.getScore();
+            // contador para saber cuantos tfgs hay por curso
+            int i = 0;
+            Iterator<HistoricProject> iterator = dataHistoric.iterator();
+            while (iterator.hasNext()) {               
+                HistoricProject prj = iterator.next();
+                if (curso.equals(prj.getCourse())) {
+                    mean += prj.getScore();
+                    i++;
                 }
-                mean = mean / newProjects.get(year).size();
             }
-            averageScores.put(year, mean);
+            tfgsPerCourse.put(curso, i);
+            mean = mean / i;
+            averageScores.put(curso, mean);
         }
         return averageScores;
     }
@@ -593,20 +426,24 @@ public class HistoricProjectsView extends VerticalLayout {
      * 
      * @return media del número de días que duran los proyectos cada curso.
      */
-    public Map<Integer, Number> getAverageTotalDays() {
-        Map<Integer, Number> averageTotalDays = new HashMap<>();
-        for (int year = minCourse; year <= maxCourse; year++) {
-            HistoricProject project;
+    public Map<String, Number> getAverageTotalDays() {
+        Map<String, Number> averageTotalDays = new HashMap<>();        
+        // Recorremos los cursos
+        for (String curso : courses) {
             double mean = 0;
-            if (newProjects.containsKey(year)) {
-                for (int index = 0; index < newProjects.get(year).size(); index++) {
-                    project = newProjects.get(year).get(index);
-                    mean += project.getTotalDays();
+            // contador para saber cuantos tfgs hay por curso
+            int i = 0;
+            Iterator<HistoricProject> iterator = dataHistoric.iterator();
+            while (iterator.hasNext()) {               
+                HistoricProject prj = iterator.next();
+                if (curso.equals(prj.getCourse())) {
+                    mean += prj.getTotalDays();
+                    i++;
                 }
-                mean = mean / newProjects.get(year).size();
             }
-            averageTotalDays.put(year, mean);
-        }
+            mean = mean / i;
+            averageTotalDays.put(curso, mean);
+        }      
         return averageTotalDays;
     }
 
@@ -618,33 +455,30 @@ public class HistoricProjectsView extends VerticalLayout {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void createYearlyTotalStats() {
-        List<String> courses = new ArrayList<>();
+        //Hashmaps con la estadistica por curso
+        Map<String,Number> yearlyStudentsCount=getStudentsCount();
+        Map<String,Number> yearlyTutorsCount=getTutorsCount();
+        
+        //Arrays con las estaditicas recogidas 
         List<Number> yearlyAssignedProjects = new ArrayList<>();
-        List<Number> yearlyOldProjects = new ArrayList<>();
-        List<Number> yearlyPresentedProjects = new ArrayList<>();
         List<Number> yearlyAssignedStudents = new ArrayList<>();
         List<Number> yearlyAssignedTutors = new ArrayList<>();
-
-        for (int year = minCourse; year <= maxCourse; year++) {
-            courses.add(year - 1 + "/" + year);
-            yearlyAssignedProjects.add(getProjectsCount(newProjects).get(year));
-            yearlyOldProjects.add(getProjectsCount(oldProjects).get(year));
-            yearlyAssignedStudents.add(getStudentsCount().get(year));
-            yearlyAssignedTutors.add(getTutorsCount().get(year));
-            yearlyPresentedProjects.add(getProjectsCount(presentedProjects).get(year));
+        
+       
+        for(String curso:courses) {
+            Number nTfgs= tfgsPerCourse.get(curso);
+            yearlyAssignedProjects.add(nTfgs);
+            yearlyAssignedStudents.add(yearlyStudentsCount.get(curso));
+            yearlyAssignedTutors.add(yearlyTutorsCount.get(curso));
         }
 
         Label asignedYearlyProjects = new Label(
                 "Número total de proyectos asignados por curso: " + yearlyAssignedProjects);
-        Label presentedYearlyProjects = new Label(
-                "Número total de proyectos presentados por curso: " + yearlyPresentedProjects);
         Label asignedYearlyStudents = new Label(
                 "Número total de alumnos asignados por curso: " + yearlyAssignedStudents);
         Label asignedYearlyTutors = new Label(
                 "Número total de tutores con nuevas asignaciones por curso: " + yearlyAssignedTutors);
-        Label allCourses = new Label("Cursos: " + courses);
-        add(asignedYearlyProjects, presentedYearlyProjects, asignedYearlyStudents, asignedYearlyTutors,
-                allCourses);
+        add(asignedYearlyProjects, asignedYearlyStudents, asignedYearlyTutors);
 
         ApexCharts lineChart = ApexChartsBuilder.get()
                 .withChart(ChartBuilder.get()
@@ -671,30 +505,52 @@ public class HistoricProjectsView extends VerticalLayout {
                         .build())
                 .withSeries(new Series("Proyectos Asignados", yearlyAssignedProjects.toArray()),
                         new Series("Alumnos Asignados", yearlyAssignedStudents.toArray()),
-                        new Series("Tutores Asignados", yearlyAssignedTutors.toArray()),
-                        new Series("Proyectos Ya Asignados", yearlyOldProjects.toArray()))
+                        new Series("Tutores Asignados", yearlyAssignedTutors.toArray()))
                 .withColors("#E91E63", "#4a6f22", "#9C27B0", "#4682B4")
                 .build();
         lineChart.setWidth("800px");
         add(lineChart);
     }
 
+    private Map<String, Number> getTutorsCount() {
+        Map<String, Number> tutorsCount  = new HashMap<>();        
+        // Recorremos los cursos
+        for (String curso : courses) {
+            int nTutors=0;
+            Iterator<HistoricProject> iterator = dataHistoric.iterator();
+            while (iterator.hasNext()) {               
+                HistoricProject prj = iterator.next();
+                if (curso.equals(prj.getCourse())) {
+                    nTutors += prj.getNumTutors();
+                }
+            }
+            tutorsCount.put(curso,nTutors);
+        }      
+        return tutorsCount;
+    }
+
     /**
-     * Obtiene el número de proyectos de cada curso.
+     * Obtiene el número de alumnos con proyectos de nueva asignación en cada
+     * curso.
      * 
-     * @param projects
-     *                 projectos agrupados por curso
-     * @return número de proyectos de cada curso.
+     * @return número de alumnos con proyectos de nueva asignación en cada
+     *         curso.
      */
-    public Map<Integer, Number> getProjectsCount(Map<Integer, List<HistoricProject>> projects) {
-        Map<Integer, Number> projectsCount = new HashMap<>();
-        for (int year = minCourse; year <= maxCourse; year++) {
-            int totalProjects = 0;
-            if (projects.containsKey(year))
-                totalProjects += projects.get(year).size();
-            projectsCount.put(year, totalProjects);
-        }
-        return projectsCount;
+    public Map<String, Number> getStudentsCount() {
+        Map<String, Number> studentsCount  = new HashMap<>();        
+        // Recorremos los cursos
+        for (String curso : courses) {
+            int nStudents=0;
+            Iterator<HistoricProject> iterator = dataHistoric.iterator();
+            while (iterator.hasNext()) {               
+                HistoricProject prj = iterator.next();
+                if (curso.equals(prj.getCourse())) {
+                    nStudents += prj.getNumStudents();
+                }
+            }
+            studentsCount.put(curso,nStudents);
+        }      
+        return studentsCount;
     }
 
     /**
