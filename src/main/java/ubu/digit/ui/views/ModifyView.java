@@ -303,12 +303,12 @@ public class ModifyView extends VerticalLayout {
 
         AceptaryCerrado.addClickListener(event -> {
             if (vacios1(tutor1, alumno1, descripcion, tituloCorto) ||
-                    vacios2(fechaAsignacion, fechaPresentacion, nota, repo)) {
+                    vacios2(fechaAsignacion, fechaPresentacion, nota)) {
                 Dialog aviso2 = new Dialog();
                 // Añadidmos un texto
                 aviso2.add(
                         "Los parámetros tutor1, alumno1, tituloCorto, descripción, curso de asignación, fecha de asignación, "
-                                + "fecha de presentación, nota y enlace URL son obligatorios para modificar y cerrar un proyecto.");
+                                + "fecha de presentación y nota son obligatorios para modificar y cerrar un proyecto.");
                 aviso2.open();
                 Button closeButton = new Button(new Icon("lumo", "cross"),
                         (e) -> aviso2.close());
@@ -428,11 +428,10 @@ public class ModifyView extends VerticalLayout {
      * @param repo
      * @return true or false
      */
-    private boolean vacios2(DatePicker fechaAsignacion, DatePicker fechaPresentacion, NumberField nota, TextArea repo) {
+    private boolean vacios2(DatePicker fechaAsignacion, DatePicker fechaPresentacion, NumberField nota) {
         return fechaAsignacion.getValue() == null ||
                 fechaPresentacion.getValue() == null ||
-                nota.getValue() == null ||
-                repo.getValue().isBlank();
+                nota.getValue() == null;
 
     }
 

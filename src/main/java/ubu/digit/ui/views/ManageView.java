@@ -131,8 +131,8 @@ public class ManageView extends VerticalLayout {
      * Formateador de fechas.
      */
     public transient DateTimeFormatter dateTimeFormatter;
-    Boolean seDeniega = true;
-    Boolean seAcepta = true;
+    Boolean sePuedeDenegar = true;
+    Boolean sePuedeAceptar = true;
 
     /**
      * Constructor.
@@ -306,9 +306,9 @@ public class ManageView extends VerticalLayout {
 
                         // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
                         if (tfg.getStatus().equals(""))
-                            seAcepta = false;
+                            sePuedeAceptar = false;
                     }
-                    if (seAcepta)
+                    if (sePuedeAceptar)
                         aceptarTFG(table.getSelectedItems());
                     else
                         Notification.show("No puedes aceptar un proyecto ya aceptado");
@@ -323,9 +323,9 @@ public class ManageView extends VerticalLayout {
                     for (ActiveProject tfg : table.getSelectedItems()) {
                         // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
                         if (tfg.getStatus().equals(""))
-                            seDeniega = false;
+                            sePuedeDenegar = false;
                     }
-                    if (seDeniega)
+                    if (sePuedeDenegar)
                         denegarTFG(table.getSelectedItems());
                     else
                         Notification.show("No puedes denegar un proyecto ya aceptado");
@@ -339,7 +339,7 @@ public class ManageView extends VerticalLayout {
                         // Guardamos el titulo del TFG
                         ModifyView.tituloTFG = tfg.getTitle();
                     }
-                    UI.getCurrent().navigate(ModifyView.class);
+                        UI.getCurrent().navigate(ModifyView.class);
                 } else {
                     // Si se han seleccionado varios tfgs y se ha dado a modificar
                     Dialog aviso = new Dialog();
