@@ -84,6 +84,13 @@ Si no se han introducido los parámetros necesarios para crear un informe se le 
 \imagenflotante{camposInforme}{Avisos para el usuario de los campos a introducir}{0.9}
 
 Este informe contendrá el número total de TFGs dirigidos, codirigidos y el número de créditos asignados a cada uno de los profesores del área seleccionado en el último curso académico. Si se seleccionan varias áreas se crearán varias hojas en el documento \emph{excel} generado, con la información pertinente. 
+
+La fórmula que se ha utilizado para obtener los créditos es la siguiente y depende del número de alumnos matriculados:
+\begin{itemize}
+	\item Créditos a asignar : número de alumnos * 0.66
+	\item De este total el 60/100 irá para los tutores y el otro 40/100 irá para el tribunal.
+	\item Si un tutor dirige solo un proyecto se lleva un 60/100 y si lo codirige se lleva un 30/100. Solo se cuentan tutores de la Escuala Politécnica superior.
+\end{itemize}
 Pestaña 1: ver imagen \ref{fig:informe_excel}
 \imagenflotante{informe_excel}{Informe generado}{0.9}
 
