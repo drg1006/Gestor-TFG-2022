@@ -488,7 +488,7 @@ public class HistoricProjectsView extends VerticalLayout {
                                 .build())
                         .build())
                 .withStroke(StrokeBuilder.get()
-                        .withColors("#E91E63", "#4a6f22", "#9C27B0", "#4682B4")
+                        .withColors("#E91E63", "#4a6f22", "#9C27B0")
                         .withCurve(Curve.straight)
                         .build())
                 .withTitle(TitleSubtitleBuilder.get()
@@ -506,7 +506,7 @@ public class HistoricProjectsView extends VerticalLayout {
                 .withSeries(new Series("Proyectos Asignados", yearlyAssignedProjects.toArray()),
                         new Series("Alumnos Asignados", yearlyAssignedStudents.toArray()),
                         new Series("Tutores Asignados", yearlyAssignedTutors.toArray()))
-                .withColors("#E91E63", "#4a6f22", "#9C27B0", "#4682B4")
+                .withColors("#E91E63", "#4a6f22", "#9C27B0")
                 .build();
         lineChart.setWidth("800px");
         add(lineChart);
