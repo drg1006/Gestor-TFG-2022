@@ -196,7 +196,6 @@ public abstract class SistInfDataAbstract implements Serializable {
 
     public abstract List<String> getNormas();
 
-    // prueba david
     public abstract List<String> getAreas();
 
     public abstract List<String> getDepartamentos();
@@ -218,5 +217,7 @@ public abstract class SistInfDataAbstract implements Serializable {
     public abstract String getUltimoTFG();
 
     public abstract ActiveProject getTFG(String tituloTFG, DateTimeFormatter dateTimeFormatter);
+
+    public abstract Number getTotalActiveTutors(String[] columnname);
 
 }

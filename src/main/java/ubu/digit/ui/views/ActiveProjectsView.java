@@ -157,7 +157,7 @@ public class ActiveProjectsView extends VerticalLayout {
             Label totalStudent = new Label("- Número total de alumnos sin asignar: " + totalStudentNumber.intValue());
 
             String[] tutorColumnNames = { TUTOR1, TUTOR2, TUTOR3 };
-            Number totalTutorNumber = fachadaDatos.getTotalNumber(tutorColumnNames, PROYECTO);
+            Number totalTutorNumber = fachadaDatos.getTotalActiveTutors(tutorColumnNames);
             Label totalTutor = new Label("- Número total de tutores involucrados: " + totalTutorNumber.intValue());
 
             add(totalProjects, totalFreeProject, aalumnos, totalStudent, totalTutor);

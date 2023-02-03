@@ -316,6 +316,28 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
                 + DISTINTO_DE_VACIO;
         return getResultSetNumber(sql);
     }
+    
+    @Override
+    public Number getTotalActiveTutors(String[] columnsName) {
+        String sql;
+        Set<String> noDups = new HashSet<>();
+        if (columnsName != null) {
+            for (int i = 0; i < columnsName.length; i++) {
+                sql = SELECT + columnsName[i] + FROM + PROYECTO + WHERE + columnsName[i] + DISTINTO_DE_VACIO+AND+ ESTADO+ "!= 'Pendiente'";
+                try {
+                    Recordset rs = connection.executeQuery(sql);
+                    // int numColumns = rs.getFieldNames().size();
+                    addUniqueStrings(noDups, rs, columnsName[i]);
+                } catch (FilloException e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+            return (float) noDups.size();
+        } else {
+            return 0;
+        }
+
+    }
 
     /**
      * Ejecuta una sentencia SQL obteniendo el número total de filas diferentes,
@@ -394,10 +416,12 @@ public class SistInfDataXls extends SistInfDataAbstract implements Serializable 
      */
     @Override
     public Number getTotalFreeProject() {
-        String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'";
+        String sql = SELECT + COUNT + "(*)" + FROM + PROYECTO + WHERE + ALUMNO1 + " = 'Aalumnos sin asignar'"+AND+ ESTADO+ "!= 'Pendiente'";
         return getResultSetNumber(sql);
     }
 
+   
+    
     /**
      * Ejecuta una sentencia SQL obteniendo un conjunto de filas distintas de
      * nulo de una columna de una tabla, ambas pasadas como parámetros.

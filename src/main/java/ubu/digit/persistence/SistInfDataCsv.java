@@ -1210,4 +1210,26 @@ public class SistInfDataCsv extends SistInfDataAbstract implements Serializable 
         return TFG;
     }
 
+    @Override
+    public Number getTotalActiveTutors(String[] columnsName) {
+        String sql;
+        Set<String> noDups = new HashSet<>();
+        if (columnsName != null) {
+            for (int i = 0; i < columnsName.length; i++) {
+                sql = SELECT + columnsName[i] + FROM + PROYECTO + WHERE + columnsName[i] + DISTINTO_DE_VACIO+AND+ ESTADO+ "!= 'Pendiente'";
+                try (Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery(sql)) {
+                    ResultSetMetaData rmeta = resultSet.getMetaData();
+                    int numColumns = rmeta.getColumnCount();
+                    addUniqueStrings(noDups, resultSet, numColumns);
+                } catch (SQLException e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+            return (float) noDups.size();
+        } else {
+            return 0;
+        }
+    }
+
 }
