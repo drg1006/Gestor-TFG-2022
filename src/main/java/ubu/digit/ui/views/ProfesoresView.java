@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +120,8 @@ public class ProfesoresView extends VerticalLayout {
     List<String> profSelect = new ArrayList<>();
 
     HistoricProjectsView vista = new HistoricProjectsView();
+    HashMap<String, HashMap<String, Double>> tabla;
+
     /**
      * Constructor.
      * 
@@ -154,7 +155,9 @@ public class ProfesoresView extends VerticalLayout {
         }
         // REUTILIZAMOS PARTES DEL CODIGO DE OTRAS CLASES
         vista.initProjectsStructures();
-        //tablaTFGsPorCursoDeCadaTutor();
+        // tabla que contiene todos los tfgs de cada profesor por curso
+        tabla = tablaTFGsPorCursoDeCadaTutor();
+
         crearEstadisticas();
         datosGraficas();
         // Si tiene permisos de administrador para actualizar archivos
@@ -409,7 +412,7 @@ public class ProfesoresView extends VerticalLayout {
         H2 metricsTitle = new H2("Datos a mostrar");
         metricsTitle.addClassName("lbl-title");
         layout.add(metricsTitle);
-        
+
         String[] colors = getRandomColors();
         // Grafico
         ApexCharts lineChart = ApexChartsBuilder.get()
@@ -558,21 +561,81 @@ public class ProfesoresView extends VerticalLayout {
         int n = 0;
         // Cogemos los tfgs de los departamentos
         for (String dep : departamentos) {
-            series[n] = new Series(dep, obtenerTFGSañoDepartamento(dep).toArray());
+
+            series[n] = new Series(dep, obtenerTFGSañoDepartamento(tabla, dep).toArray());
             n++;
         }
         // Cogemos los tfgs de las areas
         for (String area : areas) {
-            series[n] = new Series(area, obtenerTFGSañoArea(area).toArray());
+
+            series[n] = new Series(area, obtenerTFGSañoArea(tabla, area).toArray());
             n++;
         }
 
         for (String profe : profSelect) {
-            series[n] = new Series(profe, obtenerTFGSañoProfesor(profe).toArray());
+
+            series[n] = new Series(profe, obtenerTFGSañoProfesor(tabla, profe).toArray());
+
             n++;
 
         }
         lineChart.updateSeries(series);
+    }
+
+    /**
+     * Método que guarda en una tabla hash los tfgs de cada profesor separados por
+     * curso.
+     * 
+     * @return tabla hash
+     */
+    private HashMap<String, HashMap<String, Double>> tablaTFGsPorCursoDeCadaTutor() {
+        List<String> tutoresEPS = fachadaDatos.getProfesores();
+        // Hashmap con clave nombre del tutor y value : hashmap de cursoTFG
+        HashMap<String, HashMap<String, Double>> tabla = new HashMap<String, HashMap<String, Double>>();
+        HistoricProjectsView vista = new HistoricProjectsView();
+        // Asignamos un curso a cada proyecto
+        vista.initProjectsStructures();
+
+        // Recorremos por profesor
+        for (String profes : tutoresEPS) {
+            HashMap<String, Double> esteTFG = new HashMap<>();
+            // Recorremos el historico
+            for (int i = 0; i < vista.dataHistoric.size(); i++) {
+                // Comprobamos que el tutor 1 esta en la EPS
+
+                // Cogemos el curso del TFG y su tutor
+                String cursoDelTFG = vista.dataHistoric.get(i).getCourse();
+                String tutorDelTFG = vista.dataHistoric.get(i).getTutor1();
+                String tutor2DelTFG = vista.dataHistoric.get(i).getTutor2();
+                // Comprobamos si es tutor1 y si el tutor2 es de la EPS o si es tutor2 para
+                // sumar 1.0 o 0.5
+                if (profes.equals(tutorDelTFG)) {
+                    if (tutoresEPS.contains(tutor2DelTFG)) {
+                        if (esteTFG.get(cursoDelTFG) != null) {
+                            esteTFG.put(cursoDelTFG, esteTFG.get(cursoDelTFG) + 0.5);
+                        } else {
+                            esteTFG.put(cursoDelTFG, 0.5);
+                        }
+                    } else {
+                        if (esteTFG.get(cursoDelTFG) != null) {
+                            esteTFG.put(cursoDelTFG, esteTFG.get(cursoDelTFG) + 1.0);
+                        } else {
+                            esteTFG.put(cursoDelTFG, 1.0);
+                        }
+                    }
+                } else if (profes.equals(tutor2DelTFG)) {
+                    if (esteTFG.get(cursoDelTFG) != null) {
+                        esteTFG.put(cursoDelTFG, esteTFG.get(cursoDelTFG) + 0.5);
+                    } else {
+                        esteTFG.put(cursoDelTFG, 0.5);
+                    }
+                }
+            }
+            tabla.put(profes, esteTFG);
+
+        }
+        return tabla;
+
     }
 
     /**
@@ -582,75 +645,16 @@ public class ProfesoresView extends VerticalLayout {
      * @param profesor
      * @return list<Integer> de tfgs por curso
      */
-    private List<Double> obtenerTFGSañoProfesor(String profesor) {
+    private List<Double> obtenerTFGSañoProfesor(HashMap<String, HashMap<String, Double>> tabla, String profesor) {
 
         List<Double> TFGs = new ArrayList<>();
-        // Datos ya obtenidos en historicos
-        HistoricProjectsView vista = new HistoricProjectsView();
-
-        // Formato de la fecha
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // Bucle para sacar los TFGs que tiene asignado un profesor por cada año, siendo
-        // el año de presentacion del tfg el curso en el que se incluye
-        // Ejemplo: Fecha de presentacion 10-01-2021: (Curso 2020-2021)
-
-        List<String> tutoresEPS = fachadaDatos.getProfesores();
-
-        for(String curso:vista.courses) {
-            Double num1 = 0.0;
-            // El curso va del 1 de septiembre de un año al siguiente
-            for (int i = 0; i < vista.dataHistoric.size(); i++) {
-                // COMPROBAMOS LA FECHA
-                if (vista.dataHistoric.get(i).getCourse().equals(curso)) {
-                    // PRIMERO SI ES TUTOR 1
-                    if (vista.dataHistoric.get(i).getTutor1().equals(profesor)) {
-
-                        if (tutoresEPS.contains(vista.dataHistoric.get(i).getTutor2())) {
-                            // Si es de la EPS el tutor2
-                            num1 += 0.5;
-                        } else {
-                            // no es de la EPS el tutor2
-                            num1++;
-                        }
-                        // Si es tutor 2: tfgs codirigidos
-                    } else if (vista.dataHistoric.get(i).getTutor2().equals(profesor)) {
-                        num1 += 0.5;
-                    }
-
-                }
-            }
-            TFGs.add(num1);
-        }
-        return TFGs;
-
-    }
-
-    /**
-     * Metodo que obtiene el array con los TFGs por curso del departamento que se le
-     * pasa por parametro.
-     * 
-     * @param departamento
-     * @return list<Integer> de tfgs por curso
-     */
-    private List<Double> obtenerTFGSañoDepartamento(String departamento) {
-        // Sacamos los profesores que pertenecen a ese departamento y sumamos sus TFGs
-        List<Double> TFGs = new ArrayList<>();
-        List<String> profes = new ArrayList<>();
-        profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
-        int n = 0;
-        for (String profe : profes) {
-            // Obtenemos los tfgs de los profesores que pertenecen al departamento
-            List<Double> tfgprofes = obtenerTFGSañoProfesor(profe);
-            if (n == 0) {
-                // Si es el primer profesor se añade al array
-                n++;
-                TFGs.addAll(tfgprofes);
-            } else {
-                // Si no es el primero se suma al anterior
-                for (int i = 0; i < TFGs.size(); i++) {
-                    TFGs.set(i, TFGs.get(i) + tfgprofes.get(i));
-                }
-            }
+        // ordenamos por curso ya que en la tabla no se ordenan bien
+        for (String curso : vista.courses) {
+            //Si no tiene tfgs en el curso se el asigna 0.0 ya que viene con null
+            if (tabla.get(profesor).get(curso) != null)
+                TFGs.add(tabla.get(profesor).get(curso));
+            else
+                TFGs.add(0.0);
         }
         return TFGs;
 
@@ -663,14 +667,14 @@ public class ProfesoresView extends VerticalLayout {
      * @param area
      * @return list<Integer> de tfgs por curso
      */
-    private List<Double> obtenerTFGSañoArea(String area) {
+    private List<Double> obtenerTFGSañoArea(HashMap<String, HashMap<String, Double>> tabla, String area) {
         // Sacamos los profesores que pertenecen a ese area y sumamos sus TFGs
         List<Double> TFGs = new ArrayList<>();
         List<String> profes = new ArrayList<>();
         profes.addAll(fachadaDatos.getProfesoresDeArea(area));
         int n = 0;
         for (String profe : profes) {
-            List<Double> tfgprofes = obtenerTFGSañoProfesor(profe);
+            List<Double> tfgprofes = obtenerTFGSañoProfesor(tabla, profe);
             if (n == 0) {
                 n++;
                 TFGs.addAll(tfgprofes);
@@ -683,39 +687,35 @@ public class ProfesoresView extends VerticalLayout {
         return TFGs;
     }
 
-    private void tablaTFGsPorCursoDeCadaTutor() {
-        List<String> tutoresEPS = fachadaDatos.getProfesores();
-        // Hashmap con clave curso y value : double valor n tfgs
-        HashMap<String, Double> cursoTFG = new HashMap<>();
-
-        // Hashmap con clave nombre del tutor y value : hashmap de cursoTFG
-        HashMap<String, HashMap<String, Double>> tabla = new HashMap<String, HashMap<String, Double>>();
-        HistoricProjectsView vista = new HistoricProjectsView();
-        // Asignamos un curso a cada proyecto
-        vista.initProjectsStructures();
-
-        // Asignamos las keys, que serán los tutores y los cursos a cada tutor, con
-        // valor 0 inicial
-        for (String profe : tutoresEPS) {
-            for (String curso : vista.courses) {
-                cursoTFG.put(curso, 0.0);
-            }
-            tabla.put(profe, cursoTFG);
-        }
-        // Recorremos el historico
-        for (int i = 0; i < vista.dataHistoric.size(); i++) {
-            // Comprobamos que el tutor 1 esta en la EPS
-            if (tabla.containsKey(vista.dataHistoric.get(i).getTutor1())) {
-                // Cogemos el curso del TFG y su tutor
-                String cursoDelTFG = vista.dataHistoric.get(i).getCourse();
-                String tutorDelTFG = vista.dataHistoric.get(i).getTutor1();
-                // Le sumamos 1 al tutor de este tfg, en ese curso
-                // NO LO HACE BIEN
-                // LO SUMA A TODOS Y NO AL QUE PONE
-                tabla.get(tutorDelTFG).replace(cursoDelTFG, tabla.get(tutorDelTFG).get(cursoDelTFG) + 1.0);
-
+    /**
+     * Metodo que obtiene el array con los TFGs por curso del departamento que se le
+     * pasa por parametro.
+     * 
+     * @param departamento
+     * @return list<Integer> de tfgs por curso
+     */
+    private List<Double> obtenerTFGSañoDepartamento(HashMap<String, HashMap<String, Double>> tabla,
+            String departamento) {
+        // Sacamos los profesores que pertenecen a ese departamento y sumamos sus TFGs
+        List<Double> TFGs = new ArrayList<>();
+        List<String> profes = new ArrayList<>();
+        profes.addAll(fachadaDatos.getProfesoresDeDepartamento(departamento));
+        int n = 0;
+        for (String profe : profes) {
+            // Obtenemos los tfgs de los profesores que pertenecen al departamento
+            List<Double> tfgprofes = obtenerTFGSañoProfesor(tabla, profe);
+            if (n == 0) {
+                // Si es el primer profesor se añade al array
+                n++;
+                TFGs.addAll(tfgprofes);
+            } else {
+                // Si no es el primero se suma al anterior
+                for (int i = 0; i < TFGs.size(); i++) {
+                    TFGs.set(i, TFGs.get(i) + tfgprofes.get(i));
+                }
             }
         }
+        return TFGs;
 
     }
 

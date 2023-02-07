@@ -29,7 +29,6 @@ import ubu.digit.webService.CoreWebserviceGetSiteInfo;
 import ubu.digit.ui.entity.Course;
 import ubu.digit.ui.entity.MoodleUser;
 import ubu.digit.ui.components.Footer;
-import ubu.digit.ui.components.NavigationBar;
 
 /**
  * Vista de inicio de sesión.
@@ -213,7 +212,8 @@ public class LoginView extends VerticalLayout {
             if (createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
                 UI.getCurrent().getSession().setAttribute("reports", "true");
             }
-            ;
+            ;          
+           // UI.getCurrent().getSession().setAttribute("update", "true");
             return true;
         } catch (Exception e) {
             LOGGER.error("Error al recuperar los datos del usuario ", e);
