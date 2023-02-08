@@ -96,7 +96,19 @@ public class LoginView extends VerticalLayout {
             login.setEnabled(false);
             LOGGER.info("\nRealizando la autentificación del usuario... ");
 
+            
             Boolean isAutentificarte = CheckData(e.getUsername(), e.getPassword());
+            
+            //creación usuarios de prueba, la contraseña es independiente
+            if(e.getUsername().equals("alumno")){
+                isAutentificarte=true;
+            }else if(e.getUsername().equals("profesor")) {
+                UI.getCurrent().getSession().setAttribute("reports", "true");
+                isAutentificarte=true;
+            }else if(e.getUsername().equals("administrador")) {
+                isAutentificarte=true;
+                UI.getCurrent().getSession().setAttribute("update", "true");
+            }
             if (!isAutentificarte) {
                 LOGGER.info("Usuario no validado ");
                 CONTROLLER.setUsername("");
@@ -111,6 +123,8 @@ public class LoginView extends VerticalLayout {
                 UI.getCurrent().getSession().setAttribute("sesionIniciada", "true");
                 CONTROLLER.setUsername(e.getUsername());
                 login.setEnabled(true);
+                
+   
                 UI.getCurrent().navigate(InformationView.class);
             }
         });
@@ -212,8 +226,9 @@ public class LoginView extends VerticalLayout {
             if (createUserCourses.findPermission(jsonArray, courseTFG, "reports")) {
                 UI.getCurrent().getSession().setAttribute("reports", "true");
             }
-            ;          
-           // UI.getCurrent().getSession().setAttribute("update", "true");
+            ;
+            //UI.getCurrent().getSession().setAttribute("update", "true");
+            
             return true;
         } catch (Exception e) {
             LOGGER.error("Error al recuperar los datos del usuario ", e);
