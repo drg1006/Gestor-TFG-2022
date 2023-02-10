@@ -307,6 +307,8 @@ public class ManageView extends VerticalLayout {
                         // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
                         if (tfg.getStatus().equals(""))
                             sePuedeAceptar = false;
+                        else
+                            sePuedeAceptar = true;  
                     }
                     if (sePuedeAceptar)
                         aceptarTFG(table.getSelectedItems());
@@ -324,6 +326,8 @@ public class ManageView extends VerticalLayout {
                         // COMPROBAMOS SI EL ESTADO DE ALGUNOS ES ACEPTADO
                         if (tfg.getStatus().equals(""))
                             sePuedeDenegar = false;
+                        else
+                            sePuedeDenegar = true;  
                     }
                     if (sePuedeDenegar)
                         denegarTFG(table.getSelectedItems());
