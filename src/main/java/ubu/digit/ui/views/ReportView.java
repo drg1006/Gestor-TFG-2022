@@ -396,7 +396,7 @@ public class ReportView extends VerticalLayout {
         int tfgsHistoricosDeEsteCurso = vista.tfgsPerCourse.get(cursoActual).intValue();
         int tfgsEsteCurso = tfgsActivos + tfgsHistoricosDeEsteCurso;
 
-        // Total de creditos a asignar por tfg
+        // Total de creditos a asignar por tfg, el 0.6 es el porcentaje dirigido para los tutores
         float ectsPorTFG = (float) ((total * 0.6) / tfgsEsteCurso);
 
         // Total de creditos a asignar para tribunal (a dividir entre 6 porque hay 6
