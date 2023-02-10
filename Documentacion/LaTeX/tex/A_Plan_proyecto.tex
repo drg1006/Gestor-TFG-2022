@@ -160,13 +160,13 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 \begin{itemize}
 	\item Actualización de métodos para obtener los datos de ficheros CSV. Se han implementado los métodos para obtener la información de los ficheros CSV.
 	\item Implementación del nuevo sistema de \emph{Login}. Pidiendo un registro de forma opcional para asignar un rol al usuario que inicia sesión y mostrarle así las pantallas a las que puede acceder. Se ha restringido la vista a las distintas pantallas de la aplicación dependiendo de los permisos del usuario que inicia sesión.
-	\item Ajustar la nueva barra de navegación ante el usuario que inicia sesión, así como del \emph{sub menu} que se crea en la pantalla de histórico tanto del profesorado como de los proyectos. Se han estudiado también otras formas para realizar la barra de navegación que finalmente no se han implementado por no ser óptimas.
+	\item Ajustar la nueva barra de navegación ante el usuario que inicia sesión, así como del \emph{sub menú} que se crea en la pantalla de histórico tanto del profesorado como de los proyectos. Se han estudiado también otras formas para realizar la barra de navegación que finalmente no se han implementado por no ser óptimas.
 	\begin{itemize}
 		\item Realizar un desplegable mediante el componente \emph{MenuBar} de Vaadin, que se descartó porque no podía redimensionar.
 		\item Mediante el componente \emph{Tab}. Una barra de navegación que finalmente se descartó ya que era mucho más trabajo del pensado crearla y adaptarla al proyecto.
 	\end{itemize}		
 	\item Creación de la cuenta de \emph{SonarCloud} para analizar la calidad del código creado y de otros proyectos añadidos, para la pantalla de \emph{Métricas}.
-	\item Modificación de la pantalla de aceptación de TFGs que pasa a llamarse\emph{Administrar TFGs}. Se han añadido las siguientes funcionalidades:
+	\item Modificación de la pantalla de aceptación de TFGs que pasa a llamarse \emph{Administrar TFGs}. Se han añadido las siguientes funcionalidades:
 	\begin{itemize}
 		\item Nuevo botón de \emph{Modificación} de TFGs. Botón que solo permite seleccionar un solo TFG de la tabla.
 		\item Creación de la nueva pantalla de modificación de los TFGs. Esta pantalla tiene todos los campos posibles que puede tener un proyecto. Permite modificar los datos del TFG seleccionado para mantenerlo abierto y en la pantalla de activos, o para actualizarlo y cerrarlo moviéndolo a la pestaña de \emph{Históricos}.
@@ -196,7 +196,7 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	\item Se han realizado casos de prueba y validaciones nuevas para comprobar el correcto funcionamiento de la aplicación al enfrentarse a nuevos archivos.
 	\item Se ha arreglado la pantalla de histórico de proyectos que no recogía bien la información de la base de datos en la versión anterior.
 	\item Se ha terminado de arreglar los \emph{bugs} encontrados al crear un informe.
-	\item Se ha mejorado la eficiencia del código en ciertas pestañas, como en la obtención del número de \emph{tfgs} por año de la pestaña de histórico de profesorado, aumentando la velocidad de creación de gráficas.
+	\item Se ha mejorado la eficiencia del código en ciertas pestañas, como en la obtención del número de \emph{TFGs} por año de la pestaña de histórico de profesorado, aumentando la velocidad de creación de gráficas.
 	\item Se ha eliminado código innecesario y se ha comentado gran parte de el para aclarar métodos.
 	\item Se han modificado los mensajes de texto que le aparecían al usuario para que fuesen más informativos y concisos.
 	\item Se han realizado nuevas validaciones a la hora de intentar ejecutar diferentes operaciones dentro de la aplicación.	
@@ -210,19 +210,20 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 
 \subsection{Planificación temporal}
 
-En esta sección se mostrará una ideal inicial de como iba a ser el reparto de horas inicial y cual fue el real de las diferentes tareas durante el desarrollo del TFG. La tabla \ref{horas} muestra una predicción de la división del proyecto. Ver tabla \ref{horas}.
+En esta sección se mostrará una ideal inicial de cómo iba a ser el reparto de horas inicial y cual fue el real de las diferentes tareas durante el desarrollo del TFG. La tabla \ref{horas} muestra una predicción de la división del proyecto. Ver tabla \ref{horas}.
 
 \begin{table}[]
 	\label{horas}
 	\centering
-	\begin{tabular}{|l|c|c|}
+	\begin{tabular}{|l|r|r|}
 		\hline
-		\multicolumn{1}{|c|}{\textbf{TAREA}}     & \textbf{INICIAL} & \textbf{REAL} \\ \hline
-		Instalación y configuración de software y hardware & 4 h & 8 h  \\ \hline
-		Programación                            & 150 h  & 200 h       \\ \hline
-		Documentación memoria y anexos          & 60 h   & 70 h     \\ \hline
-		Estudio de las herramientas utilizadas y alternativas & 10 h & 15 h \\ \hline
-		Preparación de la presentación		    & 5 h   & 8 h        \\ \hline
+		\multicolumn{1}{|c|}{\textbf{Tarea}}     & \textbf{Inicial (h)} & \textbf{REAL (h)} \\ \hline
+		Instalación y configuración de software y hardware & 5  & 11   \\ \hline
+		Programación                            & 160   & 200        \\ \hline
+		Documentación memoria y anexos          & 60    & 70      \\ \hline
+		Estudio de las herramientas utilizadas y alternativas & 15  & 20  \\ \hline
+		Preparación de la presentación		    & 5    & 8         \\ \hline
+		\textbf{Total}		    &   \textbf{245} &  \textbf{308}        \\ \hline
 	\end{tabular}
 	\caption{Planteamiento de horas iniciales.}
 \end{table}
@@ -292,7 +293,7 @@ Desestimando gastos indirectos como el internet al vivir en un piso compartido, 
 \end{itemize}
 
 \subsection{Viabilidad legal}
-Se detallaran las licencias \emph{Software} de cada dependencia que se ha utilizado en el proyecto. En el proyecto se ha usado la misma licencia MIT que se utilizaba en la versión anterior del proyecto que permite la libre distribución del \emph{software}. Ver tabla \ref{Dependencias del proyecto}
+Se detallarán las licencias \emph{Software} de cada dependencia que se ha utilizado en el proyecto. En el proyecto se ha usado la misma licencia MIT que se utilizaba en la versión anterior del proyecto que permite la libre distribución del \emph{software}. Ver tabla \ref{Dependencias del proyecto}
 
 \begin{table}[]
 	\label{Dependencias del proyecto}

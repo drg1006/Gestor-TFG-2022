@@ -6,15 +6,13 @@ Este apartado recoge los aspectos más interesantes del desarrollo del proyecto.
 
 A la hora de ejecutar el proyecto anterior surgieron una serie de problemas tanto para la ejecución por terminal como desde Eclipse.
 
-Cuando quise ejecutarlo mediante la terminal desplegando el archivo .war generado tras compilar me surgía el siguiente error, ver imagen \ref{fig:Error_war}.
-
-\imagenflotante{Error_war}{Error tras deplegar el .war en el Gestor de Aplicaciones de Tomcat}{0.9}
+Cuando quise ejecutarlo mediante la terminal desplegando el archivo <<.war>> generado tras compilar me surgía el siguiente error un error de conexión que solo indicaba que no se podía acceder al sitio \emph{web}.
 
 Tras buscar información sobre el posible error, se descubre en los logs que proporciona tomcat lo siguiente, ver imagen \ref{fig:error_size}. En el que se informa que se intenta ejecutar un proyecto con un tamaño mayor al que tenemos configurado en tomcat.
 
-\imagenflotante{error_size}{Logs proporcionados por Tomcat}{0.9}
+\imagenflotante{error_size}{Logs proporcionados por Tomcat}{1.8}
 
-Para solucionar este problema se accede al archivo \emph{apache-tomcat-9.0.68-webapps-manager-WEB-INF} y se modifican las siguientes lineas, ver imagen \ref{fig:size_tomcat} aumentando el número que se indica.
+Para solucionar este problema se accede al archivo \emph{apache-tomcat-9.0.68-webapps-manager-WEB-INF} y se modifican las líneas que se ven en la imagen \ref{fig:size_tomcat} aumentando el número que se indica.
 
 \imagenflotante{size_tomcat}{Logs proporcionados por Tomcat}{0.9}
 
@@ -30,7 +28,7 @@ También se ha utilizado la librería \href{https://opencsv.sourceforge.net/apid
 
 \section{Trabajo con Vaadin}
 
-Este proyecto se ha tenido que llevar a cabo con \emph{Vaadin}, es la primera vez que se utiliza este \emph{framework}, por lo que se ha tenido que estudiar todo su funcionamiento, y como implantarlo durante el desarrollo.
+Este proyecto se ha tenido que llevar a cabo con \emph{Vaadin}, es la primera vez que se utiliza este \emph{framework}, por lo que se ha tenido que estudiar todo su funcionamiento, y cómo implantarlo durante el desarrollo.
 
 Se han tenido que utilizar muchos componentes nuevos que no estaban en la versión anterior como son:
 
@@ -45,16 +43,16 @@ Se han tenido que utilizar muchos componentes nuevos que no estaban en la versi�
 
 \end{itemize}
 
-Toda la información sobre el uso de \emph{Vaadin} \url{https://vaadin.com/} se ha obtenido de su página atendiendo ala versión que se utiliza.
+Toda la información sobre el uso de \emph{Vaadin} \url{https://vaadin.com/} se ha obtenido de su página atendiendo a la versión que se utiliza.
 
 \section{Actualización de ficheros}
 
-Se ha tenido que incorporar en varias ocasiones la creación de archivos \emph{.xls o .csv}, así como la actualización en tiempo real de la información de la base de datos, ya sea al introducir un TFG, al modificar su estado, o cuando queremos actualizar la información del \emph{web scraping} sobre los tutores.
+Se ha tenido que incorporar en varias ocasiones la creación de archivos \emph{.xls o .csv}, así como la actualización en tiempo real de la información de la base de datos, ya sea al introducir un TFG, al modificar su estado, o cuando queremos actualizar la información del \emph{webscraping} sobre los tutores.
 
-Para ello se ha empleado las librearías \emph{CSVWriter o WorkBook}, estudiando su funcionamiento.
+Para ello se han empleado las librerías \emph{CSVWriter o WorkBook}, estudiando su funcionamiento.
 
 \section{Validación de los usuarios de la aplicación}
 
-En esta versión se ha añadido la gestión de roles en la aplicación según el tipo de usuario que inicia sesión. Existen tres actores dependiendo de los permisos que tengan sobre la asignatura \emph{Trabajos de Fin de Grado} en \emph{Moodle}.
+En esta versión se ha añadido la posibilidad de iniciar sesión en varios dispositivos o navegadores al mismo tiempo, de esta forma también se gestinan los roles en la aplicación según el tipo de usuario que haya iniciado sesión. Existen tres roles dependiendo de los permisos que tengan en la asignatura \emph{Trabajos de Fin de Grado} en \emph{Moodle}, es decir, que para saber el rol de un usuario es necesario conectarnos al \emph{Moodle} de la \emph{UBU} para dicha asignatura.
 
 Cuando se inicie sesión, de manera opcional, se mostrarán diferentes opciones en la barra de navegación para los roles que están especificados: alumno, profesor no editor y administrador.

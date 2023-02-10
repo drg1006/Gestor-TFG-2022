@@ -20,13 +20,13 @@ Las pantallas a las que pueden acceder los diferentes roles asignados tras inici
  	\centering
  	\begin{tabular}{|l|c|c|c|c|}
  		\hline
- 		\multicolumn{1}{|c|}{\textbf{ACTOR}}     & \textbf{Proyectos} & \textbf{Histórico} & \textbf{Histórico} & \textbf{Subir TFG} \\
+ 		\multicolumn{1}{|c|}{\textbf{Actor}}     & \textbf{Proyectos} & \textbf{Histórico} & \textbf{Histórico} & \textbf{Subir TFG} \\
  		\multicolumn{1}{|c|}{}     & \textbf{activos} & \textbf{de proyectos} & \textbf{de profesores} & {}  \\ \hline 
  		Alumno & X & X & {} & {} \\ \hline
  		Profesor  & X & X & X & X   \\ \hline
  		Administrador   & X & X & X & X   \\ \hline
  	\end{tabular}
- 	\caption{Permisos de los actores.Parte 1}
+ 	\caption{Permisos de los actores. Parte 1}
  \end{table}
 
  \begin{table}[]
@@ -34,7 +34,7 @@ Las pantallas a las que pueden acceder los diferentes roles asignados tras inici
 	\centering
 	\begin{tabular}{|l|c|c|c|c|}
 		\hline
-		\multicolumn{1}{|c|}{\textbf{ACTOR}}     &  \textbf{Informes} & \textbf{Administrar} & \textbf{Metricas} & \textbf{Actualizar}\\
+		\multicolumn{1}{|c|}{\textbf{Actor}}     &  \textbf{Informes} & \textbf{Administrar} & \textbf{Metricas} & \textbf{Actualizar}\\
 		\multicolumn{1}{|c|}{}     & {} & \textbf{TFG} & {} & \textbf{Ficheros}\\\hline
 		Alumno & {} & {} & X & {} \\ \hline
 		Profesor  & X & {} & X   & {}  \\ \hline
@@ -53,7 +53,7 @@ En la parte superior tenemos un pequeño apartado de información sobre el núme
 \imagenflotante{infor_profes}{Información sobre la EPS}{0.9}
 
 A continuación debemos escoger las áreas, departamentos y profesores que deseemos visualizar en la gráfica. Una vez seleccionados \emph{clickaremos} en actualizar gráfica.
-Si queremos seleccionar varios profesores debemos introducir primero uno y posteriormente el siguiente, para eliminarlos de la selección pulsaremos en la \emph{x} del nuevo botón que se añade tras indicar un tutor. Ver imagen \ref{fig:parametros}.
+Si queremos seleccionar varios profesores debemos introducir primero uno y posteriormente el siguiente, para eliminarlos de la selección pulsaremos en la $\times$ del nuevo botón que se añade tras indicar un tutor. Ver imagen \ref{fig:parametros}.
 
 \imagenflotante{parametros}{Selección de parámetros}{0.9}
 
@@ -88,11 +88,11 @@ Este informe contendrá el número total de TFGs dirigidos, codirigidos y el nú
 La fórmula que se ha utilizado para obtener los créditos es la siguiente y depende del número de alumnos matriculados:
 \begin{itemize}
 	\item Créditos a asignar : número de alumnos * 0.66
-	\item De este total el 60/100 irá para los tutores y el otro 40/100 irá para el tribunal.
-	\item Si un tutor dirige solo un proyecto se lleva un 60/100 y si lo codirige se lleva un 30/100. Solo se cuentan tutores de la Escuela Politécnica superior.
+	\item De este total el 60\% irá para los tutores y el otro 40/100 irá para el tribunal.
+	\item Si un tutor dirige solo un proyecto se lleva un 60\% y si lo codirige se lleva un 30\%. Solo se cuentan tutores de la Escuela Politécnica superior.
 \end{itemize}
 Pestaña 1: ver imagen \ref{fig:informe_excel}
-\imagenflotante{informe_excel}{Informe generado}{0.9}
+\imagenflotante{informe_excel}{Informe generado}{0.7}
 
 Pestaña 2: ver imagen \ref{fig:informe_excel2}
 \imagenflotante{informe_excel2}{Informe generado}{0.9}
@@ -108,7 +108,7 @@ En este nuevo menú se le pedirá al tutor que introduzca los parámetros necesa
 		\item \emph{GII YY.XX} siendo YY el curso en el que se esta proponiendo el TFG, es decir el curso al que pertenece el día de subida del TFG, y siendo YY el número correspondiente al siguiente TFG, se tomará el número del último TFG de la base de datos y se le sumará uno.
 	\end{itemize}
 	\item Descripción.
-	\item Tutor1, por defecto se indica el nombre del tutor que se ha \emph{loggeado}. Esta opción es un desplegable con todos los tutores de la Escuela Politécnica Superior, y además se da la posibilidad de añadir un tutor que no esté en dicha lista, avisándo al usuario de que esta introduciendo un tutor que no pertenece a la universidad. Ver imagen \ref{fig:noProfe}.
+	\item Tutor1, por defecto se indica el nombre del tutor que se ha \emph{loggeado}. Esta opción es un desplegable con todos los tutores de la Escuela Politécnica Superior, y además se da la posibilidad de añadir un tutor que no esté en dicha lista, avisándo al usuario de que esta introduciendo un tutor que no pertenece a la universidad.
 	\item Tutor2.
 	\item Tutor3.
 	\item Alumno1, por defecto se indica \emph{'Alumnos sin asignar'}.

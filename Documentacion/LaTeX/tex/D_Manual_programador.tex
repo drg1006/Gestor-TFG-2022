@@ -192,99 +192,99 @@ En esta sección se detallarán todas las pruebas realizadas en la aplicación p
 Se realizarán pruebas manuales para todas las nuevas funcionalidades añadidas en esta versión.
 
 \subsection{Archivo de prueba: Prueba01}
-Este archivo situado en la carpeta \texttt{Documentacion/Pruebas} denominado \texttt{Prueba01}, es un archivo estructurado de igual forma que la base de datos que utilizamos de forma habitual pero con menos carga de datos.
+Este archivo situado en la carpeta \texttt{Documentacion/Pruebas} denominado \texttt{Prueba01.xls}, es un archivo estructurado de igual forma que la base de datos que utilizamos de forma habitual pero con menos carga de datos.
 Se cargará con la opción \emph{Actualizar base de datos} de la parte inferior de la pantalla, de acceso exclusivo para los administradores, y se probará su correcto tratamiento durante todas las pantallas de la aplicación.
 
 Tiene un total de nueve proyectos en la pestaña de activos, tres de ellos con un estado \emph{Pendiente} y un total de 10 en la de históricos.
 
-\begin{itemize}
-	\item \textbf{1.Proyectos activos}: en esta pantalla se muestran las estadísticas sobre los proyectos de la pestaña \texttt{N2 Proyecto}. Los resultado que debemos esperar son los siguientes:
-		\begin{itemize}
-			\item 1.1 -> 6 proyectos activos, ya que habiendo un total de 9, 3 de ellos son con estado \emph{Pendiente}, por lo que no se contarán.
-			\item 1.2 -> 4 proyectos sin asignar, ya que 2 de los 6 tienen alumno asignado.
-			\item 1.3 -> 17 alumnos sin proyecto asignado, obtenidos en la pestaña \texttt{N2 Alumno}
-			\item 1.4 -> 8 tutores asignados, ya que el tutor \emph{Raúl Marticorena} se repite, y solo contamos los proyectos aceptados.
+\begin{enumerate}
+	\item \textbf{Proyectos activos}: en esta pantalla se muestran las estadísticas sobre los proyectos de la pestaña \texttt{N2 Proyecto}. Los resultados que debemos esperar son los siguientes:
+		\begin{enumerate}
+			\item 6 proyectos activos, ya que habiendo un total de 9, 3 de ellos son con estado \emph{Pendiente}, por lo que no se contarán.
+			\item 4 proyectos sin asignar, ya que 2 de los 6 tienen alumno asignado.
+			\item 17 alumnos sin proyecto asignado, obtenidos en la pestaña \texttt{N2 Alumno}
+			\item 8 tutores asignados, ya que el tutor \emph{Raúl Marticorena} se repite, y solo contamos los proyectos aceptados.
 			
-			\item  Como podemos observar en la imagen \ref{fig:P01Activos} la información estadística es correcta y la tabla muestra bien todos los proyectos activos.
-		\end{itemize}
+			\item Como podemos observar en la imagen \ref{fig:P01Activos} la información estadística es correcta y la tabla muestra bien todos los proyectos activos.
+		\end{enumerate}
 	
-	\item \textbf{2.Histórico de proyectos}: en esta pantalla debemos observar la información sobre los proyectos históricos. Obtendremos los siguientes datos:
-		\begin{itemize}
-			\item 2.1 -> Total de 10 proyectos y 10 alumnos asignados.
-			\item 2.2 -> Calificación media de 8.2
-			\item 2.3 -> Tiempo medio de realización: 275,6 días.
-			\item 2.4 -> 6 proyectos son del curso 2013/2014 y 4 de ellos del curso 2014/2015. 
-			\item 2.5 -> El curso 2013/2014 tiene 9 tutores asignados y el curso 2014/2015 4 profesores en total.
+	\item \textbf{Histórico de proyectos}: en esta pantalla debemos observar la información sobre los proyectos históricos. Obtendremos los siguientes datos:
+			\begin{enumerate}
+			\item Total de 10 proyectos y 10 alumnos asignados.
+			\item Calificación media de 8.2
+			\item Tiempo medio de realización: 275,6 días.
+			\item 6 proyectos son del curso 2013/2014 y 4 de ellos del curso 2014/2015. 
+			\item El curso 2013/2014 tiene 9 tutores asignados y el curso 2014/2015 4 profesores en total.
 			
 			\item En la imagen \ref{fig:P01HistProyectos} la información estadística es correcta y la tabla muestra bien todos los proyectos activos.
-		\end{itemize}
+		\end{enumerate}
 	
-	\item \textbf{3.Histórico del profesorado}: en esta pantalla realizaremos varias pruebas para comprobar que recoge los datos correctamente. Los resultados que debemos obtener son los siguientes:
-		\begin{itemize}
-			\item 3.1 -> Para el tutor César Ignacio García tenemos dos proyectos ambos durante el curso 2013/2014 y ambos con un tutor 2 perteneciente a la EPS, por lo que cada uno suma 0.5, el resultado que debemos obtener es 1.0 en el curso 2013/2014. Observar imagen \ref{fig:P01GraficaCesar}.
-			\item 3.2 -> Para el área \emph{Lenguajes y Sistemas informáticos}. Este área tiene tutores que aparecen en la pestaña de históricos como, para el curso 2013/2014 César Ignacio, Raúl Marticorena, Carlos López y José Francisco Díez Pastor, un total de 3 proyectos dirigidos y 2 codirigidos, lo que hace una suma de 4 proyectos en total. Para el curso 2014/2015 tenemos dos tutores que pertenece a este área, Carlos López Nozal y Carlos Pardo Aguilar, que suman dos proyectos dirigidos exclusivamente por ellos. 
+	\item \textbf{Histórico del profesorado}: en esta pantalla realizaremos varias pruebas para comprobar que recoge los datos correctamente. Los resultados que debemos obtener son los siguientes:
+		\begin{enumerate}
+			\item Para el tutor César Ignacio García tenemos dos proyectos ambos durante el curso 2013/2014 y ambos con un tutor 2 perteneciente a la EPS, por lo que cada uno suma 0.5, el resultado que debemos obtener es 1.0 en el curso 2013/2014. Observar imagen \ref{fig:P01GraficaCesar}.
+			\item Para el área \emph{Lenguajes y Sistemas informáticos}. Este área tiene tutores que aparecen en la pestaña de históricos como, para el curso 2013/2014 César Ignacio, Raúl Marticorena, Carlos López y José Francisco Díez Pastor, un total de 3 proyectos dirigidos y 2 codirigidos, lo que hace una suma de 4 proyectos en total. Para el curso 2014/2015 tenemos dos tutores que pertenece a este área, Carlos López Nozal y Carlos Pardo Aguilar, que suman dos proyectos dirigidos exclusivamente por ellos. 
 			
-			\item 3.3 -> Para el departamento \emph{Ingeniería Informática}, que contiene el área \emph{Ciencia de la Computación e Inteligencia Artificial} además del mencionado en el punto anterior. Obtendríamos los mismos datos y habría que sumar la participación de tutores como Álvaro Herrero Cosío, María Belén Vaquerizo García y Bruno Baruque que, en el curso 2013/2014 tienen dos participaciones como tutores de un mismo proyecto, sumando 1.0 y en el curso 2014/2015 suman un total de 1.0 por la tutoría de Álvaro en solitario.
+			\item Para el departamento \emph{Ingeniería Informática}, que contiene el área \emph{Ciencia de la Computación e Inteligencia Artificial} además del mencionado en el punto anterior. Obtendríamos los mismos datos y habría que sumar la participación de tutores como Álvaro Herrero Cosío, María Belén Vaquerizo García y Bruno Baruque que, en el curso 2013/2014 tienen dos participaciones como tutores de un mismo proyecto, sumando 1.0 y en el curso 2014/2015 suman un total de 1.0 por la tutoría de Álvaro en solitario.
 			
 			\item Los resultados de las últimas dos pruebas deberían ser los siguientes \ref{fig:P01GraficaAD}.
-		\end{itemize}
+		\end{enumerate}
 
 	
-	\item \textbf{4.Creación de informes}: esta pantalla genera informes con el número de proyectos dirigidos, codirigidos y el número de créditos asignados a un tutor de un área seleccionada. Realizaremos varias pruebas para un total de 10 alumnos:
-		\begin{itemize}
-			\item 4.1 -> Área de \emph{Lenguajes y Sistemas informáticos}. De este área tenemos varios tutores mencionados en el apartado anterior, y que cuenten con proyectos activos y con alumno asignado, es decir, eliminamos los pendientes. Los resultados deben de ser los siguientes:
-				\begin{itemize}
-					\item 4.1.1 -> Raúl Marticorena Sánchez: 1 proyecto dirigido, 0.132 cts.
-					\item 4.1.2 -> Carlos Pardo Aguilar: 1 proyecto codirigido, 0.132 cts.					
-					\item 4.1.4 -> José Manuel Sáiz Díez: ningún proyecto activo pero es miembro del tribunal, 0.44 cts.
-					\item 4.1.5 -> Pedro Latorre Carmona: 1 proyecto codirigido, 0.132 cts.						
-					\item 4.1.6 -> José Francisco Díez Pastor: 1 proyecto codirigido, 0.132 cts.										
-					\item 4.1.5 -> Álvar Arnaiz González: ningún proyecto activo pero es miembro del tribunal, 0.44 cts.					
-				\end{itemize}
-			\item 4.2 -> Área de \emph{Ciencia de la Computación e Inteligencia Artificial}. Los resultados deben de ser los siguientes:
-			\begin{itemize}
-				\item 4.2.1 -> Ángel Arroyo Puente, ningún proyecto activo pero es miembro del tribunal, 0.44 cts.							
-			\end{itemize}
+	\item \textbf{Creación de informes}: esta pantalla genera informes con el número de proyectos dirigidos, codirigidos y el número de créditos asignados a un tutor de un área seleccionada. Realizaremos varias pruebas para un total de 10 alumnos:
+		\begin{enumerate}
+			\item Área de \emph{Lenguajes y Sistemas informáticos}. De este área tenemos varios tutores mencionados en el apartado anterior, y que cuenten con proyectos activos y con alumno asignado, es decir, eliminamos los pendientes. Los resultados deben de ser los siguientes:
+				\begin{enumerate}
+					\item Raúl Marticorena Sánchez: 1 proyecto dirigido, 0.132 ECTS.
+					\item Carlos Pardo Aguilar: 1 proyecto codirigido, 0.132 ECTS.					
+					\item José Manuel Sáiz Díez: ningún proyecto activo pero es miembro del tribunal, 0.44 ECTS.
+					\item Pedro Latorre Carmona: 1 proyecto codirigido, 0.132 ECTS.						
+					\item José Francisco Díez Pastor: 1 proyecto codirigido, 0.132 ECTS.										
+					\item Álvar Arnaiz González: ningún proyecto activo pero es miembro del tribunal, 0.44 ECTS.					
+				\end{enumerate}
+			\item Área de \emph{Ciencia de la Computación e Inteligencia Artificial}. Los resultados deben de ser los siguientes:
+			\begin{enumerate}
+				\item Ángel Arroyo Puente, ningún proyecto activo pero es miembro del tribunal, 0.44 ECTS.							
+			\end{enumerate}
 			\item El informe que se genere deberá ser el mismo que se puede observar en la carpeta \texttt{Documentacion/Pruebas} con el nombre \texttt{InformeP01}.
-		\end{itemize}
+		\end{enumerate}
 
 	
-	\item \textbf{5.Proponer TFG}: esta pantalla permite al usuario administrador proponer proyectos a la base de datos. Se realizarán varias pruebas.
-			\begin{itemize}
-				\item 5.1 -> Parámetros por defecto: 
-					\begin{itemize}
-				 		\item 5.1.1 -> El último proyecto del este archivo tiene como título \emph{GII 21.04 ....}, por lo que el título de este se debería de modificar y al estar en el curso 2022/2023 debería ser 22.01.
-				 		\item 5.1.2 -> El tutor debe de ser el usuario que ha iniciado sesión, en este caso figura debería figurar el mio ya que me he dado permisos de administrador, en tu caso debería figurar el tuyo.
-				 		\item 5.1.3 -> El alumno1 por defecto es 'Aalumnos sin asignar'.
-				 		\item 5.1.4 -> La fecha debe de ser la del día en la que se propone el trabajo.
+	\item \textbf{Proponer TFG}: esta pantalla permite al usuario administrador proponer proyectos a la base de datos. Se realizarán varias pruebas.
+			\begin{enumerate}
+				\item Parámetros por defecto: 
+					\begin{enumerate}
+				 		\item El último proyecto del este archivo tiene como título \emph{GII 21.04 ....}, por lo que el título de este se debería de modificar y al estar en el curso 2022/2023 debería ser 22.01.
+				 		\item El tutor debe de ser el usuario que ha iniciado sesión, en este caso figura debería figurar el mio ya que me he dado permisos de administrador, en tu caso debería figurar el tuyo.
+				 		\item El alumno1 por defecto es `Aalumnos sin asignar'.
+				 		\item La fecha debe de ser la del día en la que se propone el trabajo.
 				 		\item Se puede observar en la imagen su funcionamiento \ref{fig:P01SubirTFG}.
-					\end{itemize}
-				\item 5.2 -> Subida correcta del proyecto: una vez se ha propuesto el trabajo, debemos comprobar que ha sido correctamente generado.
-					\begin{itemize}
-						\item 5.2.1 -> En la pantalla de \emph{Administrar TFGs} deberá aparecer el proyecto con estado \emph{Pendiente}.
-						\item 5.2.2 -> Si descargamos la base de datos deberá aparecer en la pestaña \texttt{N2 Proyecto}.						
-					\end{itemize}				
-			\end{itemize}
+					\end{enumerate}
+				\item Subida correcta del proyecto: una vez se ha propuesto el trabajo, debemos comprobar que ha sido correctamente generado.
+					\begin{enumerate}
+						\item En la pantalla de \emph{Administrar TFGs} deberá aparecer el proyecto con estado \emph{Pendiente}.
+						\item Si descargamos la base de datos deberá aparecer en la pestaña \texttt{N2 Proyecto}.						
+					\end{enumerate}				
+			\end{enumerate}
 
 	
-	\item \textbf{6.Aceptar/Denegar TFG}: en esta pantalla deberán aparecer todos los proyectos de la pestaña \texttt{N2 Proyecto} de nuestra base de datos independientemente de su estado. Estado inicial en la imagen \ref{fig:P01Inicial}. Pruebas a realizar:
-		\begin{itemize}
-			\item 6.1 -> Aceptar tfg: si aceptamos un proyecto deberá cambiar su estado en esta misma pantalla y se sumará en la pestaña de activos. Ver imágenes \ref{fig:P01SelectTFG},  \ref{fig:P01AceptTFG}, \ref{fig:P01PostActivos}
-			\item 6.2 -> Denegar tfg: si denegamos un proyecto éste será eliminado de la base de datos. Ver imágenes \ref{fig:P01SelectTFG2},
+	\item \textbf{Aceptar/Denegar TFG}: en esta pantalla deberán aparecer todos los proyectos de la pestaña \texttt{N2 Proyecto} de nuestra base de datos independientemente de su estado. Estado inicial en la imagen \ref{fig:P01Inicial}. Pruebas a realizar:
+		\begin{enumerate}
+			\item Aceptar TFG: si aceptamos un proyecto deberá cambiar su estado en esta misma pantalla y se sumará en la pestaña de activos. Ver imágenes \ref{fig:P01SelectTFG},  \ref{fig:P01AceptTFG}, \ref{fig:P01PostActivos}
+			\item Denegar TFG: si denegamos un proyecto éste será eliminado de la base de datos. Ver imágenes \ref{fig:P01SelectTFG2},
 			\ref{fig:P01DenegTFG}.
-		\end{itemize}
+		\end{enumerate}
 
 	
-	\item \textbf{7.Modificar TFG}: para comprobar que está funcionalidad funciona debemos primero seleccionar un proyecto en la pestaña \emph{Administrar TFGs}. Realizaremos varias pruebas:
-		\begin{itemize}
-			\item 7.1 -> Modificar datos y mantener activo: primero deberemos \emph{clickar} en el botón \emph{No} en pregunta de la parte inferior de la pantalla, ver imagen \ref{fig:P01No} . A continuación, modificaremos los campos que queramos y pulsaremos en el botón \emph{Aceptar cambios y dejar abierto}. Esta información se podrá ver actualizada en la pestaña de activos si era un proyecto aceptado o en la pestaña de administración de proyectos, también cambiará en la base de datos.
-			\item 7.2 -> Modificar datos y cerrarlo: primero deberemos \emph{clickar} en el botón \emph{No} en pregunta de la parte inferior de la pantalla, ver imagen \ref{fig:P01No}, esto nos permitirá introducir información como la nota, fecha de presentación o el enlace \emph{URL} del proyecto. A continuación, modificaremos los campos que queramos y pulsaremos en el botón \emph{Aceptar cambios y mover a histórico}. Se verán los cambios de igual forma que en el apartado anterior.			
-		\end{itemize}
-\end{itemize}
+	\item \textbf{Modificar TFG}: para comprobar que está funcionalidad funciona debemos primero seleccionar un proyecto en la pestaña \emph{Administrar TFGs}. Realizaremos varias pruebas:
+		\begin{enumerate}
+			\item Modificar datos y mantener activo: primero deberemos \emph{clickar} en el botón \emph{No} en pregunta de la parte inferior de la pantalla, ver imagen \ref{fig:P01No}. A continuación, modificaremos los campos que queramos y pulsaremos en el botón \emph{Aceptar cambios y dejar abierto}. Esta información se podrá ver actualizada en la pestaña de activos si era un proyecto aceptado o en la pestaña de administración de proyectos, también cambiará en la base de datos.
+			\item Modificar datos y cerrarlo: primero deberemos \emph{clickar} en el botón \emph{No} en pregunta de la parte inferior de la pantalla, ver imagen \ref{fig:P01No}, esto nos permitirá introducir información como la nota, fecha de presentación o el enlace \emph{URL} del proyecto. A continuación, modificaremos los campos que queramos y pulsaremos en el botón \emph{Aceptar cambios y mover a histórico}. Se verán los cambios de igual forma que en el apartado anterior.			
+		\end{enumerate}
+\end{enumerate}
 
 \imagenflotante{P01Activos}{Comprobación pantalla activos.}{0.9}
-\imagenflotante{P01HistProyectos}{Comprobación pantalla historico de proyectos.}{0.9}
-\imagenflotante{P01GraficaCesar}{Comprobación gráfica de proyectos dirigidos de César.}{0.9}
+\imagenflotante{P01HistProyectos}{Comprobación pantalla historico de proyectos.}{0.7}
+\imagenflotante{P01GraficaCesar}{Comprobación gráfica de proyectos dirigidos de César.}{0.7}
 \imagenflotante{P01GraficaAD}{Comprobación proyectos históricos areas y departamentos.}{0.9}
 \imagenflotante{P01SubirTFG}{Comprobación campos del propuesta de proyecto.}{0.9}
 \imagenflotante{P01Inicial}{Estado inicial de los proyectos.}{0.9}
@@ -300,23 +300,23 @@ Al igual que en el apartado anterior realizaremos pruebas con otro excel que se 
 
 Tiene un total de 48 proyectos en la pestaña de activos, cinco de ellos con un estado \emph{Pendiente} y un total de 52 en la de históricos.
 
-\begin{itemize}
-	\item \textbf{1.Proyectos activos}: en esta pantalla se muestran las estadísticas sobre los proyectos de la pestaña \texttt{N2 Proyecto}. Los resultado que debemos esperar son los siguientes:
-	\begin{itemize}
-		\item 1.1 -> 43 proyectos activos, ya que habiendo un total de 48, 5 de ellos son con estado \emph{Pendiente}, por lo que no se contarán.
-		\item 1.2 -> 18 proyectos sin asignar.
-		\item 1.3 -> 6 alumnos sin proyecto asignado, obtenidos en la pestaña \texttt{N2 Alumno}
-		\item 1.4 -> 31 tutores asignados.
+\begin{enumerate}
+	\item \textbf{Proyectos activos}: en esta pantalla se muestran las estadísticas sobre los proyectos de la pestaña \texttt{N2 Proyecto}. Los resultados que debemos esperar son los siguientes:
+	\begin{enumerate}
+		\item 43 proyectos activos, ya que habiendo un total de 48, 5 de ellos son con estado \emph{Pendiente}, por lo que no se contarán.
+		\item 18 proyectos sin asignar.
+		\item 6 alumnos sin proyecto asignado, obtenidos en la pestaña \texttt{N2 Alumno}.
+		\item 31 tutores asignados.
 		
 		\item  Como podemos observar en la imagen \ref{fig:P02Activos} la información estadística es correcta y la tabla muestra bien todos los proyectos activos.
-	\end{itemize}
+	\end{enumerate}
 	
-	\item \textbf{2.Histórico de proyectos}: obtendremos los siguientes datos:
-	\begin{itemize}
-		\item 2.1 -> Total de 52 proyectos y 52 alumnos asignados.
-		\item 2.2 -> Calificación media de 8.02
-		\item 2.3 -> Tiempo medio de realización: 284.35 días.		
-		\item 2.4 -> Tabla con estadísticas \ref{P02Historico1}
+	\item \textbf{Histórico de proyectos}: obtendremos los siguientes datos:
+	\begin{enumerate}
+		\item Total de 52 proyectos y 52 alumnos asignados.
+		\item Calificación media de 8.02
+		\item Tiempo medio de realización: 284.35 días.		
+		\item Tabla con estadísticas \ref{P02Historico1}.
 		
 		 \begin{table}[]
 			\label{P02Historico1}
@@ -347,22 +347,22 @@ Tiene un total de 48 proyectos en la pestaña de activos, cinco de ellos con un 
 		\caption{Estadísticas del excel Prueba02. Parte 2}
 	\end{table}
 		
-	\end{itemize}
+	\end{enumerate}
 	
-	\item \textbf{3.Histórico del profesorado}:  los resultados que debemos obtener son los siguientes:
-	\begin{itemize}
-		\item 3.1 -> Tutor \emph{Raúl Marticorena Sánchez}, 2 tfgs codirigidos en el curso 2015/2016, 2 proyectos dirigidos y tres codirigidos durante el curso 2018/2019, pero en uno de ellos el tutor2 no es de la EPS, por lo que cuenta como 1 entero, y uno codirigido, también con un tutor que no es de la EPS, en el curso 2019/2020. Deberíamos obtener entonces 1 en el curso 2015/2016, 4 en el curso 2019/2020 y 1 en el curso 2020/2021. El resultado se puede ver en la imagen \ref{fig:P02GraficaRaul}.
+	\item \textbf{Histórico del profesorado}:  los resultados que debemos obtener son los siguientes:
+	\begin{enumerate}
+		\item Tutor \emph{Raúl Marticorena Sánchez}, 2 tfgs codirigidos en el curso 2015/2016, 2 proyectos dirigidos y tres codirigidos durante el curso 2018/2019, pero en uno de ellos el tutor2 no es de la EPS, por lo que cuenta como 1 entero, y uno codirigido, también con un tutor que no es de la EPS, en el curso 2019/2020. Deberíamos obtener entonces 1 en el curso 2015/2016, 4 en el curso 2019/2020 y 1 en el curso 2020/2021. El resultado se puede ver en la imagen \ref{fig:P02GraficaRaul}.
 		
-		\item 3.2 -> Tras realizar los cálculos a mano para el área de  \emph{Lenguajes y Sistemas informáticos}, se obtienen un total de 1 proyecto en 2014/2015, 4 en 2015/2016, 8 en 2018/2019, 4 en 2019/2020, 3 en 2020/2021 y 1 en 2022/2023. Los resultados deberían ser los siguientes \ref{fig:P02GraficaAD}.
-	\end{itemize}	
+		\item Tras realizar los cálculos a mano para el área de  \emph{Lenguajes y Sistemas informáticos}, se obtienen un total de 1 proyecto en 2014/2015, 4 en 2015/2016, 8 en 2018/2019, 4 en 2019/2020, 3 en 2020/2021 y 1 en 2022/2023. Los resultados deberían ser los siguientes \ref{fig:P02GraficaAD}.
+	\end{enumerate}	
 	
-	\item \textbf{4.Creación de informes}: realizaremos varias pruebas para un total de 30 alumnos:
-	\begin{itemize}
-		\item 4.1 -> El área de \emph{Lenguajes y Sistemas informáticos} tiene un total de 30 proyectos asignados durante este curso.
-		\item 4.2 -> El área de \emph{Ciencia de la Computación e Inteligencia Artificial} tiene un total de 6 proyectos asignados durante este curso.
+	\item \textbf{Creación de informes}: realizaremos varias pruebas para un total de 30 alumnos:
+	\begin{enumerate}
+		\item El área de \emph{Lenguajes y Sistemas informáticos} tiene un total de 30 proyectos asignados durante este curso.
+		\item El área de \emph{Ciencia de la Computación e Inteligencia Artificial} tiene un total de 6 proyectos asignados durante este curso.
 		\item El informe que se genere deberá ser el mismo que se puede observar en la carpeta \texttt{Documentacion/Pruebas} con el nombre \texttt{InformeP02}.
-	\end{itemize}
-\end{itemize}
+	\end{enumerate}
+\end{enumerate}
 \imagenflotante{P02Activos}{Comprobación pantalla activos.}{0.9}
 
 \imagenflotante{P02GraficaRaul}{Comprobación gráfica de proyectos dirigidos de Raúl.}{0.9}
