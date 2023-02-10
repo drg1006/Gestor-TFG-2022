@@ -277,9 +277,9 @@ public class ReportView extends VerticalLayout {
      * @return mapa con los datos.
      */
     private Map<String, Object[]> obtencionDatos(String area, Double nAlumn) {
-        //Se llama a este metodo que asigna cursos a los tfgs de historicos
+        // Se llama a este metodo que asigna cursos a los tfgs de historicos
         vista.initProjectsStructures();
-        
+
         Map<String, Object[]> dataTFG = new TreeMap<String, Object[]>();
 
         List<String> profes = fachadaDatos.getProfesoresDeArea(area);
@@ -300,7 +300,7 @@ public class ReportView extends VerticalLayout {
                 // Proyectos con alumno asignado
                 if (!activos.dataActiveProjects.get(n).getStudent1().equals("Aalumnos sin asignar")) {
                     // Es tutor 1
-                   
+
                     if (activos.dataActiveProjects.get(n).getTutor1().equals(prof)) {
                         // Tiene tutor 2 de la EPS
                         if (profesEPS.contains(activos.dataActiveProjects.get(n).getTutor2())) {
@@ -317,7 +317,7 @@ public class ReportView extends VerticalLayout {
             }
             // OBTENER LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE CUENTA
             for (int p = 0; p < vista.dataHistoric.size(); p++) {
-                String cursoTFG= vista.dataHistoric.get(p).getCourse();               
+                String cursoTFG = vista.dataHistoric.get(p).getCourse();
                 // Miramos si nos interesa para este curso y si es el profesor que buscamos
                 // sumamos
                 if (cursoTFG.equals(cursoActual)) {
@@ -388,15 +388,21 @@ public class ReportView extends VerticalLayout {
         float valorCred = Float.parseFloat(config.getSetting("ECTS"));
         float total = (float) (nAlumn * valorCred);
 
-        // Obtenemos todos los TFGs activos de este año
-        Number tfgsActivos = fachadaDatos.getTotalNumber(TITULO, PROYECTO);
+        // Obtenemos todos los TFGs activos de este año, es decir los que tienen alumno
+        // asignado (total de proyectos en activo -los que estan libres)
+        // y los que estén en históricos y sean de este año
 
-        // Total de creditos a asignar entre todos los directores
-        float crDir = (float) ((total * 0.6) / tfgsActivos.intValue());
+        int tfgsActivos = activos.dataActiveProjects.size() - fachadaDatos.getTotalFreeProject().intValue();
+        int tfgsHistoricosDeEsteCurso = vista.tfgsPerCourse.get(cursoActual).intValue();
+        int tfgsEsteCurso = tfgsActivos + tfgsHistoricosDeEsteCurso;
+
+        // Total de creditos a asignar por tfg
+        float ectsPorTFG = (float) ((total * 0.6) / tfgsEsteCurso);
+
         // Total de creditos a asignar para tribunal (a dividir entre 6 porque hay 6
         // miembros en el tribunal)
         float crTri = (float) (total * 0.4 / 6);
-        // float crePorTFG=crDir/;
+        // float crePorTFG=ectsPorTFG/;
 
         // Recorremos todos los tfgs activos y con alumno asignado y buscamos si es
         // tutor1 o tutor2
@@ -409,36 +415,36 @@ public class ReportView extends VerticalLayout {
                     // SI EL TUTOR 2 ESTA O NO EN LA EPS
                     if (fachadaDatos.getProfesores().contains(activos.dataActiveProjects.get(n).getTutor2())) {
                         // Se reparten los creditos para este profesor en este tfg
-                        nCreditosTutor += crDir * 0.3;
+                        nCreditosTutor += ectsPorTFG * 0.5;
                     } else {
                         // Se queda todo el porcentaje de los creditos
-                        nCreditosTutor += crDir * 0.6;
+                        nCreditosTutor += ectsPorTFG;
                     }
                     // SI ES EL TUTOR 2
                 } else if (activos.dataActiveProjects.get(n).getTutor2().equals(profesor)) {
-                    nCreditosTutor += crDir * 0.3;
+                    nCreditosTutor += ectsPorTFG * 0.5;
                 }
             }
         }
         // OBTENER LOS CREDITOS DE LOS TFGS DEL HISTORICO DE ESTE CURSO ACADÉMICO QUE
         // CUENTA
         for (int p = 0; p < vista.dataHistoric.size(); p++) {
-            String cursoTFG = vista.dataHistoric.get(p).getCourse();           
+            String cursoTFG = vista.dataHistoric.get(p).getCourse();
 
             // Miramos si nos interesa para este curso y si es el profesor que buscamos
             // sumamos
             if (cursoTFG.equals(cursoActual)) {
                 // COMPROBAMOS SI ES TUTOR1 O 2
                 if (vista.dataHistoric.get(p).getTutor1().equals(profesor)) {
-                    //es tutor 1 y si el tutor 2 es de la EPS
+                    // es tutor 1 y si el tutor 2 es de la EPS
                     if (fachadaDatos.getProfesores().contains(vista.dataHistoric.get(p).getTutor2())) {
-                        nCreditosTutor += crDir * 0.3;
+                        nCreditosTutor += ectsPorTFG * 0.5;
                     } else {
-                        nCreditosTutor += crDir * 0.6;
+                        nCreditosTutor += ectsPorTFG;
                     }
-                  //ES TUTOR 2 
+                    // ES TUTOR 2
                 } else if (vista.dataHistoric.get(p).getTutor2().equals(profesor)) {
-                    nCreditosTutor += crDir * 0.3;
+                    nCreditosTutor += ectsPorTFG * 0.5;
                 }
             }
 

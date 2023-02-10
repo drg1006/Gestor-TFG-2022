@@ -151,8 +151,13 @@ public class HistoricProjectsView extends VerticalLayout {
      */
     public SistInfDataAbstract fachadaDatos;
 
+    /**
+     * Array con todos los cursos de la pantalla de históricos.
+     */
     List<String> courses;
-    
+    /**
+     * Mapa con el numero de tfgs por curso de la pantalla de históricos.
+     */
     Map<String, Number> tfgsPerCourse;
 
     /**
