@@ -85,29 +85,29 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 	
 	\item Se realizan diferentes pruebas en las plataformas para decidir cual utilizar, y finalmente se optará por usar Heroku for Students, tras desplegar el proyecto en Heroku con éxito y que al tratar de importarlo a Northflank nos indica que debemos aportar una tasa.
 	
-	\item Búsqueda de librerías o APIs para realizar el webscraping en nuestro proyecto. Se analizan algunas librerías cómo \href{https://jsoup.org/}{Jsoup}, \href{https://htmlunit.sourceforge.io/}{HTMLUnit} o \href{https://jaunt-api.com/}{Jaunt} y APIs como \href{https://www.octoparse.es/blog/web-scraping-api-para-extraccion-de-datos}{Octoparse}.
+	\item Búsqueda de librerías o APIs para realizar el Web Scraping en nuestro proyecto. Se analizan algunas librerías cómo \href{https://jsoup.org/}{Jsoup}, \href{https://htmlunit.sourceforge.io/}{HTMLUnit} o \href{https://jaunt-api.com/}{Jaunt} y APIs como \href{https://www.octoparse.es/blog/web-scraping-api-para-extraccion-de-datos}{Octoparse}.
 	
-	\item Pruebas de webscraping en un entorno local para determinar cual utilizar. Se realizan una serie de pruebas(que encontramos en el apartado de Pruebas de la Documentación) y finalmente se consigue obtener el resultado que queremos mediante JSoup, por lo que será nuestra elección.
+	\item Pruebas de Web Scraping en un entorno local para determinar cual utilizar. Se realizan una serie de pruebas(que encontramos en el apartado de Pruebas de la Documentación) y finalmente se consigue obtener el resultado que queremos mediante JSoup, por lo que será nuestra elección.
 	
-	Se puede ver el trascurso de estas tareas en la ilustración \ref{fig:Sprint2_CONTROL}.
+	Se puede ver el transcurso de estas tareas en la ilustración \ref{fig:Sprint2_CONTROL}.
 	
 	\imagenflotante{Sprint2_CONTROL}{Gráfica Burndown <<Report-- Sprint 2>>}{0.9}
 \end{itemize}
 
 \subsection{Sprint 3 - Implementación nuevas pantallas (23/11/22 - 14/12/22)}
-En este sprint se implementará  al proyecto el proceso de \emph{webscraping} llevado a cabo en el sprint anterior, también se crearán dos nuevas pantallas.
+En este sprint se implementará  al proyecto el proceso de \emph{Web Scraping} llevado a cabo en el sprint anterior, también se crearán dos nuevas pantallas.
 
 A continuación se detallarán las tareas que se realizaron durante este segundo Sprint:
 
 \begin{itemize}
 	
-	\item Guardar los datos del \emph{webscraping} en un archivo csv/xls. Se programa un código que permite guardar los resultados sacados mediante el \emph{webscraping} a los ficheros \texttt{BaseDeDatosTFGTFM.xls} y \texttt{N4 Profesores.csv}.
+	\item Guardar los datos del \emph{Web Scraping} en un archivo csv/xls. Se programa un código que permite guardar los resultados sacados mediante el \emph{Web Scraping} a los ficheros \texttt{BaseDeDatosTFGTFM.xls} y \texttt{N4 Profesores.csv}.
 	
-	\item Creación del \emph{mock-up} pantalla de creación de informe. Mediante \href{https://pencil.evolus.vn/}{Pencil} crearemos una vista inicial de lo que queremos que sea nuestra pantalla. Esta pantalla se utilizará para crear un informe de un determinado área a elegir por el usuario y guardará los datos en un archivo \emph{.xls}.
+	\item Creación del \emph{mock up} de la pantalla de creación de informe. Mediante \href{https://pencil.evolus.vn/}{Pencil} crearemos una vista inicial de lo que queremos que sea nuestra pantalla. Esta pantalla se utilizará para crear un informe de un determinado área a elegir por el usuario y guardará los datos en un archivo \emph{.xls}.
 	
 	\item Creación del \emph{mock-up} pantalla de estadísticas del profesorad. Creada también mediante \href{https://pencil.evolus.vn/}{Pencil}. Esta pantalla se utilizará para visualizar los históricos de los profesores que queramos de la \emph{EPS}, dependiendo de los departamentos y áreas que se indiquen.
 	
-	\item Implementación \emph{webscrap} en nuestro proyecto. Se ha introducido esta función en nuestro proyecto.
+	\item Implementación \emph{Web Scrap} en nuestro proyecto. Se ha introducido esta función en nuestro proyecto.
 	
 	\item Implementación de la pantalla Generar Informes. Se comienza y se termina de programar esta nueva pantalla. No se han creado más \emph{issues} si no que se iba comentando en esta \emph{issue} los problemas y el continuo desarrollo de la pantalla, así como las dudas planteadas.
 	
@@ -143,7 +143,7 @@ A continuación se detallarán las tareas que se realizaron durante este segundo
 		\item Crear una columna con el \emph{CheckBox} para seleccionar los TFGs.
 		\item Permitir cambiar el estado mediante los botones \emph{Aceptar o Denegar}.
 	\end{itemize}
-	\item Indicar de forma visual en que pantalla estamos, modificando el color del \emph{botón} en la barra de navegación.
+	\item Indicar de forma visual en qué pantalla estamos, modificando el color del \emph{botón} en la barra de navegación.
 	\item Actualización del despliegue de la aplicación en \emph{Heroku}, cambiando el plan del proyecto.
 
 	Se puede ver el trascurso de estas tareas en la ilustración \ref{fig:Sprint4_CONTROL}.
@@ -238,7 +238,7 @@ Primero se detallarán los costes de los recursos utilizados para la realizació
 \begin{itemize}
 	\item \textbf{Coste de personal}.
 	
-	En este apartado se estima el gasto que supone mantener a un empleado. Se calcula que se han realizado unas \emph{300} horas de trabajo durante 4 meses. 
+	En este apartado se estima el gasto que supone mantener a un empleado. Se calcula que se han empleado unas \emph{300} horas de trabajo durante 4 meses. 
 	Con el \textit{salario medio español de un programador} 14,43 €/hora ~\cite{SalarioProgramador} y estimando unas 20 horas semanales obtenemos un salario bruto de:
 	
 
@@ -266,7 +266,8 @@ $$\frac{1154\frac{\text{€}}{mes}}{1-(0.236+0.055+0.002+0.006)}=1646,21\text{�
 Tras realizar todos los cálculos,como el proyecto ha durado alrededor de cuatro meses, el coste total será de 6584,84€.
 
 \item \textbf{Hardware}.
-El recurso hardware utilizado es un Lenovo Legion Y540 Coste aproximado: 1200€, que ya ha sido amortizado previamente, por lo que el coste real ha sido de 0 €.
+El recurso hardware utilizado es un Lenovo Legion Y540 Coste aproximado: 1200€.
+Los equipos informáticos se amortizan o bien aplicando un porcentaje del 25\% sobre el precio de adquisición o bien en un máximo de 8 años, como años de vida útil. Por tanto, en este caso, el importe a amortizar cada año será de 300 euros. Este ordenador fue comprado hace 3 años por lo que ya se han amortizado 900 euros. Teniendo en cuenta que el proyecto ha durado aproximadamente 4 meses, el coste real de amortización de nuestro \emph{hardware} es de 100 euros.
  
 \item \textbf{Software}.
 Todas las herramientas software utilizadas han sido gratuitas a excepción del despliegue en la nube mediante \emph{Heroku}. Los créditos obtenidos sí que han sido gratuitos gracias a la conexión entre \emph{Github estudiantes y Heroku}, pero realmente supone un gasto de 7 dólares al mes.
@@ -283,9 +284,9 @@ Desestimando gastos indirectos como el internet al vivir en un piso compartido, 
 		\hline
 		\multicolumn{1}{|c|}{\textbf{Tipo de costes}}     & \textbf{Total} \\
 		Personal &  6584,84\\ 
-		Hardware & 0 € \\
+		Hardware & 100 € \\
 		Software & 21 € \\	\hline
-		Total & 6605,84 € \\\hline
+		Total & 6705,84 € \\\hline
 	\end{tabular}
 	\caption{Costes totales.}
 \end{table}
@@ -310,5 +311,5 @@ Se detallarán las licencias \emph{Software} de cada dependencia que se ha utili
 	\caption{Licencias de las herramientas Software.}
 \end{table}
 
-También existe una cuestión de legalidad a la hora de hacer \emph{webscraping}, ya que no siempre es legal realizar este tipo de acciones sobre algunas páginas web, sobretodo si no tenemos los permisos necesarios. En nuestro caso no aplica ya que lo realizamos sobre una \emph{web} interna, por lo que no existe ningún conflicto a la hora de obtener la información.
+También existe una cuestión de legalidad a la hora de hacer \emph{Web Scraping}, ya que no siempre es legal realizar este tipo de acciones sobre algunas páginas web, sobretodo si no tenemos los permisos necesarios. En nuestro caso no aplica ya que lo realizamos sobre una \emph{web} interna, por lo que no existe ningún conflicto a la hora de obtener la información.
 
