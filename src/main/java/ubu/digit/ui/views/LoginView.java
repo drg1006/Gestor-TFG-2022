@@ -104,10 +104,12 @@ public class LoginView extends VerticalLayout {
                 isAutentificarte=true;
             }else if(e.getUsername().equals("profesor")) {
                 UI.getCurrent().getSession().setAttribute("reports", "true");
+                UI.getCurrent().getSession().setAttribute("tutorRegistrado","profesor");
                 isAutentificarte=true;
             }else if(e.getUsername().equals("administrador")) {
                 isAutentificarte=true;
                 UI.getCurrent().getSession().setAttribute("update", "true");
+                UI.getCurrent().getSession().setAttribute("tutorRegistrado","administrador");
             }
             if (!isAutentificarte) {
                 LOGGER.info("Usuario no validado ");

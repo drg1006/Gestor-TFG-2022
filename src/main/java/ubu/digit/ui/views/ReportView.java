@@ -286,6 +286,8 @@ public class ReportView extends VerticalLayout {
         List<String> profesEPS = fachadaDatos.getProfesores();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String cursoActual = obtenerCursoActual();
+        
+        
         int i = 1;
 
         for (String prof : profes) {
@@ -391,11 +393,16 @@ public class ReportView extends VerticalLayout {
         // Obtenemos todos los TFGs activos de este año, es decir los que tienen alumno
         // asignado (total de proyectos en activo -los que estan libres)
         // y los que estén en históricos y sean de este año
-
         int tfgsActivos = activos.dataActiveProjects.size() - fachadaDatos.getTotalFreeProject().intValue();
-        int tfgsHistoricosDeEsteCurso = vista.tfgsPerCourse.get(cursoActual).intValue();
+        int tfgsHistoricosDeEsteCurso =0;
+        //Por si en historicos no hay proyectos del curso actual
+        if(vista.tfgsPerCourse.get(cursoActual)!=null) {
+             tfgsHistoricosDeEsteCurso = vista.tfgsPerCourse.get(cursoActual).intValue();
+        }else {
+             tfgsHistoricosDeEsteCurso=0;
+        }
         int tfgsEsteCurso = tfgsActivos + tfgsHistoricosDeEsteCurso;
-
+        
         // Total de creditos a asignar por tfg, el 0.6 es el porcentaje dirigido para los tutores
         float ectsPorTFG = (float) ((total * 0.6) / tfgsEsteCurso);
 
